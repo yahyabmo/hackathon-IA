@@ -69,7 +69,7 @@ streamlit run app.py
 ```
 
 Sans modèle installé, l'assistant répond avec ses gabarits. Pour activer le LLM
-(sur un poste de la salle, après `ollama pull ministral-3:3b`) :
+de formulation (sur un poste de la salle, après `ollama pull ministral-3:3b`) :
 
 ```bash
 cp .env.example .env            # puis ASSISTANT_LLM=1
@@ -77,12 +77,23 @@ set -a && source .env && set +a
 streamlit run app.py
 ```
 
+L'escalade vers le gros modèle reste désactivée (`ASSISTANT_ESCALADE=0`) : un
+message incompris après la question de clarification est noté dans
+`eval/incompris.jsonl` (lecture : `python -m src.incompris`) et le client se voit
+proposer un conseiller. Le journal sert à enrichir le lexique et l'entraînement.
+
 ## Tests et scénarios
 
 ```bash
 python -m pytest -q             # contrats, compréhension, règles, outils, garde-fou, interface
 python -m eval.run_scenarios    # les conversations de référence, de bout en bout
+python -m eval.bench_formulation --situations     # les 30 conseils du banc, sans LLM
+python -m eval.bench_formulation ministral-3:14b gemma4:e2b ministral-3:8b ministral-3:3b qwen3:1.7b gemma3:1b
 ```
+
+Le banc de formulation choisit le LLM en descendant en taille : on garde le plus
+petit à zéro nombre inventé et 27 bonnes réponses sur 30 (CSV à juger dans
+`eval/resultats/`).
 
 Un scénario qui passait et qui échoue bloque la fusion.
 
@@ -91,8 +102,8 @@ Un scénario qui passait et qui échoue bloque la fusion.
 - **M1** : entraîner le classifieur (`src/comprendre/classifieur.py`) ; fixer τ par balayage ;
   compléter le lexique de mots-clés en mesurant la précision de chaque expression ; écrire le
   test français à la main ; banc A/B/C et CodeCarbon.
-- **M2** : choisir le petit LLM en descendant depuis le 14B ; brancher l'escalade sur DeepEirb ;
-  glossaire par similarité ; mode « mots simples » ; vidéo de secours.
+- **M2** : lancer le banc de formulation sur un poste de la salle et choisir le LLM ; intégrer le
+  classifieur de M1 ; glossaire par similarité (encodeur de M1) ; vidéo de secours.
 - **M3** : rattacher chaque client à sa ligne de Bank Marketing ; relever sources et dates du
   catalogue ; modèle d'appétence ; règles complètes ; scénarios jusqu'à 30.
 
