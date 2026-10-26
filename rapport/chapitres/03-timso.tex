@@ -1,0 +1,87 @@
+\chapter{Ce que Timso AI nous apprend}
+\label{ch:timso}
+
+Timso AI est l'assistant de rédaction construit pendant le stage de Yahya pour l'agence de voyage
+French Touch Travel, et mis en production. Il lit le patrimoine de l'agence --- 68\,648 courriels,
+15\,766 journées de voyage vendues, 4\,282 fiches de catalogue --- et s'en sert pour rédiger des
+brouillons qu'un conseiller relit avant envoi.
+
+Ce n'est pas le même problème, mais c'est la même famille : \textbf{comprendre une demande libre,
+retrouver le bon produit dans un catalogue, et rédiger sans rien inventer}. Plusieurs décisions y
+ont été \emph{mesurées} en conditions réelles. Les reprendre nous évite de les redécouvrir en deux
+jours.
+
+\section{Les leçons transposables}
+
+\begin{center}\small
+\begin{longtable}{@{}L{3.4cm} L{5.4cm} L{5.6cm}@{}}
+\toprule
+\textbf{Leçon de Timso AI} & \textbf{Ce qui a été décidé ou mesuré} & \textbf{Ce qu'on en fait ici} \\
+\midrule
+\endhead
+Recherche plutôt qu'affinage & L'affinage d'un LLM a été écarté avant tout travail : coûteux,
+  figé sur une version, il demande des GPU. & \textbf{Aucun affinage de LLM.} On n'entraîne qu'une
+  tête de classification, en quelques secondes sur CPU. \\
+\addlinespace
+Encodeurs E5 en local & \f{multilingual-e5-large} calculé sur place : aucune donnée client ne
+  sort. Oublier le préfixe \f{query:}/\f{passage:} dégrade la pertinence \emph{sans aucune
+  erreur}. & Même famille en version \f{small}. Les préfixes sont posés par une seule fonction,
+  reprise de \f{src/search/embed/model.py}. \\
+\addlinespace
+Pas de base vectorielle & 119\,107 vecteurs tenaient en 465 Mo ; un produit matrice-vecteur numpy
+  répondait en une centaine de millisecondes, sans index à maintenir. & Le glossaire et le
+  catalogue font quelques centaines d'entrées : \textbf{numpy en mémoire}, pas de base
+  vectorielle. \\
+\addlinespace
+Seuils obtenus par balayage & Seuils de 0,90 et 0,88 choisis en mesurant précision et couverture.
+  Une variante gagnait 2,8 points de couverture pour 0,5 de précision : \textbf{rejetée}, car une
+  erreur coûte plus qu'un manque. & Le seuil de confiance du classifieur est fixé par balayage.
+  En dessous, l'assistant \textbf{demande} plutôt que de deviner. \\
+\addlinespace
+Cascade de résolution & Chaque ligne est d'abord rapprochée du dossier en cours, puis du catalogue
+  complet, et n'est liée à un produit que si elle passe le seuil de l'étage. & Même principe pour
+  les modèles : petit d'abord, gros seulement si le petit doute. \\
+\addlinespace
+Le brouillon, jamais l'envoi & Rien ne part chez un client sans qu'un humain l'ait relu. &
+  L'assistant \textbf{oriente}, le conseiller \textbf{décide} (crédit). Le passage de main
+  transmet un résumé. \\
+\addlinespace
+Déclarer les outils, puis les exécuter & Les outils MCP séparent la déclaration (un contrat
+  lisible) de l'exécution ; la lecture est libre, les effets de bord passent par un point
+  d'entrée suivi. & Lecture du profil libre ; opposition et virement \textbf{seulement après
+  confirmation}, avec une trace dans un journal. \\
+\addlinespace
+Désactiver la réflexion & Mesuré : 8\,000 tokens consommés en réflexion sans une ligne de réponse ;
+  1\,571 tokens pour la réponse complète sans réflexion. & Sur les petits modèles qui raisonnent
+  (Qwen3), \f{think: false}. C'est de la frugalité directe. \\
+\addlinespace
+Vérifier le service réel & Un indicateur de santé répondait \og vrai \fg{} parce qu'une clé était
+  configurée, alors que le service était arrêté depuis quatre jours. & Avant la démo, on
+  interroge vraiment Ollama. S'il ne répond pas, on bascule sur les gabarits. \\
+\addlinespace
+Ne pas rendre une note obligatoire & 20 notes exigées par le formulaire : seules les 6 premières
+  étaient réfléchies, les 14 autres valaient 5/10 par défaut. & Grille d'évaluation humaine courte,
+  champs facultatifs. \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section{Ce qu'on ne reprend pas}
+
+\begin{itemize}
+  \item \textbf{L'API Claude.} Interdite ici : la règle impose des modèles open source, en local.
+        C'est précisément ce qui rend l'architecture en cascade nécessaire : on ne peut plus
+        compter sur un très gros modèle pour tout faire.
+  \item \textbf{PostgreSQL, Docker, Keycloak.} Justifiés pour un service en production, inutiles
+        pour un démonstrateur de deux jours. Des fichiers CSV et JSON suffisent.
+  \item \textbf{\f{multilingual-e5-large}.} Avec 560 millions de paramètres, il est près de cinq fois
+        plus gros que la version \f{small} (118 millions). On ne monte en taille que si le gain est mesuré.
+\end{itemize}
+
+\begin{cle}
+\textbf{Ce que Timso AI donne au pitch.} Au moment des questions, on peut répondre par
+l'expérience : \og Dans un système en production, on a mesuré qu'une erreur de rattachement coûtait
+plus cher qu'un manque ; c'est pour ça que notre assistant pose une question plutôt que de
+deviner. \fg{} Peu d'équipes pourront s'appuyer sur un système qui a déjà servi de vrais
+utilisateurs.
+\end{cle}

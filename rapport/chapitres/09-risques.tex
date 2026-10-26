@@ -1,0 +1,55 @@
+\chapter{Les risques et leurs parades}
+\label{ch:risques}
+
+\begin{center}\small
+\begin{longtable}{@{}L{3.6cm} c L{7.2cm} c@{}}
+\toprule
+\textbf{Risque} & \textbf{Prob.} & \textbf{Parade} & \textbf{Qui} \\
+\midrule
+\endhead
+DeepEirb inaccessible ou saturé lundi soir & moyenne & Traduction par Marian sur la 3060 ;
+  escalade par \f{ministral-3:8b} en local. La traduction du jeu de test passe en premier. & M1 \\
+\addlinespace
+Traduction de qualité médiocre & moyenne & Glossaire dans la consigne ; contrôles automatiques ;
+  relecture de 100 phrases ; on présente le taux mesuré plutôt que de le cacher. & M1 \\
+\addlinespace
+Le petit LLM rédige mal en français & moyenne & Gabarits pour toutes les intentions de service ;
+  protocole de choix qui peut monter à \f{ministral-3:8b} si le gain est mesuré. & M2 \\
+\addlinespace
+Les mots-clés se trompent avec assurance & faible & Seules les expressions dont la précision
+  mesurée dépasse 97\,\% sont gardées ; une seule famille touchée exigée ; sinon, classifieur. & M1 \\
+\addlinespace
+Le classifieur confond des familles & faible & Seuil $\tau$, question de clarification, escalade ;
+  taux mesurés et montrés. & M1 \\
+\addlinespace
+La base enrichie des organisateurs arrive tard ou dans un autre format & moyenne & Enrichissement
+  simulé dès lundi ; un seul adaptateur à modifier le jour où elle arrive. & M3 \\
+\addlinespace
+L'intégration échoue tard & moyenne & Contrats figés à J0 ; bouchons ; deux intégrations datées ;
+  scénarios comme juge. & Tous \\
+\addlinespace
+Mémoire de la 3060 insuffisante & moyenne & Escalade déportée sur DeepEirb ou 8B ; contexte réduit
+  à 4\,096 tokens ; un seul gros modèle chargé à la fois. & M2 \\
+\addlinespace
+CodeCarbon ne voit pas le GPU & faible & Lecture directe de la puissance par NVML
+  (\f{nvidia-smi}) ; même protocole par lots. & M1 \\
+\addlinespace
+La démo plante devant le jury & faible & Vidéo de secours ; mode gabarits ; vérification réelle
+  d'Ollama ; répétition sur la machine de démo. & M2 \\
+\addlinespace
+Le temps manque & élevée & Priorités figées (chapitre~\ref{ch:organisation}) ; gel fonctionnel à
+  J2 ; ce qui n'est pas indispensable est coupé sans débat. & Tous \\
+\addlinespace
+Un chiffre réglementaire faux dans une réponse & faible & Tout chiffre vient du catalogue, avec sa
+  source et sa date ; garde-fou sur les nombres ; relecture du catalogue par un deuxième membre. &
+  M3 \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\begin{cle}
+\textbf{Le risque principal est le temps, pas la technique.} Chaque brique de la cascade est
+simple ; ce qui peut échouer, c'est de vouloir tout faire. Les priorités du
+chapitre~\ref{ch:organisation} ne sont pas indicatives : à J2, ce qui n'est pas indispensable et
+pas fini est abandonné.
+\end{cle}

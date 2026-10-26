@@ -1,0 +1,121 @@
+\chapter{L'interface et la démonstration}
+\label{ch:demo}
+
+\section{L'interface}
+
+Une seule page Streamlit, trois zones. La conversation à gauche ; à droite, le profil du client, le
+panneau \og pourquoi \fg{} et le panneau \og frugalité \fg. Le jury doit pouvoir lire la décision et
+son coût sans qu'on ait à les commenter.
+
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\scriptsize]
+  % Cadre
+  \draw[darkgray,rounded corners=2pt,fill=white] (0,0) rectangle (15.4,-9.4);
+  \fill[mainblue] (0,0) rectangle (15.4,-0.7);
+  \node[white,anchor=west,font=\small\bfseries] at (0.25,-0.35) {Assistant bancaire --- prototype};
+  \node[white,anchor=east] at (15.2,-0.35)
+    {[ Client : Léa (C07) $\blacktriangledown$ ] \quad [ Mots simples ] \quad [ A+ ]};
+  \fill[ext!70] (0,-0.7) rectangle (15.4,-1.15);
+  \node[anchor=west] at (0.25,-0.92) {Vous échangez avec un assistant automatique. Il oriente ;
+    un conseiller décide.};
+  % Conversation
+  \draw[darkgray!60] (0.25,-1.4) rectangle (9.2,-9.15);
+  \node[anchor=north west,font=\scriptsize\bfseries,text=darkgray] at (0.35,-1.45) {Conversation};
+  \node[acteur,anchor=east,text width=4.6cm,align=left] at (9.0,-2.25)
+    {Je veux acheter un appartement};
+  \node[etage,anchor=west,text width=6.2cm,align=left] at (0.45,-3.35)
+    {C'est un beau projet. J'ai noté vos revenus de 2\,900\eur{} nets par mois. Quel est le prix
+    du bien que vous visez, et quelle part de vos 25\,000\eur{} d'épargne souhaitez-vous y
+    consacrer ?};
+  \node[acteur,anchor=east,text width=4.6cm,align=left] at (9.0,-4.55)
+    {Autour de 250\,000, et je peux mettre les 25\,000};
+  \node[etage,anchor=west,text width=6.2cm,align=left] at (0.45,-5.95)
+    {Avec ce prix, la mensualité serait d'environ 1\,220\eur{}, soit 42\,\% de vos revenus : au-delà
+    des 35\,\% retenus pour un crédit immobilier. Avec votre apport, un bien autour de
+    212\,000\eur{} resterait dans cette limite. \underline{Taux d'effort} \dots};
+  \node[module,anchor=west,text width=6.2cm,align=left] at (0.45,-7.45)
+    {\textbf{Action proposée} : prendre rendez-vous avec un conseiller \quad [ Oui ] [ Non ]};
+  \draw[darkgray!60] (0.45,-8.45) rectangle (9.0,-8.95);
+  \node[anchor=west,text=darkgray] at (0.55,-8.7) {Écrivez votre message\dots};
+  % Profil
+  \draw[darkgray!60] (9.45,-1.4) rectangle (15.15,-3.45);
+  \node[anchor=north west,font=\scriptsize\bfseries,text=darkgray] at (9.55,-1.45) {Profil};
+  \node[anchor=north west,text width=5.4cm,align=left] at (9.55,-1.8)
+    {Léa, 31 ans, cadre\\
+     Aucun crédit en cours\\
+     Revenus : \textit{2\,900\eur{} nets par mois}\\
+     Épargne : \textit{25\,000\eur{}}\quad{\tiny\textit{(italique : simulé)}}};
+  % Pourquoi
+  \draw[darkgray!60] (9.45,-3.6) rectangle (15.15,-6.95);
+  \node[anchor=north west,font=\scriptsize\bfseries,text=darkgray] at (9.55,-3.65) {Pourquoi};
+  \node[anchor=north west,text width=5.4cm,align=left] at (9.55,-4.0)
+    {Intention : crédit immobilier\\
+     Mots-clés : acheter, appartement\\
+     Taux d'effort $\leq$ 35\,\% : \textcolor{kored}{\textbf{42,1\,\%}}\\
+     Durée $\leq$ 25 ans\\
+     Taux indicatif : 3,5\,\% (source, date)\\
+     Proposé : rendez-vous conseiller\\
+     Écarté : prêt sur 30 ans};
+  % Frugalité
+  \draw[darkgray!60] (9.45,-7.1) rectangle (15.15,-9.15);
+  \node[anchor=north west,font=\scriptsize\bfseries,text=darkgray] at (9.55,-7.15) {Frugalité};
+  \node[anchor=north west,text width=5.4cm,align=left] at (9.55,-7.5)
+    {Comprendre : mots-clés, \dots{} ms\\
+     Conseiller : règles, \dots{} ms\\
+     Formuler : \texttt{ministral-3:3b}, \dots{} s\\
+     Total : \dots{} s ; \dots{} Wh ; 3,5 Go};
+\end{tikzpicture}
+\end{adjustbox}
+\caption{Maquette de l'écran. Les valeurs sont des exemples ; les points de suspension sont
+remplis en direct par les mesures de la trace.}
+\label{fig:maquette}
+\end{figure}
+
+\paragraph{Accessibilité.} Taille de texte réglable, contraste élevé, mode \og mots simples \fg,
+termes du glossaire explicables d'un clic. C'est modeste, mais c'est ce que La Banque Postale a
+demandé de ne jamais oublier, et ça se montre en dix secondes.
+
+\paragraph{Les messages de démo.} Une liste latérale contient les messages exacts du script : un
+clic les envoie. Pas de faute de frappe devant le jury, pas de temps perdu à taper.
+
+\section{Le script de la démonstration}
+
+Six minutes en direct, sur la machine fournie. Une personne pilote, une autre commente.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{3.1cm} Y L{2.4cm}@{}}
+\toprule
+\textbf{Temps} & \textbf{Scène} & \textbf{Ce que le jury voit} & \textbf{Critère} \\
+\midrule
+0:00 & Inès : \og J'ai perdu ma carte hier soir \fg & L'assistant demande confirmation, met la carte
+  en opposition, donne une référence et rassure. Panneau frugalité : \textbf{compris par les
+  mots-clés, aucun LLM appelé}. &
+  Métier, frugalité \\
+1:00 & Léa : l'appartement & Il ne redemande pas les revenus ; il calcule, refuse avec le calcul,
+  propose des leviers. Panneau pourquoi : la règle des 35\,\%, la ligne écartée. & Explicabilité \\
+2:30 & Sophie puis Lucas : \og Je voudrais mettre de côté \fg & La même phrase, deux clients, deux
+  conseils différents, chacun avec ses raisons. & Personnalisation \\
+3:30 & Marc : les 8\eur{} de frais & Il retrouve les frais dans l'historique, les explique, cite
+  le plafond légal, oriente vers l'offre clientèle fragile. & Métier, inclusion \\
+4:30 & Julie : \og Votre appli ne marche jamais ! \fg & Il reconnaît la frustration, ne se
+  justifie pas, transmet au conseiller un résumé des trois contacts. & Métier \\
+5:15 & Le bilan & Panneau frugalité cumulé ; graphique des configurations A, B et C. & Frugalité \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Paul et le virement en mots simples sont dans la vidéo de secours et servent de réponse si le jury
+demande \og et pour un client âgé ? \fg.
+
+\section{Le plan de secours}
+
+\begin{itemize}
+  \item \textbf{Une vidéo} de tout le script, enregistrée mercredi matin sur la machine de démo.
+  \item \textbf{Un mode gabarits} : un interrupteur coupe le petit LLM. La démo continue, moins
+        fluide mais exacte. C'est aussi la configuration C, donc ce n'est pas un aveu d'échec.
+  \item \textbf{Une vérification réelle} d'Ollama au lancement de l'interface (pas seulement la
+        présence d'une configuration) et des modèles préchargés avant l'entrée du jury.
+  \item \textbf{Une répétition sur la machine de démo} mercredi entre 12h et 13h15.
+\end{itemize}

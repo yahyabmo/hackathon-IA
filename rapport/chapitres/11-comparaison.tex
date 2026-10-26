@@ -1,0 +1,68 @@
+\chapter{Comparaison avec la proposition reçue}
+\label{ch:comparaison}
+
+Un ami de l'équipe nous a transmis une proposition (\f{infos/propo.md}). Elle est solide et nous
+en gardons l'essentiel. Ce chapitre dit ce qu'on garde, ce qu'on change, et pourquoi.
+
+\section{Ce qu'on garde}
+
+\begin{itemize}
+  \item \textbf{Ne pas viser les 77 intentions comme des parcours} : quelques parcours
+        parfaitement fonctionnels valent mieux que 77 réponses approximatives.
+  \item \textbf{La chaîne} message, intention, données manquantes, questions, profil, règles,
+        recommandation, explication.
+  \item \textbf{Le LLM ne décide pas} : il comprend, extrait et reformule ; la recommandation vient
+        de règles explicables.
+  \item \textbf{Un contrat commun} autour d'une fonction centrale, défini dès le début.
+  \item \textbf{Un mode sans LLM} en cas de problème, une vidéo de secours, des répétitions.
+  \item \textbf{Des clients synthétiques et un catalogue} construits par nous.
+\end{itemize}
+
+\section{Ce qu'on change}
+
+\begin{center}\small
+\begin{longtable}{@{}L{2.9cm} L{4.1cm} L{4.1cm} L{3.4cm}@{}}
+\toprule
+\textbf{Point} & \textbf{Proposition reçue} & \textbf{Notre version} & \textbf{Pourquoi} \\
+\midrule
+\endhead
+Usage de Banking77 & Traduire les catégories utiles, créer quelques exemples & Traduire tout et
+  évaluer sur le test officiel, en anglais et en français & La qualité technique (20\,\%) demande
+  des résultats \og bien évalués \fg, comparables à une référence publique \\
+\addlinespace
+Preuve de frugalité & Mesurer latence et consommation & Comparer trois configurations, dont une
+  \og tout LLM \fg, sur le même jeu & Sans point de comparaison, un chiffre d'énergie ne prouve
+  pas \og le plus petit modèle qui suffit \fg \\
+\addlinespace
+Gros modèle & Absent & Hors ligne pour préparer les données ; en ligne en escalade rare, comptée &
+  CGI a dit que c'est \og là que vous allez innover \fg \\
+\addlinespace
+Profondeur & Guider & Agir, avec confirmation (opposition, virement, transmission) & L'oral
+  ouvrait explicitement cette possibilité \\
+\addlinespace
+Explicabilité & Afficher les règles utilisées & Raisons, produits écartés, sources datées,
+  facteurs d'appétence, garde-fou mesuré & 15\,\% de la note ; le \og pourquoi pas \fg{} est ce
+  qui convainc \\
+\addlinespace
+Valeurs de La Banque Postale & Absentes & Mots simples, glossaire, offre clientèle fragile,
+  passage de main & Accessibilité et inclusion ont été mises en avant par sa directrice SI \\
+\addlinespace
+Bank Marketing & Profils, propension \og éventuellement \fg & Appétence mesurée, \f{duration}
+  exclue (fuite documentée) & Un point de rigueur que le jury peut vérifier \\
+\addlinespace
+Conformité & Absente & Règlement européen sur l'IA, mention légale du crédit, transparence &
+  Jury bancaire \\
+\addlinespace
+Répartition & Données et métier / IA et backend / interface, mesures et slides & Trois modules
+  qui suivent la cascade, chacun avec données, modèle et logiciel & La personne 3 cumulait
+  l'interface, les mesures et les slides ; personne n'était responsable de l'évaluation \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\begin{cle}
+\textbf{En résumé.} La proposition reçue décrit un bon MVP. La nôtre garde son squelette et ajoute
+ce qui fait gagner des points sur la grille : des résultats comparables à une référence, une preuve
+de frugalité par comparaison, une explicabilité qui inclut le \og pourquoi pas \fg, et les valeurs
+du client.
+\end{cle}

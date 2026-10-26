@@ -1,0 +1,112 @@
+\chapter{Le pitch, et ce qu'on fait ce soir}
+\label{ch:pitch}
+
+\section{Les quinze minutes}
+
+Trois voix, une par module : le jury entend chaque responsable parler de ce qu'il a construit.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{2.6cm} Y L{2.3cm}@{}}
+\toprule
+\textbf{Temps} & \textbf{Partie} & \textbf{Contenu} & \textbf{Qui} \\
+\midrule
+0:00 -- 1:30 & Le problème & Un client écrit à sa banque ; un Français sur quatre est client de
+  La Banque Postale ; l'expérience client est sa priorité n\textsuperscript{o}\,1 ; la règle :
+  open source, local, frugal. & Yahya \\
+1:30 -- 4:00 & La démarche & Les quatre temps ; le constat sur Banking77 ; la cascade (une
+  figure) ; le gros modèle à l'instant précis. & Yahya \\
+4:00 -- 10:00 & La démonstration & Le script du chapitre~\ref{ch:demo}. & Yahya pilote,
+  Sohayb commente \\
+10:00 -- 12:30 & Les résultats & Compréhension sur les trois jeux de test ; scénarios ; tableau
+  A/B/C ; coût de la préparation hors ligne. & Younes \\
+12:30 -- 14:00 & L'explicabilité & Raisons et produits écartés ; garde-fou ; règlement européen
+  sur l'IA ; mention légale. & Sohayb \\
+14:00 -- 15:00 & Limites et suite & Ce qui est simulé ; ce qu'il faudrait pour 17\,000 points de
+  contact. & Younes \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Trois messages}
+
+\begin{enumerate}
+  \item \og Notre assistant comprend souvent avec de simples mots-clés, sinon avec 118 millions de
+        paramètres ; il décide avec des règles que le client peut lire ; il n'appelle un LLM
+        qu'une fois, à la fin, pour mettre en mots ce qui est déjà calculé. \fg
+  \item \og Nous l'avons mesuré contre une version où un LLM de 14 milliards de paramètres fait
+        tout. \fg{} (suivi des chiffres)
+  \item \og Chaque conseil dit pourquoi --- et pourquoi pas. \fg
+\end{enumerate}
+
+\section{Les questions probables du jury}
+
+\begin{center}\small
+\begin{longtable}{@{}L{4.6cm} L{9.8cm}@{}}
+\toprule
+\textbf{Question} & \textbf{Réponse préparée} \\
+\midrule
+\endhead
+Pourquoi ne pas tout confier à un LLM ? & Parce qu'on l'a mesuré : la configuration A fait tout
+  avec un LLM de 14 milliards de paramètres ; voici sa qualité, son énergie et sa latence face à
+  la cascade. \\
+\addlinespace
+Comment mesurez-vous l'énergie ? & CodeCarbon en mode hors ligne, par lots de 200 requêtes,
+  puissance de repos soustraite, trois répétitions. Une requête seule est trop courte pour être
+  mesurée honnêtement. \\
+\addlinespace
+Et si le classifieur se trompe ? & En dessous du seuil $\tau$, il ne devine pas : il pose une
+  question fermée, puis escalade. $\tau$ a été choisi par balayage pour 97\,\% de précision sur
+  les messages acceptés. Voici la courbe. \\
+\addlinespace
+Le LLM peut-il inventer un taux ? & Il ne reçoit que des faits calculés, et chaque nombre de sa
+  réponse est contrôlé contre ces faits ; en cas d'écart, la réponse gabarit s'affiche. Voici le
+  taux d'échec du garde-fou. \\
+\addlinespace
+Pourquoi Ministral ? & Parce qu'en descendant depuis le 14B, c'est le plus petit qui tient notre
+  seuil de qualité en français --- voici la courbe --- et qu'il est européen. Si un plus petit
+  avait suffi, le protocole l'aurait retenu. \\
+\addlinespace
+Des mots-clés, en 2026 ? & Oui : ils traitent une part mesurée des demandes pour un coût quasi nul,
+  et ils disent quand ils ne sont pas sûrs. Le reste passe au classifieur. Moins de LLM, plus
+  d'algorithmes. \\
+\addlinespace
+Bank Marketing, ce sont des données portugaises de 2008 ? & Oui. Elles ancrent des profils
+  réalistes et donnent un signal d'appétence faible, présenté comme tel. L'adaptateur permet de
+  brancher une vraie base sans toucher au reste. \\
+\addlinespace
+Et la conformité ? & Données simulées et traitement local. Le règlement européen classe à haut
+  risque la notation de solvabilité : nous n'en faisons pas, un conseiller décide. Transparence :
+  l'utilisateur sait qu'il parle à une IA. Mention légale du crédit. \\
+\addlinespace
+Comment passer à 17\,000 bureaux ? & Le coût par requête est mesuré, donc extrapolable. Les étages
+  1 à 4 tournent sur CPU ; seul le petit LLM a besoin d'un GPU, et un serveur partagé suffit. Les
+  pistes : voix locale et réponse dans la langue du client, dans la ligne de l'outil multilingue
+  annoncé pour novembre. \\
+\addlinespace
+Pourquoi pas d'affinage ? & Deux jours, des GPU partagés, et une tête de classification entraînée
+  en secondes qui suffit. C'est aussi la conclusion d'un système en production que nous avons
+  construit : la recherche bat l'affinage quand le modèle de base évolue vite. \\
+\addlinespace
+Que se passe-t-il hors périmètre ? & L'assistant le dit, et propose un conseiller. Il ne fait pas
+  semblant. \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section{Ce qu'on fait ce soir}
+
+\begin{enumerate}
+  \item Lire la page de synthèse et le chapitre~\ref{ch:organisation} (vingt minutes) ; valider ou
+        amender la répartition, puis ne plus y revenir.
+  \item Écrire \f{src/contrats.py} ensemble (trente minutes).
+  \item Rendre le dépôt GitHub privé : il est public, et il va contenir des éléments tirés de
+        supports marqués \og Interne \fg.
+  \item Déplacer les données téléchargées dans \f{data/raw/} et l'ajouter au \f{.gitignore}.
+  \item \textbf{Younes} : écrire à Denis Barthou pour DeepEirb et le modèle vLLM ; lancer la
+        traduction, ou décider du repli.
+  \item \textbf{Yahya} : squelette de \f{app.py} et de \f{reply()} avec bouchons ; parcours carte.
+  \item \textbf{Sohayb} : les 8 clients et le catalogue v0 ; squelette du rejeu des scénarios.
+  \item En filaire, télécharger \f{ministral-3:3b}, \f{qwen3:1.7b}, \f{gemma3:1b} et
+        \f{multilingual-e5-small} sur un poste de la salle.
+  \item Vérifier J0 avant de partir : \f{streamlit run app.py} répond.
+\end{enumerate}

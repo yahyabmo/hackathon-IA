@@ -1,0 +1,400 @@
+\chapter{La solution}
+\label{ch:solution}
+
+\section{Le principe : une cascade}
+
+Un seul principe gouverne l'architecture : \textbf{chaque étage ne passe la main au suivant que
+s'il ne sait pas faire lui-même}. Comprendre une demande ne demande pas un LLM ; décider d'un
+produit ne doit pas en demander un ; mettre en mots un résultat calculé peut en demander un petit ;
+lever un vrai doute peut justifier un gros, une fois. C'est la lecture littérale de \og le plus
+petit modèle qui suffit \fg, et c'est aussi la réponse à la nuance de CGI sur le \og gros modèle à
+un instant précis \fg. Un organisateur l'a résumé ainsi : \og pour gagner, c'est moins de LLM,
+plus d'algo \fg. Dans le cas normal, un tour de conversation fait \textbf{au plus un appel à un
+LLM, à la fin}.
+
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % Acteurs
+  \node[acteur,minimum width=3.6cm] (client) at (0,0) {Client, dans l'interface};
+  \node[acteur,minimum width=5.4cm,text width=5.2cm] (out) at (0,-9.6)
+    {Réponse\\+ panneau \og pourquoi \fg{} + panneau \og frugalité \fg};
+  % Étages
+  \node[etage,minimum width=4.4cm] (e1) at (0,-1.5)
+    {\textbf{1. Comprendre}\\ mots-clés, sinon \f{multilingual-e5-small}\\ + régression logistique ; entités par règles};
+  \node[test] (d) at (0,-3.05) {confiance $\geq \tau$ ?};
+  \node[etage,minimum width=4.4cm] (e2) at (0,-4.65)
+    {\textbf{2. Converser}\\ parcours YAML, profil du client};
+  \node[etage,minimum width=3.3cm] (e3) at (-2.55,-6.35)
+    {\textbf{3. Conseiller}\\ règles publiques\\ + appétence};
+  \node[etage,minimum width=3.3cm] (e4) at (2.55,-6.35)
+    {\textbf{4. Agir}\\ outils\\ + confirmation};
+  \node[etage,minimum width=4.4cm] (e5) at (0,-8.05)
+    {\textbf{5. Formuler}\\ gabarit, sinon \f{ministral-3:3b}\\ + garde-fou};
+  % Doute
+  \node[module,minimum width=2.9cm] (clar) at (-5.4,-3.05) {Question de\\ clarification};
+  \node[risque,minimum width=2.9cm] (esc) at (-5.4,-4.65) {\textbf{Escalade}\\ \f{ministral-3:14b}};
+  % Données
+  \node[donnee,minimum width=2.6cm] (prof) at (-5.6,-6.35) {Profils clients\\ (simulés)};
+  \node[donnee,minimum width=2.6cm] (cata) at (-5.6,-7.6) {Catalogue\\ + sources};
+  \node[donnee,minimum width=2.6cm] (jour) at (5.6,-6.35) {Journal\\ des actions};
+  \node[donnee,minimum width=2.6cm] (glos) at (5.6,-8.05) {Glossaire\\ (fiches vérifiées)};
+  % Hors ligne
+  \node[module,dashed,minimum width=3.2cm,text width=3.1cm] (off) at (5.95,-1.5)
+    {\textit{Hors ligne, une fois}\\ traduction et exemples\\ en français, qui\\ entraînent l'étage 1\\ (gros modèle, DeepEirb)};
+  % Mesure
+  \node[module,minimum height=9.6cm,minimum width=0.75cm] (mes) at (8.15,-4.8) {};
+  \node[rotate=90,font=\scriptsize,align=center] at (mes.center)
+    {\textbf{Mesure continue} : latence, tokens, énergie, Go chargés};
+  % Flux principal
+  \draw[fl] (client) -- (e1);
+  \draw[fl] (e1) -- (d);
+  \draw[fl] (d) -- node[et,right]{oui} (e2);
+  \draw[fl] (d) -- node[et,above]{non} (clar);
+  \draw[flp] (clar.north) |- node[et,pos=0.25,left]{question} (client.west);
+  \draw[flp] (clar) -- node[et,right]{si toujours ambigu} (esc);
+  \draw[fl] (esc) -- (e2);
+  \draw[fl] (e2) -- (e3);
+  \draw[fl] (e2) -- (e4);
+  \draw[fl] (e2) -- node[et,fill=white]{service simple} (e5);
+  \draw[fl] (e3) -- (e5);
+  \draw[fl] (e4) -- (e5);
+  \draw[fl] (e5) -- (out);
+  % Liens aux données
+  \draw[lien] (prof) -- (e3);
+  \draw[lien] (cata) -- (e3.south west);
+  \draw[lien] (e4) -- (jour);
+  \draw[lien] (e5) -- (glos);
+  \draw[flp] (off.west) -- (e1.east);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{La cascade. Les étages en bleu fonctionnent sans gros modèle ; l'escalade (en rouge) est
+l'exception, comptée et affichée.}
+\label{fig:cascade}
+\end{figure}
+
+Le tableau ci-dessous fixe pour chaque étage ce qu'il reçoit, ce qu'il rend et ce qu'il coûte au
+plus. Les budgets de latence sont des \emph{cibles} sur un poste de la salle (RTX 3060) ; les
+valeurs réelles sont mesurées et reportées dans le pitch.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y Y l@{}}
+\toprule
+\textbf{Étage} & \textbf{Reçoit} & \textbf{Rend} & \textbf{Budget cible} \\
+\midrule
+1. Comprendre & Le message, l'état du parcours en cours & Famille, intention, confiance, entités &
+  $<$ 1 ms à $<$ 30 ms \\
+2. Converser & La compréhension, le profil & La prochaine question, ou une demande de conseil ou
+  d'action & $<$ 5 ms \\
+3. Conseiller & Le besoin complété, le profil, le catalogue & Propositions, raisons, produits
+  écartés, alertes & $<$ 20 ms \\
+4. Agir & Une action confirmée & Un résultat (référence, ticket) & $<$ 20 ms \\
+5. Formuler & Les faits structurés & Le texte affiché & 0 ms (gabarit) à $\sim$1,5 s (3B) \\
+Escalade & Le message ambigu & Une intention & $\sim$2 à 4 s, rare \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Étage 1 --- Comprendre}
+\label{sec:nlu}
+
+\paragraph{Premier filtre : les mots-clés.} Avant tout modèle, un lexique d'expressions par famille
+(\og perdu ma carte \fg, \og opposition \fg, \og frais \fg, \og virement \fg, \og mettre de côté \fg,
+\og appartement \fg, \og prêt étudiant \fg, \og c'est quoi \fg\dots) est cherché dans le message
+normalisé (minuscules, accents retirés, formes simples). Coût : moins d'une milliseconde, aucun
+modèle chargé. Le lexique part des mots les plus discriminants de chaque famille dans les données
+d'entraînement, puis il est relu à la main. Le filtre \textbf{ne conclut que s'il est sûr} : une
+seule famille touchée, et soit une phrase courte, soit plusieurs expressions trouvées. Un seul
+mot-clé perdu dans une longue phrase ne suffit pas : le message passe au classifieur. Une
+expression n'est gardée dans le lexique que si sa précision mesurée sur la validation dépasse
+97\,\%. C'est la suggestion de l'organisateur, et elle se mesure : la part des messages que les
+mots-clés traitent seuls, et la précision sur cette part.
+
+\paragraph{Classer en deux niveaux.} Le classifieur prédit d'abord une \emph{famille} (14 : les 9
+familles Banking77 plus 5 nouvelles), puis l'\emph{intention} précise (85 : les 77 de Banking77
+plus 8 nouvelles). La famille suffit à choisir le parcours ; l'intention sert à affiner la réponse.
+Ce double niveau absorbe le bruit d'étiquetage de Banking77 : deux intentions voisines mal séparées
+appartiennent presque toujours à la même famille.
+
+\paragraph{Le modèle.} Les phrases sont transformées en vecteurs par
+\f{intfloat/multilingual-e5-small} (118 millions de paramètres, vecteurs de 384 nombres, environ
+0,47 Go en float32), avec le préfixe \f{query:} attendu par la famille E5. Une régression
+logistique (scikit-learn) est entraînée sur ces vecteurs : quelques secondes sur CPU, un fichier de
+moins d'un mégaoctet. L'encodeur étant multilingue, on l'entraîne sur trois sources à la fois :
+Banking77 en anglais, Banking77 traduit en français, et nos exemples français des nouvelles
+intentions. Pour expliquer ce qu'il a compris, l'assistant affiche aussi la phrase
+d'entraînement la plus proche (\og votre message ressemble à : \emph{j'ai perdu ma carte} \fg),
+retrouvée par un produit matrice-vecteur en mémoire : l'idée du RAG, appliquée à la compréhension.
+
+\paragraph{Les nouvelles intentions.}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Intention} & \textbf{Famille} & \textbf{Exemple de message} \\
+\midrule
+\f{epargne\_projet} & \f{epargne} & \og Je voudrais mettre de côté pour mes enfants \fg \\
+\f{credit\_immobilier} & \f{credit} & \og Je veux acheter un appartement \fg \\
+\f{credit\_conso} & \f{credit} & \og Il me faudrait un crédit pour une voiture \fg \\
+\f{pret\_etudiant} & \f{credit} & \og Comment on fait un prêt étudiant ? \fg \\
+\f{faire\_virement} & \f{virement} & \og Je dois envoyer 500\eur{} à mon fils \fg \\
+\f{question\_definition} & \f{aide} & \og C'est quoi un TAEG ? \fg \\
+\f{insatisfaction} & \f{insatisfaction} & \og Votre appli ne marche jamais ! \fg \\
+\f{hors\_sujet} & \f{conversation} & \og Bonjour \fg, \og merci \fg, \og quel temps fait-il ? \fg \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Pour chacune, environ 80 exemples d'entraînement sont \emph{générés} une fois, hors ligne, par un
+gros modèle, avec des consignes de variété (registre jeune ou âgé, fautes de frappe, style SMS,
+phrases longues) ; un membre de l'équipe les relit tous (une vingtaine de minutes). Les 20 exemples
+de \emph{test} de chaque intention sont \emph{écrits à la main} par l'équipe : tester un
+classifieur sur des phrases produites par le même générateur que son entraînement surestimerait
+son score.
+
+\paragraph{Le seuil de confiance $\tau$.} Si la probabilité de la famille prédite est au moins
+$\tau$, on continue. Sinon, l'assistant pose une question fermée construite à partir des deux
+familles les plus probables : \og Vous parlez de votre carte, ou d'un virement ? \fg. Si la
+réponse reste ambiguë, et seulement alors, le message part au modèle d'escalade. $\tau$ est choisi
+par balayage sur un jeu de validation, comme dans Timso AI : on retient la plus petite valeur pour
+laquelle la précision sur les messages acceptés dépasse 97\,\%. Une erreur de parcours coûte plus
+qu'une question.
+
+\paragraph{Le contexte de la conversation.} Quand un parcours attend une information (un montant,
+une durée), le message est d'abord lu comme une réponse à cette question : \og 250\,000 \fg{} n'est
+pas une nouvelle demande. Le classifieur n'est consulté que si le message ne répond pas à la
+question en cours.
+
+\paragraph{Les entités, par règles.} Montants (\og 500\eur{} \fg, \og 1\,900 euros \fg, \og 250k
+\fg), durées (\og 10 ans \fg, \og 48 mois \fg), liens (\og mon fils \fg), objets (voiture,
+appartement, études), dates relatives (\og hier soir \fg) : des expressions régulières suffisent et
+coûtent zéro. Si une information manque après les règles, on ne la devine pas avec un LLM : le
+parcours la demande au client. Un appel au LLM de moins, et aucun risque d'erreur d'extraction.
+
+\paragraph{L'insatisfaction.} Deux signaux combinés : le classifieur (intention
+\f{insatisfaction}) et l'historique (nombre de contacts du jour). Au troisième contact, la règle de
+passage de main s'applique même si le ton est neutre.
+
+\section{Étage 2 --- Converser}
+
+\paragraph{Un parcours par intention de conseil ou d'action.} Chaque parcours est un fichier YAML
+qui déclare les informations nécessaires, la question à poser pour chacune, l'ordre, et ce qui
+se passe à la fin (un conseil, une action, un passage de main). Le gestionnaire de dialogue est un
+automate qui lit ces fichiers : déterministe, testable, et modifiable sans toucher au code.
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+# src/converser/parcours/credit_immobilier.yaml (extrait)
+famille: credit
+infos:
+  revenus_nets:   {source: profil, sinon: "Quels sont vos revenus nets mensuels ?"}
+  credits_cours:  {source: profil, sinon: "Avez-vous des credits en cours ?"}
+  prix_bien:      {question: "Quel est le prix du bien que vous visez ?"}
+  apport:         {source: profil.epargne, confirmer: true,
+                   question: "Quelle part de votre epargne souhaitez-vous y consacrer ?"}
+fin: {conseil: credit_immobilier, mention_legale: credit, proposer: rdv_conseiller}
+\end{verbatim}
+\end{code}
+
+\paragraph{Ne jamais demander ce qu'on sait.} C'est la forme la plus visible de la
+personnalisation (E4) : si le profil connaît les revenus, l'assistant \emph{confirme} au lieu de
+demander (\og J'ai noté vos revenus de 2\,900\eur{} nets par mois \fg). Une information simulée
+est confirmée, jamais affirmée.
+
+\paragraph{Le registre.} Un mode \og mots simples \fg{} s'active de lui-même pour un client âgé de
+70 ans ou plus ou signalé \og peu à l'aise en ligne \fg{} (Paul), et à la demande pour tout le
+monde : phrases courtes, une seule étape par message, aucun sigle sans explication. Ce n'est pas un
+autre modèle, c'est un autre jeu de gabarits et une consigne de plus au petit LLM.
+
+\paragraph{Le jargon.} Le glossaire (annexe~\ref{an:glossaire}) est une liste de fiches courtes,
+rédigées et vérifiées par nous. Quand un terme du glossaire apparaît dans une réponse, il est
+souligné et explicable d'un clic ; quand le client demande \og c'est quoi \dots{} \fg, la fiche est
+retrouvée par similarité de vecteurs, en mémoire, sans LLM.
+
+\section{Étage 3 --- Conseiller}
+
+\paragraph{Trois passes.} Le moteur de conseil applique d'abord les conditions
+\textbf{d'éligibilité} (dures : âge, revenu, plafond déjà atteint), puis des règles de
+\textbf{pertinence} (horizon, objectif, épargne de précaution existante), puis un
+\textbf{classement}. Chaque règle a un identifiant et une phrase d'explication paramétrée : quand
+elle s'applique, la phrase remplie entre dans les raisons de la proposition.
+
+\paragraph{Pourquoi, et pourquoi pas.} La sortie contient les produits proposés avec leurs raisons
+\emph{et} les produits écartés avec la règle qui les écarte. C'est l'explication la plus
+convaincante qui soit pour un client --- \og le LEP n'est pas proposé parce que votre revenu fiscal
+dépasse le plafond \fg{} --- et pour le jury (15\,\% de la note).
+
+\paragraph{L'appétence pour l'épargne.} Bank Marketing dit, pour 45\,211 clients, qui a souscrit un
+dépôt à terme. Une régression logistique entraînée sur les seules caractéristiques du client (âge,
+métier, situation, études, solde, crédits, campagnes précédentes ; \textbf{sans} \f{duration})
+donne une probabilité d'intérêt pour l'épargne. Elle sert à \emph{ordonner} les propositions
+d'épargne et à expliquer cet ordre par les trois facteurs qui pèsent le plus. On mesure l'aire sous
+la courbe ROC sur un jeu de test tenu à part ; LightGBM ne remplace la régression logistique que si
+le gain est mesuré. Les limites sont dites : données portugaises de 2008 à 2010, donc un signal
+faible et illustratif, jamais une décision.
+
+\paragraph{La prudence sur le crédit.} Pour un crédit immobilier, les règles sont celles du Haut
+Conseil de stabilité financière : \textbf{mensualités au plus égales à 35\,\% des revenus nets,
+assurance comprise, et durée au plus de 25 ans}. La capacité d'emprunt se calcule à partir de la
+mensualité maximale $m$, du taux mensuel $i$ et du nombre de mois $n$ :
+\[
+  m = 0{,}35 \times R - C, \qquad
+  \text{capacité} = m \times \frac{1 - (1+i)^{-n}}{i}
+\]
+où $R$ est le revenu net mensuel et $C$ les mensualités déjà en cours. Le taux est un
+\emph{paramètre daté} du catalogue, affiché comme \og taux indicatif \fg. Pour le crédit à la
+consommation, la même logique de taux d'effort s'applique, avec la mention légale obligatoire :
+\og Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de
+vous engager. \fg{} L'assistant ne promet jamais un accord : il donne une estimation et propose un
+rendez-vous avec un conseiller, qui décide.
+
+\section{Étage 4 --- Agir}
+
+L'oral laissait le choix entre guider et agir (E13). Nous agissons, mais avec une règle reprise de
+Timso AI : \textbf{la lecture est libre, l'effet de bord demande une confirmation explicite}, et
+chaque action laisse une trace dans un journal.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y c Y@{}}
+\toprule
+\textbf{Outil} & \textbf{Ce qu'il fait (sur le SI simulé)} & \textbf{Confirmation} &
+  \textbf{Rend} \\
+\midrule
+\f{consulter\_profil} & Lit le profil et l'historique du client & non & Le profil \\
+\f{expliquer\_frais} & Retrouve les frais du mois dans l'historique et leur cause & non & Liste
+  datée des frais, avec la règle qui les explique \\
+\f{bloquer\_carte} & Met la carte en opposition & \textbf{oui} & Une référence d'opposition,
+  l'heure \\
+\f{preparer\_virement} & Prépare un virement vers un bénéficiaire enregistré ; vérifie le solde ;
+  ne l'exécute qu'après accord & \textbf{oui} & Un récapitulatif, puis une référence \\
+\f{transmettre\_conseiller} & Crée une demande de rappel avec un résumé de la conversation & oui &
+  Un numéro de ticket \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Le résumé transmis au conseiller est construit à partir des faits du parcours (intention, infos
+recueillies, propositions) : le conseiller n'a pas à reposer les questions. C'est le
+\og brouillon \fg{} de Timso AI transposé : l'humain reprend la main avec le travail déjà fait.
+
+\section{Étage 5 --- Formuler}
+
+\paragraph{Le gabarit d'abord.} Pour la plupart des intentions de service (carte, frais, virement,
+compte), une réponse à trous, écrite à l'avance et relue, est meilleure qu'une génération : exacte,
+instantanée, gratuite. Le petit LLM n'intervient que lorsque la réponse dépend de plusieurs faits à
+articuler (un conseil, une explication de refus).
+
+\paragraph{Un seul appel, à la fin.} C'est le seul endroit où un LLM intervient dans le cas
+normal : une fois par tour, après que tout a été compris, décidé et calculé. L'escalade de
+l'étage 1 est l'exception, comptée et affichée.
+
+\paragraph{Ce que reçoit le petit LLM.} Une consigne système courte (registre de la banque,
+vouvoiement, interdits), les \emph{faits structurés} produits par les étages 3 et 4 (propositions,
+raisons, chiffres), et la question en cours. Jamais le catalogue entier, jamais l'historique brut :
+le contexte reste petit, donc rapide et peu coûteux.
+
+\paragraph{Le garde-fou.} Après génération, trois contrôles automatiques : chaque nombre du texte
+doit figurer dans les faits fournis ; aucune formule interdite (\og accordé \fg, \og garanti \fg,
+\og sans risque \fg) ; longueur bornée. En cas d'échec, la réponse gabarit est affichée à la place
+et l'échec est compté. Le taux d'échec du garde-fou fait partie des résultats présentés.
+
+\paragraph{Le modèle.} \f{ministral-3:3b} par défaut (3,0 Go en Q4\_K\_M) : un modèle européen,
+conçu par Mistral AI, à l'aise en français --- ce qui rejoint la question de la souveraineté que
+CGI a soulevée. Mais ce choix n'est pas un a priori : le chapitre~\ref{ch:modeles} décrit comment
+il est confirmé ou remplacé par la mesure.
+
+\section{Mesurer, en continu}
+
+Chaque appel à \f{reply()} renvoie une trace : le niveau qui a compris la demande (mots-clés,
+classifieur ou escalade), puis, pour chaque étage traversé, son nom, le modèle utilisé, la latence, les tokens consommés (Ollama renvoie \f{prompt\_eval\_count} et
+\f{eval\_count}) et, pendant les campagnes de mesure, l'énergie. L'interface affiche cette trace en
+direct dans le panneau \og frugalité \fg{} : le jury voit, pendant la démo, qu'une opposition de
+carte n'a appelé aucun LLM. Le protocole de mesure de l'énergie est au chapitre~\ref{ch:evaluation}.
+
+\section{Un exemple complet : l'appartement}
+
+Léa (C07), 31 ans, 2\,900\eur{} nets par mois, aucun crédit en cours, 25\,000\eur{} d'épargne.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y l@{}}
+\toprule
+\textbf{Étape} & \textbf{Ce qui se passe} & \textbf{Modèle} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Tour 1 --- \og Je veux acheter un appartement \fg}} \\
+Comprendre & Famille \f{credit}, intention \f{credit\_immobilier}. Les mots-clés \og acheter \fg{}
+  et \og appartement \fg{} désignent une seule famille, dans une phrase courte : le filtre conclut
+  seul. Entité \f{objet=appartement} & mots-clés \\
+Converser & Parcours \f{credit\_immobilier}. Revenus et crédits connus par le profil ; épargne
+  connue, à confirmer comme apport. Manque : le prix du bien & --- \\
+Formuler & \og C'est un beau projet. J'ai noté vos revenus de 2\,900\eur{} nets par mois. Quel
+  est le prix du bien que vous visez, et quelle part de vos 25\,000\eur{} d'épargne souhaitez-vous y
+  consacrer ? \fg & gabarit \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Tour 2 --- \og Autour de 250\,000, et je peux mettre les 25\,000 \fg}} \\
+Comprendre & Lu comme la réponse attendue : prix 250\,000\eur{}, apport 25\,000\eur{} & règles \\
+Conseiller & Frais de notaire estimés à 7,5\,\% dans l'ancien : 18\,750\eur{}. Besoin de
+  financement : 243\,750\eur{}. À un taux indicatif de 3,5\,\% sur 25 ans, mensualité d'environ
+  1\,220\eur{}, soit \textbf{42,1\,\% des revenus : au-dessus des 35\,\%}. Prix maximal finançable
+  avec cet apport : environ 212\,000\eur{} & règles \\
+Formuler & Explique le calcul, propose trois leviers (bien moins cher, apport plus élevé,
+  co-emprunteur), signale qu'un conseiller peut étudier les aides (PTZ selon conditions), propose
+  un rendez-vous & \f{ministral-3:3b} \\
+Garde-fou & Tous les nombres du texte figurent dans les faits ; aucune promesse & règles \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Le panneau \og pourquoi \fg{} affiche alors les règles appliquées (taux d'effort maximal de
+35\,\%, durée maximale de 25 ans, estimation des frais de notaire), le taux indicatif avec sa date
+et sa source, et la ligne écartée : \og prêt sur 30 ans : au-delà de la durée maximale \fg. Le
+calcul est vérifiable à la main par le jury.
+
+\section{Les parcours}
+
+Neuf parcours couvrent les neuf situations du sujet ; les familles de service restantes de
+Banking77 reçoivent une fiche de réponse courte et une orientation. Le détail de chaque parcours
+est en annexe~\ref{an:parcours}.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y Y@{}}
+\toprule
+\textbf{Parcours} & \textbf{Ce que l'assistant demande} & \textbf{Comment il conclut} \\
+\midrule
+Carte perdue (Inès) & Quelle carte ; perte ou vol & \f{bloquer\_carte} après confirmation ; rassure
+  sur la responsabilité ; propose une nouvelle carte \\
+Frais (Marc) & Quel frais, si plusieurs & \f{expliquer\_frais} sur l'historique ; plafond légal ;
+  si les incidents se répètent, oriente vers l'offre clientèle fragile \\
+Virement (Paul) & Bénéficiaire, montant, date & \f{preparer\_virement} pas à pas ; rappel :
+  la banque ne demande jamais un code \\
+Épargne (Sophie) & Pour qui, horizon, montant mensuel & Propositions classées, raisons, produits
+  écartés \\
+Appartement (Léa) & Prix, apport & Capacité, taux d'effort, leviers, rendez-vous \\
+Crédit auto (Karim) & Montant, durée, apport & Taux d'effort avec le crédit en cours, mention
+  légale, rendez-vous \\
+Prêt étudiant (Lucas) & Études, montant, caution & Orientation vers le prêt étudiant ; Livret Jeune
+  pour épargner \\
+Jargon & Le terme & Fiche du glossaire \\
+Insatisfaction (Julie) & Rien : on écoute & Reconnaît la frustration, s'excuse,
+  \f{transmettre\_conseiller} avec le résumé des trois contacts \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Conformité}
+
+\begin{itemize}
+  \item \textbf{Données personnelles.} Toutes les données sont simulées ; tout est traité en local,
+        aucune donnée ne sort de la machine (E8).
+  \item \textbf{Règlement européen sur l'IA.} Les systèmes destinés à évaluer la solvabilité des
+        personnes physiques sont classés à haut risque. Notre assistant ne note pas la solvabilité :
+        il applique des règles publiques, donne une estimation indicative, et renvoie la décision à
+        un conseiller. Le modèle d'appétence n'ordonne que des produits d'épargne. Le règlement
+        impose aussi d'informer l'utilisateur qu'il échange avec une IA : un bandeau permanent le
+        dit.
+  \item \textbf{Crédit.} La mention légale accompagne toute réponse sur un crédit.
+  \item \textbf{Protection.} Toute réponse qui touche à la carte ou au virement rappelle qu'aucun
+        code ne doit être communiqué --- une protection simple contre l'arnaque au faux conseiller,
+        qui vise en particulier les clients âgés.
+\end{itemize}

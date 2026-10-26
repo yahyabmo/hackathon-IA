@@ -1,0 +1,220 @@
+\chapter{Ce que le hackathon attend}
+\label{ch:attentes}
+
+Ce chapitre rassemble tout ce qui a été demandé, écrit ou dit, sans interprétation. Il se termine
+par une liste d'exigences numérotées : le chapitre~\ref{ch:couverture} vérifie que la solution
+répond à chacune.
+
+\section{La règle commune aux deux sujets}
+
+Les slides de CGI posent quatre règles, \og deux sujets, une même règle : une IA frugale et open
+source pour le domaine bancaire \fg.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{4cm} Y@{}}
+\toprule
+\textbf{Règle} & \textbf{Ce qu'elle impose} \\
+\midrule
+Open source uniquement & Licences ouvertes, aucune API de LLM externe, données en local. \\
+Le plus petit modèle qui suffit & Le GPU est partagé : une base simple d'abord, un modèle plus gros
+  seulement si le gain est \emph{mesuré}. \\
+Serveur GPU sur site & Données et modèles restent en interne. \\
+Mesurer sa frugalité & Taille du modèle, énergie (CodeCarbon) et latence, présentées dans le
+  pitch. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Denis Barthou a précisé : la solution tourne uniquement sur les machines locales ; utiliser d'autres
+IA pour \emph{développer} est autorisé ; dans la solution, on privilégie de petits LLM, \og des
+algorithmes au lieu de LLM quand c'est possible \fg, des bases de données et d'autres types d'IA
+(classifieurs). Le critère de frugalité retient le plus petit LLM \emph{en Go, quantisation
+comprise}.
+
+À l'oral, CGI a ajouté trois nuances qui orientent directement notre architecture :
+\begin{itemize}
+  \item la frugalité, c'est peu de tokens, \og mais surtout \fg{} peu d'énergie ;
+  \item \og le plus petit modèle qui suffit \fg{} est une phrase \og à double tranchant \fg : une
+        architecture peut appeler \textbf{un gros modèle à un instant précis, pour un besoin
+        précis}, et de petits modèles le reste du temps --- \og c'est là que vous allez innover \fg ;
+  \item le sujet 1 est \og de l'IA générative qu'on orchestre \fg, \og du chatbot, mais pas du
+        chatbot traditionnel \fg.
+\end{itemize}
+
+\section{Le sujet 1}
+
+\begin{cle}
+\og Un client écrit : \emph{Je veux acheter un appartement.} Votre assistant doit comprendre, poser
+les bonnes questions et lui proposer une piste adaptée à sa situation. \fg
+\end{cle}
+
+\paragraph{Objectifs.} Comprendre les questions des clients en langage naturel ; personnaliser
+selon l'âge, les revenus et l'historique ; conseiller, c'est-à-dire recommander un produit bancaire
+simple.
+
+\paragraph{Démarche attendue, en quatre temps.} \emph{Cadrer} (quels besoins et quelles intentions
+prioriser ?), \emph{Préparer} (rendre les données exploitables en français), \emph{Concevoir}
+(quelle architecture, et pourquoi la plus sobre ?), \emph{Démontrer} (prouver la valeur et la
+frugalité).
+
+\paragraph{Livrables attendus.} Données préparées en français ; modèle de compréhension des
+intentions ; chatbot relié à une base clients simulée ; moteur de conseils personnalisés ; mesures
+de frugalité.
+
+\paragraph{Données fournies.} Banking77 (intentions) ; Bank Marketing, \og enrichi de revenus et
+d'historique simulés \fg{} ; le catalogue de produits est à construire à partir d'informations
+publiques.
+
+\paragraph{Les situations données en exemple.} Six sur les slides, trois de plus à l'oral.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{4.3cm} L{3.2cm} Y@{}}
+\toprule
+\textbf{Thème} & \textbf{Message} & \textbf{Profil} & \textbf{Comportement attendu} \\
+\midrule
+Carte & \og J'ai perdu ma carte hier soir, je fais quoi ? \fg & Inès, 34 ans, cadre & Réagir vite,
+  guider l'opposition, rassurer \\
+Réclamation & \og Pourquoi j'ai payé 8\eur{} de frais ce mois-ci ? \fg & Marc, 52 ans, découverts
+  fréquents & Expliquer les frais, orienter si besoin \\
+Épargne & \og Je voudrais mettre de côté pour mes enfants. \fg & Sophie, 41 ans, deux enfants &
+  Demander l'horizon, proposer une piste \\
+Virement & \og Je dois envoyer 500\eur{} à mon fils. \fg & Paul, 68 ans, peu à l'aise en ligne &
+  Guider pas à pas, avec des mots simples \\
+Crédit & \og Je veux un crédit pour acheter une voiture. \fg & Karim, 29 ans, 1\,900\eur{} de
+  revenus & Questionner, rester prudent sur l'endettement \\
+Insatisfaction & \og Votre appli ne marche jamais ! \fg & Client mécontent, 3\textsuperscript{e}
+  message du jour & Reconnaître la frustration, passer la main \\
+\midrule
+Logement & \og Je veux acheter un appartement. \fg & (énoncé principal) & Comprendre, questionner,
+  proposer une piste \\
+Prêt étudiant & \og Je veux faire un prêt étudiant, comment je fais ? \fg & (exemple oral) &
+  Regard d'un jeune client \\
+Jargon & Un mot ou un sigle bancaire non compris & (exemple oral) & Expliquer avec des mots simples \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Précisions données à l'oral.} Les jeux de données sont \og indicatifs \fg{} : on peut en
+croiser d'autres. La profondeur est à notre choix : \og un agent qui va jusqu'au bout d'un workflow
+et qui fait lui-même l'action \fg{} (couper la carte selon la gravité), ou un assistant qui guide
+seulement. Ils veulent \og notre regard \fg{} de jeunes clients sur le niveau de service attendu. Le
+chatbot doit répondre \og immédiatement \fg. Les attentes seront précisées avec chaque équipe au
+fil des jours.
+
+\section{Ce que le jury regarde}
+
+Jury de trois personnes : Adrien (CGI, aussi coach), Denis Barthou (ENSEIRB) et Jean-Michel (La
+Banque Postale, à distance ; les équipes peuvent lui poser des questions). Il \og évalue votre
+démarche autant que votre résultat \fg.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}c l Y@{}}
+\toprule
+\textbf{Poids} & \textbf{Critère} & \textbf{Formulation officielle} \\
+\midrule
+25\,\% & Pertinence métier & Utile pour un client ou un analyste \\
+20\,\% & Qualité technique & Résultats mesurés et bien évalués \\
+20\,\% & Frugalité & Taille, énergie, latence \\
+15\,\% & Explicabilité & Chaque conseil ou alerte se justifie \\
+10\,\% & Démonstration & Elle fonctionne et se comprend \\
+10\,\% & Présentation & Claire et tenue en 15 minutes \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Format.} 30 minutes par équipe (20 s'il y a plus de 7 groupes) : 15 minutes de
+présentation avec \textbf{démonstration en direct sur le serveur fourni}, environ 10 minutes de
+questions, 5 minutes de retour à chaud. À remettre avant : le code source déposé sur un dépôt Git
+et le support de présentation.
+
+\section{Ce que La Banque Postale valorise}
+
+La directrice SI de La Banque Postale a présenté ses priorités IA dans cet ordre :
+\begin{enumerate}
+  \item \textbf{l'expérience client} : chatbot conversationnel sur ses contrats, \textbf{les
+        réclamations} (\og un sujet prégnant \fg), et la personnalisation des offres à partir des
+        avoirs du client --- c'est exactement le sujet 1 ;
+  \item l'optimisation des processus (dossiers de crédit, anti-blanchiment, anti-fraude) ;
+  \item l'innovation (outils pour les collaborateurs, incubateur).
+\end{enumerate}
+Elle a insisté sur trois valeurs : \textbf{l'accessibilité} (clients et collaborateurs malvoyants
+ou malentendants : tout ce que construit la DSI doit être compatible), \textbf{l'inclusion
+bancaire} (la banque a le devoir d'accueillir tous les clients, y compris les plus fragiles) et la
+\textbf{responsabilité} (banque citoyenne, finance durable). CGI a mentionné la souveraineté et
+la RSE parmi les enjeux de ses clients. Un client sur quatre en France est client de La Banque
+Postale, accueilli dans 17\,000 points de contact.
+
+\section{Les contraintes}
+
+\begin{itemize}
+  \item \textbf{Le temps.} Lundi soir, mardi, mercredi matin : un jour et demi de travail effectif.
+  \item \textbf{Les machines.} Postes de la salle (RTX 3060 12 Go, 30 Go de RAM) : machine
+        principale de développement. DeepEirb (2 $\times$ A6000 48 Go) : SSH et serveur
+        d'inférence vLLM, à condition de \emph{demander à Denis Barthou} les modèles voulus.
+        Jetson AGX Orin et OrangePi : disponibles mardi, pour le déploiement uniquement.
+  \item \textbf{Les modèles déjà installés.} \f{gemma4:e2b} (7,2 Go) et \f{ministral-3:14b}
+        (9,1 Go) sous Ollama, contexte réglé à 16\,384 tokens. Télécharger d'autres modèles est
+        possible, \og pas en wifi \fg.
+  \item \textbf{L'équipe.} Trois personnes : Yahya (IA), Sohayb (génie logiciel), Younes (calcul
+        intensif).
+\end{itemize}
+
+\section{Ce qu'un organisateur nous a conseillé}
+
+Lundi vers 17h30, un organisateur du hackathon a pris le temps d'échanger avec nous
+(transcription dans \f{infos/transcription-3-echange-organisateur.txt}). Ses conseils précisent
+la règle commune :
+
+\begin{itemize}
+  \item \textbf{\og Pour gagner, c'est moins de LLM, plus d'algo \fg}, ou des algorithmes différents,
+        ou des modèles d'IA plus spécialisés --- \og même pour le premier \fg{} sujet.
+  \item \textbf{En entrée, pas besoin de LLM} pour savoir de quoi parle le client : un algorithme de
+        catégorisation est plus rapide. Une simple recherche de \textbf{mots-clés}, presque gratuite,
+        trouve le sujet dans environ 30\,\% des cas (\og ça fait 30\,\% de gagné \fg), et peut
+        donner \textbf{un degré de confiance} : un seul mot-clé trouvé dans une longue phrase, ce
+        n'est pas sûr. Les autres cas passent à un outil plus lourd.
+  \item \textbf{En sortie, un LLM}, parce qu'il faut parler français à un humain ; mais il faut
+        \textbf{minimiser les appels} et ne l'appeler \textbf{qu'à la fin}.
+  \item \textbf{Choisir sa taille en descendant} : commencer avec un modèle qui parle correctement
+        (\og un 15B ou un 30B \fg), puis descendre vers un 4B, un 2B (\og même le Gemma 4 que vous
+        avez \fg), voire un 1B.
+  \item \textbf{Se demander, à chaque endroit, si un LLM est nécessaire} : jamais, ou seulement pour
+        une partie des cas. \og Seulement 30\,\% des cas avec un LLM, c'est intéressant \fg{} : on
+        prend le vélo pour aller chercher le pain, la voiture pour le week-end.
+  \item \textbf{Un seul sujet}, bien fait. Puis, \textbf{une fois la solution sûre}, essayer des
+        idées nouvelles, même exotiques ; utiliser l'IA pour coder et discuter des idées ; et
+        \og se faire plaisir \fg.
+\end{itemize}
+
+\section{Les exigences, numérotées}
+\label{sec:exigences}
+
+\begin{center}\small
+\begin{longtable}{@{}l L{8.6cm} L{4.4cm}@{}}
+\toprule
+\textbf{N\textsuperscript{o}} & \textbf{Exigence} & \textbf{Source} \\
+\midrule
+\endhead
+E1 & Comprendre les demandes en langage naturel, en français & Objectif 01, livrable \\
+E2 & Fournir des données préparées en français & Livrable \\
+E3 & Poser les bonnes questions avant de proposer & Énoncé \\
+E4 & Personnaliser selon l'âge, les revenus et l'historique & Objectif 02 \\
+E5 & Recommander un produit bancaire simple & Objectif 03, livrable \\
+E6 & Relier le chatbot à une base clients simulée & Livrable \\
+E7 & Construire le catalogue à partir d'informations publiques & Données \\
+E8 & Open source, aucune API externe, données locales & Règle commune \\
+E9 & Le plus petit modèle qui suffit ; un plus gros seulement si le gain est mesuré & Règle commune \\
+E10 & Mesurer taille, énergie (CodeCarbon) et latence & Règle commune, livrable \\
+E11 & Justifier chaque conseil & Grille (15\,\%) \\
+E12 & Répondre immédiatement & Oral \\
+E13 & Choisir et assumer la profondeur : guider ou agir & Oral \\
+E14 & Traiter les six situations avec le comportement attendu & Slide 3 \\
+E15 & Expliquer le jargon ; apporter le regard d'un jeune client & Oral \\
+E16 & Démo en direct sur le serveur fourni ; code sur Git ; support remis & Soutenance \\
+E17 & Respecter accessibilité et inclusion (souhaitable) & Présentation de La Banque Postale \\
+E18 & En entrée, des algorithmes ; un seul appel au LLM, à la fin ; mesurer la part des cas sans
+  LLM & Échange avec un organisateur \\
+E19 & D'abord une solution sûre, ensuite des idées nouvelles & Échange avec un organisateur \\
+\bottomrule
+\end{longtable}
+\end{center}

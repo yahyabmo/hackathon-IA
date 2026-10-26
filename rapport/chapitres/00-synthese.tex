@@ -1,0 +1,90 @@
+\chapter*{La solution en une page}
+\addcontentsline{toc}{chapter}{La solution en une page}
+\markboth{La solution en une page}{}
+
+\paragraph{Le problème.} Un client écrit à sa banque en langage libre : \og Je veux acheter un
+appartement \fg, \og J'ai perdu ma carte hier soir \fg, \og Pourquoi j'ai payé 8\eur{} de frais ? \fg.
+L'assistant doit comprendre, poser les bonnes questions, tenir compte de la situation du client, et
+proposer une piste --- avec une IA open source, locale, la plus sobre possible, et dont chaque
+conseil se justifie.
+
+\paragraph{Notre réponse : une cascade.} Chaque étage ne passe la main au suivant que s'il ne sait
+pas faire lui-même. Le calcul le plus cher n'est appelé qu'en dernier recours, et c'est mesuré.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{3.6cm} Y@{}}
+\toprule
+\textbf{Étage} & \textbf{Qui fait le travail} & \textbf{Pourquoi pas un LLM} \\
+\midrule
+1. Comprendre & Mots-clés, sinon petit encodeur (118 M de paramètres) et régression logistique &
+  Les cas évidents coûtent moins d'une milliseconde, les autres quelques millisecondes ; tout se
+  mesure sur le jeu de test officiel de Banking77. \\
+2. Converser & Parcours décrits en YAML : quoi demander, dans quel ordre & Les questions à poser se
+  déduisent du profil : on ne demande jamais ce qu'on sait déjà. \\
+3. Conseiller & Règles publiques (plafonds, 35\,\% d'endettement) et modèle d'appétence &
+  Une décision financière doit être reproductible et justifiable, pas générée. \\
+4. Agir & Outils : opposition, virement guidé, transmission au conseiller & Une action ne part
+  qu'après confirmation explicite du client. \\
+5. Formuler & Le seul appel LLM du tour, à la fin : \f{ministral-3:3b} (3,0 Go) sous garde-fou ;
+  gabarits pour les réponses simples & Le LLM met en forme des faits calculés ; il n'en invente
+  aucun. \\
+Escalade & \f{ministral-3:14b} (9,1 Go), seulement si l'étage 1 doute encore après une question &
+  Le \og gros modèle à un instant précis \fg{} que CGI a explicitement encouragé. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Les quatre décisions qui font la différence.}
+\begin{enumerate}
+  \item \textbf{Comprendre sans LLM.} Des mots-clés pour les cas évidents, un petit classifieur
+        pour le reste. Il est entraîné sur Banking77 traduit en français, plus 8 intentions que
+        Banking77 ne couvre pas : épargne, crédit immobilier, crédit à la consommation, prêt
+        étudiant, virement à un proche, jargon, insatisfaction, hors sujet.
+  \item \textbf{Décider sans LLM.} Chaque proposition vient avec ses raisons \emph{et} avec la
+        liste des produits écartés et pourquoi (\og pourquoi pas le LEP ? \fg).
+  \item \textbf{Formuler avec le plus petit modèle qui suffit, une seule fois par tour.} On part
+        d'un modèle qui parle bien (14B), on descend en taille, et on garde le plus petit qui tient
+        encore le seuil de qualité.
+  \item \textbf{Tout mesurer contre une version \og tout LLM \fg.} Même jeu de scénarios, trois
+        configurations, et un tableau qualité / énergie / latence / taille au cœur du pitch.
+\end{enumerate}
+
+\paragraph{Ce qu'un organisateur nous a dit.} \og Pour gagner, c'est moins de LLM, plus d'algo, ou
+des modèles d'IA plus spécialisés \fg, y compris pour le sujet 1 : des mots-clés et un classifieur
+en entrée, un LLM appelé une seule fois, à la fin, et dont on choisit la taille en descendant.
+C'est l'architecture ci-dessus.
+
+\needspace{10\baselineskip}
+\paragraph{Ce que la grille du jury y gagne.}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l c Y@{}}
+\toprule
+\textbf{Critère} & \textbf{Poids} & \textbf{Notre preuve} \\
+\midrule
+Pertinence métier & 25\,\% & Les 6 situations des slides, plus l'appartement, le prêt étudiant et
+  le jargon ; priorité n\textsuperscript{o}\,1 de La Banque Postale ; inclusion et accessibilité. \\
+Qualité technique & 20\,\% & Précision sur le test officiel Banking77 (anglais et français) ; taux
+  de réussite d'un jeu de 30 scénarios automatisés. \\
+Frugalité & 20\,\% & Énergie par requête (CodeCarbon), latence, Go chargés, part des requêtes
+  traitées sans LLM ; comparaison à la version \og tout LLM \fg. \\
+Explicabilité & 15\,\% & Panneau \og pourquoi \fg{} : intention et confiance, règles appliquées,
+  produits proposés et écartés, sources publiques. \\
+Démonstration & 10\,\% & Six minutes en direct, avec les profils fournis par les slides ; vidéo de
+  secours. \\
+Présentation & 10\,\% & Trois voix, une par module ; un tableau de résultats, une démo, un
+  message. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{L'organisation.} Trois modules, un responsable et un suppléant chacun : \emph{Comprendre
+et mesurer} (Younes), \emph{Converser et formuler} (Yahya), \emph{Conseiller et agir} (Sohayb).
+Les contrats entre modules sont figés lundi soir ; deux intégrations mardi (12h30 et 18h) ; gel
+fonctionnel mardi 18h ; mercredi matin consacré aux mesures finales, à la vidéo et aux répétitions.
+
+\begin{cle}
+\textbf{La phrase à retenir.} \emph{Notre assistant comprend souvent avec de simples mots-clés,
+sinon avec un modèle de 118 millions de paramètres ; il décide avec des règles que le client peut
+lire ; et il n'appelle un LLM qu'une fois, à la fin, pour mettre en mots ce qui a déjà été
+calculé.}
+\end{cle}

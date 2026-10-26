@@ -1,0 +1,284 @@
+\chapter{L'organisation de l'équipe}
+\label{ch:organisation}
+
+\section{Les principes}
+
+\begin{itemize}
+  \item \textbf{Un module, un responsable, un suppléant.} Le responsable décide dans son module ;
+        le suppléant connaît le code assez pour le reprendre si besoin, et relit chaque fusion.
+  \item \textbf{Des contrats figés lundi soir.} Les modules communiquent par des structures de
+        données définies ensemble, une fois. Chacun développe contre des \emph{bouchons} qui
+        respectent le contrat : personne n'attend personne.
+  \item \textbf{\f{main} tourne toujours.} À tout moment, \f{streamlit run app.py} doit lancer la
+        démo depuis \f{main}.
+  \item \textbf{Deux intégrations mardi}, à 12h30 et à 18h, avec le jeu de scénarios comme juge.
+  \item \textbf{D'abord une solution sûre, ensuite les idées.} Jusqu'à J2, on construit ce qui est
+        prévu. Après, on essaie les idées nouvelles, même exotiques : c'est ce que l'organisateur
+        nous a encouragés à faire, une fois la base solide. Et on se fait plaisir.
+\end{itemize}
+
+\section{Les trois modules}
+
+Le découpage suit la cascade, pas les filières. Chaque module contient une part de données, une
+part de modèle et une part de logiciel : chacun touche à l'IA, au code et à la mesure, et chacun
+peut présenter son module au jury avec des chiffres.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm} Y Y Y@{}}
+\toprule
+& \textbf{Module 1 --- Comprendre et mesurer} & \textbf{Module 2 --- Converser et formuler} &
+  \textbf{Module 3 --- Conseiller et agir} \\
+\midrule
+\textbf{Responsable} & Younes & Yahya & Sohayb \\
+\textbf{Suppléant} & Yahya & Sohayb & Younes \\
+\textbf{Étages} & 1, et la mesure transversale & 2, 5, l'escalade, l'interface & 3 et 4 \\
+\textbf{Part données} & Banking77 en français, exemples des 8 intentions & Glossaire, gabarits &
+  Clients simulés, catalogue \\
+\textbf{Part modèle} & Mots-clés, encodeur, têtes, seuil $\tau$ & Choix du petit LLM, garde-fou & Modèle
+  d'appétence \\
+\textbf{Part logiciel} & \f{comprendre()}, instrumentation, bancs de mesure & \f{reply()},
+  automate de dialogue, Streamlit & Moteur de règles, outils, rejeu des scénarios \\
+\textbf{Dans le pitch} & Les résultats et la frugalité & Le problème, l'architecture, la démo &
+  L'explicabilité et la conformité \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Module 1 --- Comprendre et mesurer (Younes)}
+
+Le module où se trouve le calcul lourd --- inférence par lots sur DeepEirb, bancs de mesure
+d'énergie --- et aussi un vrai travail de modélisation.
+
+\begin{itemize}
+  \item Obtenir l'accès à DeepEirb ; traduire Banking77 (vLLM ou, à défaut, Marian sur la 3060) ;
+        générer et faire relire les exemples des 8 nouvelles intentions ; écrire la fiche de
+        données.
+  \item Construire le filtre par mots-clés et sa règle de confiance ; entraîner l'encodeur et les
+        deux têtes (famille, intention) ; choisir $\tau$ par balayage ;
+        écrire les règles d'extraction des entités ; exposer \f{comprendre(message, etat)}.
+  \item Remplir le tableau de compréhension du chapitre~\ref{ch:evaluation}.
+  \item Écrire l'instrumentation (\f{src/mesure/frugalite.py}) et le banc A/B/C ; produire le
+        graphique du pitch.
+  \item En bonus : faire tourner l'étage 1 et les règles sur la Jetson.
+\end{itemize}
+\textbf{Fichiers} : \f{data/processed/banking77\_fr/}, \f{data/processed/intentions\_fr.csv},
+\f{src/comprendre/}, \f{src/mesure/}, \f{eval/bench\_nlu.py}, \f{eval/bench\_frugalite.py}.
+
+\subsection{Module 2 --- Converser et formuler (Yahya)}
+
+Le module de l'orchestration : il appelle les deux autres et porte l'interface.
+
+\begin{itemize}
+  \item Écrire l'automate de dialogue et les neuf parcours YAML ; écrire \f{reply()}, le point
+        d'entrée unique de la cascade.
+  \item Écrire les gabarits ; brancher le petit LLM via Ollama ; écrire le garde-fou ; dérouler le
+        protocole de choix du modèle de formulation.
+  \item Brancher l'escalade (DeepEirb ou Ollama) ; écrire le glossaire et sa recherche en mémoire.
+  \item Construire l'interface : conversation, profil, panneaux \og pourquoi \fg{} et \og
+        frugalité \fg, mode mots simples, messages de démo ; enregistrer la vidéo de secours.
+\end{itemize}
+\textbf{Fichiers} : \f{src/assistant.py}, \f{src/converser/}, \f{app.py},
+\f{data/processed/glossaire.json}.
+
+\subsection{Module 3 --- Conseiller et agir (Sohayb)}
+
+Le module des décisions : il doit être juste, testé et lisible, ce qui en fait un module de génie
+logiciel autant que d'IA.
+
+\begin{itemize}
+  \item Écrire l'adaptateur de la base clients et l'enrichissement simulé ; créer les huit clients
+        de démonstration.
+  \item Écrire le catalogue JSON avec sources et dates ; écrire le moteur de règles (éligibilité,
+        pertinence, classement, raisons, produits écartés) et les calculs de crédit.
+  \item Entraîner et évaluer le modèle d'appétence ; exposer ses trois facteurs principaux.
+  \item Écrire les cinq outils, la confirmation et le journal.
+  \item Écrire le programme de rejeu des scénarios ; le lancer à chaque intégration ; tenir le dépôt
+        Git propre jusqu'au dépôt final.
+\end{itemize}
+\textbf{Fichiers} : \f{src/conseiller/}, \f{data/processed/clients.csv},
+\f{data/processed/catalogue.json}, \f{eval/run\_scenarios.py}, \f{tests/}.
+
+\subsection{Ce qui est commun}
+
+Chacun écrit les scénarios de son module (au moins dix). Chacun écrit les diapositives de son
+module. Les contrats sont écrits ensemble, lundi soir, et ne changent plus qu'à l'unanimité.
+
+\section{Les contrats entre modules}
+
+Un seul fichier, \f{src/contrats.py}, importé par tous. Les noms de champs sont en français et sans
+accents.
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+from dataclasses import dataclass, field
+
+@dataclass
+class Comprehension:                  # rendu par le module 1
+    famille: str                      # "credit", "carte_perdue", ...
+    intention: str                    # "credit_immobilier", "lost_or_stolen_card", ...
+    confiance: float                  # probabilite de la famille, entre 0 et 1
+    alternatives: list                # [("virement", 0.21), ...] pour la clarification
+    entites: dict                     # {"montant": 250000, "lien": "fils", "objet": "voiture"}
+    insatisfaction: bool = False
+    modele: str = "e5-small+lr"       # ou "mots-cles", ou "ministral-3:14b" (escalade)
+    exemple_proche: str = ""          # phrase d'entrainement la plus proche (explication)
+
+@dataclass
+class Proposition:                    # rendu par le module 3
+    produit_id: str                   # "livret_a"
+    raisons: list                     # ["Lucas a 20 ans : Livret Jeune possible (12-25 ans)"]
+    sources: list                     # URL publiques du catalogue
+    score: float = 0.0
+
+@dataclass
+class Conseil:                        # rendu par le module 3
+    propositions: list                # [Proposition], triees
+    ecartes: list                     # [("lep", "revenu au-dessus du plafond")]
+    manque: list                      # ["prix_bien"] : informations a demander
+    alertes: list                     # ["taux d'effort 42,1 % > 35 %"]
+    faits: dict                       # tous les nombres que le texte a le droit de citer
+
+@dataclass
+class Action:                         # rendu par le module 3
+    outil: str                        # "bloquer_carte"
+    parametres: dict
+    confirmee: bool
+    resultat: dict = field(default_factory=dict)   # {"reference": "OPP-..."}
+
+@dataclass
+class Etape:                          # une ligne du panneau frugalite (module 1)
+    nom: str; modele: str; latence_ms: float; tokens: int = 0
+
+@dataclass
+class Reponse:                        # rendu par le module 2, affiche par l'interface
+    texte: str
+    comprehension: Comprehension
+    conseil: Conseil | None
+    action: Action | None
+    escalade: bool
+    trace: list                       # [Etape]
+
+def reply(message: str, client_id: str, etat: dict) -> tuple[Reponse, dict]: ...
+\end{verbatim}
+\end{code}
+
+\section{L'arborescence du dépôt}
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+hackathon-IA/
+|-- app.py                       interface Streamlit                      (M2)
+|-- src/
+|   |-- contrats.py              structures partagees                     (tous)
+|   |-- assistant.py             reply() : la cascade                     (M2)
+|   |-- comprendre/              nlu.py, entites.py, tetes/               (M1)
+|   |-- converser/               dialogue.py, parcours/*.yaml,
+|   |                            formuler.py, garde_fou.py, glossaire.py  (M2)
+|   |-- conseiller/              clients.py, catalogue.py, regles.py,
+|   |                            appetence.py, outils.py                  (M3)
+|   `-- mesure/                  frugalite.py                             (M1)
+|-- data/
+|   |-- raw/                     Banking77, Bank Marketing (ignore par git)
+|   `-- processed/               jeux francais, clients, catalogue, glossaire
+|-- eval/
+|   |-- scenarios/*.yaml         30 conversations                         (tous)
+|   |-- run_scenarios.py                                                  (M3)
+|   |-- bench_nlu.py, bench_frugalite.py                                  (M1)
+|-- tests/                       tests unitaires des regles               (M3)
+`-- rapport/                     ce document
+\end{verbatim}
+\end{code}
+
+Les données téléchargées sont aujourd'hui dans \f{data/banking77/} et \f{data/bank-marketing/} :
+elles passent dans \f{data/raw/}, ajouté au \f{.gitignore}. Les jeux préparés, petits et produits
+par nous, sont versionnés : ils font partie du livrable.
+
+\section{Le planning}
+
+\begin{table}[H]
+\centering\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}L{1.45cm} Y Y Y Y Y@{}}
+\toprule
+& \textbf{Lundi\newline 18h--20h} & \textbf{Mardi\newline 8h30--12h30} & \textbf{Mardi\newline 13h30--18h}
+  & \textbf{Mardi\newline 18h--20h (option)} & \textbf{Mercredi\newline 8h30--12h} \\
+\midrule
+\textbf{Younes}\newline (M1) & \cellcolor{ent}Accès DeepEirb ; lancer la traduction
+  & \cellcolor{ent}Mots-clés ; têtes v1 (anglais et français partiel) ; entités ; \texttt{comprendre()}
+  & \cellcolor{ent}Français complet ; 8 intentions ; seuil $\tau$ ; escalade ; instrumentation
+  & \cellcolor{ent}Banc A/B/C sans surveillance
+  & \cellcolor{ent}Chiffres finaux ; graphique ; Jetson (bonus) \\
+\textbf{Yahya}\newline (M2) & \cellcolor{tab}Parcours carte ; squelette de \texttt{app.py}
+  & \cellcolor{tab}Automate ; parcours carte et frais ; gabarits ; petit LLM branché
+  & \cellcolor{tab}Parcours épargne, crédits, virement, insatisfaction ; garde-fou ; panneaux
+  & \cellcolor{tab}Scénarios en échec
+  & \cellcolor{tab}Vidéo de secours ; finitions de l'interface \\
+\textbf{Sohayb}\newline (M3) & \cellcolor{ext}8 clients ; catalogue v0
+  & \cellcolor{ext}\texttt{clients.py} ; règles épargne et crédit ; opposition ; frais
+  & \cellcolor{ext}Appétence ; produits écartés ; virement ; conseiller ; rejeu et scénarios
+  & \cellcolor{ext}Scénarios en échec
+  & \cellcolor{ext}Dépôt Git final ; README \\
+\textbf{Tous} & \cellcolor{mod}Lire ce document ; contrats figés ; bouchons
+  & & & & \cellcolor{mod}Diapositives ; deux répétitions ; dépôt à 11h30 \\
+\midrule
+\textbf{Jalon} & \textcolor{kored}{\textbf{J0}} à 20h & \textcolor{kored}{\textbf{J1}} à 12h30 :
+  intégration 1 & \textcolor{kored}{\textbf{J2}} à 18h : intégration 2, gel & ---
+  & \textcolor{kored}{\textbf{J3}} à 11h30 : tout est remis \\
+\bottomrule
+\end{tabularx}
+\caption{Le planning, par demi-journée.}
+\label{tab:planning}
+\end{table}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Jalon} & \textbf{Quand} & \textbf{Critère de passage} \\
+\midrule
+J0 & Lundi, 20h & \f{src/contrats.py} écrit et fusionné ; \f{streamlit run app.py} répond avec
+  les bouchons ; la traduction est lancée (ou son repli décidé). \\
+J1 & Mardi, 12h30 & Intégration 1 : Inès (carte) et Marc (frais) passent de bout en bout, avec
+  les vrais modules. \\
+J2 & Mardi, 18h & Intégration 2 : les neuf parcours passent leurs scénarios principaux ; la trace
+  est complète. \textbf{Gel fonctionnel} : après J2, on corrige et on mesure, on n'ajoute plus. \\
+J3 & Mercredi, 11h30 & Tableaux de résultats remplis ; vidéo enregistrée ; deux répétitions
+  chronométrées faites ; code déposé (étiquette \f{v1.0}) ; support remis. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Les priorités}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{2.6cm} Y@{}}
+\toprule
+\textbf{Priorité} & \textbf{Contenu} \\
+\midrule
+\textbf{Indispensable} (J2) & Étage 1 mesuré en anglais et en français ; parcours carte, frais,
+  épargne, appartement, crédit auto ; règles avec raisons et produits écartés ; les 8 clients ;
+  petit LLM et garde-fou ; panneaux pourquoi et frugalité ; banc A/B/C. \\
+\textbf{Important} & Virement en mots simples ; insatisfaction et passage de main ; jargon ; prêt
+  étudiant ; appétence ; escalade. \\
+\textbf{Si le temps le permet} & Idées nouvelles, même exotiques, encouragées par l'organisateur une
+  fois la base sûre ; déploiement sur Jetson ; réponse dans la langue du client ;
+  outils exposés en MCP ; saisie vocale locale (Whisper), utile à l'accessibilité. \\
+\textbf{Hors périmètre} & Affinage d'un LLM ; connexion à un vrai système bancaire ;
+  authentification ; base de données serveur. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Les règles de travail}
+
+\begin{itemize}
+  \item Branches courtes \f{m1/<sujet>}, \f{m2/<sujet>}, \f{m3/<sujet>}, fusionnées dans la
+        demi-journée, après relecture du suppléant et passage des scénarios.
+  \item Aucune donnée brute ni aucun secret dans Git ; les modèles ne sont jamais versionnés.
+  \item Un point de cinq minutes toutes les trois heures : fait, bloqué, suivant.
+  \item Tout résultat chiffré est noté au moment où il est obtenu, avec la commande qui l'a
+        produit : le support se construit au fil de l'eau.
+  \item \textbf{Définition de \og fini \fg{} pour un module} : le code est dans \f{main}, ses
+        scénarios passent, ses mesures sont notées, et sa diapositive est écrite.
+\end{itemize}

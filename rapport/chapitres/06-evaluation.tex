@@ -1,0 +1,173 @@
+\chapter{Évaluer et mesurer}
+\label{ch:evaluation}
+
+La qualité technique vaut 20\,\% et s'intitule \og résultats mesurés et bien évalués \fg ; la
+frugalité vaut 20\,\% et se mesure. Ce chapitre fixe \emph{avant} de coder ce qu'on mesure, sur
+quoi, et comment. Les tableaux sont des gabarits : ils seront remplis mardi soir et présentés tels
+quels.
+
+\section{Ce qu'on mesure}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm} Y L{3.2cm} l@{}}
+\toprule
+\textbf{Mesure} & \textbf{Comment} & \textbf{Sur quoi} & \textbf{Critère} \\
+\midrule
+Précision, F1 macro & scikit-learn, par intention et par famille & Tests Banking77 et nos tests &
+  Technique \\
+Taux de réussite & Rejeu automatique des scénarios & 30 conversations & Technique, métier \\
+Échecs du garde-fou & Compteur dans la trace & Toutes les réponses générées & Explicabilité \\
+Répartition par niveau & Compteur dans la trace : mots-clés, classifieur, escalade & Tests et
+  scénarios & Frugalité \\
+Taux d'escalade & Compteur dans la trace & Scénarios & Frugalité \\
+Part sans LLM & Compteur dans la trace & Scénarios & Frugalité \\
+Latence & Horloge par étage (p50, p95) & Scénarios & Frugalité \\
+Énergie & CodeCarbon, par lot (section~\ref{sec:energie}) & Lots de 200 requêtes & Frugalité \\
+Taille & Go sur disque, quantisation comprise & Chaque modèle chargé & Frugalité \\
+Appétence & Aire sous la courbe ROC & 20\,\% de Bank Marketing tenus à part & Technique \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{La compréhension}
+
+\paragraph{Trois jeux de test.} (a) Le test officiel de Banking77 en anglais, 3\,080 phrases ;
+(b) le même, traduit en français ; (c) nos 160 phrases françaises des 8 nouvelles intentions,
+écrites à la main. Le jeu (a) rend nos chiffres comparables à l'article d'origine ; les jeux (b) et
+(c) mesurent ce qui compte pour le sujet.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}Y c c c c c@{}}
+\toprule
+\textbf{Configuration} & \textbf{Préc. (a)} & \textbf{Préc. (b)} & \textbf{F1 famille (b+c)} &
+  \textbf{Latence p95} & \textbf{Taille} \\
+\midrule
+\textit{Référence : BERT affiné (article)} & \textit{93,66\,\%} & --- & --- & --- & \textit{1,4 Go} \\
+Mots-clés seuls, sur la part acceptée & \amesurer & \amesurer & \amesurer & \amesurer & Ko \\
+TF-IDF + régression logistique & \amesurer & \amesurer & \amesurer & \amesurer & \amesurer \\
+MiniLM-L12 + régression logistique & \amesurer & \amesurer & \amesurer & \amesurer & 0,47 Go \\
+\textbf{e5-small + régression logistique} & \amesurer & \amesurer & \amesurer & \amesurer &
+  \textbf{0,47 Go} \\
+e5-base + régression logistique & \amesurer & \amesurer & \amesurer & \amesurer & 1,1 Go \\
+\f{qwen3:1.7b}, sans exemple & \amesurer & \amesurer & \amesurer & \amesurer & 1,4 Go \\
+\f{ministral-3:14b}, sans exemple & \amesurer & \amesurer & \amesurer & \amesurer & 9,1 Go \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Pour les mots-clés, on donne aussi la part des messages qu'ils acceptent : l'organisateur l'estime
+à environ 30\,\%, nous la mesurons. La taille de la référence correspond à BERT-Large (340 millions de paramètres en float32). Les
+deux dernières lignes classent avec un LLM, la liste des intentions dans la consigne : elles
+montrent ce que coûterait la compréhension \og tout LLM \fg. Le message attendu : un encodeur de
+118 millions de paramètres fait aussi bien, ou presque, pour une fraction du coût.
+
+\paragraph{Le seuil $\tau$.} Sur un jeu de validation (10\,\% de l'entraînement, tenus à part), on
+trace la précision des messages acceptés en fonction de la part de messages acceptés, pour $\tau$
+de 0,30 à 0,95. On retient le plus petit $\tau$ qui donne au moins 97\,\% de précision. La courbe
+elle-même va dans le support : elle montre qu'on a \emph{choisi} le compromis.
+
+\section{Les scénarios de bout en bout}
+
+Un scénario est une conversation complète, avec un client donné et des attentes vérifiables
+automatiquement.
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+# eval/scenarios/sophie_epargne.yaml
+client: C03
+tours:
+  - client: "je voudrais mettre de cote pour mes enfants"
+    attendu: {famille: epargne, demande: [horizon]}
+    interdit: {demande: [age, enfants]}        # deja connus par le profil
+  - client: "dans 10 ans pour leurs etudes, 100 euros par mois"
+    attendu: {propose: [livret_a], ecarte: [lep]}
+    interdit: {nombre_invente: true}
+\end{verbatim}
+\end{code}
+
+\paragraph{Le jeu.} Trente conversations : les neuf parcours, chacun en trois variantes
+(formulation différente, autre client, réponse en plusieurs tours), plus trois demandes hors
+périmètre. Chaque membre écrit les scénarios de son module ; Sohayb maintient le programme qui les
+rejoue. Le jeu est rejoué à chaque intégration : \textbf{un scénario qui passait et qui échoue
+bloque la fusion}.
+
+\paragraph{Ce qui est vérifié.} La famille reconnue ; les questions posées, et surtout celles qui
+\emph{ne doivent pas} l'être (une information déjà connue) ; les produits proposés et écartés ;
+l'action déclenchée et sa confirmation ; le passage de main ; l'absence de nombre inventé.
+
+\section{La formulation}
+
+Deux indicateurs. \textbf{Le taux d'échec du garde-fou}, automatique, sur toutes les réponses
+générées. \textbf{Une évaluation humaine courte} : pour chaque modèle candidat, du 14B au plus petit, 30 réponses notées
+par deux membres sur trois critères (exact, clair, ton juste), en oui ou non, \textbf{champs
+facultatifs} --- la leçon du formulaire de Timso AI.
+
+\section{La frugalité : trois configurations}
+
+Le cœur de la démonstration de frugalité est une comparaison sur le même jeu de scénarios.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+\textbf{Configuration} & \textbf{Ce qu'elle fait} \\
+\midrule
+A --- Tout LLM & \f{ministral-3:14b} reçoit le message, le profil et le catalogue dans sa
+  consigne, et fait tout : comprendre, décider, rédiger. C'est ce que ferait une équipe pressée. \\
+B --- Cascade & Notre architecture complète. \\
+C --- Cascade sans LLM & La même, avec des gabarits à la place du petit LLM : la borne basse en
+  énergie. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{center}\small
+\begin{tabular}{@{}l c c c c c c@{}}
+\toprule
+& \textbf{Réussite} & \textbf{Nombres inventés} & \textbf{Wh / 1\,000 req.} &
+  \textbf{Latence p95} & \textbf{Go chargés} & \textbf{Sans LLM} \\
+\midrule
+A & \amesurer & \amesurer & \amesurer & \amesurer & 9,1 & 0\,\% \\
+B & \amesurer & \amesurer & \amesurer & \amesurer & 3,5 & \amesurer \\
+C & \amesurer & \amesurer & \amesurer & \amesurer & 0,5 & 100\,\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Ce qu'on s'attend à montrer, et qu'il faudra confirmer : B atteint la qualité de A, voire mieux
+parce que ses décisions sont des règles ; B consomme une fraction de l'énergie de A ; C coûte
+encore moins mais rédige moins naturellement --- ce qui justifie, mesure à l'appui, la présence
+d'un petit LLM. Si la mesure dit autre chose, c'est la mesure qu'on présente.
+
+\section{Le protocole de mesure de l'énergie}
+\label{sec:energie}
+
+CodeCarbon mesure l'énergie de la machine entière (processeur, mémoire, GPU Nvidia par NVML). Une
+requête dure trop peu pour être mesurée seule : on mesure par lots.
+
+\begin{enumerate}
+  \item Charger les modèles et faire une requête de chauffe (le chargement n'est pas compté).
+  \item Mesurer 60 secondes à vide : puissance de repos $P_0$.
+  \item Rejouer un lot de $N = 200$ requêtes tirées des scénarios ; énergie totale $E$, durée $t$.
+  \item Énergie par requête : $(E - P_0 \times t) / N$.
+  \item Répéter trois fois ; présenter la moyenne et l'écart.
+\end{enumerate}
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+from codecarbon import OfflineEmissionsTracker
+suivi = OfflineEmissionsTracker(country_iso_code="FRA", measure_power_secs=1,
+                                project_name="cascade-B", log_level="error")
+suivi.start()
+for message, client in lot:
+    reply(message, client, {})
+suivi.stop()
+energie_kwh = suivi.final_emissions_data.energy_consumed
+\end{verbatim}
+\end{code}
+
+La version \og hors ligne \fg{} de CodeCarbon n'interroge aucun service extérieur : cohérent avec
+la règle. On présente d'abord l'énergie en wattheures, puis l'équivalent CO\textsubscript{2}
+calculé par CodeCarbon pour le réseau français. Sur Jetson, si le temps le permet, la puissance est
+lue avec \f{tegrastats}.

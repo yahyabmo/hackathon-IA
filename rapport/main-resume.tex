@@ -1,0 +1,677 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[french]{babel}
+\addto\captionsfrench{\renewcommand{\tablename}{Tableau}
+  \renewcommand{\figurename}{Figure}}
+
+\usepackage{lmodern}\usepackage{geometry}\usepackage{setspace}
+\usepackage{microtype}\usepackage{graphicx}\usepackage{xcolor}\usepackage{colortbl}
+\usepackage{booktabs}\usepackage{tabularx}\usepackage{longtable}
+\usepackage{array}\usepackage{enumitem}
+\usepackage{titlesec}\usepackage{fancyhdr}\usepackage{caption}
+\usepackage{float}\usepackage{needspace}
+\usepackage{amssymb}\usepackage{amsmath}\usepackage[most]{tcolorbox}\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,shapes.geometric,calc}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\geometry{top=2.1cm,bottom=2.1cm,left=2.2cm,right=2.1cm}
+\setstretch{1.04}
+\setlength{\emergencystretch}{1.2em}
+\setlength{\parskip}{0.25em}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{lightblue}{RGB}{238,245,250}
+\definecolor{ent}{RGB}{221,236,247}
+\definecolor{tab}{RGB}{215,237,221}
+\definecolor{mod}{RGB}{233,233,238}
+\definecolor{ext}{RGB}{250,233,207}
+\definecolor{alerte}{RGB}{250,226,226}
+\definecolor{codebg}{RGB}{246,246,248}
+\definecolor{okgreen}{RGB}{46,125,50}
+\definecolor{kored}{RGB}{176,42,42}
+
+\hypersetup{colorlinks=true,linkcolor=mainblue,urlcolor=mainblue,
+  pdftitle={Assistant bancaire frugal - resume de la proposition},
+  pdfauthor={Equipe Yahya, Sohayb, Younes}}
+
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.2em}{0.45em}
+\titlespacing*{\subsection}{0pt}{0.9em}{0.3em}
+
+\captionsetup{font=small,labelfont=bf}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.08em,topsep=0.2em}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.08em,topsep=0.2em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small\color{darkgray}Assistant bancaire frugal --- résumé}
+\rhead{\small\color{darkgray}Sujet 1}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newtcolorbox{cle}{breakable,colback=lightblue,colframe=mainblue,boxrule=0.7pt,arc=1.4mm,
+  left=3mm,right=3mm,top=1.5mm,bottom=1.5mm}
+\newtcolorbox{attention}{breakable,colback=alerte!60,colframe=kored!80,boxrule=0.6pt,arc=1.4mm,
+  left=3mm,right=3mm,top=1.5mm,bottom=1.5mm}
+\newtcolorbox{code}{breakable,colback=codebg,colframe=darkgray!35,boxrule=0.4pt,arc=1mm,
+  left=2mm,right=2mm,top=0.8mm,bottom=0.8mm}
+
+\DeclareRobustCommand{\f}[1]{{\texttt{\small
+  \renewcommand{\_}{\char`\_\allowbreak}#1}}}
+\newcommand{\eur}{\,\texteuro}
+\newcommand{\amesurer}{\textit{\textcolor{darkgray}{à mesurer}}}
+
+\tikzset{
+  etage/.style={rectangle,draw=mainblue,fill=ent,rounded corners=2pt,
+                align=center,font=\scriptsize,inner sep=4pt,minimum height=0.8cm},
+  donnee/.style={rectangle,draw=mainblue!70,fill=tab,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  module/.style={rectangle,draw=darkgray!70,fill=mod,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  acteur/.style={rectangle,draw=darkgray,fill=ext,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  risque/.style={rectangle,draw=kored!80,fill=alerte,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  test/.style={diamond,aspect=2.2,draw=mainblue,fill=white,align=center,
+               font=\scriptsize,inner sep=1pt},
+  fl/.style={-{Latex[length=1.8mm]},semithick,draw=mainblue!80},
+  flp/.style={-{Latex[length=1.8mm]},semithick,draw=darkgray!75,dashed},
+  lien/.style={semithick,draw=darkgray!70},
+  et/.style={font=\scriptsize,text=darkgray,inner sep=1.5pt},
+}
+
+\begin{document}
+
+% ───────────────────────── En-tête ─────────────────────────
+\begin{center}
+{\small\scshape\color{darkgray} Hackathon IA --- La Banque Postale $\times$ CGI $\times$
+ENSEIRB-MATMECA --- Sujet 1\par}
+\vspace{0.25cm}
+{\LARGE\bfseries\color{mainblue} Un assistant bancaire frugal, explicable, et qui agit\par}
+\vspace{0.15cm}
+{\large Résumé de la proposition de solution et de la répartition\par}
+\vspace{0.2cm}
+{\small Yahya (IA) --- Sohayb (génie logiciel) --- Younes (calcul intensif) --- lundi 26 octobre
+2026\par}
+{\footnotesize\color{darkgray} Version complète, avec annexes (85 intentions, catalogue, parcours,
+glossaire, commandes) : \f{rapport/main.pdf}. Ce résumé fait foi là où il en diffère :
+nous ne traduisons pas Banking77.\par}
+\end{center}
+\vspace{-0.2cm}
+
+\section*{L'essentiel}
+
+\textbf{Le problème.} Un client écrit à sa banque en langage libre (\og Je veux acheter un
+appartement \fg, \og J'ai perdu ma carte \fg). L'assistant doit comprendre, poser les bonnes
+questions, tenir compte de sa situation et proposer une piste --- avec une IA open source, locale,
+la plus sobre possible, et dont chaque conseil se justifie.
+
+\textbf{Notre réponse : une cascade.} Chaque étage ne passe la main au suivant que s'il ne sait pas
+faire lui-même ; le calcul le plus cher n'arrive qu'en dernier, et c'est mesuré.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{5.6cm} Y@{}}
+\toprule
+\textbf{Étage} & \textbf{Qui fait le travail} & \textbf{Pourquoi} \\
+\midrule
+1. Comprendre & Mots-clés, sinon \f{multilingual-e5-small} (118 M) + régression logistique &
+  Moins d'une milliseconde pour les cas évidents ; mesurable sur le test officiel de Banking77 \\
+2. Converser & Parcours YAML : quoi demander, dans quel ordre & On ne redemande jamais ce que le
+  profil sait \\
+3. Conseiller & Règles publiques (plafonds, 35\,\% d'endettement) + appétence & Une décision
+  financière doit être reproductible et justifiable \\
+4. Agir & Opposition, virement guidé, transmission au conseiller & Toujours après confirmation \\
+5. Formuler & \textbf{Le seul appel LLM du tour, à la fin} : \f{ministral-3:3b} + garde-fou ;
+  gabarits pour les réponses simples & Le LLM met en mots des faits calculés, n'en invente aucun \\
+Escalade & \f{ministral-3:14b}, seulement si le doute persiste après une question & L'exception,
+  comptée et affichée \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\textbf{Quatre décisions.} (1) Comprendre sans LLM ; (2) décider sans LLM, avec les raisons
+\emph{et} les produits écartés ; (3) un seul appel au plus petit LLM qui suffit, choisi en
+descendant en taille depuis le 14B ; (4) tout mesurer contre une version \og tout LLM \fg.
+
+\begin{cle}
+\textbf{À retenir.} \emph{L'assistant comprend souvent avec de simples mots-clés, sinon avec 118
+millions de paramètres ; il décide avec des règles que le client peut lire ; il n'appelle un LLM
+qu'une fois, à la fin, pour mettre en mots ce qui est déjà calculé.} Un organisateur nous l'a
+confirmé : \og pour gagner, c'est moins de LLM, plus d'algo \fg.
+\end{cle}
+
+% ───────────────────────── 1. Cadre ─────────────────────────
+\section{Le cadre}
+
+\paragraph{La règle commune.} Open source uniquement, aucune API de LLM externe, données en local ;
+le plus petit modèle qui suffit, un plus gros seulement si le gain est \emph{mesuré} ; serveur GPU
+sur site ; mesurer taille (en Go, quantisation comprise), énergie (CodeCarbon) et latence. Utiliser
+d'autres IA \emph{pour développer} est autorisé. CGI : la frugalité, c'est \og surtout \fg{}
+l'énergie ; un gros modèle \og à un instant précis \fg, c'est \og là que vous allez innover \fg.
+
+\paragraph{Le sujet 1.} Objectifs : comprendre les demandes en langage naturel ; personnaliser
+selon l'âge, les revenus et l'historique ; recommander un produit bancaire simple. Livrables :
+\textbf{données préparées en français, modèle de compréhension des intentions, chatbot relié à une
+base clients simulée, moteur de conseils personnalisés, mesures de frugalité}. Démarche attendue :
+cadrer, préparer, concevoir, démontrer. À l'oral : on peut \emph{agir} (couper la carte) ou
+seulement guider ; ils veulent notre regard de jeunes clients ; réponse immédiate.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{5.2cm} L{3.1cm} Y@{}}
+\toprule
+\textbf{Thème} & \textbf{Message} & \textbf{Profil} & \textbf{Attendu} \\
+\midrule
+Carte & \og J'ai perdu ma carte hier soir, je fais quoi ? \fg & Inès, 34 ans & Réagir vite,
+  opposition, rassurer \\
+Frais & \og Pourquoi j'ai payé 8\eur{} de frais ce mois-ci ? \fg & Marc, 52 ans, découverts &
+  Expliquer, orienter \\
+Épargne & \og Je voudrais mettre de côté pour mes enfants. \fg & Sophie, 41 ans & Demander
+  l'horizon \\
+Virement & \og Je dois envoyer 500\eur{} à mon fils. \fg & Paul, 68 ans & Pas à pas, mots
+  simples \\
+Crédit & \og Je veux un crédit pour acheter une voiture. \fg & Karim, 29 ans, 1\,900\eur{} &
+  Questionner, prudence \\
+Insatisfaction & \og Votre appli ne marche jamais ! \fg & 3\textsuperscript{e} message du jour &
+  Reconnaître, passer la main \\
+Autres & Logement (énoncé), prêt étudiant et jargon (oral) & --- & Questionner, expliquer \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Le jury.} Adrien (CGI), Denis Barthou (ENSEIRB), Jean-Michel (La Banque Postale, à
+distance). 30 minutes : 15 de présentation \textbf{avec démo en direct sur le serveur fourni},
+10 de questions, 5 de retour. Code déposé sur Git et support remis avant.
+
+\begin{center}\small
+\begin{tabular}{@{}l l l l l l@{}}
+\toprule
+Pertinence métier & Qualité technique & Frugalité & Explicabilité & Démonstration & Présentation \\
+\midrule
+\textbf{25\,\%} & \textbf{20\,\%} & \textbf{20\,\%} & \textbf{15\,\%} & \textbf{10\,\%} &
+  \textbf{10\,\%} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Ce que La Banque Postale valorise.} Sa priorité IA n\textsuperscript{o}\,1 est
+l'expérience client (chatbot, réclamations, offres personnalisées). Elle insiste sur
+l'accessibilité, l'inclusion des clients fragiles et la responsabilité. Un Français sur quatre est
+son client.
+
+\paragraph{Les conseils de l'organisateur.} Lors d'un échange lundi à 17h30 : moins de LLM, plus
+d'algorithmes ou de modèles spécialisés ; en entrée, les mots-clés règlent environ 30\,\% des cas
+pour presque rien et peuvent dire quand ils ne sont pas sûrs ; en sortie, un LLM, appelé une seule
+fois, à la fin ; choisir sa taille en descendant (15B ou 30B, puis 4B, 2B, 1B) ; un seul sujet ;
+d'abord une solution sûre, ensuite les idées exotiques ; se faire plaisir.
+
+\paragraph{Les moyens.} Postes de la salle : RTX 3060 12 Go, Ollama avec \f{gemma4:e2b} (7,2 Go)
+et \f{ministral-3:14b} (9,1 Go). DeepEirb : 2 $\times$ A6000 48 Go, SSH et vLLM \emph{sur demande
+à Denis Barthou}. Jetson et OrangePi dès mardi, pour le déploiement. Un jour et demi de travail.
+
+% ───────────────────────── 2. Données ─────────────────────────
+\section{Les données}
+
+\paragraph{Banking77.} 13\,083 questions de clients d'une néobanque britannique, \textbf{en
+anglais}, 77 intentions ; 10\,003 en entraînement (35 à 187 par intention), 3\,080 en test (40 par
+intention). Références de l'article : 87,19\,\% (BERT figé) à 93,66\,\% (BERT affiné) ; un
+encodeur figé et un classifieur léger se placent à un ou deux points. \textbf{Il couvre le service
+(carte, frais, virements), pas le conseil} : aucune demande d'épargne, de crédit ou de logement.
+Il contient aussi un peu de bruit d'étiquetage. Nous rangeons les 77 intentions en 9 familles et
+créons 8 intentions françaises :
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.4cm} Y@{}}
+\toprule
+\textbf{Familles Banking77} & carte perdue, usage de la carte, commande de carte, frais et
+  contestations, virements, compte et identité, espèces, change, alimentation du compte \\
+\textbf{Nouvelles intentions} & \f{epargne\_projet}, \f{credit\_immobilier}, \f{credit\_conso},
+  \f{pret\_etudiant}, \f{faire\_virement}, \f{question\_definition}, \f{insatisfaction},
+  \f{hors\_sujet} \\
+\textbf{Au total} & 14 familles, 85 intentions ; environ 80 exemples générés hors ligne par
+  intention nouvelle (relus), 20 exemples de test écrits à la main \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Pas de traduction de Banking77.} C'est notre choix. L'encodeur
+\f{multilingual-e5-small} place une phrase et sa traduction très près l'une de l'autre dans
+l'espace des vecteurs : un classifieur entraîné sur les phrases anglaises reconnaît les mêmes
+demandes écrites en français. Traduire 13\,083 phrases coûterait du temps et de l'énergie, et
+ajouterait des erreurs de traduction, pour un gain non prouvé. \textbf{Ce qui est en français} :
+le lexique de mots-clés ; les exemples des 8 nouvelles intentions ; 5 phrases par famille
+Banking77 ajoutées à l'entraînement ; un \textbf{test français de 250 phrases écrites à la main}
+(10 par famille Banking77, 20 par nouvelle intention) ; le glossaire, le catalogue et les libellés
+des profils. C'est notre livrable \og données préparées en français \fg. L'écart de précision
+entre le test anglais officiel et notre test français mesure ce que l'encodeur transfère d'une
+langue à l'autre : un résultat à présenter.
+
+\paragraph{Bank Marketing.} 45\,211 clients d'une banque portugaise (2008--2010) : âge, métier,
+situation, études, solde (3\,766 négatifs, 8,3\,\%), crédit immobilier (55,6\,\%), crédit personnel
+(16,0\,\%) ; cible \f{y} = a souscrit un dépôt à terme (11,7\,\%). Pas de revenus, d'enfants ni
+d'historique : on les simule (graine fixe, drapeau \f{simule=True}, affichés en italique) derrière un
+adaptateur unique, prêt pour la version enrichie promise par les organisateurs.
+
+\begin{attention}
+\textbf{\f{duration} est une fuite} : la durée de l'appel n'est connue qu'après l'appel et
+détermine presque la réponse. On l'exclut (avec \f{contact}, \f{day}, \f{month}). Le dire au jury.
+\end{attention}
+
+\paragraph{Les 8 clients de démonstration.} Ancrés sur des lignes réelles de Bank Marketing :
+C01 Inès (carte), C02 Marc (frais, découverts), C03 Sophie (épargne, 2 enfants), C04 Paul (68 ans,
+virement), C05 Karim (1\,900\eur{}, crédit en cours), C06 Julie (3 contacts aujourd'hui),
+C07 Léa (2\,900\eur{}, 25\,000\eur{} d'épargne, appartement), C08 Lucas (20 ans, étudiant).
+
+\paragraph{Le catalogue.} En JSON, une fiche par produit, avec \textbf{source publique et date} :
+Livret A (22\,950\eur{}), LDDS (12\,000\eur{}), LEP (10\,000\eur{}, sous condition de revenu),
+Livret Jeune (12--25 ans, 1\,600\eur{}), PEL (61\,200\eur{}), CEL (15\,300\eur{}), crédit
+immobilier, PTZ, prêt personnel, prêt étudiant, offre clientèle fragile, opposition de carte.
+\textbf{Aucun taux en dur} : c'est un paramètre daté du catalogue.
+
+% ───────────────────────── 3. Solution ─────────────────────────
+\section{La solution}
+
+\begin{figure}[tbp]
+\centering
+\begin{adjustbox}{max width=0.92\textwidth}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[acteur,minimum width=3.6cm] (client) at (0,0) {Client, dans l'interface};
+  \node[acteur,minimum width=5.4cm,text width=5.2cm] (out) at (0,-9.6)
+    {Réponse\\+ panneau \og pourquoi \fg{} + panneau \og frugalité \fg};
+  \node[etage,minimum width=4.4cm] (e1) at (0,-1.5)
+    {\textbf{1. Comprendre}\\ mots-clés, sinon \f{multilingual-e5-small}\\ + régression logistique ; entités par règles};
+  \node[test] (d) at (0,-3.05) {confiance $\geq \tau$ ?};
+  \node[etage,minimum width=4.4cm] (e2) at (0,-4.65)
+    {\textbf{2. Converser}\\ parcours YAML, profil du client};
+  \node[etage,minimum width=3.3cm] (e3) at (-2.55,-6.35)
+    {\textbf{3. Conseiller}\\ règles publiques\\ + appétence};
+  \node[etage,minimum width=3.3cm] (e4) at (2.55,-6.35)
+    {\textbf{4. Agir}\\ outils\\ + confirmation};
+  \node[etage,minimum width=4.4cm] (e5) at (0,-8.05)
+    {\textbf{5. Formuler}\\ gabarit, sinon \f{ministral-3:3b}\\ + garde-fou};
+  \node[module,minimum width=2.9cm] (clar) at (-5.4,-3.05) {Question de\\ clarification};
+  \node[risque,minimum width=2.9cm] (esc) at (-5.4,-4.65) {\textbf{Escalade}\\ \f{ministral-3:14b}};
+  \node[donnee,minimum width=2.6cm] (prof) at (-5.6,-6.35) {Profils clients\\ (simulés)};
+  \node[donnee,minimum width=2.6cm] (cata) at (-5.6,-7.6) {Catalogue\\ + sources};
+  \node[donnee,minimum width=2.6cm] (jour) at (5.6,-6.35) {Journal\\ des actions};
+  \node[donnee,minimum width=2.6cm] (glos) at (5.6,-8.05) {Glossaire\\ (fiches vérifiées)};
+  \node[module,dashed,minimum width=3.2cm,text width=3.1cm] (off) at (5.95,-1.5)
+    {\textit{Hors ligne, une fois}\\ exemples français des\\ 8 nouvelles intentions,\\ qui entraînent l'étage 1\\ (gros modèle, DeepEirb)};
+  \node[module,minimum height=9.6cm,minimum width=0.75cm] (mes) at (8.15,-4.8) {};
+  \node[rotate=90,font=\scriptsize,align=center] at (mes.center)
+    {\textbf{Mesure continue} : latence, tokens, énergie, Go chargés};
+  \draw[fl] (client) -- (e1);
+  \draw[fl] (e1) -- (d);
+  \draw[fl] (d) -- node[et,right]{oui} (e2);
+  \draw[fl] (d) -- node[et,above]{non} (clar);
+  \draw[flp] (clar.north) |- node[et,pos=0.25,left]{question} (client.west);
+  \draw[flp] (clar) -- node[et,right]{si toujours ambigu} (esc);
+  \draw[fl] (esc) -- (e2);
+  \draw[fl] (e2) -- (e3);
+  \draw[fl] (e2) -- (e4);
+  \draw[fl] (e2) -- node[et,fill=white]{service simple} (e5);
+  \draw[fl] (e3) -- (e5);
+  \draw[fl] (e4) -- (e5);
+  \draw[fl] (e5) -- (out);
+  \draw[lien] (prof) -- (e3);
+  \draw[lien] (cata) -- (e3.south west);
+  \draw[lien] (e4) -- (jour);
+  \draw[lien] (e5) -- (glos);
+  \draw[flp] (off.west) -- (e1.east);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{La cascade. En bleu, sans gros modèle ; en rouge, l'exception comptée.}
+\end{figure}
+
+\subsection{Étage 1 --- Comprendre (cible : moins de 30 ms)}
+\begin{itemize}
+  \item \textbf{Mots-clés d'abord.} Lexique d'expressions par famille (\og perdu ma carte \fg,
+        \og virement \fg, \og appartement \fg\dots), cherché dans le message normalisé (minuscules,
+        sans accents). Il ne conclut que s'il est sûr : une seule famille touchée, phrase courte ou
+        plusieurs expressions. Expressions gardées seulement si leur précision dépasse 97\,\%.
+  \item \textbf{Sinon, classifieur à deux niveaux} (14 familles, puis 85 intentions) :
+        \f{multilingual-e5-small} (préfixe \f{query:}) + régression logistique scikit-learn,
+        entraînée sur Banking77 en anglais, \textbf{sans traduction}, plus nos phrases françaises. Quelques secondes
+        d'entraînement sur CPU ; affiche aussi la phrase d'entraînement la plus proche.
+  \item \textbf{Seuil $\tau$} choisi par balayage (97\,\% de précision sur les messages acceptés).
+        En dessous : question fermée (\og votre carte, ou un virement ? \fg), puis escalade.
+  \item \textbf{Contexte} : si un parcours attend un montant, \og 250\,000 \fg{} est une réponse.
+        \textbf{Entités} par expressions régulières (montants, durées, liens, objets, dates) ; ce qui
+        manque est demandé au client, pas deviné par un LLM. \textbf{Insatisfaction} :
+        classifieur + nombre de contacts du jour.
+\end{itemize}
+
+\subsection{Étage 2 --- Converser}
+Un fichier YAML par parcours : informations nécessaires, source (profil ou question), ordre, fin
+(conseil, action, passage de main). Un automate déterministe les lit. \textbf{On confirme ce que
+le profil sait au lieu de le demander.} Mode \og mots simples \fg{} automatique dès 70 ans ou
+\og peu à l'aise en ligne \fg{} (phrases courtes, une étape par message). Glossaire : fiches
+écrites et vérifiées par nous, retrouvées par similarité en mémoire (numpy), sans LLM.
+
+\subsection{Étage 3 --- Conseiller}
+Éligibilité (âge, revenu, plafonds), puis pertinence (horizon, objectif), puis classement. Chaque
+règle a un identifiant et une phrase d'explication : la sortie donne \textbf{les propositions avec
+leurs raisons, et les produits écartés avec la règle qui les écarte}. Appétence épargne : régression
+logistique sur Bank Marketing, sans \f{duration}, évaluée en AUC, trois facteurs principaux
+affichés ; LightGBM seulement si le gain est mesuré. Crédit immobilier (règles HCSF) :
+$m = 0{,}35 \times R - C$ et capacité $= m \times \frac{1-(1+i)^{-n}}{i}$, durée $\leq$ 25 ans,
+taux indicatif daté. Crédit : mention légale obligatoire, aucune promesse, rendez-vous conseiller.
+
+\subsection{Étage 4 --- Agir}
+\f{consulter\_profil} et \f{expliquer\_frais} (lecture libre) ; \f{bloquer\_carte},
+\f{preparer\_virement} et \f{transmettre\_conseiller} (\textbf{après confirmation}, avec trace dans
+un journal). Le conseiller reçoit un résumé des faits du parcours.
+
+\subsection{Étage 5 --- Formuler}
+\textbf{Un seul appel LLM par tour, à la fin}, après que tout a été compris, décidé et calculé.
+Gabarits relus pour les réponses simples. Le petit LLM ne reçoit que la consigne, les faits
+structurés et la question en cours. \textbf{Garde-fou} : chaque nombre du texte doit figurer dans
+les faits, aucune formule interdite (\og accordé \fg, \og garanti \fg), longueur bornée ; sinon, le
+gabarit s'affiche et l'échec est compté.
+
+\subsection{Un exemple : l'appartement de Léa}
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y l@{}}
+\toprule
+\textbf{Tour} & \textbf{Ce qui se passe} & \textbf{Par} \\
+\midrule
+\og Je veux acheter un appartement \fg & Mots-clés \og acheter \fg{} + \og appartement \fg{} : une
+  seule famille, phrase courte ; revenus connus, donc confirmés ; on demande le prix et l'apport &
+  mots-clés, gabarit \\
+\og Autour de 250\,000, je mets les 25\,000 \fg & Notaire 7,5\,\% $\Rightarrow$ besoin
+  243\,750\eur{} ; à 3,5\,\% sur 25 ans, mensualité $\approx$ 1\,220\eur{}, soit
+  \textbf{42,1\,\% $>$ 35\,\%} ; prix maximal $\approx$ 212\,000\eur{} ; leviers et rendez-vous ;
+  écarté : prêt sur 30 ans & règles, \f{ministral-3:3b} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Conformité.} Données simulées et traitement local. Le règlement européen sur l'IA classe
+à haut risque la notation de solvabilité : nous n'en faisons pas, un conseiller décide ;
+l'utilisateur est informé qu'il parle à une IA. Rappel anti-arnaque : aucun code ne se communique.
+
+% ───────────────────────── 4. Modèles et technologies ─────────────────────────
+\section{Modèles et technologies}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.2cm} L{4.6cm} l Y@{}}
+\toprule
+\textbf{Rôle} & \textbf{Modèle} & \textbf{Taille} & \textbf{Où} \\
+\midrule
+Filtre d'entrée & Lexique de mots-clés & quelques Ko & CPU \\
+Encodeur & \f{multilingual-e5-small} (118 M) & $\approx$\,0,47 Go & CPU ou GPU \\
+Têtes famille + intention & Régression logistique ($\approx$\,38\,000 poids) & $<$ 1 Mo & CPU \\
+Formulation & \f{ministral-3:3b} Q4\_K\_M (hypothèse) & 3,0 Go & RTX 3060 \\
+Escalade & \f{ministral-3:14b} Q4\_K\_M & 9,1 Go & DeepEirb (vLLM) ou 8B en local \\
+Appétence & Régression logistique & $<$ 1 Mo & CPU \\
+Exemples des 8 intentions & \f{ministral-3:14b} via vLLM, relus à la main & --- & DeepEirb, une
+  fois \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{cle}
+\textbf{Choisir le LLM en descendant.} Référence \f{ministral-3:14b} (ou un 30B sur DeepEirb), puis
+\f{gemma4:e2b} (7,2 Go), \f{ministral-3:8b} (6,0), \f{ministral-3:3b} (3,0), \f{qwen3:1.7b} (1,4,
+réflexion coupée), \f{gemma3:1b} (0,8), \f{qwen3:0.6b} (0,5), \f{gemma3:270m} (0,3). Seuil fixé
+avant : zéro nombre inventé et 27 réponses sur 30 jugées bonnes. \textbf{On garde le plus petit
+qui tient le seuil} ; la courbe qualité--taille--énergie va dans le support.
+\end{cle}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm} Y@{}}
+\toprule
+\textbf{Brique} & \textbf{Technologie} \\
+\midrule
+Langage, environnement & Python 3, \f{venv}, Git (branches courtes) \\
+Compréhension & \f{sentence-transformers}, \f{scikit-learn}, numpy, expressions régulières \\
+Dialogue & PyYAML (parcours), automate maison \\
+LLM & Ollama (API \f{/api/chat}, \f{num\_ctx} 4\,096, température 0,2, 200 tokens max,
+  \f{keep\_alive}), vLLM sur DeepEirb (API compatible OpenAI) \\
+Données & pandas (DuckDB si besoin), JSON pour catalogue et glossaire, CSV pour les clients \\
+Interface & Streamlit : conversation, profil, panneaux \og pourquoi \fg{} et \og frugalité \fg,
+  mode mots simples, taille du texte \\
+Mesure & CodeCarbon (\f{OfflineEmissionsTracker}, pays FRA), NVML / \f{nvidia-smi},
+  \f{tegrastats} sur Jetson \\
+Tests & pytest pour les règles ; rejeu YAML des 30 scénarios \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\textbf{Mémoire.} Le 3B et le 14B ne tiennent pas ensemble dans 12 Go : escalade sur DeepEirb, ou
+8B en local, ou un seul modèle chargé à la fois.
+
+% ───────────────────────── 5. Évaluation ─────────────────────────
+\section{Évaluer et mesurer}
+
+\begin{itemize}
+  \item \textbf{Compréhension}, sur deux jeux : le test officiel Banking77 en anglais (3\,080,
+        comparable à l'article) et notre test français écrit à la main (250) ; leur écart mesure le
+        transfert de l'anglais au français. Précision et F1 macro, par intention et par famille ;
+        part acceptée par les mots-clés (l'organisateur l'estime à 30\,\%). Comparé : mots-clés,
+        TF-IDF, MiniLM, e5-small, e5-base, et deux LLM qui classent seuls (1.7B, 14B).
+  \item \textbf{Scénarios} : 30 conversations YAML (9 parcours $\times$ 3 variantes + 3 hors
+        périmètre). Vérifiés : famille, questions posées \emph{et interdites}, produits proposés et
+        écartés, action, passage de main, aucun nombre inventé. Un scénario qui casse bloque la
+        fusion.
+  \item \textbf{Frugalité} : répartition par niveau (mots-clés, classifieur, escalade), part sans
+        LLM, latence p50/p95, Go chargés, énergie par requête.
+\end{itemize}
+
+\begin{center}\small
+\begin{tabular}{@{}l l c c c c c@{}}
+\toprule
+& \textbf{Configuration} & \textbf{Réussite} & \textbf{Wh / 1\,000 req.} & \textbf{Latence p95} &
+  \textbf{Go} & \textbf{Sans LLM} \\
+\midrule
+A & Tout LLM : \f{ministral-3:14b} fait tout & \amesurer & \amesurer & \amesurer & 9,1 & 0\,\% \\
+B & \textbf{Notre cascade} & \amesurer & \amesurer & \amesurer & 3,5 & \amesurer \\
+C & Cascade, gabarits seuls & \amesurer & \amesurer & \amesurer & 0,5 & 100\,\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Énergie} : CodeCarbon hors ligne, par lots de 200 requêtes, après chauffe, puissance de
+repos (60 s) soustraite, trois répétitions : $(E - P_0 t)/N$ par requête. Le coût de la préparation
+hors ligne est donné à part.
+
+% ───────────────────────── 6. Démo ─────────────────────────
+\section{La démonstration (6 minutes)}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{3.2cm} Y l@{}}
+\toprule
+\textbf{Temps} & \textbf{Scène} & \textbf{Ce que le jury voit} & \textbf{Critère} \\
+\midrule
+0 min & Inès, carte perdue & Confirmation, opposition, référence ; compris par mots-clés, aucun
+  LLM & Métier, frugalité \\
+1 min & Léa, appartement & Revenus non redemandés ; refus chiffré ; pourquoi et pourquoi pas &
+  Explicabilité \\
+2 min 30 & Sophie puis Lucas & Même phrase, deux clients, deux conseils & Personnalisation \\
+3 min 30 & Marc, 8\eur{} de frais & Historique, plafond légal, offre clientèle fragile & Inclusion \\
+4 min 30 & Julie, mécontente & Excuses, passage de main avec résumé & Métier \\
+5 min 15 & Bilan & Panneau frugalité cumulé ; graphique A/B/C & Frugalité \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Secours : vidéo enregistrée mercredi matin, mode gabarits, vérification réelle d'Ollama, modèles
+préchargés, messages de démo cliquables, répétition sur la machine de démo.
+
+% ───────────────────────── 7. Organisation ─────────────────────────
+\section{L'organisation}
+
+\paragraph{Principes.} Un module, un responsable, un suppléant. Contrats figés lundi soir, bouchons
+pour avancer sans attendre. \f{main} tourne toujours. Deux intégrations mardi (12h30, 18h), jugées
+par les scénarios. D'abord une solution sûre (jusqu'à J2), ensuite les idées exotiques.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{2.4cm} Y Y Y@{}}
+\toprule
+& \textbf{M1 --- Comprendre et mesurer} & \textbf{M2 --- Converser et formuler} &
+  \textbf{M3 --- Conseiller et agir} \\
+\midrule
+\textbf{Responsable} & \textbf{Younes} (suppléant Yahya) & \textbf{Yahya} (suppléant Sohayb) &
+  \textbf{Sohayb} (suppléant Younes) \\
+\textbf{Données} & Test français écrit à la main ; 8 intentions ; fiche de données & Glossaire, gabarits &
+  8 clients simulés ; catalogue \\
+\textbf{Modèle} & Mots-clés ; encodeur et têtes ; seuil $\tau$ & Choix du LLM en descendant ;
+  garde-fou ; escalade & Appétence (AUC) \\
+\textbf{Logiciel} & \f{comprendre()} ; instrumentation ; bancs NLU et A/B/C ; Jetson (bonus) &
+  \f{reply()} ; automate et 9 parcours ; interface Streamlit ; vidéo de secours & Moteur de règles
+  et calculs ; 5 outils ; rejeu des scénarios ; dépôt Git final \\
+\textbf{Fichiers} & \f{src/comprendre/}, \f{src/mesure/}, \f{eval/bench\_*.py} &
+  \f{src/assistant.py}, \f{src/converser/}, \f{app.py} & \f{src/conseiller/},
+  \f{eval/run\_scenarios.py}, \f{tests/} \\
+\textbf{Dans le pitch} & Résultats et frugalité & Problème, architecture, démo &
+  Explicabilité et conformité \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Chacun écrit au moins dix scénarios et la diapositive de son module. Le découpage suit la cascade,
+pas les filières : chaque module a une part données, une part modèle et une part logiciel.
+
+\paragraph{Le contrat commun.} Sohayb l'a posé dans \f{src/contrats.py} (commit du lundi 18h23),
+avec le squelette de \f{reply()} et de l'interface. À relire ensemble ce soir, puis à figer :
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+Comprehension(famille, intention, confiance, alternatives, entites, insatisfaction,
+              modele, exemple_proche)                                            # M1
+Conseil(propositions=[Proposition(produit_id, raisons, sources, score)],
+        ecartees, manque, alertes, faits)                                         # M3
+Action(outil, parametres, confirmee, resultat)                                    # M3
+Etape(nom, modele, latence_ms, tokens)                                            # M1
+Reponse(texte, comprehension, conseil, action, escalade, trace=[Etape])           # M2
+EtatConversation(intention, slots, derniere_reponse, historique, action_en_attente)
+reply(message, client_id, etat) -> (Reponse, EtatConversation)   # point d'entree, M2
+\end{verbatim}
+\end{code}
+
+\paragraph{Le dépôt.} \f{app.py} ; \f{src/} (\f{contrats.py}, \f{assistant.py},
+\f{comprendre/}, \f{converser/}, \f{conseiller/}, \f{mesure/}) ; \f{data/raw/} (données téléchargées, versionnées) et
+\f{data/processed/} (versionné : c'est un livrable) ; \f{eval/} (scénarios, bancs) ; \f{tests/}.
+
+\begin{table}[H]
+\centering\scriptsize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}L{1.3cm} Y Y Y Y Y@{}}
+\toprule
+& \textbf{Lundi 18h--20h} & \textbf{Mardi 8h30--12h30} & \textbf{Mardi 13h30--18h}
+  & \textbf{Mardi soir (option)} & \textbf{Mercredi 8h30--12h} \\
+\midrule
+\textbf{Younes} & \cellcolor{ent}Accès DeepEirb ; lancer la génération des 8 intentions
+  & \cellcolor{ent}Mots-clés ; têtes v1 ; entités ; \texttt{comprendre()}
+  & \cellcolor{ent}Test français ; 8 intentions ; $\tau$ ; escalade ; instrumentation
+  & \cellcolor{ent}Banc A/B/C
+  & \cellcolor{ent}Chiffres finaux ; graphique ; Jetson \\
+\textbf{Yahya} & \cellcolor{tab}Parcours carte sur le squelette
+  & \cellcolor{tab}Automate ; carte et frais ; gabarits ; LLM branché
+  & \cellcolor{tab}Épargne, crédits, virement, insatisfaction ; garde-fou ; panneaux
+  & \cellcolor{tab}Scénarios en échec
+  & \cellcolor{tab}Vidéo de secours ; finitions \\
+\textbf{Sohayb} & \cellcolor{ext}8 clients ; catalogue v0
+  & \cellcolor{ext}\texttt{clients.py} ; règles épargne et crédit ; opposition ; frais
+  & \cellcolor{ext}Appétence ; écartés ; virement ; conseiller ; scénarios
+  & \cellcolor{ext}Scénarios en échec
+  & \cellcolor{ext}Dépôt Git final ; README \\
+\textbf{Tous} & \cellcolor{mod}Relire et figer le socle de Sohayb & \cellcolor{mod}Test français :
+  environ 85 phrases chacun & & & \cellcolor{mod}Diapositives ; 2 répétitions \\
+\midrule
+\textbf{Jalon} & \textcolor{kored}{\textbf{J0}} 20h : \texttt{app.py} répond &
+  \textcolor{kored}{\textbf{J1}} 12h30 : Inès et Marc de bout en bout &
+  \textcolor{kored}{\textbf{J2}} 18h : 9 parcours, \textbf{gel} & --- &
+  \textcolor{kored}{\textbf{J3}} 11h30 : code, vidéo, support remis \\
+\bottomrule
+\end{tabularx}
+\caption{Le planning.}
+\end{table}
+
+\paragraph{Priorités.} \textbf{Indispensable à J2} : étage 1 mesuré ; parcours carte, frais,
+épargne, appartement, crédit auto ; règles avec raisons et écartés ; 8 clients ; LLM et garde-fou ;
+panneaux ; banc A/B/C. \textbf{Important} : virement en mots simples, insatisfaction, jargon, prêt
+étudiant, appétence, escalade. \textbf{Si le temps le permet} : idées exotiques, Jetson, langue du
+client, MCP, voix locale. \textbf{Hors périmètre} : affinage de LLM, vrai SI bancaire.
+
+\paragraph{Règles.} Branches \f{m1/}, \f{m2/}, \f{m3/} fusionnées dans la demi-journée après relecture
+du suppléant ; ni données brutes ni secrets dans Git ; point de cinq minutes toutes les trois heures ;
+chaque chiffre noté avec sa commande. \textbf{\og Fini \fg} = dans \f{main}, scénarios verts,
+mesures notées, diapositive écrite.
+
+% ───────────────────────── 8. Risques ─────────────────────────
+\section{Les risques principaux}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{4.6cm} Y l@{}}
+\toprule
+\textbf{Risque} & \textbf{Parade} & \textbf{Qui} \\
+\midrule
+DeepEirb inaccessible lundi soir & Exemples des 8 intentions générés par \f{ministral-3:14b} sur un
+  poste de la salle ; escalade en 8B local & M1 \\
+Transfert anglais $\to$ français insuffisant & Plus de phrases françaises écrites à la main dans
+  l'entraînement ; les mots-clés en premier ; écart mesuré et présenté & M1 \\
+Petit LLM faible en français & Gabarits ; la descente s'arrête plus haut (8B) si mesuré & M2 \\
+Mots-clés trop sûrs d'eux & Précision $\geq$ 97\,\% par expression ; une seule famille ; sinon
+  classifieur & M1 \\
+Base enrichie en retard & Simulation dès lundi ; un seul adaptateur à changer & M3 \\
+Intégration tardive & Contrats J0, bouchons, deux intégrations datées & Tous \\
+Démo qui plante & Vidéo, mode gabarits, vérification d'Ollama, répétition sur place & M2 \\
+\textbf{Le temps} & \textbf{Priorités figées ; gel à J2 ; on coupe sans débat} & Tous \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ───────────────────────── 9. Pitch ─────────────────────────
+\section{Le pitch (15 minutes)}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l L{3.2cm} Y L{2.4cm}@{}}
+\toprule
+\textbf{Temps} & \textbf{Partie} & \textbf{Contenu} & \textbf{Qui} \\
+\midrule
+0 min & Le problème & Client, priorité de La Banque Postale, règle commune & Yahya \\
+1 min 30 & La démarche & Quatre temps, constat Banking77, la cascade & Yahya \\
+4 min & La démo & Le script ci-dessus & Yahya pilote, Sohayb commente \\
+10 min & Les résultats & Tests anglais et français, scénarios, A/B/C, coût de la préparation & Younes \\
+12 min 30 & L'explicabilité & Pourquoi et pourquoi pas, garde-fou, conformité & Sohayb \\
+14 min & Limites et suite & Ce qui est simulé ; passer à 17\,000 bureaux & Younes \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\textbf{Questions attendues.} \emph{Pourquoi pas tout en LLM ?} Mesuré : A contre B.
+\emph{L'énergie ?} CodeCarbon par lots, repos soustrait. \emph{Si le classifieur se trompe ?}
+Seuil, question, escalade ; courbe à l'appui. \emph{Le LLM invente un taux ?} Il ne reçoit que des
+faits, et chaque nombre est contrôlé. \emph{Pourquoi Ministral ?} Le plus petit qui tient le seuil
+en descendant, et européen. \emph{Pourquoi ne pas traduire Banking77 ?} L'encodeur est multilingue : on mesure le transfert
+au lieu de payer une traduction. \emph{Des mots-clés en 2026 ?} Une part mesurée des demandes pour
+presque rien, et ils disent quand ils doutent. \emph{Conformité ?} Pas de notation de solvabilité,
+un conseiller décide, transparence, mention légale.
+
+% ───────────────────────── 10. Ce soir ─────────────────────────
+\section{Ce qu'on fait ce soir}
+
+Déjà fait : le socle de Sohayb (contrats, \f{reply()}, interface, tests) est sur GitHub ; les
+données sont dans \f{data/raw/}, versionnées.
+
+\begin{enumerate}
+  \item Lire ce résumé ; valider la répartition, puis ne plus y revenir.
+  \item Relire ensemble \f{src/contrats.py} et le squelette, puis les figer.
+  \item Rendre le dépôt GitHub privé.
+  \item \textbf{Younes} : écrire à Denis Barthou (DeepEirb, modèle vLLM) ; lancer la génération des
+        exemples des 8 nouvelles intentions.
+  \item \textbf{Yahya} : brancher le parcours carte et ses gabarits sur le squelette.
+  \item \textbf{Sohayb} : les 8 clients, le catalogue v0, le rejeu des scénarios.
+  \item En filaire : télécharger \f{ministral-3:3b}, \f{qwen3:1.7b}, \f{gemma3:1b} et
+        \f{multilingual-e5-small} sur un poste de la salle.
+  \item Avant de partir, vérifier J0 : \f{streamlit run app.py} répond.
+\end{enumerate}
+
+\end{document}

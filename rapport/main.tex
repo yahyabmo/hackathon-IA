@@ -1,0 +1,161 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[french]{babel}
+\addto\captionsfrench{\renewcommand{\tablename}{Tableau}
+  \renewcommand{\figurename}{Figure}}
+
+\usepackage{lmodern}\usepackage{geometry}\usepackage{setspace}
+\usepackage{microtype}\usepackage{graphicx}\usepackage{xcolor}\usepackage{colortbl}
+\usepackage{booktabs}\usepackage{tabularx}\usepackage{longtable}
+\usepackage{array}\usepackage{multirow}\usepackage{enumitem}
+\usepackage{titlesec}\usepackage{fancyhdr}\usepackage{caption}
+\usepackage{placeins}\usepackage{float}\usepackage{needspace}
+\usepackage{amssymb}\usepackage{amsmath}\usepackage[most]{tcolorbox}\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,shapes.geometric,calc,
+                backgrounds,shapes.multipart,decorations.pathreplacing}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\geometry{top=2.4cm,bottom=2.4cm,left=2.5cm,right=2.3cm}
+\setstretch{1.07}
+% Laisse TeX relâcher l'espacement plutôt que de déborder dans la marge
+\setlength{\emergencystretch}{1.2em}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{lightblue}{RGB}{238,245,250}
+\definecolor{ent}{RGB}{221,236,247}    % étage de la cascade
+\definecolor{tab}{RGB}{215,237,221}    % donnée
+\definecolor{mod}{RGB}{233,233,238}    % module logiciel
+\definecolor{ext}{RGB}{250,233,207}    % acteur ou système externe
+\definecolor{alerte}{RGB}{250,226,226} % risque, interdit
+\definecolor{codebg}{RGB}{246,246,248}
+\definecolor{okgreen}{RGB}{46,125,50}
+\definecolor{kored}{RGB}{176,42,42}
+
+\hypersetup{colorlinks=true,linkcolor=mainblue,citecolor=mainblue,urlcolor=mainblue,
+  pdftitle={Assistant bancaire frugal - Proposition de solution, sujet 1},
+  pdfauthor={Equipe Yahya, Sohayb, Younes}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{mainblue}}
+  {\normalsize\mdseries\color{darkgray}\MakeUppercase{\chaptertitlename}\ \thechapter}
+  {6pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-24pt}{22pt}
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{\thesection}{0.7em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{darkgray}}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.5em}
+\titlespacing*{\subsection}{0pt}{1.05em}{0.35em}
+
+\captionsetup{font=small,labelfont=bf}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.12em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.12em,topsep=0.25em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{Z}{>{\raggedright\arraybackslash\small}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small\color{darkgray}\leftmark}\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter\ --- #1}{}}
+
+\newtcolorbox{choix}{breakable,colback=ext!45,colframe=darkgray,boxrule=0.5pt,arc=1.4mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm}
+\newtcolorbox{cle}{breakable,colback=lightblue,colframe=mainblue,boxrule=0.7pt,arc=1.4mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm}
+\newtcolorbox{attention}{breakable,colback=alerte!60,colframe=kored!80,boxrule=0.6pt,arc=1.4mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm}
+\newtcolorbox{code}{breakable,colback=codebg,colframe=darkgray!35,boxrule=0.4pt,arc=1mm,
+  left=2mm,right=2mm,top=1mm,bottom=1mm}
+
+% Identifiants (intentions, fichiers, champs) : coupure autorisée après chaque souligné.
+% Le souligné est pris dans la fonte : passer par \_ redéfini bouclerait.
+% Robuste, car \f apparaît dans des titres et des légendes.
+\DeclareRobustCommand{\f}[1]{{\texttt{\small
+  \renewcommand{\_}{\char`\_\allowbreak}#1}}}
+\newcommand{\eur}{\,\texteuro}
+\newcommand{\oui}{\textcolor{okgreen}{\textbf{oui}}}
+\newcommand{\non}{\textcolor{kored}{\textbf{non}}}
+\newcommand{\partiel}{\textcolor{darkgray}{\textbf{partiel}}}
+\newcommand{\amesurer}{\textit{\textcolor{darkgray}{à mesurer}}}
+
+% ── Styles de diagrammes, constants dans tout le rapport ──
+\tikzset{
+  etage/.style={rectangle,draw=mainblue,fill=ent,rounded corners=2pt,
+                align=center,font=\scriptsize,inner sep=4pt,minimum height=0.8cm},
+  donnee/.style={rectangle,draw=mainblue!70,fill=tab,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  module/.style={rectangle,draw=darkgray!70,fill=mod,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  acteur/.style={rectangle,draw=darkgray,fill=ext,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  risque/.style={rectangle,draw=kored!80,fill=alerte,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  test/.style={diamond,aspect=2.2,draw=mainblue,fill=white,align=center,
+               font=\scriptsize,inner sep=1pt},
+  fl/.style={-{Latex[length=1.8mm]},semithick,draw=mainblue!80},
+  flp/.style={-{Latex[length=1.8mm]},semithick,draw=darkgray!75,dashed},
+  lien/.style={semithick,draw=darkgray!70},
+  et/.style={font=\scriptsize,text=darkgray,inner sep=1.5pt},
+  gantt/.style={rectangle,draw=mainblue!80,rounded corners=1pt,font=\tiny,
+                align=center,inner sep=1.5pt,minimum height=0.46cm},
+}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{0.6cm}
+{\large\scshape\color{darkgray} Hackathon IA\\[0.15cm]
+La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA\par}
+\vspace{0.3cm}
+{\normalsize\color{darkgray} Sujet 1 --- Assistant bancaire personnalisé\par}
+
+\vspace{2.6cm}
+{\large\color{darkgray} Proposition de solution et feuille de route\par}
+\vspace{0.5cm}
+{\Huge\bfseries\color{mainblue} Un assistant bancaire\\[0.25cm] frugal, explicable, et qui agit\par}
+\vspace{0.6cm}
+{\Large Comprendre, personnaliser, conseiller\\[0.1cm]
+avec le plus petit calcul qui suffit\par}
+
+\vspace{1.8cm}
+\rule{0.78\textwidth}{0.7pt}
+\vspace{1.1cm}
+
+\begin{tabular}{rl}
+\textbf{Yahya Bel Hajjam} & Intelligence artificielle \\[0.15cm]
+\textbf{Sohayb} & Génie logiciel \\[0.15cm]
+\textbf{Younes} & Calcul intensif \\
+\end{tabular}
+
+\vfill
+{\small\color{darkgray} Document de travail interne à l'équipe --- lundi 26 octobre 2026\\
+Soutenance : mercredi 28 octobre, 13h30\par}
+\end{titlepage}
+
+\tableofcontents
+\cleardoublepage
+
+\input{chapitres/00-synthese}
+\input{chapitres/01-attentes}
+\input{chapitres/02-donnees}
+\input{chapitres/03-timso}
+\input{chapitres/04-solution}
+\input{chapitres/05-modeles}
+\input{chapitres/06-evaluation}
+\input{chapitres/07-demo}
+\input{chapitres/08-organisation}
+\input{chapitres/09-risques}
+\input{chapitres/10-couverture}
+\input{chapitres/11-comparaison}
+\input{chapitres/12-pitch}
+
+\appendix
+\input{chapitres/annexes}
+
+\end{document}

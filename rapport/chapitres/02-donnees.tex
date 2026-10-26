@@ -1,0 +1,179 @@
+\chapter{Ce que disent les données}
+\label{ch:donnees}
+
+Les deux jeux de données ont été téléchargés et lus le 26 octobre. Les chiffres de ce chapitre sont
+comptés sur les fichiers, pas recopiés d'une documentation.
+
+\section{Banking77 : la compréhension des demandes}
+
+\paragraph{Ce que c'est.} 13\,083 questions de clients d'une banque en ligne britannique, chacune
+étiquetée par l'une de 77 intentions (Casanueva et al., 2020, licence CC-BY-4.0). Le jeu
+d'entraînement compte 10\,003 questions, réparties de façon inégale (de 35 à 187 par intention) ;
+le jeu de test en compte 3\,080, exactement 40 par intention. \textbf{Tout est en anglais.}
+
+\paragraph{Les scores de référence.} L'article d'origine donne, en précision sur le test complet :
+87,19\,\% pour BERT utilisé comme encodeur figé, 92,81\,\% pour USE, 93,01\,\% pour ConveRT,
+93,36\,\% pour USE et ConveRT combinés, 93,66\,\% pour BERT affiné. Le message utile pour nous :
+\textbf{un encodeur figé et un classifieur léger se placent à un ou deux points du meilleur modèle
+affiné}, pour un coût d'entraînement de quelques minutes sur CPU.
+
+\paragraph{Ce qu'il couvre, et surtout ce qu'il ne couvre pas.} Le vocabulaire est celui d'une
+néobanque : recharges (\emph{top-up}), cartes virtuelles, Apple Pay, taux de change. Confronté aux
+situations du sujet, le constat est net :
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l c Y@{}}
+\toprule
+\textbf{Situation du sujet} & \textbf{Couverte ?} & \textbf{Intentions Banking77 concernées} \\
+\midrule
+Carte perdue (Inès) & \oui & \f{lost\_or\_stolen\_card}, \f{compromised\_card},
+  \f{card\_swallowed} \\
+Frais (Marc) & \oui & \f{extra\_charge\_on\_statement}, \f{card\_payment\_fee\_charged},
+  \f{transfer\_fee\_charged}, \f{cash\_withdrawal\_charge}\dots \\
+Virement à un proche (Paul) & \partiel & Les intentions \f{transfer\_*} portent sur l'\emph{état}
+  d'un virement (en attente, refusé, annulé), pas sur \og comment en faire un \fg \\
+Épargne (Sophie) & \non & --- \\
+Crédit auto (Karim) & \non & --- \\
+Appartement (énoncé) & \non & --- \\
+Prêt étudiant (oral) & \non & --- \\
+Insatisfaction & \non & --- \\
+Jargon (oral) & \non & --- \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{cle}
+\textbf{Banking77 couvre le \emph{service}, pas le \emph{conseil}.} Il sait reconnaître une carte
+perdue ou un frais contesté ; il ne contient pas une seule demande d'épargne, de crédit ou de projet
+immobilier --- c'est-à-dire l'exemple même de l'énoncé. Les intentions de conseil sont à créer, en
+français, par nous. C'est une partie du livrable \og données préparées en français \fg.
+\end{cle}
+
+\paragraph{Un bruit d'étiquetage à connaître.} Certaines étiquettes sont discutables. Dans le jeu
+d'entraînement, \og \emph{What is the word?} \fg{} est rangé sous
+\f{direct\_debit\_payment\_not\_recognised}, et \og \emph{Has there been any activity on my card
+today?} \fg{} sous \f{lost\_or\_stolen\_card}. Cela plafonne la précision atteignable et justifie de
+raisonner aussi au niveau des \emph{familles} d'intentions, plus robustes (section~\ref{sec:nlu}).
+
+\paragraph{Neuf familles.} Nous regroupons les 77 intentions en neuf familles, vérifié par script :
+chaque intention est rangée une fois et une seule. Le détail est en annexe~\ref{an:taxonomie}.
+
+\begin{center}\small
+\begin{tabular}{@{}l r r r@{}}
+\toprule
+\textbf{Famille} & \textbf{Intentions} & \textbf{Entraînement} & \textbf{Test} \\
+\midrule
+\f{carte\_perdue} & 4 & 350 & 160 \\
+\f{carte\_usage} & 10 & 1\,084 & 400 \\
+\f{carte\_commande} & 12 & 1\,465 & 480 \\
+\f{frais\_contestation} & 14 & 2\,225 & 560 \\
+\f{virement} & 10 & 1\,409 & 400 \\
+\f{compte\_identite} & 8 & 884 & 320 \\
+\f{especes} & 5 & 764 & 200 \\
+\f{change\_etranger} & 6 & 815 & 240 \\
+\f{alimenter\_compte} & 8 & 1\,007 & 320 \\
+\midrule
+\textbf{Total} & \textbf{77} & \textbf{10\,003} & \textbf{3\,080} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Bank Marketing : la base clients}
+
+\paragraph{Ce que c'est.} Les clients d'une banque portugaise contactés par téléphone entre mai 2008
+et novembre 2010 pour souscrire un dépôt à terme (UCI, Moro et al.). Le fichier
+\f{bank-full.csv} compte \textbf{45\,211 clients} et 17 colonnes ; la variante
+\f{bank-additional-full.csv} (41\,188 lignes) remplace le solde par des indicateurs économiques.
+Nous partons de \f{bank-full.csv}, qui contient le solde.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm} Y L{4.5cm}@{}}
+\toprule
+\textbf{Colonnes} & \textbf{Contenu} & \textbf{Usage pour nous} \\
+\midrule
+\f{age}, \f{job}, \f{marital}, \f{education} & Âge (18 à 95 ans, médiane 39), 12 métiers dont 938
+  étudiants et 2\,264 retraités, situation (\og divorced \fg{} inclut les veufs), études &
+  Profil, éligibilité (Livret Jeune, LDDS), registre de langue \\
+\f{balance} & Solde annuel moyen en euros, de $-$8\,019 à 102\,127 ; médiane 448 ;
+  \textbf{3\,766 soldes négatifs (8,3\,\%)} & Découverts fréquents (Marc), capacité d'épargne \\
+\f{housing}, \f{loan}, \f{default} & Crédit immobilier en cours (55,6\,\%), crédit personnel
+  (16,0\,\%), défaut de paiement (1,8\,\%) & Charges existantes, prudence crédit \\
+\f{contact}, \f{day}, \f{month}, \f{duration}, \f{campaign}, \f{pdays}, \f{previous},
+  \f{poutcome} & Historique des campagnes de démarchage & Seulement \f{previous} et
+  \f{poutcome}, pour l'appétence \\
+\f{y} & A souscrit un dépôt à terme : 5\,289 oui (11,7\,\%) & Cible du modèle d'appétence épargne \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{attention}
+\textbf{La colonne \f{duration} est une fuite.} La documentation de l'UCI le dit explicitement : la
+durée de l'appel n'est connue qu'\emph{après} l'appel, et elle détermine presque la réponse (un
+appel de 0 seconde donne toujours \og non \fg). Un modèle qui l'utilise affiche un excellent score
+et ne sert à rien. Nous l'excluons, ainsi que \f{contact}, \f{day} et \f{month}, propres à la
+campagne. Le dire au jury est un point de qualité technique gratuit.
+\end{attention}
+
+\section{Ce qui manque, et comment on le comble}
+
+Bank Marketing ne contient ni revenus, ni enfants, ni charges, ni historique d'opérations. Or
+l'énoncé demande de personnaliser \og selon l'âge, les revenus et l'historique \fg. Les slides
+annoncent une version \og enrichie de revenus et d'historique simulés \fg{} fournie par les
+organisateurs. Deux cas :
+
+\begin{itemize}
+  \item \textbf{Elle arrive à temps.} On la branche derrière un \emph{adaptateur} unique,
+        \f{src/conseiller/clients.py}, qui expose toujours le même profil au reste du code.
+  \item \textbf{Elle tarde.} On simule nous-mêmes, avec une graine fixe et une méthode écrite :
+        revenu mensuel net tiré par métier et âge ; nombre d'enfants à partir de l'âge et de la
+        situation ; charges de crédit si \f{housing} ou \f{loan} ; douze mois d'événements (frais,
+        découverts, contacts avec le service client), plus nombreux si le solde est négatif.
+\end{itemize}
+
+\begin{choix}
+\textbf{Règle de transparence.} Toute donnée simulée porte le drapeau \f{simule=True} et sa méthode
+est décrite dans la fiche de données. Dans l'interface, un champ simulé s'affiche en italique. Le
+jury ne doit jamais pouvoir croire qu'un revenu inventé est une donnée réelle.
+\end{choix}
+
+\paragraph{Les clients de démonstration.} Les profils des slides deviennent huit clients fixes,
+chacun ancré sur une ligne réelle de Bank Marketing (âge, métier, situation, solde, crédits) et
+complété par simulation. Ils servent à la démo et aux tests.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l l L{3.5cm} Y@{}}
+\toprule
+\textbf{Id} & \textbf{Client} & \textbf{Ancrage Bank Marketing} & \textbf{Enrichissement simulé
+  (exemple)} \\
+\midrule
+C01 & Inès, 34 ans & \f{management}, \f{single} & 3\,200\eur{} nets, carte active \\
+C02 & Marc, 52 ans & \f{blue-collar}, \f{married}, solde négatif & 1\,850\eur{} nets, 5 découverts
+  en 12 mois, commissions facturées \\
+C03 & Sophie, 41 ans & \f{admin.}, \f{married} & 2\,400\eur{} nets, enfants de 8 et 12 ans,
+  Livret A \\
+C04 & Paul, 68 ans & \f{retired}, \f{divorced} & 1\,600\eur{}, \og peu à l'aise en ligne \fg, fils
+  enregistré comme bénéficiaire \\
+C05 & Karim, 29 ans & \f{technician}, \f{loan=yes} & 1\,900\eur{} nets (donné), crédit en cours
+  de 150\eur{}/mois \\
+C06 & Julie, 37 ans & \f{services} & 3 contacts au service client aujourd'hui \\
+C07 & Léa, 31 ans & \f{management}, \f{housing=no} & 2\,900\eur{} nets, 25\,000\eur{} d'épargne \\
+C08 & Lucas, 20 ans & \f{student} & Job étudiant à 450\eur{}, sans épargne \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Le catalogue de produits}
+
+L'énoncé le laisse à construire \og à partir d'informations publiques \fg. Nous le limitons à ce
+qu'un assistant peut honnêtement proposer --- des produits \emph{simples} --- et nous l'écrivons en
+JSON, une fiche par produit : identifiant, nom, catégorie, conditions d'éligibilité, plafond,
+disponibilité de l'argent, à qui il convient, limites, \textbf{source publique et date de
+relevé}. La liste complète et les paramètres sont en annexe~\ref{an:catalogue}.
+
+\begin{attention}
+\textbf{Les taux réglementés changent} (le taux du Livret A est révisé deux fois par an). Aucun taux
+n'est écrit en dur dans le code : c'est un champ du catalogue, avec sa date et sa source, relevé le
+jour même sur le site public. Les plafonds (22\,950\eur{} pour le Livret A, 12\,000\eur{} pour le
+LDDS, 10\,000\eur{} pour le LEP, 1\,600\eur{} pour le Livret Jeune, 61\,200\eur{} pour le PEL) sont
+stables mais sont aussi vérifiés à la source.
+\end{attention}

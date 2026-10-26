@@ -1,0 +1,88 @@
+\chapter{Vérification : toutes les cases sont remplies}
+\label{ch:couverture}
+
+\section{Les exigences}
+
+Chaque exigence de la section~\ref{sec:exigences} est rattachée à un composant et à une preuve
+visible par le jury.
+
+\begin{center}\small
+\begin{longtable}{@{}l L{4.6cm} L{4.6cm} l@{}}
+\toprule
+\textbf{N\textsuperscript{o}} & \textbf{Composant} & \textbf{Preuve} & \textbf{Module} \\
+\midrule
+\endhead
+E1 & Étage 1 : mots-clés, encodeur multilingue, têtes, entités & Précision sur le test français ; démo &
+  M1 \\
+E2 & Banking77 traduit, 8 intentions, glossaire, catalogue, fiche de données & Fichiers dans
+  \f{data/processed/} ; taux de relecture & M1, M2, M3 \\
+E3 & Parcours YAML, questions déduites du profil & Scénarios : questions attendues et interdites
+  & M2 \\
+E4 & Profil, règles d'éligibilité, appétence & Démo : même phrase, deux clients & M3 \\
+E5 & Moteur de règles sur un catalogue de produits simples & Panneau pourquoi & M3 \\
+E6 & Adaptateur et 8 clients ancrés sur Bank Marketing & Sélecteur de client & M3 \\
+E7 & Catalogue avec source et date par fiche & Annexe~\ref{an:catalogue} ; panneau pourquoi &
+  M3 \\
+E8 & Modèles open source servis par Ollama et vLLM, CodeCarbon hors ligne & Aucun appel
+  sortant & Tous \\
+E9 & Protocole : descendre en taille, garder le plus petit qui tient le seuil ; escalade rare & Tableaux du
+  chapitre~\ref{ch:evaluation} & M1, M2 \\
+E10 & Instrumentation, banc A/B/C & Panneau frugalité ; graphique du pitch & M1 \\
+E11 & Raisons, produits écartés, sources, garde-fou & Panneau pourquoi ; taux du garde-fou &
+  M2, M3 \\
+E12 & Étages sans LLM en millisecondes ; petit LLM limité à 200 tokens & Latence p95 mesurée & M1, M2 \\
+E13 & Outils avec confirmation : opposition, virement, conseiller & Démo Inès & M3 \\
+E14 & Neuf parcours & Les 30 scénarios & Tous \\
+E15 & Glossaire ; prêt étudiant ; mode mots simples & Démo Lucas ; termes cliquables & M2 \\
+E16 & Script de démo, vidéo, dépôt étiqueté \f{v1.0} & Jalon J3 & Tous \\
+E17 & Mots simples, taille du texte, contraste ; offre clientèle fragile & Démo Marc et Paul &
+  M2, M3 \\
+E18 & Mots-clés et classifieur en entrée ; un seul appel LLM, à la fin & Répartition par
+  niveau ; part sans LLM & M1, M2 \\
+E19 & Gel fonctionnel à J2, puis exploration & Planning ; priorités & Tous \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section{Les livrables du sujet}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{4.2cm} Y l@{}}
+\toprule
+\textbf{Livrable attendu} & \textbf{Ce que nous livrons} & \textbf{Module} \\
+\midrule
+Données préparées en français & Banking77 traduit (13\,083 phrases), 8 intentions de conseil en
+  français, glossaire, catalogue ; fiche de données décrivant méthode et contrôles & M1 \\
+Modèle de compréhension des intentions & Mots-clés, puis encodeur \f{multilingual-e5-small} et
+  deux têtes
+  (14 familles, 85 intentions), avec seuil et escalade ; résultats sur trois jeux de test & M1 \\
+Chatbot relié à une base clients simulée & Interface Streamlit, \f{reply()}, 8 clients de
+  démonstration, adaptateur prêt pour la base enrichie & M2, M3 \\
+Moteur de conseils personnalisés & Règles d'éligibilité et de pertinence, calculs de crédit,
+  appétence, raisons et produits écartés & M3 \\
+Mesures de frugalité & Énergie, latence, taille, part sans LLM ; comparaison A/B/C ; coût de
+  la préparation hors ligne & M1 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{La démarche en quatre temps}
+
+Les slides demandent une démarche en quatre temps ; le jury \og évalue la démarche autant que le
+résultat \fg. Chaque temps a sa réponse et sa diapositive.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+\textbf{Temps} & \textbf{Notre réponse} \\
+\midrule
+Cadrer & Les neuf situations du sujet ; le constat que Banking77 couvre le service et pas le
+  conseil ; 14 familles et 85 intentions. \\
+Préparer & Traduction outillée et contrôlée ; 8 intentions créées ; tests écrits à la main ;
+  enrichissement simulé déclaré comme tel ; \f{duration} exclue. \\
+Concevoir & La cascade : chaque étage ne passe la main que s'il ne sait pas faire ; le gros modèle
+  à l'instant précis. \\
+Démontrer & Les tests officiels, les 30 scénarios, la comparaison A/B/C, la démo en direct. \\
+\bottomrule
+\end{tabularx}
+\end{center}

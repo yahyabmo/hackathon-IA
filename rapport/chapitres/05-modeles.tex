@@ -1,0 +1,133 @@
+\chapter{Les modèles, et comment on les choisit}
+\label{ch:modeles}
+
+\section{Les modèles retenus}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{2.3cm} L{4.3cm} l l Y@{}}
+\toprule
+\textbf{Rôle} & \textbf{Modèle} & \textbf{Paramètres} & \textbf{Taille} & \textbf{Où il tourne} \\
+\midrule
+Filtre d'entrée (étage 1) & Lexique de mots-clés par famille & --- & quelques Ko & CPU \\
+Encodeur (étage 1) & \f{multilingual-e5-small} (intfloat) & 118 M & $\approx$\,0,47 Go & CPU ou GPU \\
+Tête de classification & Régression logistique & $\approx$\,38\,000 & $<$ 1 Mo & CPU \\
+Base de comparaison & TF-IDF + régression logistique & --- & quelques Mo & CPU \\
+Formulation (étage 5) & \f{ministral-3:3b}, Q4\_K\_M & $\approx$\,3 G & 3,0 Go & GPU (RTX 3060) \\
+Escalade & \f{ministral-3:14b}, Q4\_K\_M & $\approx$\,14 G & 9,1 Go & GPU, à la demande \\
+Appétence (étage 3) & Régression logistique & $\approx$\,50 & $<$ 1 Mo & CPU \\
+Préparation, hors ligne & \f{ministral-3:14b} ou plus gros, via vLLM & --- & --- & DeepEirb, une fois \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+La tête de classification compte environ 38\,000 poids : 99 classes (14 familles et 85
+intentions) fois 385 (les 384 dimensions du vecteur, plus un biais). Les tailles des modèles
+Ollama sont celles de la bibliothèque Ollama ; celles des modèles Ministral 3 incluent un encodeur
+d'images que nous n'utilisons pas.
+
+\begin{attention}
+\textbf{La mémoire de la RTX 3060 est de 12 Go.} \f{ministral-3:3b} (3,0 Go) et
+\f{ministral-3:14b} (9,1 Go) ne tiennent pas ensemble avec leurs caches de contexte. Trois options,
+par ordre de préférence :
+\begin{enumerate}
+  \item l'escalade est envoyée au serveur vLLM de DeepEirb, qui sert le gros modèle à toutes les
+        équipes ; le poste ne garde que le petit ;
+  \item l'escalade utilise \f{ministral-3:8b} (6,0 Go), qui tient à côté du 3B ;
+  \item un seul modèle est chargé à la fois ; l'escalade, rare, accepte quelques secondes de
+        rechargement.
+\end{enumerate}
+Dans tous les cas, le contexte est réglé au plus juste (\f{num\_ctx} à 4\,096 au lieu de 16\,384) :
+moins de mémoire et des réponses plus rapides, comme l'a rappelé Denis Barthou.
+\end{attention}
+
+\section{\og Le plus petit modèle qui suffit \fg, rendu opérationnel}
+
+La règle commune ne dit pas comment on sait qu'un modèle \og suffit \fg. Nous le décidons avant
+de mesurer, pour ne pas choisir après coup le résultat qui nous arrange. La démarche est celle
+qu'un organisateur nous a conseillée : partir d'un modèle qui marche, puis descendre.
+
+\begin{cle}
+\textbf{Protocole.} On commence par un modèle qui fait clairement l'affaire : il fixe la référence
+de qualité. On descend ensuite en taille, candidat par candidat, sur le même jeu et avec le même
+seuil fixé à l'avance. \textbf{On retient le plus petit qui tient encore le seuil.} Un modèle plus
+gros n'est retenu que si tous les plus petits échouent --- c'est la définition exacte de \og un
+modèle plus gros seulement si le gain est mesuré \fg. Toute l'échelle est évaluée : la courbe
+qualité, taille et énergie qui en sort va dans le support.
+\end{cle}
+
+\paragraph{Pour l'encodeur.} Candidats : \f{paraphrase-multilingual-MiniLM-L12-v2} et
+\f{multilingual-e5-small} (118 M chacun), puis \f{multilingual-e5-base} (278 M). Seuil : rester à
+moins d'un point de F1 macro du meilleur candidat testé, au niveau des familles, sur le test
+français.
+
+\paragraph{Pour la formulation.} Référence : \f{ministral-3:14b} (9,1 Go, déjà installé), ou un
+modèle d'environ 30B sur DeepEirb si Denis Barthou en sert un. Puis, en descendant :
+\f{gemma4:e2b} (7,2 Go, déjà installé), \f{ministral-3:8b} (6,0 Go), \f{ministral-3:3b}
+(3,0 Go), \f{qwen3:1.7b} (1,4 Go, réflexion désactivée), \f{gemma3:1b} (0,8 Go),
+\f{qwen3:0.6b} (0,5 Go) et \f{gemma3:270m} (0,3 Go). Jeu : 30 situations sous forme de faits structurés, tirées des parcours. Seuil :
+\textbf{zéro nombre inventé après garde-fou} et au moins 27 réponses sur 30 jugées correctes et
+claires en français par deux membres de l'équipe. Notre pari est que \f{ministral-3:3b} sera le plus
+petit à tenir le seuil ; la mesure peut descendre plus bas.
+
+\paragraph{Les réglages de génération.} Température basse (0,2), au plus 200 tokens produits,
+réflexion désactivée sur les modèles qui en ont une, modèle gardé en mémoire pendant la démo
+(\f{keep\_alive}) pour ne pas payer le chargement devant le jury.
+
+\section{Le gros modèle, à l'instant précis}
+
+CGI a encouragé l'usage d'un gros modèle \og à un instant T, pour un besoin spécifique \fg. Nous en
+faisons deux usages, et seulement deux.
+
+\paragraph{Hors ligne, une fois : préparer les données.} Traduire les 13\,083 phrases de Banking77
+et générer les exemples des nouvelles intentions est un travail de qualité, fait une seule fois.
+C'est le bon endroit pour un gros modèle : son coût est payé une fois, mesuré avec CodeCarbon, et
+\emph{amorti} sur toutes les requêtes futures. Le pitch donne les deux chiffres : l'énergie totale
+de la préparation, et l'énergie par requête en service.
+
+\paragraph{En ligne, rarement : lever un doute.} Quand le classifieur reste sous le seuil après une
+question de clarification. Le taux d'escalade est mesuré sur les scénarios et affiché ; une
+escalade fréquente signalerait un classifieur insuffisant, pas un besoin de gros modèle.
+
+\section{La traduction de Banking77}
+
+\paragraph{La méthode.} Traduction par lots avec une consigne et un glossaire : adapter au contexte
+bancaire français plutôt que traduire mot à mot.
+
+\begin{center}\small
+\begin{tabular}{@{}l l@{}}
+\toprule
+\textbf{Anglais (Banking77)} & \textbf{Français attendu} \\
+\midrule
+\emph{top up} & alimenter son compte, recharger \\
+\emph{transfer} & virement \\
+\emph{direct debit} & prélèvement \\
+\emph{statement} & relevé de compte \\
+\emph{PIN} & code confidentiel \\
+\emph{ATM} & distributeur \\
+\emph{card payment declined} & paiement par carte refusé \\
+\emph{exchange rate} & taux de change \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Le contrôle.} Contrôles automatiques sur tout le jeu (la sortie est bien en français,
+le rapport de longueur avec l'original est plausible, pas de ligne vide) ; relecture humaine de
+100 phrases tirées au hasard, avec le taux de phrases acceptables reporté dans la fiche de données.
+
+\paragraph{Le repli.} Si DeepEirb n'est pas accessible lundi soir, la traduction passe par
+\f{Helsinki-NLP/opus-mt-en-fr}, un modèle de traduction dédié d'environ 75 millions de paramètres,
+très rapide sur la RTX 3060. Il connaît moins bien le jargon bancaire : le glossaire est alors
+appliqué en post-traitement, et la relecture porte sur le jeu de test en priorité.
+
+\section{Ce qu'il faut demander lundi soir}
+
+\begin{itemize}
+  \item \textbf{À Denis Barthou} : l'accès SSH à DeepEirb, et un modèle servi par vLLM pour la
+        préparation et l'escalade (\f{ministral-3:14b} au minimum, un modèle plus gros si
+        disponible pour la traduction).
+  \item \textbf{Sur les postes, en filaire} : télécharger \f{ministral-3:3b}, \f{qwen3:1.7b},
+        \f{gemma3:1b} et \f{multilingual-e5-small}. Les slides demandent d'éviter les gros
+        téléchargements en wifi.
+  \item \textbf{Aux organisateurs} : la version enrichie de Bank Marketing, et la confirmation de
+        la machine de démonstration (DeepEirb ou poste de la salle).
+\end{itemize}

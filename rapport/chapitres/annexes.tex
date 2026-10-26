@@ -1,0 +1,271 @@
+\chapter{Taxonomie des intentions}
+\label{an:taxonomie}
+
+Les 77 intentions de Banking77, rangées en neuf familles (vérifié par script : chacune une fois et
+une seule), puis les huit intentions que nous créons.
+
+\begin{center}\footnotesize
+\begin{longtable}{@{}L{3.1cm} L{11.3cm}@{}}
+\toprule
+\textbf{Famille} & \textbf{Intentions} \\
+\midrule
+\endhead
+\f{carte\_perdue} (4) & \f{lost\_or\_stolen\_card}, \f{compromised\_card}, \f{card\_swallowed},
+  \f{lost\_or\_stolen\_phone} \\
+\addlinespace
+\f{carte\_usage} (10) & \f{card\_not\_working}, \f{contactless\_not\_working}, \f{pin\_blocked},
+  \f{change\_pin}, \f{activate\_my\_card}, \f{card\_about\_to\_expire}, \f{card\_acceptance},
+  \f{declined\_card\_payment}, \f{virtual\_card\_not\_working}, \f{pending\_card\_payment} \\
+\addlinespace
+\f{carte\_commande} (12) & \f{card\_arrival}, \f{card\_delivery\_estimate},
+  \f{order\_physical\_card}, \f{get\_physical\_card}, \f{getting\_spare\_card},
+  \f{getting\_virtual\_card}, \f{get\_disposable\_virtual\_card}, \f{disposable\_card\_limits},
+  \f{card\_linking}, \f{visa\_or\_mastercard}, \f{supported\_cards\_and\_currencies},
+  \f{apple\_pay\_or\_google\_pay} \\
+\addlinespace
+\f{frais\_contestation} (14) & \f{extra\_charge\_on\_statement}, \f{card\_payment\_fee\_charged},
+  \f{transfer\_fee\_charged}, \f{cash\_withdrawal\_charge}, \f{exchange\_charge},
+  \f{top\_up\_by\_card\_charge}, \f{top\_up\_by\_bank\_transfer\_charge},
+  \f{transaction\_charged\_twice}, \f{card\_payment\_not\_recognised},
+  \f{direct\_debit\_payment\_not\_recognised}, \f{cash\_withdrawal\_not\_recognised},
+  \f{request\_refund}, \f{Refund\_not\_showing\_up}, \f{reverted\_card\_payment?} \\
+\addlinespace
+\f{virement} (10) & \f{transfer\_into\_account}, \f{cancel\_transfer}, \f{pending\_transfer},
+  \f{transfer\_timing}, \f{failed\_transfer}, \f{declined\_transfer}, \f{beneficiary\_not\_allowed},
+  \f{transfer\_not\_received\_by\_recipient}, \f{receiving\_money},
+  \f{balance\_not\_updated\_after\_bank\_transfer} \\
+\addlinespace
+\f{compte\_identite} (8) & \f{edit\_personal\_details}, \f{verify\_my\_identity},
+  \f{why\_verify\_identity}, \f{unable\_to\_verify\_identity}, \f{verify\_source\_of\_funds},
+  \f{passcode\_forgotten}, \f{terminate\_account}, \f{age\_limit} \\
+\addlinespace
+\f{especes} (5) & \f{atm\_support}, \f{pending\_cash\_withdrawal}, \f{declined\_cash\_withdrawal},
+  \f{wrong\_amount\_of\_cash\_received}, \f{balance\_not\_updated\_after\_cheque\_or\_cash\_deposit} \\
+\addlinespace
+\f{change\_etranger} (6) & \f{exchange\_rate}, \f{card\_payment\_wrong\_exchange\_rate},
+  \f{wrong\_exchange\_rate\_for\_cash\_withdrawal}, \f{exchange\_via\_app},
+  \f{fiat\_currency\_support}, \f{country\_support} \\
+\addlinespace
+\f{alimenter\_compte} (8) & \f{automatic\_top\_up}, \f{pending\_top\_up}, \f{top\_up\_limits},
+  \f{top\_up\_reverted}, \f{topping\_up\_by\_card}, \f{top\_up\_failed}, \f{verify\_top\_up},
+  \f{top\_up\_by\_cash\_or\_cheque} \\
+\midrule
+\f{epargne} (1) & \f{epargne\_projet} \\
+\f{credit} (3) & \f{credit\_immobilier}, \f{credit\_conso}, \f{pret\_etudiant} \\
+\f{virement} (+1) & \f{faire\_virement} \\
+\f{aide} (1) & \f{question\_definition} \\
+\f{insatisfaction} (1) & \f{insatisfaction} \\
+\f{conversation} (1) & \f{hors\_sujet} \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+Total : 14 familles, 85 intentions. Les noms \f{Refund\_not\_showing\_up} et
+\f{reverted\_card\_payment?} sont repris tels qu'ils figurent dans Banking77.
+
+\chapter{Le catalogue de produits}
+\label{an:catalogue}
+
+Produits simples, conditions publiques. \textbf{Chaque fiche du fichier JSON porte la source
+publique et la date du relevé} ; les valeurs ci-dessous sont à vérifier à la source le jour de la
+saisie, et les taux réglementés, qui changent, n'y figurent volontairement pas.
+
+\begin{center}\small
+\begin{longtable}{@{}L{2.5cm} L{3.1cm} L{2.6cm} L{2.2cm} L{3.7cm}@{}}
+\toprule
+\textbf{Produit} & \textbf{Pour qui} & \textbf{Plafond, limites} & \textbf{Argent disponible}
+  & \textbf{Convient pour} \\
+\midrule
+\endhead
+Livret A & Tout le monde, mineurs compris ; un par personne & 22\,950\eur{} & Oui & Épargne de
+  précaution ; épargne d'un enfant \\
+LDDS & Majeurs domiciliés fiscalement en France ; un par personne & 12\,000\eur{} & Oui &
+  Compléter le Livret A \\
+LEP & Revenu fiscal de référence sous un plafond annuel (à relever) & 10\,000\eur{} & Oui &
+  Revenus modestes : taux plus élevé \\
+Livret Jeune & 12 à 25 ans & 1\,600\eur{} & Oui & Premier livret d'un jeune \\
+PEL & Tout le monde ; versements réguliers obligatoires & 61\,200\eur{} & Non : un retrait clôt le
+  plan & Projet immobilier à plusieurs années \\
+CEL & Tout le monde & 15\,300\eur{} & Oui & Petit projet, complément du PEL \\
+\midrule
+Crédit immobilier & Majeurs & Mensualités $\leq$ 35\,\% des revenus nets, assurance comprise ;
+  durée $\leq$ 25 ans (27 dans certains cas) & --- & Achat d'un logement ; décision par un
+  conseiller \\
+Prêt à taux zéro & Primo-accédants, sous conditions de ressources et de zone & Selon conditions
+  & --- & Complément d'un crédit immobilier ; éligibilité vérifiée par un conseiller \\
+Prêt personnel & Majeurs & Capacité de remboursement ; mention légale obligatoire & --- & Voiture,
+  travaux, équipement \\
+Prêt étudiant & Étudiants majeurs & Montant et caution selon l'offre ; remboursement différé
+  possible ; version garantie par l'État sous conditions & --- & Financer ses études \\
+\midrule
+Offre clientèle fragile & Personnes en situation de fragilité financière & Tarif mensuel plafonné ;
+  commission d'intervention limitée à 4\eur{} par opération et 20\eur{} par mois & --- &
+  Inclusion ; proposée par un conseiller \\
+Opposition carte (service) & Tout titulaire d'une carte & --- & Immédiat & Perte, vol, fraude \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\paragraph{Règle générale sur les frais.} Hors offre clientèle fragile, la commission
+d'intervention est plafonnée par la loi à 8\eur{} par opération et 80\eur{} par mois (article
+R312-4-1 du Code monétaire et financier). C'est un plafond, pas un prix : le montant réellement
+facturé est celui de la grille tarifaire de la banque, à relever sur son site.
+
+\chapter{Le détail des parcours}
+\label{an:parcours}
+
+P : information lue dans le profil (confirmée si simulée). Q : question posée au client.
+E : entité extraite du message.
+
+\begin{center}\small
+\begin{longtable}{@{}L{2.4cm} L{4.4cm} L{3.5cm} L{4.1cm}@{}}
+\toprule
+\textbf{Parcours} & \textbf{Informations} & \textbf{Règles, outils} & \textbf{Conclusion} \\
+\midrule
+\endhead
+Carte perdue & Carte concernée (P ; Q s'il y en a plusieurs) ; perte ou vol (Q) ; quand (E) &
+  \f{bloquer\_carte}, avec confirmation & Référence, heure ; rassurer ; proposer une nouvelle carte ;
+  rappel : ne jamais communiquer son code \\
+\addlinespace
+Frais & Période (E ou P) ; frais visé (Q s'il y en a plusieurs) & \f{expliquer\_frais} ; plafond
+  légal & Explication datée ; si les incidents se répètent, orientation vers l'offre clientèle
+  fragile ; transmission si contestation \\
+\addlinespace
+Virement & Bénéficiaire (P ; Q) ; montant (E ; Q) ; date (Q, immédiat par défaut) &
+  \f{preparer\_virement} ; solde suffisant ; bénéficiaire enregistré & Récapitulatif, confirmation,
+  référence ; mode mots simples ; rappel contre l'arnaque \\
+\addlinespace
+Épargne & Pour qui (P : enfants ; Q) ; horizon (Q) ; montant mensuel (Q) ; épargne existante (P)
+  & Éligibilité (âge, revenu, plafonds atteints) ; pertinence (horizon court : livrets ; projet
+  immobilier : PEL, CEL) ; appétence & Propositions classées avec raisons ; produits écartés \\
+\addlinespace
+Crédit immobilier & Revenus (P) ; crédits en cours (P) ; prix (Q) ; apport (P, confirmé) & 35\,\% ;
+  25 ans ; frais de notaire estimés ; capacité & Estimation, leviers, rendez-vous ; mention
+  légale \\
+\addlinespace
+Crédit à la consommation & Objet (E) ; montant (Q) ; durée (Q) ; revenus et crédits (P) & Taux
+  d'effort, crédit en cours compris ; reste à vivre (paramètre interne) & Estimation prudente ;
+  mention légale ; rendez-vous \\
+\addlinespace
+Prêt étudiant & Statut (P) ; études et durée (Q) ; montant (Q) ; caution possible (Q) &
+  Éligibilité (majeur, étudiant) & Orientation vers le prêt étudiant ; Livret Jeune ;
+  rendez-vous \\
+\addlinespace
+Jargon & Terme (E, par le glossaire) & Recherche dans le glossaire, en mémoire & Fiche courte ;
+  proposition d'un exemple \\
+\addlinespace
+Insatisfaction & Contacts du jour (P) & Règle des trois contacts ; ton & Excuses ; reformulation
+  du problème ; \f{transmettre\_conseiller} avec résumé \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\chapter{Le glossaire}
+\label{an:glossaire}
+
+Fiches courtes, écrites par nous et relues ; c'est le texte que l'assistant affiche, sans LLM.
+
+\begin{center}\small
+\begin{longtable}{@{}L{3.3cm} L{11.1cm}@{}}
+\toprule
+\textbf{Terme} & \textbf{Explication en mots simples} \\
+\midrule
+\endhead
+Agios & Les intérêts et frais que la banque facture quand votre compte est à découvert. \\
+Apport personnel & L'argent que vous mettez vous-même dans un achat, sans l'emprunter. \\
+Assurance emprunteur & Une assurance qui rembourse tout ou partie de votre crédit si vous ne
+  pouvez plus le faire (décès, invalidité\dots). Elle est presque toujours demandée pour un crédit
+  immobilier. \\
+Commission d'intervention & Des frais facturés quand la banque doit traiter une opération qui pose
+  problème, par exemple un paiement alors que votre solde est insuffisant. La loi les plafonne. \\
+Découvert autorisé & La possibilité, prévue avec votre banque, d'avoir un solde négatif jusqu'à
+  un certain montant. Il coûte des agios. \\
+Épargne de précaution & Une réserve d'argent disponible à tout moment pour faire face à un
+  imprévu ; on conseille souvent trois à six mois de dépenses. \\
+Frais de notaire & Les taxes et frais payés lors de l'achat d'un logement, en plus du prix :
+  environ 7 à 8\,\% dans l'ancien, 2 à 3\,\% dans le neuf. \\
+IBAN & Le numéro qui identifie un compte bancaire ; il faut le donner pour recevoir un virement. \\
+LDDS & Livret de développement durable et solidaire : un livret d'épargne disponible, sans impôt
+  sur les intérêts, plafonné à 12\,000\eur{}, réservé aux majeurs. \\
+LEP & Livret d'épargne populaire : un livret mieux rémunéré, réservé aux personnes dont les
+  revenus sont sous un plafond. \\
+Livret A & Le livret d'épargne le plus courant : argent disponible à tout moment, intérêts sans
+  impôt, taux fixé par l'État, plafond de 22\,950\eur{}. \\
+Livret Jeune & Un livret pour les 12--25 ans, plafonné à 1\,600\eur{}. \\
+Opposition & Le blocage définitif d'une carte perdue ou volée, pour que personne ne puisse s'en
+  servir. \\
+PEL & Plan épargne logement : on verse régulièrement pendant plusieurs années, en vue d'un projet
+  immobilier ; un retrait ferme le plan. \\
+Prélèvement & Un paiement demandé directement à votre banque par une entreprise que vous avez
+  autorisée (énergie, téléphone\dots). \\
+Reste à vivre & Ce qui vous reste chaque mois une fois payés vos charges et vos crédits. \\
+TAEG & Taux annuel effectif global : le coût total d'un crédit (intérêts, frais, assurance
+  obligatoire) exprimé en pourcentage par an. C'est le chiffre qui permet de comparer deux offres. \\
+Taux d'endettement & La part de vos revenus qui part chaque mois dans vos crédits. Pour un crédit
+  immobilier, elle ne doit pas dépasser 35\,\%. \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\chapter{Commandes utiles}
+\label{an:commandes}
+
+\paragraph{Ollama sur un poste de la salle} (d'après les slides de Denis Barthou).
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+export PATH=/opt/ollama/bin:${PATH}
+export OLLAMA_MODELS=/opt/ollama/models
+export OLLAMA_CONTEXT_LENGTH=4096          # au plus juste (16384 par defaut sur les slides)
+ollama serve &                             # un seul serveur par machine
+ollama pull ministral-3:3b                 # en filaire
+ollama list
+\end{verbatim}
+\end{code}
+
+\paragraph{Appel à Ollama avec mesure.} La réponse contient \f{prompt\_eval\_count},
+\f{eval\_count} et les durées en nanosecondes, ce qui alimente la trace.
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+curl -s localhost:11434/api/chat -d '{
+  "model": "ministral-3:3b",
+  "messages": [{"role": "system", "content": "..."},
+               {"role": "user", "content": "..."}],
+  "stream": false,
+  "keep_alive": "30m",
+  "options": {"temperature": 0.2, "num_ctx": 4096, "num_predict": 200}
+}'
+# Pour un modele qui raisonne (qwen3) : ajouter  "think": false
+\end{verbatim}
+\end{code}
+
+\paragraph{Serveur vLLM sur DeepEirb.} vLLM expose une API compatible OpenAI ; l'adresse et le nom
+du modèle sont donnés par Denis Barthou.
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+curl -s http://<deepeirb>:<port>/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "<modele>", "temperature": 0,
+       "messages": [{"role": "user", "content": "Traduis en francais ..."}]}'
+\end{verbatim}
+\end{code}
+
+\paragraph{Lancer l'interface et les mesures.} Depuis la racine du dépôt, une fois les modules
+en place :
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+python3 -m venv .venv && source .venv/bin/activate
+pip install sentence-transformers scikit-learn streamlit pyyaml codecarbon pandas
+streamlit run app.py
+python eval/run_scenarios.py          # rejoue les 30 scenarios
+python eval/bench_nlu.py              # tableau de comprehension
+python eval/bench_frugalite.py A B C  # comparaison des configurations
+\end{verbatim}
+\end{code}
