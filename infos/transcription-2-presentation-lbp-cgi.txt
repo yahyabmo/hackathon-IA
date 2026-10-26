@@ -1,0 +1,251 @@
+[00:00] Bon, peut-être qu'à l'heure, vraiment, si vous avez des questions, on pourra aller à ça.
+[00:06] Merci Vincent.
+[00:07] Merci à l'ANSERV et à la CGI d'avoir organisé ce pacaton,
+[00:10] parce que c'est une véritable opportunité pour la Banque Postale d'être au contact d'étudiants.
+[00:15] Donc, moi, je suis directrice SI à la Banque Postale.
+[00:18] J'ai en charge toute la partie projet autour de l'IA générative, notamment, mais autour de la data.
+[00:24] Donc, comme généralement, il n'y a pas d'IA générative sans data,
+[00:27] là, c'est deux ensembles qui fonctionnent bien.
+[00:32] Donc, je vais vous parler un petit peu de la Banque Postale.
+[00:35] La Banque Postale, c'est une des grandes banques françaises,
+[00:37] aux côtés de la Société Générale et, par exemple, du Crédit Mutuel.
+[00:41] C'est aujourd'hui...
+[00:42] Alors, j'ai quelques antisèches, je reviens de vacances.
+[00:44] Donc, j'ai pris quelques antisèches.
+[00:47] C'est aujourd'hui 17 000 points de contact.
+[00:50] Donc, vous avez en tête, vous voyez tous les petits bureaux de poste
+[00:53] qui sont répartis sur tout le territoire français.
+[00:56] En gros, vous voyez aussi...
+[00:57] C'est dans les DOM et dans les DOM.
+[00:59] Donc, c'est 17 000 points de contact.
+[01:01] Ces 17 000 points de contact, ils accueillent quasiment tous les jours 11 000 clients.
+[01:06] 11 000 clients qui sont des clients particuliers, des jeunes et des moins jeunes,
+[01:11] des pros, des professionnels, mais aussi des entreprises et des grands comptes d'entreprises.
+[01:17] Donc, vous ayez en tête que la Banque Postale, aujourd'hui,
+[01:19] il y a à peu près un client sur quatre en France qui est client de la Banque Postale,
+[01:24] soit avec un compte d'argent quotidien, soit avec un livret départ,
+[01:27] comme le livret A, potentiellement, ou de l'épargne financière, par exemple,
+[01:32] ou un crédit à la conso, ou un crédit mort.
+[01:36] Depuis 2020, c'est aussi un milliard d'euros investis dans la transformation numérique.
+[01:43] Donc, dans la transformation numérique, on va avoir tout ce qui est des développements
+[01:48] autour de la digitalisation des opérations bancaires, des processus, de l'application mobile,
+[01:54] puisque toutes les banques ont aujourd'hui une application mobile,
+[01:57] mais aujourd'hui, sur de l'IA traditionnelle, mais aussi sur de l'IA générative.
+[02:02] La Banque Postale, c'est aussi un engagement sociétal très fort.
+[02:07] C'est une banque qui est très axée sur l'accessibilité aux personnes en handicap,
+[02:15] aussi bien dans nos bureaux de poste, mais aussi dans nos middles et dans nos back-office,
+[02:19] qui accueillent les clients au téléphone.
+[02:21] Et donc, on a aussi, notamment au niveau de l'IT, une politique d'accessibilité assez forte,
+[02:27] je vois que notre partenaire appuie également sur ce sujet,
+[02:31] dans la mesure où on a des collaborateurs qui sont malentendants ou malvoyants.
+[02:35] Et donc, on s'assure que tout ce qui est construit au niveau de la DSI soit compatible avec le handicap.
+[02:42] Un autre point sur notre engagement sociétal fort, c'est qu'on est une entreprise 100% responsable.
+[02:48] On propose un certain nombre de financements verts,
+[02:51] qui correspondent justement à l'approche qu'on peut avoir aujourd'hui dans le monde dans lequel on est,
+[02:56] avec les entreprises.
+[02:57] Donc, on a une attrition forte sur l'écologie et la responsabilité sociétale.
+[03:02] Et il y a un autre point qui est important pour la Banque Postale, c'est l'inclusion bancaire.
+[03:06] C'est que la Banque Postale a le devoir d'accueillir tous les clients.
+[03:10] Les clients patrimoniaux, mais aussi les clients qui sont moins patrimoniaux, qui sont en accessibilité bancaire.
+[03:15] Donc, dans ce cadre-là, au mois de novembre, par exemple, on lâche pas un petit peu de teasing.
+[03:19] On va mettre à disposition dans les bureaux un outil avec de l'IA générative,
+[03:25] qui permettra à un client de se mettre à l'écoute.
+[03:26] un conseiller bancaire qui parle français de communiquer avec différents clients d'origine
+[03:33] arabe espagnol et je crois qu'on a l'indie aussi également et donc du coup ça permettra à nos
+[03:40] conseillers dans quelques bureaux d'avoir une interaction avec des clients et de pouvoir
+[03:45] partager une expérience bancaire maintenant je vais vous parler un petit peu de la dsi parce
+[03:51] qu'en fait vous êtes des ingénieurs en développement informatique et donc à la dsi
+[03:55] de la banque postale, on a une DSI qui est répartie sur tout le territoire français,
+[03:59] avec trois sites majeurs, un site à Paris, un site à Nantes, quatre sites, un site à Paris,
+[04:04] un site à Nantes, un site à Toulouse et un site à Bordeaux. Ça représente à peu près 1600
+[04:10] collaboratrices et collaborateurs, j'insiste aussi sur collaboratrices, je vois qu'il y a un
+[04:14] effectif prévu, mais c'est important aussi dans ces filières scientifiques d'appuyer sur la présence
+[04:20] féminine d'ailleurs avec isabelle on représente toutes les trois la jante féminine dans le monde
+[04:28] de l'aïti qui est quand même souvent peu représenté donc 1600 collaboratrices et
+[04:35] collaborateurs et en fait on s'appuie sur des partenaires comme c'est génie pour faire pour
+[04:40] mener à bien tous les projets en complète nos effectifs à peu près avec 3000 personnes vous
+[04:44] voyez c'est quand même une dsi au service d'une banque d'une grande banque française qui a
+[04:50] une empreinte sur le territoire français un passé important donc en fait une dsi son rôle c'est
+[04:55] notamment la dsi d'avant postale c'est de proposer un assis bancaire ainsi bancaire qu'est ce que c'est
+[05:01] c'est de la gestion d'opérations bancaires de virements de contrats de clients de en multimarché
+[05:09] donc je voulais dire des clients de personnes physiques comme vous et nous mais des entreprises
+[05:14] et des pros et derrière qui qui permet à différents acteurs de la banque de travail et des clients
+[05:20] qui sont en bureau de poste mais les personnes qui aussi répondent au téléphone et qui gèrent
+[05:23] vos contrats. Donc maintenant si j'enchaîne un petit peu sur l'IA, à la banque postale nos
+[05:31] premiers travaux autour de l'IA ils sont très centrés au service de nos clients. D'abord pour
+[05:37] améliorer l'expérience client, l'expérience que vous avez tous les jours avec la banque postale
+[05:42] via un chatbot par exemple conversationnel où vous pouvez échanger sur la situation de vos contrats,
+[05:48] une réclamation donc ça c'est effectivement un sujet assez intéressant et prégnant que vous
+[05:54] verrez peut-être dans quelques minutes de l'analyse prédictive et de la personnalisation
+[06:01] d'offres il s'agit des fois de regarder quels sont les actifs de clients et de regarder quels
+[06:05] sont les produits qu'on peut lui soumettre pour étoffer son patrimoine et rentabiliser
+[06:10] d'un bâtage de son patrimoine le deuxième axe assez intéressant pour la banque postale c'est
+[06:16] c'est de regarder comment on peut optimiser les processus au quotidien,
+[06:20] processus à la fois sur le traitement des dossiers, par exemple de crédit,
+[06:24] comment on peut accélérer un dossier de crédit dans son analyse,
+[06:27] l'analyse des ressources, l'analyse des risques, ce genre de choses,
+[06:30] et notamment également la détection des risques au niveau de la lutte anti-lanchiment,
+[06:34] la lutte anti-frog, qui peuvent être des sujets sur lesquels on travaille énormément aussi à la Banque Postale.
+[06:40] On a un sujet aussi important à la Banque Postale, c'est de regarder sur l'innovation.
+[06:45] l'innovation à la fois de comment on peut optimiser les tâches administratives de
+[06:50] chacun de nos collaborateurs ça peut être au quotidien avec nos collaborateurs de l'IT
+[06:54] mais aussi du siège avec des outils d'IA générative pour faire des contrats de réunion.
+[07:00] Donc il ne s'agit pas que de produire des outils d'IA pour des processus bancaires et puis la
+[07:08] banque postale je ne sais pas si vous le savez c'est aussi une collaboration avec des start-up
+[07:13] puisqu'on a aujourd'hui à la Banque Postale un incubateur de startups qui s'appelle la plateforme Intruse 58.
+[07:20] Donc vous voyez, la Banque Postale finalement c'est une banque citoyenne,
+[07:24] ancrée dans l'actualité et dans l'innovation, avec un réseau de 17 000 points de contact
+[07:30] et une orientation sur la finance durable,
+[07:34] mais c'est aussi une banque innovante qui place l'IA au cœur de sa stratégie.
+[07:38] Donc l'IA c'est un véritable terrain de jeu pour les équipes de la DSI, pour les équipes de la banque postale,
+[07:47] qui permettent de mettre en évidence un certain nombre de compétences.
+[07:53] D'une part la créativité, on ne s'entend pas quand on travaille dans la DSI à rechercher un esprit de créativité,
+[08:00] mais je pense que l'utilisation de l'IA c'est vraiment un point important sur la créativité.
+[08:04] l'expertise technique, parce qu'effectivement, on voit que c'est une technologie qui évolue très rapidement,
+[08:10] mais pas sur des technologies historiques où, pendant des années, on était sur une vision très longue.
+[08:21] Là, on est sur des visions qui se comptent des fois en semaine.
+[08:24] Enfin, vous me direz.
+[08:25] Donc, du coup, il faut vraiment être dans l'up-to-date et d'être attentif, effectivement, à ce qui se passe dans le contexte.
+[08:34] et de regarder effectivement quelle est la vision que nous offre le marché.
+[08:38] Donc j'espère que vous allez vraiment profiter de ce hackathon
+[08:40] parce que c'est une véritable opportunité pour vous et pour nous
+[08:44] de capter de très belles choses.
+[08:48] Merci, vous avez réussi.
+[08:49] On va passer au CGI.
+[08:57] Je pourrais le mieux si ça aille.
+[09:01] Moi aussi, je m'en en plus.
+[09:04] Alors, CGI, c'est un des leaders mondiaux du service numérique et du conseil.
+[09:09] C'est une entreprise qui a 50 ans, la vente postale a 20 ans.
+[09:13] un peu plus vieux. Donc 50 ans cette année, elle a été créée en 1976. Le siège est à Montréal,
+[09:23] en fait, CGI est une entreprise canadienne, mais très implantée en France, on le verra tout à l'heure,
+[09:29] et le Canada et la France ont pas mal d'histoires communes et qui se fortifient beaucoup en ce moment,
+[09:37] étant donné le contexte géopolitique, surtout aux US, fait qu'il y a des rapprochements très très peu entre Canada
+[09:43] et la France. On est bientôt 95 000 collaborateurs dans le monde, répartis dans 400 bureaux, 40 pays.
+[09:53] Cette notion de bureau est importante. En fait, tout le modèle d'affaires de CGI est basé sur un modèle
+[09:58] de proximité, c'est-à-dire on est très ancré dans les territoires. Et nous, en tant que société de conseil
+[10:03] qui accompagnons nos clients dans la réussite de leur plan stratégique pour les aider à atteindre
+[10:09] leurs ambitions, la stratégie de CGE c'est d'être là où sont nos clients.
+[10:14] Voilà donc c'est pour ça qu'il y a cet ancrage territorial très fort, assez étendu
+[10:18] pour être là où sont nos clients. Pourquoi ? Parce que quand on est près de nos clients,
+[10:22] on les connaît bien et de bien connaître le métier de nos clients, c'est
+[10:25] essentiel pour réussir. Voilà, on présente dans le monde entier. Alors qu'est-ce qu'on
+[10:32] fait ? En fait on a quatre grandes lignes de services. Je vais vous parler de services
+[10:35] numérique et de conseil. On a une entité CGE Business Consulting qui délivre des prestations
+[10:42] de conseil, donc conseil en stratégie d'entreprise, conseil en stratégie IT, avec pas mal d'expertise
+[10:47] de métier. On est intégrateur aussi, comme intégration de systèmes, ERP, on contribue
+[10:55] au développement des SI et à leur maintenance aussi, ce qu'on va retrouver grâce à nos
+[11:00] services, donc là, centre de services où en fait on a des relations assez correctes avec nos clients.
+[11:07] Et puis on a aussi une activité où on est propriétaire de solutions, c'est d'accommer
+[11:17] sur l'étagère différentes solutions pour nos clients qui sont des véritables accélérateurs.
+[11:21] On a des différents assets qu'à tout moment nos clients peuvent intégrer dans leur récit et qui
+[11:27] leur permettent d'accélérer et d'avoir un thème qui est marqué tout court,
+[11:32] de sécuriser leurs opérations. Ça peut être des assets, des métiers, des technologies.
+[11:36] Typiquement Valérie parlait de digitalisation de processus tout à l'heure, on a un outil
+[11:41] dans laquelle la Banque Postale s'appuie pour digitaliser ses processus de compte tout vaque.
+[11:47] Le modèle de proximité est très important, à côté de ça on a un réseau mondial de prestations
+[11:53] de services parce que certains de nos clients sont présents dans le monde entier,
+[11:56] et plus belle fierté française mais qui est présent aussi dans le monde entier donc on
+[12:03] doit être là où sont nos clients dont on est présent c'est par exemple les sites d'Airbus
+[12:06] sont typiquement et on est amené à opérer les opérations en 24 4 7 7 pour celle qu'on a besoin
+[12:12] de cette présence. On travaille dans tous les grands secteurs d'activité donc assurance,
+[12:21] banque défense du retail énergie qui dit is industry la santé secteur public tel comme les
+[12:28] transports et donc le domaine financier chez ces gilets est important parce que tout ce qui est
+[12:34] banque l'assurance représentant une carte de l'échelle d'affaires sg dans le monde et c'est
+[12:38] aussi le cas en france voilà et la banque postale est parti du top 10 de nos clients en france
+[12:42] Merci à la banque de Sade pour la confiance, j'en profite.
+[12:48] Les expertises que l'on offre à nos clients,
+[12:51] on a de la stratégie de transformation,
+[12:53] et puis après, on va faire tourner les opérations au quotidien,
+[12:57] qui ont un volet extrêmement important aussi.
+[12:59] D'accord, on développe des systèmes,
+[13:00] on a un souci aussi de la maintenabilité,
+[13:02] comment je le maintiens,
+[13:03] comment j'arrive à le faire évoluer très vite.
+[13:06] Voilà, la stratégie, je vais juste aller sur la stratégie de Londres.
+[13:09] fait on travaille beaucoup sur les enjeux de nos clients. On ne fait pas de l'informatique, on fait de l'informatique parce qu'on doit répondre à des enjeux. Et souvent, les enjeux de nos clients, ils tournent autour de ces cinq points-là.
+[13:21] L'efficacité opérationnelle, comment on accompagne nos clients et qu'ils sont plus efficaces au quotidien. Comment on les accompagne à améliorer l'expérience client, donc le client ou le citoyen quand on travaille avec le gouvernement.
+[13:35] l'expérience collaborateurs aussi est aussi importante que l'expérience client
+[13:39] symétrie des attentions j'essaie de faire en sorte que mon collaborateur
+[13:44] l'année une séance que j'ai fait un petit peu facile à tirer fidéliser les
+[13:50] talents quelque chose de très important aussi la gestion du risque et encore
+[13:56] plus en domaine bancaire où le législateur est assez prolifique et
+[13:59] tant mieux ça nous protège aussi parfois ça met quelques contraintes
+[14:03] surtout quand ce n'est pas les mêmes dans tous les pays, mais c'est extrêmement important d'accompagner nos clients sur ces enjeux-là.
+[14:09] Le risque basse aussi le risque cyber, c'est la souveraineté, des sujets majeurs, vraiment majeurs, capital, il y a deux ans plus, on comprend pourquoi.
+[14:19] Donc ça c'est vraiment le sujet sur lequel on accompagne nos clients.
+[14:24] Et puis le volet P&G, responsabilité sociétale, qui est aussi un volet extrêmement important.
+[14:31] et la bombe postale autograniste
+[14:33] citoyenne, effectivement. Ça aussi,
+[14:35] elle appelle à ce génie pour ces sujets-là.
+[14:37] L'accessibilité, l'empreinte carbone,
+[14:39] l'application qui a un impact
+[14:41] en consommation de l'eau, etc.
+[14:43] C'est des choses aussi sur lesquelles on accompagne
+[14:45] le client.
+[14:47] Voilà. En France,
+[14:49] on est 15 000. Donc, je dirais
+[14:51] que je disais proximité. Là, on le voit.
+[14:54] Alors, on n'a pas autant de points
+[14:55] de contact que la bombe postale.
+[14:57] On n'a pas d'essai de vie de bonne contact.
+[14:59] Tant mieux, d'ailleurs.
+[15:00] C'est très peu de fortune.
+[15:02] C'est compliqué de vous émerger dans nos bureaux de poste.
+[15:05] Mais on a un engagement téléphonique important.
+[15:10] Ça nous permet d'être au plus près de nos clients.
+[15:13] Il y a une trentaine d'implantations.
+[15:16] Je parlais de l'EG.
+[15:18] Il y a un sujet dont on est assez fiers.
+[15:20] On a eu la première ESL en France à être certifiée ISO 14001,
+[15:24] qui vient confirmer l'engagement et surtout les actes
+[15:27] retour justement de tous ces thèmes de... Voilà.
+[15:32] Voilà.
+[15:34] Alors, qu'est-ce que c'est que ça ?
+[15:36] Je vais juste passer deux secondes.
+[15:37] Ça a l'air de rien,
+[15:39] mais ça, je pense que c'est ce qui fait aussi la puissance de l'entreprise.
+[15:41] Là, désolé, il est pas un petit peu en professeur.
+[15:45] C'est le cadre de gestion d'entreprise.
+[15:46] Il y a une culture très très forte chez CGD.
+[15:48] En fait, toute l'entreprise dans le monde entier
+[15:50] fonctionne exactement dans le même cadre,
+[15:51] avec le même cadre de fonctionnement.
+[15:53] Ça a l'air de rien.
+[15:54] C'est pas juste ça.
+[15:55] Enfin, là, c'est une photo d'écran,
+[15:56] on clique sur n'importe quel, tout est décrit, les processus, les capillailles, etc.
+[16:02] Et ce qui fait qu'à tout moment, je travaille avec n'importe quel collègue dans mon entier,
+[16:06] on se comprend tout de suite.
+[16:07] Et tout ça guidé par des valeurs, un partenariat qualité,
+[16:11] évidemment, objectivité, intégrité, entrepreneurship.
+[16:14] Le modèle de l'OCG est très responsabilisant.
+[16:16] Il y a un cadre, mais on encadre, on peut être autonome, on prend l'économie.
+[16:20] Et voilà, moi qui ai une âme d'entrepreneur,
+[16:22] c'est très important pour moi de faire un cadre.
+[16:25] c'est moi qui ai volant. Donc très important le respect évidemment, rien n'est dépassable là-dessus,
+[16:32] la solidité financière qui nous permet d'investir en fonction de l'union et la responsabilité sociale.
+[16:37] L'idée par le rêve, qui des fois peut faire sourire, Serge Gonin, le créateur d'entreprise, a écrit très tôt ce rêve-là,
+[16:44] de créer un environnement où nous avons du plaisir à travailler ensemble et où en tant que propriétaire,
+[16:49] c'est une culture d'actionnariat très forte, tout le monde est actionnaire d'entreprise, c'est ce que j'ai dit,
+[16:53] nous participons au développement d'une entreprise dont nous sommes fiers.
+[16:57] Ben voilà, moi je n'aurais pas fait mieux.
+[16:59] Et voilà, je pense que d'être guidée par ça, c'est extrêmement important.
+[17:04] Parce que, ouais, on parle de travail, etc.
+[17:07] Beaucoup aussi en ce moment, on peut tellement s'épanouir dans le travail
+[17:11] et être fière de ce qu'on fait.
+[17:12] Voilà, en quelques mots, la culture au CGT.
+[17:16] Merci
+[17:18] Pour votre implication
+[17:25] il faut dire à vos copains qui sont en train de arriver
+[17:27] qu'ils viennent
+[17:27] D'accord ça marche
+[17:31] Merci pour votre confiance aussi
+[17:33] on vous accorde un support
+[17:34] Adrien va vous parler
+[17:39] et deux sujets
+[17:41] et deux cas d'usage
+[17:42] Il y a deux sujets
+[17:45] qui rentrent dans l'espace-temps
+[17:47] de la fenêtre
+[17:49] de la première partie
+[17:50] Merci.

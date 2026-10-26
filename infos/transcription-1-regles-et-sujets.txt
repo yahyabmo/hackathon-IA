@@ -1,0 +1,303 @@
+[00:00] On l'a vu tout à l'heure, mon explication, c'est le côté green, le côté responsable de l'intelligence artificielle.
+[00:09] Ce doit, c'est le futur. On a vu toutes les possibilités de l'intelligence artificielle en termes de capacité à traiter des gros volumes,
+[00:14] un niveau de raisonnement qui est très avancé, très poussé. La problématique pour l'instant, c'est que ça consomme une folie.
+[00:20] Il y a une différence de modèle entre les modèles européens, les modèles américains, les modèles chinois,
+[00:24] qui n'ont pas les mêmes couches de réseaux de neurones à l'intérieur.
+[00:27] On a besoin de quelque chose pour le quantifier. Par exemple, la frégalité, c'est le terme.
+[00:32] Pour moi, il n'était pas il y a ce terme, frégalité, mais ça veut dire qu'il faut que ça consomme peu.
+[00:36] Peu à la fois en token d'un côté, mais surtout en co-énergétique.
+[00:41] Pourquoi co-énergétique ici ? Parce que pour la session, vous n'aurez que des modèles qui sont open source et qui tourneront sur vos machines.
+[00:48] Après, on verra le panel des machines disponibles, parce que j'ai pu le comprendre, on peut passer de très gros à très petit.
+[00:53] Mais c'est des modèles qui tournent en open source.
+[00:55] Et en fait, c'est pourquoi on ne veut absolument rien.
+[00:57] Parce que les modèles de raisonnement gigantesques, c'est super pertinent, mais ce n'est pas le cas d'usage de demain de toutes les entreprises.
+[01:04] Et en fait, on sait faire du très précis, du très pointilleux avec des modèles open source en les cadrant, en les gouvernant.
+[01:11] Donc, c'est pour ça qu'avec des modèles open source, on va pouvoir calculer le coût de consommation réel et voir si ça tourne.
+[01:16] Donc, le plus petit modèle d'aide, il suffit.
+[01:19] Alors, la phrase un peu à double tranchant, tout à l'heure, on en a discuté.
+[01:21] Pourquoi ? Parce que du coup, dans les cas d'usage, en fonction de ce que vous allez choisir comme voie,
+[01:25] c'est là que ça va être intéressant.
+[01:27] On peut avoir peut-être une partie de gros modèles qui est utilisée à un instant T,
+[01:30] sur un besoin spécifique au sein de votre raisonnement, et après, du petit modèle.
+[01:35] Donc, ça, c'est toute l'architecture et la conception qui va être intéressante et qui va vous permettre d'innover et de créer.
+[01:42] Donc là, les serveurs GPU sur site avec les données, ça reste.
+[01:45] Alors, c'est quoi les deux sujets qu'on a retenus ?
+[01:47] Merci. Alors, on en avait parlé tout à l'heure.
+[01:51] C'est l'assistance bancaire personnalisée.
+[01:54] Alors, la façon dont on a pensé le sujet ici,
+[01:57] c'est vraiment comment vous voulez échanger avec votre banque.
+[02:00] Donc, on va voir après, il y aura des exemples qui sont posés,
+[02:04] mais c'est vous, vous êtes au final des utilisateurs potentiels,
+[02:08] on va dire de la banque postale, mais vous avez forcément un compte bancaire.
+[02:11] Vous en aurez un bientôt.
+[02:12] Mais en fait, c'est des questions que vous n'avez plus déjà à voir,
+[02:15] par exemple, pour l'instant, et même dans votre famille, autour de la banque.
+[02:18] J'ai besoin de créer un pré-étudiant.
+[02:19] Comment je fais ? J'ai des questions à poser, je veux interagir.
+[02:23] Et en fait, c'est aussi avoir votre regard sur qu'est-ce que vous attendez comme niveau de service,
+[02:27] et niveau de réponse à ces questions-là.
+[02:28] Parce que du coup, comme on le dit, chaque génération avance avec d'autres attentes vis-à-vis des services,
+[02:34] et en fait, c'est aussi pour avoir un nouveau regard.
+[02:36] Donc là, vous allez utiliser nos modèles à l'apport,
+[02:38] les modèles mis à disposition à un prématrice, pour comprendre des intentions.
+[02:43] Donc là, en fait, on a mis des modèles de données qui sont des référentiels.
+[02:48] Ils sont à titre indicatif, ce n'est pas forcément uniquement ça.
+[02:51] Si vous avez des besoins de concevoir, des besoins de croiser de la donnée, vous êtes libre.
+[02:54] Le but, ce n'est pas trop beaucoup à donner,
+[02:56] c'est en fait de laisser votre esprit créatif pour avoir quelque chose qui est pertinent en termes de résultat final.
+[03:02] Donc voilà, on a un autre dataset avec des chiffres à l'intérieur sur des personnes.
+[03:07] Et après, du coup, le catalogue de produits, c'est à vous de le construire.
+[03:10] Dans la banque, il y a des livrets classiques.
+[03:12] On en parlait tout à l'heure du livret A, il y a le livret de développement durable, il y a différents types de livrets.
+[03:15] Mais c'est aussi à vous de concevoir votre stratégie, comment vous voulez aborder, pour répondre au sujet.
+[03:20] Qu'est-ce qu'on attendra là-dessus ?
+[03:21] C'est un peu ma plus haute question, pour se donner un peu plus de questions.
+[03:24] Par exemple, j'ai perdu ma carte.
+[03:26] Là, qu'est-ce qu'on attend derrière ?
+[03:28] Quelque chose comme ça, c'est vraiment l'intention de se dire,
+[03:30] voilà, faire opposition, on peut faire ça.
+[03:31] Donc, est-ce que c'est un agent qui va jusqu'au bout d'un workflow
+[03:34] et qui fait lui-même l'action de dire, je coupe, en fonction de la typologie, de l'importance ?
+[03:39] Est-ce qu'il vient juste à guider ?
+[03:41] C'est aussi à vous de juger.
+[03:42] En fait, le niveau de profondeur que vous voulez donner à votre système.
+[03:46] Donc, l'intelligence artificielle fait qu'un sujet comme ça, il y a quelques années,
+[03:51] n'aurait pas suffi, aurait été beaucoup plus contraint.
+[03:54] Mais maintenant, vous faites des capacités,
+[03:56] vous faites des recherches que vous allez pouvoir poser pour atteindre un résultat.
+[03:59] C'est pour ça qu'il se veut assez large pour que vous puissiez aller assez loin.
+[04:03] Par exemple, si on dit, voilà, des explications.
+[04:06] On a beaucoup de choses, on parle beaucoup avec des anagrammes,
+[04:08] on parle beaucoup avec des mots complexes qui font partie de notre quotidien.
+[04:11] Et en fait, quand on se rend compte, quand on parle avec quelqu'un d'autre,
+[04:14] qui ne les connaît pas, en fait, on ne les comprend pas.
+[04:17] Et donc, du coup, c'est comment je peux interroger le système ?
+[04:19] Avant, on avait toujours, je posais une question, j'ai une réponse qui est fixée, déterministe.
+[04:23] Là, l'intelligence artificielle nous donne la possibilité d'avoir,
+[04:26] j'ai une réponse qui nous explique, j'ai mal dit le mot, et qui nous explique.
+[04:30] Donc, en fait, l'objectif, c'est comment on peut interagir avec l'intelligence artificielle
+[04:33] et obtenir un résultat concret qui répond à nos attentes.
+[04:36] Donc, voilà.
+[04:37] Ça, c'est le premier sujet, c'est vraiment du chatbot,
+[04:38] mais pas du chatbot traditionnel, chatbot un peu avancé,
+[04:41] où vous êtes assez libre pour aller un peu plus loin.
+[04:43] Et au fur et à mesure des jours, on cadrera un petit peu avec les équipes les attendues là-dessus.
+[04:48] Merci, Corentin.
+[04:49] Deuxième sujet, donc là, c'est différent, c'est de la lutte contre le blanchiment d'argent.
+[04:54] Deuxième sujet qui a été énoncé, décidément.
+[04:56] Là, ici, c'est essayer de chercher ce qu'on appelle les patterns,
+[05:01] c'est les schématiques du blanchiment d'argent.
+[05:04] Donc, ce n'est pas la même approche.
+[05:05] Au début, le premier sujet, c'est plutôt l'IA générative,
+[05:08] qu'on orchestre différemment.
+[05:09] Là, c'est vraiment de l'analyse de données, de l'analyse de graphes,
+[05:11] vraiment de traiter la data.
+[05:13] Et on recherche de signaux faibles, comme on peut le dire.
+[05:17] Les slides, vous les aurez.
+[05:19] On va vous les mettre à disposition pour que vous puissiez déjà accéder aux différents modèles.
+[05:23] Ce que je vais vous montrer, c'est qu'est-ce qu'il y a derrière.
+[05:25] Parce que là, sur un chatbot,
+[05:26] tout le monde voit à quoi ressemble un chatbot,
+[05:27] à quoi ressemble un pattern.
+[05:28] C'est ça qu'on a le plus de mal.
+[05:30] En fait, c'est les grands schémas qui sont dans la partie du blanchiment d'argent
+[05:34] et comment je l'identifie.
+[05:36] Donc là, vous allez me dire, ok, il y a un dataset,
+[05:38] on va entraîner un modèle,
+[05:40] on va voir si on fait un modèle, plusieurs modèles,
+[05:42] voir comment on découpe ça.
+[05:44] On aura le résultat.
+[05:45] Oui, on aura le résultat, c'est une chose.
+[05:46] Mais du coup, grâce à l'intelligence artificielle,
+[05:48] on peut aller un peu plus loin.
+[05:49] Du coup, vous allez pouvoir,
+[05:51] on a nos données, nos données de test, nos données d'entraînement,
+[05:53] mettre en place une chaîne un peu aléatoire,
+[05:56] qui va injecter, en termes d'analyse temps réel,
+[06:00] du contenu pour le détecter.
+[06:02] C'est vrai que l'objectif, ici, de tous ces outils,
+[06:04] c'est d'être dans le présent.
+[06:06] C'est que ce soit dynamique,
+[06:07] que ce soit quelque chose qui soit vraiment de temps réel,
+[06:09] que ce soit sur les deux.
+[06:10] J'interagis avec mon chatbot,
+[06:11] j'ai une réponse immédiate dans l'espace de temps
+[06:13] donnée par la fenêtre du serveur pour pouvoir répondre.
+[06:16] Et là, sur la partie blanchiment,
+[06:18] on a les statistiques basées sur le modèle,
+[06:21] sur la phase d'exploitation,
+[06:22] mais également, quelque chose qui va générer du contenu
+[06:24] et qui va vous montrer,
+[06:25] c'est un pattern.
+[06:26] Ça peut être des patterns aléatoires,
+[06:28] donc on va aussi regarder qu'ils sont bien injectés dans le système.
+[06:30] En fait, c'est la partie détection.
+[06:32] Plus on détecte vite, plus on peut couper ou migrer une transaction
+[06:35] pour éviter qu'elle se propage et qu'elle reste, par exemple,
+[06:37] sur un noeud dans un pays qui serait intéressant
+[06:39] où on a un contrôle dessus pour pouvoir récupérer des fonds.
+[06:42] Si les sujets ne sont pas clairs,
+[06:45] il y aura une phase de questions pour pouvoir échanger
+[06:47] et je pense que c'est à Vincent, maintenant.
+[06:49] Ah, parfait.
+[06:50] C'est vrai que c'est bon.
+[06:52] Donc, il est pour cette vague-là, donc,
+[06:54] qui va durer deux jours,
+[06:55] Denis, à partir de maintenant,
+[06:57] vous aurez des personnes pour vous assister.
+[06:59] Donc, Adrien, qui est coach
+[07:01] et qui sera aussi membre du jury.
+[07:03] Vous retrouverez Denis au jury, également.
+[07:06] Et c'est bien ça ?
+[07:08] Oui.
+[07:09] Donc, on co-opte.
+[07:11] Et il y aura aussi Jean-Michel,
+[07:12] qui est dans les équipes de la banque postale,
+[07:13] qui viendra pour le jury.
+[07:14] Jean-Michel, il est à distance,
+[07:17] il est au courant des sujets.
+[07:19] Les équipes pourront éventuellement interagir
+[07:22] en posant des questions.
+[07:23] Mais en tout cas, il sera là pour tout le jury,
+[07:24] mais pour les plus...
+[07:25] Pour vous évaluer, quoi.
+[07:27] Et tout au long des phases,
+[07:28] vous aurez des coaches qui seront là
+[07:30] pour vous accompagner.
+[07:32] Donc, Adrien, il est présent.
+[07:33] Daniel, je ne sais pas si vous le connaissez.
+[07:34] Son visage vous dit peut-être quelque chose.
+[07:35] C'est un ancien chez vous.
+[07:37] Qui travaille dans nos équipes
+[07:38] et qui sera là sur les deux matinées.
+[07:40] Voilà.
+[07:40] Donc, tout le temps, vous aurez
+[07:41] quelqu'un d'équipe à l'équipe.
+[07:43] Et puis, on arrive à mercredi midi.
+[07:46] Donc, ça s'approche, ça s'approche.
+[07:48] Le mercredi matin, c'est...
+[07:50] Enfin, on vous a mis un peu des fenêtres
+[07:52] pour voir un peu les grosses tendances,
+[07:55] les grosses opérations qu'il y a à faire.
+[07:56] On vous a fait des concepts sur l'ambiance midi.
+[07:59] Vous délivrez votre solution.
+[08:00] Vous êtes trois par équipe.
+[08:01] Donc, vous pouvez peut-être travailler...
+[08:03] C'est vous qui organisez votre travail
+[08:06] et comment vous répartissez les tâches.
+[08:08] Et puis, il faut préparer la soutenance.
+[08:10] Parce qu'au final,
+[08:11] vous aurez 30 minutes de soutenance
+[08:13] devant le jury.
+[08:15] Donc, avec ces trois parties prenantes.
+[08:18] Bonjour.
+[08:19] Ah oui, c'est...
+[08:20] C'est une copie.
+[08:21] Et...
+[08:27] Voilà.
+[08:29] Je t'en prie.
+[08:29] Je t'en prie.
+[08:30] Ensuite, on délivrera.
+[08:31] Il y aura la remise des prix.
+[08:35] Vas-y, tu peux continuer.
+[08:36] Donc, c'est 30 minutes devant le jury.
+[08:39] Comment ça va passer exactement ?
+[08:40] Pendant une 15e minute,
+[08:42] vous présentez votre problème,
+[08:43] votre démarche.
+[08:44] Vous faites une démonstration réelle
+[08:46] de ce que vous avez fait sur vos postes,
+[08:47] pour illustrer,
+[08:48] pour montrer le travail que vous avez fait.
+[08:51] Ensuite, le jury vous interpelle,
+[08:53] vous vous challenge un peu,
+[08:54] pendant 5 minutes,
+[08:56] et enfin, le jury délibère,
+[08:58] sans vous, il délibère à chaud,
+[09:00] pour faire une commission.
+[09:01] Vous avez la grille d'évaluation
+[09:05] qui va être utilisée,
+[09:07] pertinence métier pour 25%,
+[09:08] la frugalité pour 20%,
+[09:10] la démonstration, est-ce que vous arrivez à bien faire passer
+[09:12] vos messages, c'est important en tant qu'ingénieur de bien faire passer
+[09:14] vos messages et d'expliquer ce que vous faites,
+[09:17] la qualité technique,
+[09:18] c'est plus le côté technicien qui va s'éveiller en vous,
+[09:21] c'est l'intelligence que vous avez mis derrière tout ça,
+[09:24] l'explicabilité,
+[09:26] et puis enfin, la présentation.
+[09:27] Toujours pareil, c'est très important
+[09:29] de faire bien passer
+[09:30] le message.
+[09:32] Les livrables de cet hackathon, c'est votre code source
+[09:34] qui est déposé sur un guide,
+[09:36] et puis votre support de présentation.
+[09:39] Donc 30 minutes,
+[09:42] c'est ok pour vous ?
+[09:43] Donc le sujet,
+[09:45] c'est l'un ou l'autre,
+[09:46] vous choisissez le sujet qui vous...
+[09:48] Avec lequel vous êtes le plus à l'aise ?
+[09:50] Je vous en reviens sur le sujet.
+[09:52] Si vous voulez les deux, encore mieux.
+[09:54] Alors après, si vous êtes très joueur,
+[09:57] il fallait donner...
+[09:58] Comme ça, les sujets, ils paraissent
+[10:00] peut-être simples,
+[10:04] mais en tout cas,
+[10:04] l'idée, c'est d'aller le plus loin possible.
+[10:07] Dans tout ce que vous ferez.
+[10:09] Très super.
+[10:10] Allez, si tu veux passer.
+[10:11] Et avec ça, il y a des prix.
+[10:13] Alors, pour l'équipe gagnante,
+[10:16] tous les ans,
+[10:19] on fait l'InnovTech.
+[10:21] Cette année, c'est la 13e édition.
+[10:23] Ce sont tous les techos,
+[10:24] toute la communauté technique de CGI
+[10:26] qui se réunissent pendant une journée
+[10:28] autour de problématiques.
+[10:29] Ils partagent des cas.
+[10:31] Et là, c'est la 13e édition.
+[10:33] Ça aura lieu le mercredi 25 novembre à Paris.
+[10:37] Et en fait, on vous propose
+[10:38] de venir participer toute la journée
+[10:40] à l'InnovTech à Paris,
+[10:41] donc pour l'équipe gagnante.
+[10:43] Et pendant 30 minutes,
+[10:45] durant la keynote,
+[10:46] vous pitcherez ce que vous aurez fait
+[10:47] pendant votre hackathon.
+[10:48] Donc, comme ça, vous pitcherez
+[10:50] auprès de toute cette communauté.
+[10:52] Et puis après, ce sera tranquille pour vous.
+[10:54] Vous bénéficierez
+[10:56] des autres personnes
+[10:58] qui vont pitcher tous leurs sujets
+[10:59] pendant toute la journée.
+[11:01] Ça, c'est le premier prix.
+[11:03] C'est une première partie de la récompense.
+[11:04] Et la deuxième, c'est une rencontre
+[11:06] avec un leader aspirant.
+[11:07] Donc, on a Kevin Beaubrand dans nos équipes.
+[11:10] Qui est...
+[11:11] Non, c'est un aspirant quadrilien,
+[11:12] mais...
+[11:12] Qui s'occupe de l'idée
+[11:18] de la récompense.
+[11:18] Tout ce qui est développement natif de l'IA
+[11:21] en France, au niveau de la France.
+[11:24] Donc, il viendra sur Bordeaux.
+[11:26] Et vous aurez un échange privilégié avec lui.
+[11:29] Vous pourrez lui poser toutes les questions
+[11:31] et puis interagir avec lui.
+[11:32] C'est le grand gourou de l'IA.
+[11:36] Voilà ce qu'on vous propose.
+[11:38] Ça va ?
+[11:39] On partant ?
+[11:41] Merci.
+[11:42] Et puis, il n'y a plus qu'à.
+[11:43] Et voilà, il n'y a plus qu'à.
+[11:44] Merci.

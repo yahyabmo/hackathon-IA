@@ -1,0 +1,102 @@
+[00:00] Pour gagner, c'est moins de LLM, plus d'algo, ou des algos différents,
+[00:05] ou des modèles d'IA plus spécialisés.
+[00:07] Des trucs vraiment spécialisés.
+[00:08] Pour le premier projet ?
+[00:10] Oui, même pour le premier.
+[00:11] Éventuellement, pour le premier, en fait...
+[00:12] Du coup, le RAC, ce sera un algo, c'est ça ?
+[00:15] En fait, il n'y aura pas d'algo.
+[00:17] À un moment donné, il faut qu'ils vous parlent en français.
+[00:18] Donc, la sortie, ça sera forcément un LLM, je pense.
+[00:21] Après, l'entrée, en revanche, ce n'est pas évident.
+[00:23] Parce que trouver la catégorie, la personne a dit des trucs,
+[00:26] savoir de quoi elle parle, c'est quoi les thématiques,
+[00:28] ça on n'a pas forcément besoin d'un NLM. On peut le faire avec des trucs de catégories qui vont
+[00:33] trouver les catégories de sujets qui correspondent le mieux. Comme vous avez vu dans le projet que j'ai signé,
+[00:38] en fait pour diviser la demande en sujets, j'ai fait le NLM. On peut faire ça avec un algorithme
+[00:46] qui est plus rapide et on obtient un sujet ou une catégorie, un contexte dans lequel on peut
+[00:56] chercher à aller tout ça avoir du contexte et après on fait on remonte la demande et en fait
+[01:01] mais le ragas une autre façon de trouver de quoi ça quoi ça parle en fait il est trop
+[01:07] qu'ils soient assez basiques sur les mots clés chercher les mots clés donc passer du
+[01:10] crac facile donc c'est hyper type c'est vraiment pas cher mais ça permet de trouver de quoi parle
+[01:18] la personne dans je parle 30% des cas mais ça fait 30% de carmo en fait après il reste 60%
+[01:24] des cas vous avez pas géré il faut peut-être un LLM mais il y a aussi ça en fait certaines demandes
+[01:29] vous avez utilisé vraiment un mot très simple et puis si jamais il est pas très confiant en fait
+[01:33] vous pouvez avoir un degré de confidence savoir ouais en fait j'ai trouvé des mots clés mais la
+[01:37] phrase elle est longue j'ai chopé juste un mot clé c'est pas super dis le moi j'ai raté des mots clés
+[01:41] donc ça il peut le dire on peut dire ok c'était quelques mots mais il y avait différentes phrases
+[01:46] il y a des phrases j'ai pas vu de mot clé oui bah ça nous donne l'option mais pas de choix
+[01:50] c'est comment choisir sa question oui non en fait ce que vous pouvez faire c'est vous pouvez faire
+[01:56] une solution comme on a dit en fait celle qui vous semble la plus raisonnable avec des élèves
+[02:01] d'abord et après fleur à l'hiver et pour dire ok le lait et tout le temps comment je fais pour
+[02:05] pas la tête du temps ce que je peux faire d'autres choses et après vous faire des tests comme ça
+[02:10] vous avez fait le temps comment j'ai pas compris vous avez dit la solution en appelant les l'élève
+[02:16] En fait, dans le process que je propose, on va appeler l'élève plusieurs fois dans le process.
+[02:23] Comment diminuer les appels, c'est ça ?
+[02:25] Oui, c'est ça.
+[02:25] L'élève, dans toutes les solutions, on va l'appeler à la dernière fois.
+[02:29] Oui, c'est ça.
+[02:30] Là, je pense que dans le sujet 1, comme ils veulent un truc qui parle à un humain,
+[02:36] en fait, il faudra mettre un élève qui fait des phrases.
+[02:38] Oui, c'est ça.
+[02:38] Il faut minimiser mon élève à la fin.
+[02:41] Après, ce l'élève-là, il peut être plus ou moins gros.
+[02:43] OK.
+[02:44] donc ça va devoir au début prenez un modèle qui a l'air ok puis ça peut être le 15B ou un 30B
+[02:51] normalement ça suffit pour parler correctement même un truc plus petit normalement il parle
+[02:54] normalement en français et puis après vous pouvez éventuellement le baisser en fait
+[03:00] donc prendre un modèle 2B ou 4B normalement ça marche même le GMA4 que vous avez normalement il va y arriver
+[03:06] mais après des modèles plus petits donc un 2B, un 1B pour voir ce que ça donne
+[03:12] Donc ça c'est juste pour la sortie.
+[03:13] Mais après vous avez peut-être aussi un LLM ailleurs.
+[03:15] Et ailleurs, il faut voir si vous avez vraiment besoin d'un LLM.
+[03:18] Parce que vous avez besoin d'un LLM, il y a différentes questions.
+[03:21] Est-ce que vous avez besoin, oui ou non, d'un LLM ?
+[03:23] Donc éventuellement on peut le gérer complètement.
+[03:25] Ou oui, on en a besoin, mais pas tout le temps.
+[03:28] Parfois il y a des cas qu'on peut traiter de façon plus vite, un LLM,
+[03:31] et il n'y a peut-être que 30% des cas qu'on va traiter avec un LLM.
+[03:34] C'est intéressant quand même.
+[03:35] C'est-à-dire que, vous voyez, je sors la ferraille, seulement 30% des cas.
+[03:39] quand je vais chercher du pain, je prends de la ferraille, je prends le vélo,
+[03:42] au niveau consommation d'essence, je vais y gagner.
+[03:45] Même si je continue à prendre la ferraille
+[03:46] pour le week-end.
+[03:47] Vous voyez, c'est la consommation d'essence.
+[03:49] C'est de la flexibilité, quand même.
+[03:51] Oui, c'est ça.
+[03:53] Mais sur un sujet, il y a du mou,
+[03:56] il y a pas mal de marge.
+[03:58] Même si je sais que c'est tentant de faire les deux sujets,
+[04:00] là, en fait, je n'aurai pas le temps
+[04:01] de faire bien les deux sujets.
+[04:04] Au contraire,
+[04:05] une fois que vous avez la solution, un truc à peu près safe,
+[04:07] c'est là où vous pouvez commencer à avoir des nouvelles idées.
+[04:10] Pour dire, si on faisait ça,
+[04:12] puis vous cherchez,
+[04:12] « Tiens, j'ai vu, Claude, il m'a dit ça, vous pouvez faire ça. »
+[04:15] « Tiens, je vais te dire qu'il m'a dit ça, voyons si c'est faisable,
+[04:17] est-ce que ça s'applique au jeu de données ? »
+[04:19] Il ne faut pas hésiter à balancer des idées un peu crazy.
+[04:21] Vous pouvez utiliser le BIA, évidemment,
+[04:23] pour vous conseiller,
+[04:25] mettre tous les clans à refond sur l'IA.
+[04:27] Gération de code,
+[04:29] discuter des idées,
+[04:30] savoir comment est-ce qu'on fait pour trouver des catégories sur un sujet.
+[04:34] Allez-y franchement, en fait.
+[04:36] Et puis, l'autre aspect,
+[04:37] Il faut vous faire plaisir.
+[04:39] Il faut que ce soit fun, c'est ça le but du hackathon.
+[04:43] Découvrir des nouveaux trucs,
+[04:45] se mettre un peu la pression, mais gentille,
+[04:46] sur ce qu'on peut faire, quelles méthodes existent.
+[04:49] Il y a plein de trucs.
+[04:50] Je ne connais pas tout, évidemment,
+[04:52] non plus.
+[04:54] Il ne faut pas hésiter à défricher, à essayer un truc un peu exotique.
+[04:58] Vas-y.
+[04:59] Deux limites.
+[05:01] Ça marche ?
+[05:02] Oui, ça marche.
