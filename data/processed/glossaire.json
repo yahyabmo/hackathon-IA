@@ -1,0 +1,23 @@
+{
+  "_note": "Fiches écrites et relues par l'équipe : c'est le texte affiché, sans LLM. Les termes et synonymes sont cherchés dans le message normalisé.",
+  "fiches": [
+    {"terme": "agios", "synonymes": ["agio"], "explication": "Les intérêts et frais que la banque facture quand votre compte est à découvert."},
+    {"terme": "apport personnel", "synonymes": ["apport"], "explication": "L'argent que vous mettez vous-même dans un achat, sans l'emprunter."},
+    {"terme": "assurance emprunteur", "synonymes": [], "explication": "Une assurance qui rembourse tout ou partie de votre crédit si vous ne pouvez plus le faire (décès, invalidité…). Elle est presque toujours demandée pour un crédit immobilier."},
+    {"terme": "commission d'intervention", "synonymes": ["commission d intervention"], "explication": "Des frais facturés quand la banque doit traiter une opération qui pose problème, par exemple un paiement alors que votre solde est insuffisant. La loi les plafonne."},
+    {"terme": "découvert autorisé", "synonymes": ["decouvert autorise", "decouvert"], "explication": "La possibilité, prévue avec votre banque, d'avoir un solde négatif jusqu'à un certain montant. Il coûte des agios."},
+    {"terme": "épargne de précaution", "synonymes": ["epargne de precaution"], "explication": "Une réserve d'argent disponible à tout moment pour faire face à un imprévu ; on conseille souvent trois à six mois de dépenses."},
+    {"terme": "frais de notaire", "synonymes": [], "explication": "Les taxes et frais payés lors de l'achat d'un logement, en plus du prix : environ 7 à 8 % dans l'ancien, 2 à 3 % dans le neuf."},
+    {"terme": "IBAN", "synonymes": ["rib"], "explication": "Le numéro qui identifie un compte bancaire ; il faut le donner pour recevoir un virement."},
+    {"terme": "LDDS", "synonymes": ["livret de developpement durable"], "explication": "Un livret d'épargne disponible, sans impôt sur les intérêts, plafonné à 12 000 €, réservé aux majeurs."},
+    {"terme": "LEP", "synonymes": ["livret d epargne populaire"], "explication": "Un livret mieux rémunéré, réservé aux personnes dont les revenus sont sous un plafond."},
+    {"terme": "Livret A", "synonymes": ["livret a"], "explication": "Le livret d'épargne le plus courant : argent disponible à tout moment, intérêts sans impôt, taux fixé par l'État, plafond de 22 950 €."},
+    {"terme": "Livret Jeune", "synonymes": ["livret jeune"], "explication": "Un livret pour les 12-25 ans, plafonné à 1 600 €."},
+    {"terme": "opposition", "synonymes": [], "explication": "Le blocage définitif d'une carte perdue ou volée, pour que personne ne puisse s'en servir."},
+    {"terme": "PEL", "synonymes": ["plan epargne logement"], "explication": "Plan épargne logement : on verse régulièrement pendant plusieurs années, en vue d'un projet immobilier ; un retrait ferme le plan."},
+    {"terme": "prélèvement", "synonymes": ["prelevement"], "explication": "Un paiement demandé directement à votre banque par une entreprise que vous avez autorisée (énergie, téléphone…)."},
+    {"terme": "reste à vivre", "synonymes": ["reste a vivre"], "explication": "Ce qui vous reste chaque mois une fois payés vos charges et vos crédits."},
+    {"terme": "TAEG", "synonymes": ["taux annuel effectif global"], "explication": "Le coût total d'un crédit (intérêts, frais, assurance obligatoire) exprimé en pourcentage par an. C'est le chiffre qui permet de comparer deux offres."},
+    {"terme": "taux d'endettement", "synonymes": ["taux d endettement", "taux d effort"], "explication": "La part de vos revenus qui part chaque mois dans vos crédits. Pour un crédit immobilier, elle ne doit pas dépasser 35 %."}
+  ]
+}

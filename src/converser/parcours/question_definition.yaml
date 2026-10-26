@@ -1,0 +1,6 @@
+# Exemple oral : un mot ou un sigle bancaire non compris — expliquer avec des mots simples.
+famille: aide
+intentions: [question_definition]
+infos: {}
+fin:
+  type: fiche

@@ -1,0 +1,10 @@
+client: C08
+tours:
+  - client: "Je voudrais mettre de côté"
+    attendu: {intention: epargne_projet, demande: horizon_mois}
+  - client: "Dans 2 ans"
+    attendu: {demande: montant_mensuel}
+  - client: "50 euros"
+    attendu: {propose: [livret_jeune, livret_a, ldds], ecarte: [lep, pel]}
+  - client: "C'est quoi un TAEG ?"
+    attendu: {intention: question_definition, texte_contient: "coût total d'un crédit"}

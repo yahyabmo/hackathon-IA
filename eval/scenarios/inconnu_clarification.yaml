@@ -1,0 +1,8 @@
+client: C01
+tours:
+  - client: "Je ne sais pas quoi demander"
+    attendu: {intention: inconnue, texte_contient: "pouvez-vous préciser"}
+  - client: "euh rien de précis"
+    attendu: {attente: transmettre_conseiller, escalade: false}
+  - client: "non"
+    attendu: {texte_contient: "je ne fais rien"}

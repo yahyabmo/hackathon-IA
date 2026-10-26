@@ -1,0 +1,14 @@
+# Inès : « J'ai perdu ma carte hier soir, je fais quoi ? » — réagir vite, opposition, rassurer.
+famille: carte_perdue
+intentions: [lost_or_stolen_card, compromised_card, card_swallowed]
+accroche: "Je comprends, on sécurise votre carte tout de suite."
+infos:
+  perte_ou_vol:
+    type: choix
+    options:
+      perte: [perdu, perdue, perte, egare, egaree]
+      vol: [vole, volee, vol, piratee, compromise]
+    question: "Votre carte a-t-elle été perdue ou volée ?"
+fin:
+  type: action
+  outil: bloquer_carte

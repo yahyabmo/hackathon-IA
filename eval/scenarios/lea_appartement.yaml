@@ -1,0 +1,9 @@
+client: C07
+tours:
+  - client: "Je veux acheter un appartement"
+    attendu: {intention: credit_immobilier, niveau: mots_cles, demande: prix_bien, texte_contient: "2 900"}
+    interdit: {demande: [revenus_nets, mensualites_en_cours]}
+  - client: "Autour de 250 000, et je peux mettre les 25 000"
+    attendu: {niveau: reponse_attendue, propose: [rdv_conseiller], ecarte: [credit_immobilier, credit_immobilier_30_ans],
+              alerte: "42,1", texte_contient: "Un crédit vous engage", attente: transmettre_conseiller}
+    interdit: {propose: [credit_immobilier]}

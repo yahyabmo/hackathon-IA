@@ -1,15 +1,6 @@
-"""Dialogue déterministe et orchestration des parcours."""
+"""Étages 2 et 5 : converser et formuler (module de Yahya)."""
 
-from ..contrats import Comprehension, EtatConversation
+from .dialogue import Decision, avancer, parcours_disponibles
+from .formuler import formuler
 
-
-def prochaine_etape(
-    comprehension: Comprehension, etat: EtatConversation
-) -> str:
-    """Retourne le nom symbolique de la prochaine étape du dialogue."""
-
-    if comprehension.intention == "carte_perdue":
-        return "securiser_carte"
-    if comprehension.intention == "salutation":
-        return "accueillir"
-    return "clarifier_intention"
+__all__ = ["Decision", "avancer", "formuler", "parcours_disponibles"]

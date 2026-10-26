@@ -1,0 +1,9 @@
+client: C05
+tours:
+  - client: "Je veux un crédit pour acheter une voiture."
+    attendu: {intention: credit_conso, demande: montant, texte_contient: "150"}
+    interdit: {demande: [revenus_nets, mensualites_en_cours]}
+  - client: "12000"
+    attendu: {demande: duree_mois}
+  - client: "48 mois"
+    attendu: {propose: [pret_personnel], texte_contient: "Un crédit vous engage"}

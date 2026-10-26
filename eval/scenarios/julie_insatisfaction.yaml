@@ -1,0 +1,6 @@
+client: C06
+tours:
+  - client: "Votre appli ne marche jamais !"
+    attendu: {intention: insatisfaction, attente: transmettre_conseiller, texte_contient: "3e message"}
+  - client: "oui"
+    attendu: {action: transmettre_conseiller}

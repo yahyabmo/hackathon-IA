@@ -1,45 +1,113 @@
-"""Interface Streamlit minimale du prototype."""
+"""Interface Streamlit du prototype : conversation, profil, « pourquoi », « frugalité »."""
 
 from __future__ import annotations
 
 import streamlit as st
 
+from src import llm
 from src.assistant import reply
+from src.conseiller import clients
+from src.conseiller.catalogue import nom as nom_produit
 from src.contrats import EtatConversation
+from src.mesure import resumer
+
+MESSAGES_DEMO = {
+    "C01": ["J'ai perdu ma carte hier soir, je fais quoi ?", "oui"],
+    "C02": ["Pourquoi j'ai payé 8 € de frais ce mois-ci ?"],
+    "C03": ["Je voudrais mettre de côté pour mes enfants.", "Dans 10 ans, 100 euros par mois"],
+    "C04": ["Je dois envoyer 500 € à mon fils.", "oui"],
+    "C05": ["Je veux un crédit pour acheter une voiture.", "12000", "48 mois"],
+    "C06": ["Votre appli ne marche jamais !"],
+    "C07": ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000"],
+    "C08": ["Je voudrais mettre de côté", "Dans 2 ans", "50 euros", "C'est quoi un TAEG ?"],
+}
 
 
-st.set_page_config(page_title="Assistant bancaire frugal", page_icon="🏦")
-st.title("Assistant bancaire frugal")
-st.caption("Prototype local — aucune action bancaire réelle n'est exécutée.")
+def _nom(produit_id: str) -> str:
+    try:
+        return nom_produit(produit_id)
+    except KeyError:
+        return produit_id
 
-client_id = st.sidebar.selectbox(
-    "Client fictif",
-    ["CLIENT-001", "CLIENT-002", "CLIENT-003"],
-)
 
-if "etat" not in st.session_state:
+def _reinitialiser(client_id: str) -> None:
+    st.session_state.client = client_id
     st.session_state.etat = EtatConversation()
-if "messages" not in st.session_state:
     st.session_state.messages = []
+    st.session_state.derniere = None
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
 
-question = st.chat_input("Écrivez votre demande bancaire…")
-if question:
-    st.session_state.messages.append({"role": "user", "content": question})
-    reponse, st.session_state.etat = reply(
-        question, client_id, st.session_state.etat
-    )
+def _envoyer(texte: str) -> None:
+    st.session_state.messages.append({"role": "user", "content": texte})
+    reponse, st.session_state.etat = reply(texte, st.session_state.client, st.session_state.etat)
     st.session_state.messages.append({"role": "assistant", "content": reponse.texte})
-    st.rerun()
+    st.session_state.derniere = reponse
 
-with st.sidebar.expander("Panneau technique", expanded=True):
-    etat = st.session_state.etat
-    st.write("Intention détectée :", etat.intention or "—")
-    if st.session_state.messages:
-        st.write("Messages :", len(st.session_state.messages))
-        if etat.derniere_reponse:
-            st.write("Dernière réponse :", etat.derniere_reponse)
-    st.caption("Le détail des étapes sera enrichi par le module de mesure.")
+
+st.set_page_config(page_title="Assistant bancaire frugal", page_icon="🏦", layout="wide")
+st.title("Assistant bancaire frugal")
+st.info("Vous échangez avec un assistant automatique. Il oriente ; un conseiller décide. "
+        "Prototype : aucune opération bancaire réelle n'est exécutée.")
+
+# ── Client : changer de client recommence la conversation ──
+libelles = dict(clients.lister())
+client_id = st.sidebar.selectbox("Client de démonstration", list(libelles), format_func=libelles.get)
+if st.session_state.get("client") != client_id:
+    _reinitialiser(client_id)
+if st.sidebar.button("Nouvelle conversation"):
+    _reinitialiser(client_id)
+
+st.sidebar.caption("Messages de démo")
+for i, texte in enumerate(MESSAGES_DEMO.get(client_id, [])):
+    if st.sidebar.button(texte, key=f"demo-{client_id}-{i}"):
+        _envoyer(texte)
+st.sidebar.caption("LLM : " + (f"activé ({llm.MODELE_FORMULATION})" if llm.actif() else "désactivé, gabarits"))
+
+colonne_chat, colonne_panneaux = st.columns([3, 2])
+
+with colonne_chat:
+    question = st.chat_input("Écrivez votre demande bancaire…")
+    if question:
+        _envoyer(question)
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+
+with colonne_panneaux:
+    profil = clients.profil(client_id)
+    with st.expander("Profil", expanded=True):
+        for champ, libelle in (("age", "Âge"), ("metier", "Métier"), ("situation", "Situation"),
+                               ("revenus_nets", "Revenus nets / mois"), ("epargne", "Épargne"),
+                               ("mensualites_credits", "Crédits en cours / mois")):
+            valeur = profil.get(champ)
+            affiche = f"*{valeur}* (simulé)" if clients.est_simule(profil, champ) else f"{valeur}"
+            st.markdown(f"**{libelle}** : {affiche}")
+
+    reponse = st.session_state.derniere
+    with st.expander("Pourquoi", expanded=True):
+        if reponse is None:
+            st.caption("Le raisonnement de la dernière réponse s'affiche ici.")
+        else:
+            c = reponse.comprehension
+            if c.comprise:
+                st.markdown(f"**Intention** : `{c.intention}` ({c.famille}) — compris par **{c.niveau}**")
+            if reponse.question:
+                st.markdown(f"**Information demandée** : `{reponse.question}`")
+            if reponse.conseil:
+                for p in reponse.conseil.propositions:
+                    st.markdown(f"✅ **{_nom(p.produit_id)}** — " + " ".join(p.raisons))
+                for e in reponse.conseil.ecartees:
+                    st.markdown(f"❌ **{_nom(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
+                for a in reponse.conseil.alertes:
+                    st.warning(a)
+            if reponse.action:
+                etat_action = "exécutée" if reponse.action.resultat else "en attente de votre accord"
+                st.markdown(f"**Action** : `{reponse.action.outil}` — {etat_action}")
+
+    with st.expander("Frugalité", expanded=True):
+        if reponse is not None:
+            st.table([{"étape": e.nom, "modèle": e.modele or "—", "ms": round(e.latence_ms, 2),
+                       "tokens": e.tokens} for e in reponse.trace])
+            totaux = resumer(reponse.trace)
+            st.markdown(f"**Total** : {totaux['latence_ms']:.1f} ms — appels au LLM : "
+                        f"**{int(totaux['appels_llm'])}** — escalade : {'oui' if reponse.escalade else 'non'}")

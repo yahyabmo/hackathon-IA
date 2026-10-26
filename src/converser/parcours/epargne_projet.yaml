@@ -1,0 +1,16 @@
+# Sophie : « Je voudrais mettre de côté pour mes enfants. » — demander l'horizon, proposer une piste.
+famille: epargne
+intentions: [epargne_projet]
+accroche: "Bonne idée de mettre de côté."
+infos:
+  pour_qui:
+    type: lien
+    defaut: soi
+  horizon_mois:
+    type: duree
+    question: "Dans combien de temps pensez-vous avoir besoin de cet argent ?"
+  montant_mensuel:
+    type: montant
+    question: "Combien pouvez-vous mettre de côté chaque mois ?"
+fin:
+  type: conseil

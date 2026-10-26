@@ -1,0 +1,8 @@
+# Julie : « Votre appli ne marche jamais ! » (3e message du jour) — reconnaître la frustration, passer la main.
+famille: insatisfaction
+intentions: [insatisfaction]
+accroche: "Je suis désolé pour ce désagrément."
+infos: {}
+fin:
+  type: transmettre
+  outil: transmettre_conseiller

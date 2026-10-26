@@ -1,0 +1,90 @@
+{
+  "_note": "Les 8 clients de démonstration. Les champs listés dans « simule » sont inventés (graine fixe) et affichés en italique. « ancrage_bank_marketing » rattache chaque client à une ligne réelle de data/raw/bank-marketing/bank/bank-full.csv : numéro de ligne à fixer par M3.",
+  "clients": [
+    {
+      "id": "C01", "prenom": "Inès", "age": 34, "metier": "cadre", "situation": "célibataire",
+      "revenus_nets": 3200, "epargne": 8000, "solde": 1450, "mensualites_credits": 0,
+      "enfants": [], "livrets": {"livret_a": 8000}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C01-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["revenus_nets", "epargne", "solde", "livrets", "cartes"],
+      "ancrage_bank_marketing": {"age": 34, "job": "management", "marital": "single", "ligne": null}
+    },
+    {
+      "id": "C02", "prenom": "Marc", "age": 52, "metier": "ouvrier", "situation": "marié",
+      "revenus_nets": 1850, "epargne": 0, "solde": -120, "mensualites_credits": 0,
+      "enfants": [], "livrets": {}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 5,
+      "cartes": [{"id": "CB-C02-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [],
+      "historique_frais": [
+        {"date": "2026-10-08", "libelle": "commission d'intervention", "montant": 8,
+         "cause": "un paiement est passé alors que votre compte dépassait son découvert autorisé"}
+      ],
+      "simule": ["revenus_nets", "solde", "decouverts_12_mois", "historique_frais"],
+      "ancrage_bank_marketing": {"age": 52, "job": "blue-collar", "marital": "married", "ligne": null}
+    },
+    {
+      "id": "C03", "prenom": "Sophie", "age": 41, "metier": "employée administrative", "situation": "mariée",
+      "revenus_nets": 2400, "epargne": 6000, "solde": 980, "mensualites_credits": 0,
+      "enfants": [8, 12], "livrets": {"livret_a": 6000}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C03-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["revenus_nets", "epargne", "solde", "enfants", "livrets"],
+      "ancrage_bank_marketing": {"age": 41, "job": "admin.", "marital": "married", "ligne": null}
+    },
+    {
+      "id": "C04", "prenom": "Paul", "age": 68, "metier": "retraité", "situation": "veuf",
+      "revenus_nets": 1600, "epargne": 12000, "solde": 2300, "mensualites_credits": 0,
+      "enfants": [41], "livrets": {"livret_a": 12000}, "peu_a_laise_en_ligne": true,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C04-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [{"nom": "Thomas", "lien": "fils", "iban_masque": "FR76 •••• 4521"}],
+      "historique_frais": [],
+      "simule": ["revenus_nets", "epargne", "solde", "beneficiaires", "peu_a_laise_en_ligne"],
+      "ancrage_bank_marketing": {"age": 68, "job": "retired", "marital": "divorced", "ligne": null}
+    },
+    {
+      "id": "C05", "prenom": "Karim", "age": 29, "metier": "technicien", "situation": "célibataire",
+      "revenus_nets": 1900, "epargne": 1500, "solde": 640, "mensualites_credits": 150,
+      "enfants": [], "livrets": {"livret_a": 1500}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 1,
+      "cartes": [{"id": "CB-C05-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["epargne", "solde", "mensualites_credits"],
+      "ancrage_bank_marketing": {"age": 29, "job": "technician", "marital": "single", "loan": "yes", "ligne": null}
+    },
+    {
+      "id": "C06", "prenom": "Julie", "age": 37, "metier": "employée de services", "situation": "célibataire",
+      "revenus_nets": 2100, "epargne": 3000, "solde": 410, "mensualites_credits": 0,
+      "enfants": [], "livrets": {"livret_a": 3000}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 3, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C06-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["revenus_nets", "epargne", "solde", "contacts_aujourdhui"],
+      "ancrage_bank_marketing": {"age": 37, "job": "services", "marital": "single", "ligne": null}
+    },
+    {
+      "id": "C07", "prenom": "Léa", "age": 31, "metier": "cadre", "situation": "célibataire",
+      "revenus_nets": 2900, "epargne": 25000, "solde": 1800, "mensualites_credits": 0,
+      "enfants": [], "livrets": {"livret_a": 22950, "ldds": 2050}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C07-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["revenus_nets", "epargne", "solde", "livrets"],
+      "ancrage_bank_marketing": {"age": 31, "job": "management", "marital": "single", "housing": "no", "ligne": null}
+    },
+    {
+      "id": "C08", "prenom": "Lucas", "age": 20, "metier": "étudiant", "situation": "célibataire",
+      "revenus_nets": 450, "epargne": 0, "solde": 120, "mensualites_credits": 0,
+      "enfants": [], "livrets": {}, "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
+      "cartes": [{"id": "CB-C08-1", "type": "Visa", "statut": "active"}],
+      "beneficiaires": [], "historique_frais": [],
+      "simule": ["revenus_nets", "solde"],
+      "ancrage_bank_marketing": {"age": 20, "job": "student", "marital": "single", "ligne": null}
+    }
+  ]
+}

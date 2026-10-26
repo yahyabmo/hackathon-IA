@@ -1,29 +1,54 @@
-"""Compréhension des intentions : stub initial pour le module de Younes."""
+"""Étage 1 de la cascade : comprendre (module de Younes).
 
-from ..contrats import Comprehension
+Ordre, du moins cher au plus cher :
+1. la réponse attendue : si une question est en cours, le message y répond,
+   sauf s'il ouvre clairement un autre sujet ;
+2. les mots-clés ;
+3. le classifieur (encodeur multilingue + régression logistique), au-dessus de τ ;
+4. sinon, rien : l'orchestrateur pose une question de clarification, puis escalade.
+"""
+
+from __future__ import annotations
+
+from ..contrats import NIVEAU_REPONSE, Comprehension, EtatConversation
+from ..taxonomie import famille_de
+from . import classifieur, mots_cles
+from .entites import extraire
+from .escalade import escalader
+
+__all__ = ["comprendre", "escalader"]
 
 
-def comprendre(message: str) -> Comprehension:
-    """Retourne une compréhension provisoire sans prétendre faire du ML.
+def comprendre(message: str, etat: EtatConversation) -> Comprehension:
+    """Compréhension du message, compte tenu de la conversation en cours."""
 
-    Cette règle minimale permet de vérifier l'intégration avant l'arrivée du
-    classifieur et du modèle d'embeddings.
-    """
+    entites = extraire(message)
+    par_mots_cles = mots_cles.detecter(message)
+    insatisfait = "insatisfaction" in mots_cles.expressions_trouvees(message)
 
-    texte = message.lower()
-    if any(mot in texte for mot in ("perdu", "volée", "volee", "carte")):
+    nouveau_sujet = (
+        par_mots_cles is not None
+        and par_mots_cles.intention not in (etat.parcours, "hors_sujet")
+    )
+    if etat.info_attendue and etat.parcours and not nouveau_sujet:
         return Comprehension(
-            famille="carte",
-            intention="carte_perdue",
-            confiance=0.55,
-            modele="stub-keywords",
-            exemple_proche="Ma carte est perdue.",
+            famille=etat.famille or famille_de(etat.parcours), intention=etat.parcours, confiance=1.0,
+            niveau=NIVEAU_REPONSE, modele="regles", entites=entites, insatisfaction=insatisfait,
         )
-    if any(mot in texte for mot in ("bonjour", "salut")):
-        return Comprehension(
-            famille="accueil",
-            intention="salutation",
-            confiance=0.9,
-            modele="stub-keywords",
-        )
-    return Comprehension(modele="stub-keywords")
+
+    if par_mots_cles is not None:
+        par_mots_cles.entites = entites
+        return par_mots_cles
+
+    par_classifieur = classifieur.predire(message)
+    if par_classifieur is not None and par_classifieur.confiance >= classifieur.SEUIL_TAU:
+        par_classifieur.entites = entites
+        par_classifieur.insatisfaction = par_classifieur.insatisfaction or insatisfait
+        return par_classifieur
+
+    return Comprehension(
+        entites=entites,
+        insatisfaction=insatisfait,
+        alternatives=par_classifieur.alternatives if par_classifieur else [],
+        modele=mots_cles.MODELE if par_classifieur is None else classifieur.MODELE,
+    )

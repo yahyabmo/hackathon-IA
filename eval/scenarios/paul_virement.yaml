@@ -1,0 +1,6 @@
+client: C04
+tours:
+  - client: "Je dois envoyer 500 € à mon fils."
+    attendu: {intention: faire_virement, attente: preparer_virement, texte_contient: "Thomas"}
+  - client: "oui"
+    attendu: {action: preparer_virement, texte_contient: "est enregistré"}

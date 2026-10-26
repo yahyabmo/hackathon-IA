@@ -1,0 +1,12 @@
+# Exemple oral : « Je veux faire un prêt étudiant, comment je fais ? » — le regard d'un jeune client.
+famille: credit
+intentions: [pret_etudiant]
+accroche: "C'est une question fréquente pendant les études."
+infos:
+  montant:
+    type: montant
+    question: "De quel montant auriez-vous besoin, à peu près ?"
+fin:
+  type: conseil
+  mention_legale: credit
+  proposer: transmettre_conseiller

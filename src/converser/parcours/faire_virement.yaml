@@ -1,0 +1,14 @@
+# Paul : « Je dois envoyer 500 € à mon fils. » — guider pas à pas, avec des mots simples.
+famille: virement
+intentions: [faire_virement]
+accroche: "D'accord, je vous guide pas à pas."
+infos:
+  beneficiaire:
+    type: lien
+    question: "À qui voulez-vous envoyer l'argent ?"
+  montant:
+    type: montant
+    question: "Quel montant voulez-vous envoyer ?"
+fin:
+  type: action
+  outil: preparer_virement

@@ -1,0 +1,25 @@
+# Léa : « Je veux acheter un appartement. » — comprendre, questionner, proposer une piste.
+famille: credit
+intentions: [credit_immobilier]
+accroche: "C'est un beau projet."
+infos:
+  revenus_nets:
+    type: montant
+    source: revenus_nets
+    confirmer: "J'ai noté vos revenus de {valeur} nets par mois."
+    question: "Quels sont vos revenus nets mensuels ?"
+  mensualites_en_cours:
+    type: montant
+    source: mensualites_credits
+    confirmer: "Vous remboursez déjà {valeur} de crédits par mois."
+    question: "Remboursez-vous déjà des crédits ? Si oui, combien par mois ?"
+  prix_bien:
+    type: montant
+    question: "Quel est le prix du bien que vous visez, et quelle part de vos {epargne} d'épargne souhaitez-vous y consacrer ?"
+  apport:
+    type: montant
+    question: "Quelle part de vos {epargne} d'épargne souhaitez-vous consacrer à l'achat ?"
+fin:
+  type: conseil
+  mention_legale: credit
+  proposer: transmettre_conseiller

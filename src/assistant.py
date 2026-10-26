@@ -1,54 +1,121 @@
-"""Point d'entrée unique de l'assistant bancaire."""
+"""Point d'entrée unique de l'assistant : un tour de conversation, la cascade.
+
+comprendre → (clarifier, puis escalader) → converser → conseiller ou agir → formuler
+
+Chaque étage ne passe la main au suivant que s'il ne sait pas faire lui-même.
+Dans le cas normal, un tour fait au plus un appel au LLM, à la fin (formuler) ;
+l'escalade est l'exception, comptée dans la trace. Aucune action à effet de
+bord ne part sans un « oui » explicite du client.
+"""
 
 from __future__ import annotations
 
-from .comprendre import comprendre
-from .conseiller import conseiller
-from .contrats import Action, Conseil, EtatConversation, Reponse
-from .converser import prochaine_etape
+from .comprendre import comprendre, escalader
+from .comprendre.entites import oui_non
+from .conseiller import clients, conseiller, outils
+from .contrats import Action, Comprehension, Conseil, EtatConversation, Etape, Reponse
+from .converser import Decision, avancer, formuler
 from .mesure import mesurer
+
+# Fiches qui se suffisent : pas de proposition de rappel derrière.
+FICHES_AUTONOMES = ("question_definition", "hors_sujet")
+
+
+def _executer(action: Action, profil: dict, etat: EtatConversation, trace: list[Etape]) -> Action:
+    action, etape = mesurer("agir", lambda: outils.executer(action, profil, etat), modele=action.outil)
+    trace.append(etape)
+    return action
+
+
+def _action_suivante(decision: Decision, action: Action | None) -> Action | None:
+    """L'action à proposer au tour suivant (elle attendra un « oui »)."""
+
+    if decision.type in ("action", "transmettre") and action is not None and not action.confirmee:
+        return action
+    if decision.type == "conseil" and decision.proposer:
+        return Action(outil=decision.proposer)
+    if decision.type == "orienter" or (decision.type == "fiche" and decision.parcours not in FICHES_AUTONOMES):
+        return Action(outil="transmettre_conseiller")
+    if (decision.type == "action_faite" and action is not None and action.outil == "expliquer_frais"
+            and action.resultat and action.resultat.get("proposer_offre_fragile")):
+        return Action(outil="transmettre_conseiller")
+    return None
 
 
 def reply(
-    message: str,
-    client_id: str,
-    etat: EtatConversation,
+    message: str, client_id: str, etat: EtatConversation | None = None
 ) -> tuple[Reponse, EtatConversation]:
-    """Orchestre les stubs du pipeline et conserve l'état de conversation.
+    """Traite un message du client et rend la réponse, avec l'état mis à jour."""
 
-    Cette version ne déclenche aucune action bancaire et ne prétend pas
-    produire une recommandation validée. Elle sert uniquement de contrat
-    d'intégration pour les trois modules.
-    """
-
-    comprehension, etape_comprendre = mesurer("comprendre", lambda: comprendre(message))
-    etat.intention = comprehension.intention
+    etat = etat if etat is not None else EtatConversation()
+    profil = clients.profil(client_id)
     etat.historique.append({"role": "user", "content": message})
-    etape_dialogue = prochaine_etape(comprehension, etat)
-    conseil = conseiller(client_id, comprehension.intention, etat.slots)
+    trace: list[Etape] = []
+    comprehension = Comprehension()
+    conseil: Conseil | None = None
+    action: Action | None = None
+    escalade = False
+    decision: Decision | None = None
 
-    if comprehension.intention == "carte_perdue":
-        texte = (
-            "Je peux vous guider pour sécuriser votre carte. "
-            "Aucune action bancaire n'est exécutée dans ce prototype."
-        )
-    elif comprehension.intention == "salutation":
-        texte = "Bonjour ! Comment puis-je vous aider aujourd'hui ?"
-    else:
-        texte = (
-            "Je n'ai pas encore identifié votre demande. "
-            "Pouvez-vous préciser votre besoin bancaire ?"
-        )
+    # 0. Une action attend l'accord du client.
+    if etat.action_en_attente is not None:
+        en_attente, etat.action_en_attente = etat.action_en_attente, None
+        accord = oui_non(message)
+        if accord is not None:
+            action = en_attente
+            if accord:
+                action.confirmee = True
+                action = _executer(action, profil, etat, trace)
+                decision = Decision("action_faite", parcours=etat.parcours, outil=action.outil)
+            else:
+                decision = Decision("action_annulee", parcours=etat.parcours, outil=action.outil)
+
+    # 1. Comprendre ; sinon clarifier une fois, puis escalader.
+    if decision is None:
+        comprehension, etape = mesurer("comprendre", lambda: comprendre(message, etat))
+        etape.modele = comprehension.modele
+        trace.append(etape)
+        if not comprehension.comprise:
+            if not etat.clarification_demandee:
+                etat.clarification_demandee = True
+                decision = Decision("clarifier")
+            else:
+                par_escalade, etape = escalader(message)
+                if etape is not None:
+                    trace.append(etape)
+                    escalade = True
+                if par_escalade is not None:
+                    comprehension = par_escalade
+                else:
+                    decision = Decision("orienter")
+
+    # 2 à 4. Converser, puis conseiller ou agir.
+    if decision is None:
+        etat.clarification_demandee = False
+        decision, etape = mesurer("converser", lambda: avancer(message, comprehension, etat, profil),
+                                  modele="automate")
+        trace.append(etape)
+        if decision.type == "conseil":
+            conseil, etape = mesurer("conseiller", lambda: conseiller(etat.parcours, profil, etat.slots),
+                                     modele="regles")
+            trace.append(etape)
+        elif decision.type in ("action", "transmettre"):
+            action = Action(outil=decision.outil, parametres=dict(etat.slots))
+            if not outils.demande_confirmation(action.outil):
+                action = _executer(action, profil, etat, trace)
+                decision = Decision("action_faite", parcours=etat.parcours, outil=action.outil)
+
+    etat.action_en_attente = _action_suivante(decision, action)
+
+    # 5. Formuler : le seul appel LLM du tour, et seulement pour un conseil.
+    texte, etape = formuler(decision, conseil, action, profil, etat, message)
+    trace.append(etape)
 
     etat.derniere_reponse = texte
     etat.historique.append({"role": "assistant", "content": texte})
     reponse = Reponse(
-        texte=texte,
-        comprehension=comprehension,
-        conseil=conseil,
-        action=Action(),
-        escalade=comprehension.intention == "inconnue",
-        trace=[etape_comprendre],
+        texte=texte, comprehension=comprehension, conseil=conseil, action=action,
+        question=decision.info if decision.type == "question" else None,
+        escalade=escalade, trace=trace,
     )
-    reponse.trace.append(type(etape_comprendre)(nom="dialogue", modele=etape_dialogue))
     return reponse, etat

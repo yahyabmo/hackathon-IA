@@ -1,8 +1,9 @@
 from src.assistant import reply
 from src.contrats import (
     Action,
-    Conseil,
     Comprehension,
+    Conseil,
+    Ecart,
     EtatConversation,
     Etape,
     Proposition,
@@ -12,37 +13,37 @@ from src.contrats import (
 
 def test_contracts_are_constructible():
     assert Comprehension().intention == "inconnue"
+    assert Comprehension().comprise is False
     assert isinstance(Proposition("demo").raisons, list)
-    assert isinstance(Conseil().propositions, list)
-    assert Action().confirmee is False
-    assert Etape("test").nom == "test"
-    assert Reponse("ok").texte == "ok"
+    assert Ecart("lep", "raison").regle is None
+    assert isinstance(Conseil().ecartees, list)
+    assert Action("bloquer_carte").confirmee is False
+    assert Etape("test").appel_llm is False
+    assert Reponse("ok").appels_llm == 0
 
 
 def test_reply_returns_contracts_and_updates_state():
-    etat = EtatConversation()
-    reponse, nouvel_etat = reply("Ma carte est perdue", "CLIENT-001", etat)
+    reponse, etat = reply("Ma carte est perdue", "C01", EtatConversation())
 
     assert isinstance(reponse, Reponse)
-    assert isinstance(nouvel_etat, EtatConversation)
-    assert reponse.comprehension.intention == "carte_perdue"
-    assert nouvel_etat.intention == "carte_perdue"
-    assert len(nouvel_etat.historique) == 2
-    assert reponse.action.confirmee is False
-
-
-def test_reply_keeps_conversation_context():
-    etat = EtatConversation()
-    _, etat = reply("Bonjour", "CLIENT-001", etat)
-    _, etat = reply("Je ne sais pas quoi demander", "CLIENT-001", etat)
-
-    assert len(etat.historique) == 4
-    assert etat.derniere_reponse is not None
-
-
-def test_unknown_intent_escalates_without_action():
-    reponse, _ = reply("Une demande totalement inconnue", "CLIENT-001", EtatConversation())
-
-    assert reponse.escalade is True
-    assert reponse.action.confirmee is False
+    assert reponse.comprehension.intention == "lost_or_stolen_card"
+    assert etat.parcours == "lost_or_stolen_card"
+    assert len(etat.historique) == 2
+    assert reponse.action is not None and reponse.action.confirmee is False
     assert reponse.action.resultat is None
+
+
+def test_reply_without_state_starts_a_conversation():
+    reponse, etat = reply("Bonjour", "C01")
+
+    assert "Bonjour" in reponse.texte
+    assert etat.derniere_reponse == reponse.texte
+
+
+def test_unknown_message_asks_before_escalating():
+    reponse, etat = reply("Une demande totalement inconnue", "C01", EtatConversation())
+
+    assert reponse.escalade is False  # aucune escalade sans LLM appelé
+    assert reponse.appels_llm == 0
+    assert etat.clarification_demandee is True
+    assert "préciser" in reponse.texte

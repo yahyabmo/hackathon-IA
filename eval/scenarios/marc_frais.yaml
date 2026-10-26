@@ -1,0 +1,5 @@
+client: C02
+tours:
+  - client: "Pourquoi j'ai payé 8 € de frais ce mois-ci ?"
+    attendu: {intention: extra_charge_on_statement, action: expliquer_frais, attente: transmettre_conseiller,
+              texte_contient: "offre clientèle fragile"}
