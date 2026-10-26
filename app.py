@@ -35,13 +35,35 @@ def _reinitialiser(client_id: str) -> None:
     st.session_state.etat = EtatConversation()
     st.session_state.messages = []
     st.session_state.derniere = None
+    st.session_state.reponses = []
 
 
 def _envoyer(texte: str) -> None:
+    st.session_state.etat.mots_simples = st.session_state.get("mots_simples", False)
     st.session_state.messages.append({"role": "user", "content": texte})
     reponse, st.session_state.etat = reply(texte, st.session_state.client, st.session_state.etat)
     st.session_state.messages.append({"role": "assistant", "content": reponse.texte})
     st.session_state.derniere = reponse
+    st.session_state.reponses.append(reponse)
+
+
+def _frugalite_session(reponses) -> dict:
+    """Totaux de la conversation : la preuve de frugalité au fil de la démo."""
+
+    tours = len(reponses)
+    sans_llm = sum(1 for r in reponses if r.appels_llm == 0)
+    niveaux = {}
+    for r in reponses:
+        if r.comprehension.comprise:
+            niveaux[r.comprehension.niveau] = niveaux.get(r.comprehension.niveau, 0) + 1
+    return {
+        "tours": tours,
+        "sans_llm": sans_llm,
+        "latence_ms": sum(resumer(r.trace)["latence_ms"] for r in reponses),
+        "appels_llm": sum(r.appels_llm for r in reponses),
+        "escalades": sum(1 for r in reponses if r.escalade),
+        "niveaux": niveaux,
+    }
 
 
 st.set_page_config(page_title="Assistant bancaire frugal", page_icon="🏦", layout="wide")
@@ -56,6 +78,12 @@ if st.session_state.get("client") != client_id:
     _reinitialiser(client_id)
 if st.sidebar.button("Nouvelle conversation"):
     _reinitialiser(client_id)
+
+st.sidebar.toggle("Mots simples", key="mots_simples",
+                  help="Automatique dès 70 ans ou pour un client peu à l'aise en ligne.")
+if st.sidebar.toggle("Grand texte", key="grand_texte"):
+    st.markdown("<style>[data-testid='stChatMessage'] p {font-size: 1.3rem; line-height: 1.6;}</style>",
+                unsafe_allow_html=True)
 
 st.sidebar.caption("Messages de démo")
 for i, texte in enumerate(MESSAGES_DEMO.get(client_id, [])):
@@ -96,6 +124,8 @@ with colonne_panneaux:
             if reponse.conseil:
                 for p in reponse.conseil.propositions:
                     st.markdown(f"✅ **{_nom(p.produit_id)}** — " + " ".join(p.raisons))
+                    if p.sources:
+                        st.caption("Source : " + " ; ".join(dict.fromkeys(p.sources)))
                 for e in reponse.conseil.ecartees:
                     st.markdown(f"❌ **{_nom(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
                 for a in reponse.conseil.alertes:
@@ -109,5 +139,10 @@ with colonne_panneaux:
             st.table([{"étape": e.nom, "modèle": e.modele or "—", "ms": round(e.latence_ms, 2),
                        "tokens": e.tokens} for e in reponse.trace])
             totaux = resumer(reponse.trace)
-            st.markdown(f"**Total** : {totaux['latence_ms']:.1f} ms — appels au LLM : "
+            st.markdown(f"**Ce tour** : {totaux['latence_ms']:.1f} ms — appels au LLM : "
                         f"**{int(totaux['appels_llm'])}** — escalade : {'oui' if reponse.escalade else 'non'}")
+            session = _frugalite_session(st.session_state.reponses)
+            niveaux = ", ".join(f"{n} : {k}" for n, k in session["niveaux"].items()) or "—"
+            st.markdown(f"**Conversation** : {session['tours']} tours, dont **{session['sans_llm']} sans LLM** — "
+                        f"{session['latence_ms']:.1f} ms au total — {session['appels_llm']} appel(s) au LLM, "
+                        f"{session['escalades']} escalade(s) — compris par : {niveaux}")

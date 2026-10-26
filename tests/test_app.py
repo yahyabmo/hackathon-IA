@@ -23,3 +23,12 @@ def test_l_interface_repond_et_change_de_client_proprement():
 
     app.sidebar.selectbox[0].set_value("C08").run()  # nouveau client : conversation remise à zéro
     assert len(app.chat_message) == 0
+
+
+def test_le_mode_mots_simples_s_active_depuis_l_interface():
+    app = testing.AppTest.from_file(APP, default_timeout=30)
+    app.run()
+    app.sidebar.toggle(key="mots_simples").set_value(True).run()
+    app.chat_input[0].set_value("J'ai perdu ma carte").run()
+    assert not app.exception
+    assert "veut dire" in app.chat_message[-1].markdown[0].value
