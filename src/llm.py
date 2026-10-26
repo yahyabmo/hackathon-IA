@@ -1,7 +1,8 @@
 """Accès au LLM local (Ollama), partagé par la formulation et l'escalade.
 
 Désactivé par défaut : sans modèle installé, l'assistant répond avec ses
-gabarits (c'est la configuration C des mesures). ``ASSISTANT_LLM=1`` l'active.
+gabarits (c'est la configuration C des mesures). ``ASSISTANT_LLM=1`` l'active
+pour la formulation ; ``ASSISTANT_ESCALADE=1`` permet en plus l'escalade.
 Un tour de conversation fait au plus un appel, à la fin (formulation) ;
 l'escalade est l'exception, comptée dans la trace.
 
@@ -25,6 +26,16 @@ def actif() -> bool:
     """Le LLM est-il activé ? Lu à chaque appel, pour que les tests puissent le changer."""
 
     return os.getenv("ASSISTANT_LLM", "0") == "1"
+
+
+def escalade_active() -> bool:
+    """L'escalade est-elle permise ? Désactivée par défaut, même si le LLM formule.
+
+    Sans escalade, un message resté incompris après la question de
+    clarification part au journal et le client se voit proposer un conseiller.
+    """
+
+    return actif() and os.getenv("ASSISTANT_ESCALADE", "0") == "1"
 
 
 def joignable(delai: float = 2.0) -> bool:

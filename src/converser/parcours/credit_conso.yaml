@@ -6,6 +6,7 @@ infos:
   revenus_nets:
     type: montant
     source: revenus_nets
+    indices: [revenus, salaire, gagne]
     confirmer: "J'ai noté vos revenus de {valeur} nets par mois."
     question: "Quels sont vos revenus nets mensuels ?"
   mensualites_en_cours:
@@ -13,11 +14,14 @@ infos:
     source: mensualites_credits
     confirmer: "Vous remboursez déjà {valeur} de crédit par mois."
     question: "Remboursez-vous déjà des crédits ? Si oui, combien par mois ?"
+    si_non: 0
+    indices: [credit en cours, rembourse, mensualite]
   objet:
     type: objet
     defaut: projet
   montant:
     type: montant
+    indices: [emprunter, montant, credit, pret, voiture]
     question: "Quel montant souhaitez-vous emprunter ?"
   duree_mois:
     type: duree

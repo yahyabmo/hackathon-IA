@@ -26,7 +26,7 @@ _SYSTEME = (
 def escalader(message: str) -> tuple[Comprehension | None, Etape | None]:
     """Compréhension par le LLM d'escalade, ou ``None`` si le LLM est désactivé ou hésite."""
 
-    if not llm.actif():
+    if not llm.escalade_active():
         return None, None
     debut = perf_counter()
     texte, tokens = llm.generer(llm.MODELE_ESCALADE, _SYSTEME, message, max_tokens=12)

@@ -11,9 +11,10 @@ bord ne part sans un « oui » explicite du client.
 from __future__ import annotations
 
 from .comprendre import comprendre, escalader
-from .comprendre.entites import oui_non
+from .comprendre.entites import extraire, oui_non
 from .conseiller import clients, conseiller, outils
-from .contrats import Action, Comprehension, Conseil, EtatConversation, Etape, Reponse
+from . import incompris
+from .contrats import NIVEAU_REPONSE, Action, Comprehension, Conseil, EtatConversation, Etape, Reponse
 from .converser import Decision, avancer, formuler
 from .mesure import mesurer
 
@@ -61,6 +62,8 @@ def reply(
     if etat.action_en_attente is not None:
         en_attente, etat.action_en_attente = etat.action_en_attente, None
         accord = oui_non(message)
+        if accord is False and extraire(message).get("montants"):
+            accord = None  # « non, plutôt 300 € » : une correction, pas un refus
         if accord is not None:
             action = en_attente
             if accord:
@@ -75,6 +78,12 @@ def reply(
         comprehension, etape = mesurer("comprendre", lambda: comprendre(message, etat))
         etape.modele = comprehension.modele
         trace.append(etape)
+        if not comprehension.comprise and etat.parcours and (
+                comprehension.entites.get("montants") or comprehension.entites.get("duree_mois")):
+            # « Et avec un bien à 200 000 ? » : la suite du parcours en cours.
+            comprehension = Comprehension(
+                famille=etat.famille or "", intention=etat.parcours, confiance=1.0,
+                niveau=NIVEAU_REPONSE, modele="regles", entites=comprehension.entites)
         if not comprehension.comprise:
             if not etat.clarification_demandee:
                 etat.clarification_demandee = True
@@ -88,6 +97,8 @@ def reply(
                     comprehension = par_escalade
                 else:
                     decision = Decision("orienter")
+            if decision is not None:
+                incompris.noter(message, client_id, decision.type, comprehension)
 
     # 2 à 4. Converser, puis conseiller ou agir.
     if decision is None:

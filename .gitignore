@@ -14,3 +14,6 @@ __pycache__/
 # Fichiers locaux à ne pas pousser
 /presentation/
 /audios/
+
+# Journal local des messages non compris (src/incompris.py)
+eval/incompris.jsonl

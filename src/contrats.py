@@ -131,5 +131,6 @@ class EtatConversation:
     slots: dict[str, Any] = field(default_factory=dict)  # informations recueillies
     clarification_demandee: bool = False
     action_en_attente: Action | None = None  # attend un « oui » ou un « non »
+    mots_simples: bool = False  # demandé par le client ; automatique dès 70 ans ou « peu à l'aise »
     historique: list[dict[str, str]] = field(default_factory=list)
     derniere_reponse: str | None = None

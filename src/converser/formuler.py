@@ -7,10 +7,15 @@ reformule ; le garde-fou n'autorise que les nombres déjà présents dans ce
 gabarit. En cas d'échec, le gabarit est affiché.
 
 Les mentions légales et les rappels de sécurité sont ajoutés hors du LLM.
+
+Mode « mots simples » (client de 70 ans ou plus, « peu à l'aise en ligne », ou
+sur demande) : une phrase par ligne, pas d'aparté entre parenthèses, et le
+premier terme du glossaire présent dans la réponse est expliqué.
 """
 
 from __future__ import annotations
 
+import re
 from time import perf_counter
 from typing import Any
 
@@ -29,6 +34,11 @@ MENTIONS = {
 RAPPEL_CODE = "Rappel : la banque ne vous demandera jamais votre code confidentiel."
 OUI_NON = "(oui / non)"
 NOMS_SPECIAUX = {"credit_immobilier_30_ans": "Un prêt immobilier sur 30 ans"}
+AGE_MOTS_SIMPLES = 70
+RELANCES = {
+    "incompris": "Je n'ai pas bien compris.",
+    "ne_sait_pas": "Pas de souci, une estimation suffit.",
+}
 MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre")
 
@@ -37,6 +47,27 @@ SYSTEME_FORMULATION = (
     "français, au vouvoiement, avec des phrases courtes et un ton chaleureux. N'ajoute aucun chiffre, "
     "aucun produit et aucune promesse. Garde tous les chiffres exactement. Termine par la même question."
 )
+CONSIGNE_SIMPLE = " Le client est peu à l'aise : phrases très courtes, mots de tous les jours."
+
+
+def mots_simples(profil: dict[str, Any], etat: EtatConversation) -> bool:
+    """Le mode « mots simples » s'applique-t-il à ce client ?"""
+
+    return (etat.mots_simples or bool(profil.get("peu_a_laise_en_ligne"))
+            or profil.get("age", 0) >= AGE_MOTS_SIMPLES)
+
+
+def simplifier(texte: str, expliquer_jargon: bool = True) -> str:
+    """Une phrase par paragraphe, sans aparté, et le premier terme technique expliqué."""
+
+    texte = re.sub(r"\s*\((?!oui / non\))[^)]*\)", "", texte)
+    phrases = [p.strip() for p in re.split(r"(?<=[.?!])\s+(?!\()", texte) if p.strip()]
+    if expliquer_jargon:
+        fiche = glossaire.chercher(texte)
+        if fiche:
+            explication = fiche["explication"]
+            phrases.append(f"« {fiche['terme']} » veut dire : {explication[0].lower()}{explication[1:]}")
+    return "\n\n".join(phrases)
 
 
 def _nom(produit_id: str) -> str:
@@ -157,9 +188,14 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
             f"point : un conseiller peut le traiter. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
 
 
-def _gabarit(decision, conseil, action, profil, etat, message) -> str:
+def gabarit(decision, conseil, action, profil, etat, message) -> str:
+    """Le texte gabarit d'une décision (public : le banc de formulation s'en sert)."""
+
     if decision.type == "question":
-        return _joindre(decision.accroche, *decision.confirmations, decision.question)
+        return _joindre(decision.accroche, *decision.confirmations, RELANCES.get(decision.relance),
+                        decision.question)
+    if decision.type == "abandon":
+        return "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?"
     if decision.type == "conseil":
         return _joindre(decision.accroche, *decision.confirmations, _gabarit_conseil(decision, conseil))
     if decision.type == "action":
@@ -191,13 +227,15 @@ def formuler(
     """Le texte affiché au client, et l'étape mesurée (avec ou sans appel au LLM)."""
 
     debut = perf_counter()
-    texte = _gabarit(decision, conseil, action, profil, etat, message)
+    texte = gabarit(decision, conseil, action, profil, etat, message)
     etape = Etape(nom="formuler", modele="gabarit")
+    simple = mots_simples(profil, etat)
 
     if decision.type == "conseil" and llm.actif():
         etape.modele, etape.appel_llm = llm.MODELE_FORMULATION, True
+        systeme = SYSTEME_FORMULATION + (CONSIGNE_SIMPLE if simple else "")
         try:
-            reformule, etape.tokens = llm.generer(llm.MODELE_FORMULATION, SYSTEME_FORMULATION, texte)
+            reformule, etape.tokens = llm.generer(llm.MODELE_FORMULATION, systeme, texte)
             if not garde_fou.verifier(reformule, set(garde_fou.nombres(texte))):
                 texte = reformule
             else:
@@ -205,7 +243,9 @@ def formuler(
         except OSError:
             etape.modele = f"{llm.MODELE_FORMULATION} (injoignable)"
 
+    if simple:
+        texte = simplifier(texte, expliquer_jargon=decision.type != "fiche")
     if decision.mention_legale:
-        texte = _joindre(texte, MENTIONS[decision.mention_legale])
+        texte = (texte + "\n\n" if simple else texte + " ") + MENTIONS[decision.mention_legale]
     etape.latence_ms = (perf_counter() - debut) * 1000
     return texte, etape

@@ -6,6 +6,7 @@ infos:
   revenus_nets:
     type: montant
     source: revenus_nets
+    indices: [revenus, salaire, gagne]
     confirmer: "J'ai noté vos revenus de {valeur} nets par mois."
     question: "Quels sont vos revenus nets mensuels ?"
   mensualites_en_cours:
@@ -13,11 +14,15 @@ infos:
     source: mensualites_credits
     confirmer: "Vous remboursez déjà {valeur} de crédits par mois."
     question: "Remboursez-vous déjà des crédits ? Si oui, combien par mois ?"
+    si_non: 0
+    indices: [credit en cours, rembourse, mensualite]
   prix_bien:
     type: montant
+    indices: [prix, bien, appartement, maison, logement, coute]
     question: "Quel est le prix du bien que vous visez, et quelle part de vos {epargne} d'épargne souhaitez-vous y consacrer ?"
   apport:
     type: montant
+    indices: [apport, epargne, mettre]
     question: "Quelle part de vos {epargne} d'épargne souhaitez-vous consacrer à l'achat ?"
 fin:
   type: conseil

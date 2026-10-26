@@ -9,8 +9,10 @@ infos:
   horizon_mois:
     type: duree
     question: "Dans combien de temps pensez-vous avoir besoin de cet argent ?"
+    si_inconnu: {valeur: 12, phrase: "Je pars sur un an ; vous pourrez ajuster."}
   montant_mensuel:
     type: montant
+    indices: [par mois, chaque mois, mettre]
     question: "Combien pouvez-vous mettre de côté chaque mois ?"
 fin:
   type: conseil
