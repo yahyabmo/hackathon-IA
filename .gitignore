@@ -1,5 +1,4 @@
-# Données brutes fournies ou téléchargées pour le hackathon
-data/raw/
+# Modèles et caches locaux
 models/
 *.gguf
 .cache/
@@ -11,3 +10,7 @@ models/
 __pycache__/
 *.py[cod]
 .env
+
+# Fichiers locaux à ne pas pousser
+/presentation/
+/audios/
