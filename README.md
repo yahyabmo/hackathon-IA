@@ -1,94 +1,88 @@
-# Hackathon IA — La Banque Postale × CGI
+# Hackathon IA — Assistant bancaire frugal
 
-> **Des idées pour une finance plus intelligente** — 3 jours pour imaginer, développer et présenter une solution IA autour d'un défi du monde bancaire.
-> ENSEIRB-MATMECA, salle IA · 26 → 28 octobre
+Prototype pour le hackathon La Banque Postale × CGI × ENSEIRB-MATMECA.
+L'objectif est de construire un assistant bancaire personnalisé, explicable,
+local et open source. Le socle actuel fonctionne sans GPU, Ollama ni modèle
+téléchargé ; les modules spécialisés seront ajoutés progressivement.
 
----
+## Architecture
 
-## Le défi
+```text
+app.py
+  → src.assistant.reply()
+      → comprendre : intention et entités
+      → converser : état et parcours déterministe
+      → conseiller : profils, produits et règles explicables
+      → agir : actions simulées avec confirmation obligatoire
+      → formuler : gabarits ou petit LLM local
+      → mesure : latence, énergie, taille et qualité
+```
 
-> À compléter après la présentation des cas d'usage (lundi 14h30).
+Les contrats partagés sont définis dans `src/contrats.py`. Les implémentations
+actuelles sont des stubs volontairement prudents : elles ne simulent pas une
+prédiction ML ni une recommandation bancaire validée.
 
-| | |
+## Responsabilités
+
+| Membre | Module principal |
 |---|---|
-| **Cas d'usage choisi** | _…_ |
-| **Problème** | _Quelle douleur, pour qui ?_ |
-| **Utilisateur cible** | _Conseiller, client, analyste risque… ?_ |
-| **Données fournies** | _Format, volume, confidentialité_ |
-| **Notre solution en une phrase** | _…_ |
-| **Critères du jury** | _À demander lundi pendant les Q&R_ |
+| Younes (M1) | Compréhension des intentions, modèles et mesures |
+| Yahya (M2) | Dialogue, orchestration, LLM local et interface |
+| Sohayb (M3) | Profils clients, recommandations, actions simulées et tests |
 
-## L'équipe
+Les contrats de `src/contrats.py` sont la référence commune pour travailler en
+parallèle sans coupler les modules.
 
-| Membre | Rôle principal | GitHub |
-|---|---|---|
-| _…_ | Produit & pitch : cadrage, slides, démo | |
-| _…_ | LLM & prompts : client LLM, évaluation des réponses | |
-| _…_ | Données & RAG : préparation, indexation, recherche | |
-| _…_ | Interface : démo, intégration bout en bout | |
+## Structure
 
-Les rôles indiquent qui est responsable de quoi. Tout le monde code.
+```text
+├── app.py
+├── src/
+│   ├── contrats.py
+│   ├── assistant.py
+│   ├── comprendre/
+│   ├── converser/parcours/
+│   ├── conseiller/
+│   └── mesure/
+├── data/raw/       # données publiques ou fournies, ignorées par Git
+├── data/processed/ # données préparées, versionnables si nécessaire
+├── eval/
+└── tests/
+```
 
-## Planning
+Les documents du briefing et les données locales existantes sont conservés.
+Ne jamais placer de secrets ou de nouvelles données sensibles dans Git.
 
-| Quand | Officiel | Nos jalons internes |
-|---|---|---|
-| **Lun. 11h** | Accueil salle IA, machines, accès LLM | Le LLM répond sur toutes les machines |
-| **Lun. 14h–15h30** | Kickoff, cas d'usage, Q&R | Cas d'usage choisi, section « Le défi » remplie |
-| **Lun. soir** | | Périmètre du MVP figé, squelette de bout en bout qui tourne |
-| **Mar. midi** | | MVP utilisable sur un vrai exemple |
-| **Mar. soir** | | **Gel des fonctionnalités**, on ne fait plus que corriger et peaufiner |
-| **Mer. matin** | | Slides + démo enregistrée en secours + 2 répétitions chronométrées |
-| **Mer. 13h30** | Soutenances | |
-| **Mer. 17h** | Remise des prix, cocktail | |
+## Installation et lancement
 
-## Démarrage rapide
+Python 3.11 ou supérieur est recommandé.
 
 ```bash
-git clone https://github.com/yahyabmo/hackathon-IA.git
-cd hackathon-IA
 python3 -m venv .venv
 source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
 ```
 
-> Les dépendances et les commandes de lancement seront ajoutées ici une fois le dépôt initialisé.
+L'application affiche un chat minimal et un panneau technique. Le scénario
+« carte perdue » permet de vérifier la chaîne sans service externe.
 
-## Accès aux LLMs
+## Tests
 
-| Backend | Où | Détails |
-|---|---|---|
-| **Ollama local** | Chaque machine de la salle IA | Ministral, nom exact donné par `ollama list` |
-| **DeepEirb** | Serveur de l'école | Adresse et liste des modèles communiquées lundi 11h |
-
-> À confirmer lundi 11h : si DeepEirb est compatible avec l'API OpenAI comme Ollama, un seul client suffit et on change de backend par configuration. Demander aussi s'il faut une clé d'API.
-
-## Structure proposée
-
-```
-hackathon-IA/
-├── app.py              # Démo, l'interface montrée au jury
-├── src/                # Code livré (client LLM, traitement des données…)
-├── notebooks/          # Explorations ; le code qui marche migre dans src/
-├── data/               # Données du défi, jamais versionnées
-├── .env.example        # Configuration à copier en .env
-└── requirements.txt
+```bash
+python -m pytest -q
 ```
 
-## Règles d'équipe
+## Configuration future
 
-1. **`main` doit toujours tourner.** À tout moment, on doit pouvoir lancer la démo depuis `main`.
-2. **Branches courtes** : `feat/<sujet>` ou `fix/<sujet>`, mergées dans la demi-journée. On fait `git pull` souvent.
-3. **Aucune donnée ni aucun secret dans git.** Les données fournies par les partenaires restent dans `data/` et les clés dans `.env`, les deux listés dans le `.gitignore`.
-4. **Les notebooks servent à explorer, `src/` sert à livrer.** Une fonction utilisée par l'app vit dans `src/`.
-5. **Un point toutes les ~3h** (5 min debout) : ce qui est fait, ce qui bloque, la suite.
-6. **Les prompts sont du code** : on les versionne et on note ce qui a été essayé et pourquoi.
+Copier `.env.example` vers `.env` lorsque le module LLM local sera branché.
+Les paramètres Ollama resteront configurables par environnement ; aucune clé
+ou donnée sensible ne doit être commitée.
 
-## Checklist soutenance
+## Conventions Git
 
-- [ ] Problème + utilisateur cible expliqués en 30 secondes
-- [ ] Démo live sur un **cas réaliste** (préparé à l'avance, testé sur la machine de présentation)
-- [ ] **Vidéo de secours** de la démo, au cas où le réseau ou le LLM ne répondrait pas
-- [ ] Architecture en un schéma : données → LLM → interface
-- [ ] Limites et risques assumés : hallucinations, confidentialité, RGPD, coût
-- [ ] Suite du projet : comment La Banque Postale pourrait l'industrialiser
-- [ ] Répétition chronométrée (durée à demander aux organisateurs)
+- `main` doit rester exécutable.
+- Utiliser des branches courtes : `feat/<sujet>` ou `fix/<sujet>`.
+- Garder les prompts et les règles versionnés.
+- Mettre le code livré dans `src/`, pas seulement dans des notebooks.
+- Ne pas versionner `data/raw/`, les modèles, les caches ou `.env`.

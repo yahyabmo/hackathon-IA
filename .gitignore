@@ -1,0 +1,13 @@
+# Données brutes fournies ou téléchargées pour le hackathon
+data/raw/
+models/
+*.gguf
+.cache/
+.pytest_cache/
+.streamlit/
+
+# Environnements et fichiers locaux
+.venv/
+__pycache__/
+*.py[cod]
+.env
