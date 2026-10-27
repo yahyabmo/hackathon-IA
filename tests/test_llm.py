@@ -10,8 +10,9 @@ from src.converser.glossaire import chercher
 GABARIT = "La mensualité serait d'environ 1 220 €, soit 42,1 % de vos revenus. Voulez-vous un rendez-vous ?"
 
 
-def test_la_reflexion_est_coupee_pour_qwen3_seulement():
+def test_la_reflexion_est_coupee_pour_les_modeles_qui_reflechissent():
     assert llm.corps_ollama("qwen3:1.7b", "s", "m", 10)["think"] is False
+    assert llm.corps_ollama("gemma4:e2b", "s", "m", 10)["think"] is False
     assert "think" not in llm.corps_ollama("ministral-3:3b", "s", "m", 10)
 
 

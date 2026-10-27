@@ -28,6 +28,7 @@ URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 MODELE_FORMULATION = os.getenv("OLLAMA_MODEL", "ministral-3:3b")
 MODELE_ESCALADE = os.getenv("OLLAMA_MODEL_ESCALADE", "ministral-3:14b")
 OPTIONS = {"temperature": 0.2, "num_ctx": 4096}
+MODELES_A_REFLEXION = ("qwen3", "gemma4")
 
 
 def actif() -> bool:
@@ -72,8 +73,8 @@ def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int) -> di
         "keep_alive": "30m",
         "options": {**OPTIONS, "num_predict": max_tokens},
     }
-    if modele.startswith("qwen3"):
-        corps["think"] = False
+    if modele.startswith(MODELES_A_REFLEXION):
+        corps["think"] = False  # sinon la réflexion consomme le budget de tokens et la réponse reste vide
     return corps
 
 
