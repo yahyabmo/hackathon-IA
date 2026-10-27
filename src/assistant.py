@@ -21,6 +21,7 @@ from .conseiller import clients, conseiller, outils
 from .conseiller import integration as m3
 from .contrats import NIVEAU_REPONSE, Action, Comprehension, Conseil, EtatConversation, Etape, Reponse
 from .converser import Decision, avancer, formuler
+from .converser.formuler import question_clarification
 from .mesure import mesurer
 
 # Fiches qui se suffisent : pas de proposition de rappel derrière.
@@ -146,7 +147,7 @@ def reply(
         if not comprehension.comprise:
             if not etat.clarification_demandee:
                 etat.clarification_demandee = True
-                decision = Decision("clarifier")
+                decision = Decision("clarifier", question=question_clarification(comprehension.alternatives))
             else:
                 par_escalade, etape = escalader(message)
                 if etape is not None:

@@ -1,0 +1,23 @@
+{
+  "encodeur": "intfloat/multilingual-e5-small",
+  "prefixe": "query: ",
+  "tau": 0.76,
+  "regularisation_C": 100.0,
+  "precision_visee": 0.97,
+  "validation": {
+    "taille": 1071,
+    "exactitude_intention": 0.9132,
+    "routage_correct_tous": 0.9412,
+    "precision_acceptes": 0.9705,
+    "part_acceptee": 0.887
+  },
+  "exemples": {
+    "banking77_anglais": 10003,
+    "equipe": 672,
+    "total": 10675
+  },
+  "taille_tetes_ko": 140.8,
+  "duree_entrainement_s": 254.9,
+  "duree_encodage_s": 46.8,
+  "date": "2026-10-27T11:36:33"
+}

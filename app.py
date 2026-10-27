@@ -6,6 +6,7 @@ import streamlit as st
 
 from src import llm
 from src.assistant import reply
+from src.comprendre import classifieur
 from src.conseiller import clients
 from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation
@@ -58,6 +59,18 @@ def _prechauffer(modele: str) -> bool:
     """Une seule fois par session du serveur : le jury ne paie pas le chargement."""
 
     return llm.prechauffer(modele)
+
+
+@st.cache_resource(show_spinner="Chargement de l'encodeur de compréhension…")
+def _prechauffer_classifieur() -> bool:
+    return classifieur.prechauffer()
+
+
+def _etat_comprehension() -> str:
+    if not _prechauffer_classifieur():
+        return "Compréhension : mots-clés seuls (classifieur absent)"
+    return (f"Compréhension : mots-clés, puis {classifieur.MODELE} "
+            f"(τ = {classifieur.SEUIL_TAU:.2f})".replace(".", ","))
 
 
 def _etat_llm() -> str:
@@ -115,6 +128,7 @@ st.sidebar.caption("Messages de démo")
 for i, texte in enumerate(MESSAGES_DEMO.get(client_id, [])):
     if st.sidebar.button(texte, key=f"demo-{client_id}-{i}"):
         _envoyer(texte)
+st.sidebar.caption(_etat_comprehension())
 st.sidebar.caption(_etat_llm())
 
 colonne_chat, colonne_panneaux = st.columns([3, 2])
@@ -150,6 +164,14 @@ with colonne_panneaux:
             c = reponse.comprehension
             if c.comprise:
                 st.markdown(f"**Intention** : `{c.intention}` ({c.famille}) — compris par **{c.niveau}**")
+                if c.niveau == "classifieur":
+                    st.caption(f"Confiance {c.confiance:.2f} ≥ τ {classifieur.SEUIL_TAU:.2f}".replace(".", ",")
+                               + (f" — phrase d'entraînement la plus proche : « {c.exemple_proche} »"
+                                  if c.exemple_proche else ""))
+            elif c.alternatives:
+                st.markdown("**Hésitation** : " + " ou ".join(
+                    f"{a.famille} ({a.confiance:.2f})".replace(".", ",") for a in c.alternatives)
+                    + f", sous le seuil τ = {classifieur.SEUIL_TAU:.2f}".replace(".", ","))
             if reponse.question:
                 st.markdown(f"**Information demandée** : `{reponse.question}`")
             if reponse.conseil:
