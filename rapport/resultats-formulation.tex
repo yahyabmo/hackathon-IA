@@ -1,1 +1,13 @@
-\centering\textit{Banc en cours : résultats à venir.}
+\centering\small
+\begin{tabular}{@{}l r c c r r@{}}
+\toprule
+\textbf{Modèle} & \textbf{Taille} & \textbf{Garde-fou} & \textbf{Juges} & \textbf{Latence p50} & \textbf{Tokens} \\
+\midrule
+\texttt{ministral-3:3b} & 3,0 Go & 16/30 & \textit{à juger} & 19,9 s & 457 \\
+\texttt{qwen3:1.7b} & 1,4 Go & 30/30 & \textit{à juger} & 12,0 s & 482 \\
+\texttt{gemma3:1b} & 0,8 Go & 25/30 & \textit{à juger} & 8,3 s & 418 \\
+\bottomrule
+\end{tabular}
+
+\medskip
+{\scriptsize Mesuré sur yahya-bel-hajjam (CPU) ; le 14B se mesure sur un poste à GPU. Garde-fou : aucun chiffre inventé ni oublié, longueur plausible.}
