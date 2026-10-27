@@ -33,3 +33,15 @@ def test_le_mode_mots_simples_s_active_depuis_l_interface():
     app.chat_input[0].set_value("J'ai perdu ma carte").run()
     assert not app.exception
     assert "veut dire" in app.chat_message[-1].markdown[0].value
+
+
+def test_le_profil_et_l_action_refletent_la_simulation():
+    app = testing.AppTest.from_file(APP, default_timeout=30)
+    app.run()
+    app.sidebar.selectbox[0].set_value("C04").run()
+    app.chat_input[0].set_value("Je dois envoyer 500 € à mon fils.").run()
+    app.chat_input[0].set_value("oui").run()
+    assert not app.exception
+    textes = " ".join(m.value for m in app.markdown)
+    assert "exécutée (simulation)" in textes
+    assert "**Solde** : *1800.0* (simulé)" in textes  # 2 300 € avant le virement de 500 €

@@ -11,14 +11,22 @@ from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation
 from src.mesure import resumer
 
+STATUTS_ACTION = {
+    "succes": "exécutée (simulation)",
+    "refus": "refusée",
+    "echec": "échec, rien n'a été modifié",
+    "en_attente": "en attente de votre accord",
+}
+
 MESSAGES_DEMO = {
     "C01": ["J'ai perdu ma carte hier soir, je fais quoi ?", "oui"],
     "C02": ["Pourquoi j'ai payé 8 € de frais ce mois-ci ?"],
     "C03": ["Je voudrais mettre de côté pour mes enfants.", "Dans 10 ans, 100 euros par mois"],
-    "C04": ["Je dois envoyer 500 € à mon fils.", "oui"],
+    "C04": ["Je dois envoyer 500 € à mon fils.", "Oui, mais pas maintenant", "Non, plutôt 300 €", "oui"],
     "C05": ["Je veux un crédit pour acheter une voiture.", "12000", "48 mois"],
     "C06": ["Votre appli ne marche jamais !"],
-    "C07": ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000"],
+    "C07": ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000",
+            "Et avec un bien à 200 000 ?"],
     "C08": ["Je voudrais mettre de côté", "Dans 2 ans", "50 euros", "C'est quoi un TAEG ?"],
 }
 
@@ -120,14 +128,19 @@ with colonne_chat:
             st.write(message["content"])
 
 with colonne_panneaux:
-    profil = clients.profil(client_id)
+    # Le profil de la session : soldes et statuts reflètent les actions simulées (virement, opposition).
+    profil = st.session_state.etat.profil_simule or clients.profil(client_id)
     with st.expander("Profil", expanded=True):
         for champ, libelle in (("age", "Âge"), ("metier", "Métier"), ("situation", "Situation"),
                                ("revenus_nets", "Revenus nets / mois"), ("epargne", "Épargne"),
-                               ("mensualites_credits", "Crédits en cours / mois")):
+                               ("mensualites_credits", "Crédits en cours / mois"), ("solde", "Solde")):
             valeur = profil.get(champ)
-            affiche = f"*{valeur}* (simulé)" if clients.est_simule(profil, champ) else f"{valeur}"
+            affiche = "inconnu" if valeur is None else f"{valeur}"
+            if clients.est_simule(profil, champ):
+                affiche = f"*{affiche}* (simulé)"
             st.markdown(f"**{libelle}** : {affiche}")
+        for carte in profil.get("cartes", []):
+            st.markdown(f"**Carte {carte['id']}** : {carte['statut']}")
 
     reponse = st.session_state.derniere
     with st.expander("Pourquoi", expanded=True):
@@ -148,8 +161,16 @@ with colonne_panneaux:
                     st.markdown(f"❌ **{nom_produit(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
                 for a in reponse.conseil.alertes:
                     st.warning(a)
+                for h in reponse.conseil.faits.get("hypotheses", []):
+                    st.caption(f"Hypothèse : {h}")
+                sources = reponse.conseil.faits.get("sources_produits", {})
+                if sources:
+                    st.caption("Sources : " + " ; ".join(f"{nom_produit(k)} : {v}" for k, v in sources.items()))
             if reponse.action:
-                etat_action = "exécutée" if reponse.action.resultat else "en attente de votre accord"
+                r = reponse.action.resultat
+                etat_action = STATUTS_ACTION.get(r.get("statut") if r else None, "en attente de votre accord")
+                if r and r.get("motif"):
+                    etat_action += f" : {r['motif']}"
                 st.markdown(f"**Action** : `{reponse.action.outil}` — {etat_action}")
 
     with st.expander("Frugalité", expanded=True):
