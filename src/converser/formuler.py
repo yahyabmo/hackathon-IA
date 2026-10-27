@@ -94,7 +94,7 @@ def simplifier(texte: str, expliquer_jargon: bool = True) -> str:
     """Une phrase par paragraphe, sans aparté, et le premier terme technique expliqué."""
 
     texte = re.sub(r"\s*\((?!oui / non\))[^)]*\)", "", texte)
-    phrases = [p.strip() for p in re.split(r"(?<=[.?!])\s+(?!\()", texte) if p.strip()]
+    phrases = [p.strip() for p in re.split(r"(?:(?<=[.?!])|(?<=\(oui / non\)))\s+(?!\()", texte) if p.strip()]
     if expliquer_jargon:
         fiche = glossaire.chercher(texte)
         if fiche:

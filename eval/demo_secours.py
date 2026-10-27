@@ -23,6 +23,8 @@ from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation, Reponse
 from src.mesure import resumer
 
+STATUTS_ACTION = {"succes": "exécutée (simulation)", "refus": "refusée", "echec": "échec, rien n'a été modifié"}
+
 SORTIE = Path(__file__).resolve().parents[1] / "rapport" / "demo-secours.tex"
 
 SCENES: list[tuple[str, str, list[str], str]] = [
@@ -32,7 +34,7 @@ SCENES: list[tuple[str, str, list[str], str]] = [
     ("L'appartement : questionner, calculer, expliquer", "C07",
      ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000",
       "Et avec un bien à 200 000 ?"],
-     "Les revenus ne sont pas redemandés ; refus chiffré, puis correction recalculée."),
+     "Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, puis recalculé."),
     ("Même phrase, deux clients : Sophie", "C03",
      ["Je voudrais mettre de côté pour mes enfants.", "Dans 10 ans, 100 euros par mois"],
      "Pour ses enfants : Livret A, Livret Jeune pour l'aîné ; LDDS et LEP écartés."),
@@ -46,8 +48,8 @@ SCENES: list[tuple[str, str, list[str], str]] = [
      ["Votre appli ne marche jamais !", "oui"],
      "Pas de justification : un conseiller reprend la main avec le résumé."),
     ("Paul, 68 ans : pas à pas, en mots simples", "C04",
-     ["Je dois envoyer 500 € à mon fils.", "oui"],
-     "Mode « mots simples » automatique ; rien ne part sans confirmation."),
+     ["Je dois envoyer 500 € à mon fils.", "Oui, mais pas maintenant", "Non, plutôt 300 €", "oui"],
+     "Mots simples automatiques ; « oui, mais » n'est pas un accord ; le montant se corrige avant le « oui »."),
     ("Le jargon, même mal écrit", "C08",
      ["C'est quoi le TEAG ?"],
      "Fiche du glossaire retrouvée malgré la faute de frappe, sans LLM."),
@@ -81,9 +83,14 @@ def _pourquoi(reponse: Reponse) -> list[str]:
         lignes += [f"Écarté : {tex(nom_produit(e.produit_id))} --- {tex(e.raison)}"
                    + (f" (\\texttt{{{tex(e.regle)}}})" if e.regle else "") for e in reponse.conseil.ecartees]
         lignes += [f"Alerte : {tex(a)}" for a in reponse.conseil.alertes]
+        lignes += [f"Hypothèse : {tex(h)}" for h in reponse.conseil.faits.get("hypotheses", [])]
     if reponse.action:
-        etat = "exécutée" if reponse.action.resultat is not None else "en attente du « oui »"
-        lignes.append(f"Action \\texttt{{{tex(reponse.action.outil)}}} : {etat}")
+        resultat = reponse.action.resultat
+        etat = (STATUTS_ACTION.get(resultat.get("statut"), "exécutée") if resultat is not None
+                else "en attente du « oui »")
+        if resultat and resultat.get("motif"):
+            etat += f" ({resultat['motif']})"
+        lignes.append(f"Action \\texttt{{{tex(reponse.action.outil)}}} : {tex(etat)}")
     return lignes
 
 
