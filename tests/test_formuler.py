@@ -33,5 +33,5 @@ def test_llm_injoignable_retombe_sur_le_gabarit(monkeypatch):
     etat = EtatConversation()
     _, etat = reply("Je veux acheter un appartement", "C07", etat)
     reponse, _ = reply("250000, apport 25000", "C07", etat)
-    assert "42,1" in reponse.texte  # le gabarit, intact
+    assert "41,3" in reponse.texte  # gabarit, taux statistique BDF de 3,32 %
     assert reponse.appels_llm == 1  # l'appel est compté, même raté
