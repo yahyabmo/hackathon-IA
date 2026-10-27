@@ -1,38 +1,33 @@
-"""Interface Streamlit du prototype : conversation, profil, « pourquoi », « frugalité »."""
+"""Interface de démonstration : conversation, contexte et preuve de frugalité."""
 
 from __future__ import annotations
 
 import streamlit as st
+from html import escape
 
 from src import llm
 from src.assistant import reply
 from src.comprendre import classifieur
 from src.conseiller import clients
-from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation
 from src.mesure import resumer
-
-STATUTS_ACTION = {
-    "succes": "exécutée (simulation)",
-    "refus": "refusée",
-    "echec": "échec, rien n'a été modifié",
-    "en_attente": "en attente de votre accord",
-}
+from src.ui import components, theme
 
 MESSAGES_DEMO = {
-    "C01": ["J'ai perdu ma carte hier soir, je fais quoi ?", "oui"],
-    "C02": ["Pourquoi j'ai payé 8 € de frais ce mois-ci ?"],
-    "C03": ["Je voudrais mettre de côté pour mes enfants.", "Dans 10 ans, 100 euros par mois"],
-    "C04": ["Je dois envoyer 500 € à mon fils.", "Oui, mais pas maintenant", "Non, plutôt 300 €", "oui"],
-    "C05": ["Je veux un crédit pour acheter une voiture.", "12000", "48 mois"],
-    "C06": ["Votre appli ne marche jamais !"],
-    "C07": ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000",
-            "Et avec un bien à 200 000 ?"],
-    "C08": ["Je voudrais mettre de côté", "Dans 2 ans", "50 euros", "C'est quoi un TAEG ?"],
+    "C01": [("Carte perdue", "J'ai perdu ma carte hier soir, je fais quoi ?"), ("Confirmer", "oui")],
+    "C02": [("Frais", "Pourquoi j'ai payé 8 € de frais ce mois-ci ?")],
+    "C03": [("Épargne enfants", "Je voudrais mettre de côté pour mes enfants."), ("Projet", "Dans 10 ans, 100 euros par mois")],
+    "C04": [("Virement", "Je dois envoyer 500 € à mon fils."), ("Confirmer", "oui")],
+    "C05": [("Crédit auto", "Je veux un crédit pour acheter une voiture."), ("Montant", "12000"), ("Durée", "48 mois")],
+    "C06": [("Insatisfaction", "Votre appli ne marche jamais !")],
+    "C07": [("Immobilier", "Je veux acheter un appartement"), ("Budget", "Autour de 250 000, et je peux mettre les 25 000"), ("Alternative", "Et avec un bien à 200 000 ?")],
+    "C08": [("Épargne", "Je voudrais mettre de côté"), ("Horizon", "Dans 2 ans"), ("Versement", "50 euros"), ("TAEG", "C'est quoi un TAEG ?")],
 }
 
+STATUTS = {"succes": "Exécutée · simulation", "refus": "Refusée", "echec": "Échec · rien modifié", "en_attente": "En attente de confirmation"}
 
-def _reinitialiser(client_id: str) -> None:
+
+def _initialiser(client_id: str) -> None:
     st.session_state.client = client_id
     st.session_state.etat = EtatConversation()
     st.session_state.messages = []
@@ -40,10 +35,12 @@ def _reinitialiser(client_id: str) -> None:
     st.session_state.reponses = []
 
 
-def _envoyer(texte: str) -> None:
+def _envoyer(message: str) -> None:
     st.session_state.etat.mots_simples = st.session_state.get("mots_simples", False)
-    st.session_state.messages.append({"role": "user", "content": texte})
-    reponse, st.session_state.etat = reply(texte, st.session_state.client, st.session_state.etat)
+    with st.spinner("Noria prépare votre réponse…"):
+        reponse, etat = reply(message, st.session_state.client, st.session_state.etat)
+    st.session_state.messages.append({"role": "user", "content": message})
+    st.session_state.etat = etat
     st.session_state.messages.append({"role": "assistant", "content": reponse.texte})
     st.session_state.derniere = reponse
     st.session_state.reponses.append(reponse)
@@ -54,156 +51,113 @@ def _serveur_joignable(role: str) -> bool:
     return llm.joignable(role)
 
 
-@st.cache_resource(show_spinner="Chargement du modèle en mémoire…")
-def _prechauffer(modele: str) -> bool:
-    """Une seule fois par session du serveur : le jury ne paie pas le chargement."""
-
-    return llm.prechauffer(modele)
-
-
-@st.cache_resource(show_spinner="Chargement de l'encodeur de compréhension…")
-def _prechauffer_classifieur() -> bool:
-    return classifieur.prechauffer()
-
-
-def _etat_comprehension() -> str:
-    if not _prechauffer_classifieur():
-        return "Compréhension : mots-clés seuls (classifieur absent)"
-    return (f"Compréhension : mots-clés, puis {classifieur.MODELE} "
-            f"(τ = {classifieur.SEUIL_TAU:.2f})".replace(".", ","))
-
-
-def _etat_llm() -> str:
-    """L'état réel du LLM : une configuration présente ne prouve pas que le serveur répond."""
-
+def _statut_moteur() -> tuple[str, str]:
     if not llm.actif():
-        return "LLM : désactivé — réponses par gabarits"
+        return "Local · gabarits", "Le LLM est désactivé. La cascade répond localement."
     if not _serveur_joignable("formulation"):
-        return f"LLM : serveur {llm.serveur()} injoignable — réponses par gabarits"
-    pret = _prechauffer(llm.MODELE_FORMULATION)
-    escalade = "escalade activée" if llm.escalade_active() else "escalade désactivée"
-    return (f"LLM : {llm.MODELE_FORMULATION} sur {llm.serveur()} — "
-            f"{'prêt' if pret else 'non chargé'} — {escalade}")
+        return "Local · gabarits", "Serveur LLM injoignable. Réponse de secours active."
+    return f"Local · {llm.MODELE_FORMULATION}", "Serveur LLM local joignable."
 
 
-def _frugalite_session(reponses) -> dict:
-    """Totaux de la conversation : la preuve de frugalité au fil de la démo."""
-
-    tours = len(reponses)
-    sans_llm = sum(1 for r in reponses if r.appels_llm == 0)
-    niveaux = {}
-    for r in reponses:
-        if r.comprehension.comprise:
-            niveaux[r.comprehension.niveau] = niveaux.get(r.comprehension.niveau, 0) + 1
-    return {
-        "tours": tours,
-        "sans_llm": sans_llm,
-        "latence_ms": sum(resumer(r.trace)["latence_ms"] for r in reponses),
-        "appels_llm": sum(r.appels_llm for r in reponses),
-        "escalades": sum(1 for r in reponses if r.escalade),
-        "niveaux": niveaux,
-    }
+def _statut_comprehension() -> str:
+    if not classifieur.TETES.exists():
+        return "Mots-clés · classifieur non chargé"
+    return "Classifieur configuré · disponibilité non vérifiée"
 
 
-st.set_page_config(page_title="Assistant bancaire frugal", page_icon="🏦", layout="wide")
-st.title("Assistant bancaire frugal")
-st.info("Vous échangez avec un assistant automatique. Il oriente ; un conseiller décide. "
-        "Prototype : aucune opération bancaire réelle n'est exécutée.")
+st.set_page_config(page_title="Noria · assistant bancaire", page_icon="N", layout="wide", initial_sidebar_state="expanded")
+theme.injecter()
 
-# ── Client : changer de client recommence la conversation ──
 libelles = dict(clients.lister())
-client_id = st.sidebar.selectbox("Client de démonstration", list(libelles), format_func=libelles.get)
-if st.session_state.get("client") != client_id:
-    _reinitialiser(client_id)
-if st.sidebar.button("Nouvelle conversation"):
-    _reinitialiser(client_id)
+if "client" not in st.session_state:
+    _initialiser(next(iter(libelles)))
 
-st.sidebar.toggle("Mots simples", key="mots_simples",
-                  help="Automatique dès 70 ans ou pour un client peu à l'aise en ligne.")
-if st.sidebar.toggle("Grand texte", key="grand_texte"):
-    st.markdown("<style>[data-testid='stChatMessage'] p {font-size: 1.3rem; line-height: 1.6;}</style>",
-                unsafe_allow_html=True)
+# Navigation latérale discrète : elle contient les choix de démo, pas le contenu principal.
+with st.sidebar:
+    st.markdown('<div class="brand"><span class="brand-mark">n.</span><div><strong>noria</strong><small>La banque, en clair.</small></div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Client de démonstration</div>', unsafe_allow_html=True)
+    selection = st.selectbox("Client", list(libelles), index=list(libelles).index(st.session_state.client), format_func=libelles.get, label_visibility="collapsed")
+    if selection != st.session_state.client:
+        _initialiser(selection)
+    if st.button("Nouvelle conversation", use_container_width=True):
+        _initialiser(st.session_state.client)
+    st.divider()
+    st.markdown('<div class="section-label">Scénarios rapides</div>', unsafe_allow_html=True)
+    for index, (label, message) in enumerate(MESSAGES_DEMO.get(st.session_state.client, [])):
+        if message == "oui":
+            continue  # L'accord se donne uniquement sur le récapitulatif actif.
+        if st.button(label, key=f"scenario-{st.session_state.client}-{index}", use_container_width=True):
+            _envoyer(message)
+    st.divider()
+    st.toggle("Mots simples", key="mots_simples", help="Adapte la formulation pour les personnes peu à l'aise en ligne.")
+    moteur, detail_moteur = _statut_moteur()
+    with st.expander("État du moteur"):
+        st.caption(detail_moteur)
+        st.caption(_statut_comprehension())
+    if not llm.actif():
+        st.caption("LLM : désactivé — réponses par gabarits")
 
-st.sidebar.caption("Messages de démo")
-for i, texte in enumerate(MESSAGES_DEMO.get(client_id, [])):
-    if st.sidebar.button(texte, key=f"demo-{client_id}-{i}"):
-        _envoyer(texte)
-st.sidebar.caption(_etat_comprehension())
-st.sidebar.caption(_etat_llm())
+client_id = st.session_state.client
+profil = st.session_state.etat.profil_simule or clients.profil(client_id)
+reponse = st.session_state.derniere
 
-colonne_chat, colonne_panneaux = st.columns([3, 2])
+st.markdown('<div class="topbar"><span>VOTRE ESPACE CONSEIL</span><span>La Banque Postale × CGI <i> / </i> Démonstration</span></div>', unsafe_allow_html=True)
 
-with colonne_chat:
-    question = st.chat_input("Écrivez votre demande bancaire…")
+left, right = st.columns([2.25, 1], gap="large")
+with left:
+    st.markdown('<div class="conversation-title">Conversation <span>Privée · session de démonstration</span></div>', unsafe_allow_html=True)
+    if not st.session_state.messages:
+        st.markdown(f'<div class="welcome"><span class="eyebrow">UN PEU PLUS DE CLARTÉ</span><h1>Bonjour {escape(profil.get("prenom", ""))}.<br>Parlons de vos projets.</h1><p>Un achat à préparer, une question sur votre compte ?<br>On avance ensemble, une étape à la fois.</p></div>', unsafe_allow_html=True)
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"], avatar="assistant" if message["role"] == "assistant" else "user"):
+            st.markdown(message["content"])
+    components.chiffres(reponse)
+    pending = st.session_state.etat.action_en_attente
+    if pending:
+        with st.container(border=True, key="confirmation"):
+            st.markdown("**Votre confirmation est nécessaire**")
+            st.caption("L'accord porte sur la demande récapitulée ci-dessus. Cette opération est simulée.")
+            oui, non = st.columns(2)
+            if oui.button("Confirmer la simulation", key=f"confirm-{pending.identifiant}", type="primary", use_container_width=True):
+                _envoyer("oui")
+                st.rerun()
+            if non.button("Annuler", key=f"cancel-{pending.identifiant}", use_container_width=True):
+                _envoyer("non")
+                st.rerun()
+    if not st.session_state.messages:
+        suggestions = [MESSAGES_DEMO[client_id][0], ("Un projet immobilier", "Je veux acheter un appartement"), ("Une question d’épargne", "Je voudrais mettre de côté")]
+        suggestion_cols = st.columns(3)
+        for index, (col, (titre, texte)) in enumerate(zip(suggestion_cols, suggestions)):
+            with col:
+                if st.button(titre + "  ↗", key=f"suggestion-{index}", use_container_width=True):
+                    _envoyer(texte)
+                    st.rerun()
+    elif not pending and reponse and reponse.question:
+        exemples = {
+            "prix_bien": "250000, apport 25000", "apport": "25000",
+            "horizon_mois": "Dans 2 ans", "montant_mensuel": "50 euros",
+            "montant": "12000", "duree_mois": "48 mois",
+        }
+        exemple = exemples.get(reponse.question)
+        if exemple and st.button(f"Exemple de démo : {exemple}", key="suite-demo"):
+            _envoyer(exemple)
+            st.rerun()
+    question = st.chat_input("Écrivez votre demande…")
     if question:
         _envoyer(question)
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
+        st.rerun()
 
-with colonne_panneaux:
-    # Le profil de la session : soldes et statuts reflètent les actions simulées (virement, opposition).
-    profil = st.session_state.etat.profil_simule or clients.profil(client_id)
-    with st.expander("Profil", expanded=True):
-        for champ, libelle in (("age", "Âge"), ("metier", "Métier"), ("situation", "Situation"),
-                               ("revenus_nets", "Revenus nets / mois"), ("epargne", "Épargne"),
-                               ("mensualites_credits", "Crédits en cours / mois"), ("solde", "Solde")):
-            valeur = profil.get(champ)
-            affiche = "inconnu" if valeur is None else f"{valeur}"
-            if clients.est_simule(profil, champ):
-                affiche = f"*{affiche}* (simulé)"
-            st.markdown(f"**{libelle}** : {affiche}")
-        for carte in profil.get("cartes", []):
-            st.markdown(f"**Carte {carte['id']}** : {carte['statut']}")
+with right:
+    with st.container(border=True, key="profile"):
+        components.profil(profil)
+    if reponse and reponse.action:
+        components.action(reponse, en_attente=bool(st.session_state.etat.action_en_attente))
+    if reponse and reponse.conseil:
+        components.carte("Vos pistes", lambda: components.recommandations(reponse))
+    if reponse:
+        components.carte("Comprendre cette réponse", lambda: components.explication(reponse, classifieur), expanded=False)
+        components.carte("Ressources utilisées", lambda: components.frugalite(reponse, st.session_state.reponses, resumer), expanded=False)
+    else:
+        st.markdown('<div class="promise"><span>01</span><div><strong>À votre mesure</strong><p>Votre situation guide chaque réponse.</p></div></div><div class="promise"><span>02</span><div><strong>Des choix expliqués</strong><p>Les raisons, les limites et les sources.</p></div></div><div class="promise"><span>03</span><div><strong>Le calcul juste nécessaire</strong><p>Une cascade qui privilégie la simplicité.</p></div></div>', unsafe_allow_html=True)
 
-    reponse = st.session_state.derniere
-    with st.expander("Pourquoi", expanded=True):
-        if reponse is None:
-            st.caption("Le raisonnement de la dernière réponse s'affiche ici.")
-        else:
-            c = reponse.comprehension
-            if c.comprise:
-                st.markdown(f"**Intention** : `{c.intention}` ({c.famille}) — compris par **{c.niveau}**")
-                if c.niveau == "classifieur":
-                    st.caption(f"Confiance {c.confiance:.2f} ≥ τ {classifieur.SEUIL_TAU:.2f}".replace(".", ",")
-                               + (f" — phrase d'entraînement la plus proche : « {c.exemple_proche} »"
-                                  if c.exemple_proche else ""))
-            elif c.alternatives:
-                st.markdown("**Hésitation** : " + " ou ".join(
-                    f"{a.famille} ({a.confiance:.2f})".replace(".", ",") for a in c.alternatives)
-                    + f", sous le seuil τ = {classifieur.SEUIL_TAU:.2f}".replace(".", ","))
-            if reponse.question:
-                st.markdown(f"**Information demandée** : `{reponse.question}`")
-            if reponse.conseil:
-                for p in reponse.conseil.propositions:
-                    st.markdown(f"✅ **{nom_produit(p.produit_id)}** — " + " ".join(p.raisons))
-                    if p.sources:
-                        st.caption("Source : " + " ; ".join(dict.fromkeys(p.sources)))
-                for e in reponse.conseil.ecartees:
-                    st.markdown(f"❌ **{nom_produit(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
-                for a in reponse.conseil.alertes:
-                    st.warning(a)
-                for h in reponse.conseil.faits.get("hypotheses", []):
-                    st.caption(f"Hypothèse : {h}")
-                sources = reponse.conseil.faits.get("sources_produits", {})
-                if sources:
-                    st.caption("Sources : " + " ; ".join(f"{nom_produit(k)} : {v}" for k, v in sources.items()))
-            if reponse.action:
-                r = reponse.action.resultat
-                etat_action = STATUTS_ACTION.get(r.get("statut") if r else None, "en attente de votre accord")
-                if r and r.get("motif"):
-                    etat_action += f" : {r['motif']}"
-                st.markdown(f"**Action** : `{reponse.action.outil}` — {etat_action}")
-
-    with st.expander("Frugalité", expanded=True):
-        if reponse is not None:
-            st.table([{"étape": e.nom, "modèle": e.modele or "—", "ms": round(e.latence_ms, 2),
-                       "tokens": e.tokens} for e in reponse.trace])
-            totaux = resumer(reponse.trace)
-            st.markdown(f"**Ce tour** : {totaux['latence_ms']:.1f} ms — appels au LLM : "
-                        f"**{int(totaux['appels_llm'])}** — escalade : {'oui' if reponse.escalade else 'non'}")
-            session = _frugalite_session(st.session_state.reponses)
-            niveaux = ", ".join(f"{n} : {k}" for n, k in session["niveaux"].items()) or "—"
-            st.markdown(f"**Conversation** : {session['tours']} tours, dont **{session['sans_llm']} sans LLM** — "
-                        f"{session['latence_ms']:.1f} ms au total — {session['appels_llm']} appel(s) au LLM, "
-                        f"{session['escalades']} escalade(s) — compris par : {niveaux}")
+st.caption("Vous échangez avec un assistant automatique. Données fictives · Aucune opération bancaire réelle.")
