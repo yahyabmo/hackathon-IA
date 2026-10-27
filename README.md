@@ -98,7 +98,13 @@ python -m eval.bench_formulation ministral-3:14b gemma4:e2b ministral-3:8b minis
 
 Le banc de formulation choisit le LLM en descendant en taille : on garde le plus
 petit à zéro nombre inventé et 27 bonnes réponses sur 30 (CSV à juger dans
-`eval/resultats/`).
+`eval/resultats/`, colonnes `juge_1` et `juge_2`). Le LLM ne réécrit que le corps
+du conseil : la question oui / non, les hypothèses et la mention légale restent
+hors LLM. `BANC_MACHINE="RTX 3070"` nomme le poste de mesure ; ensuite
+`python -m eval.tableau_formulation` écrit le tableau du support.
+
+`python -m eval.demo_secours` rejoue le script de la démo et écrit
+`rapport/demo-secours.tex`, à compiler, au cas où la démo en direct échoue.
 
 Un scénario qui passait et qui échoue bloque la fusion.
 

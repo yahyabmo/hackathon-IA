@@ -51,6 +51,7 @@ def lire() -> list[dict]:
             "tokens": statistics.mean(int(r["tokens"]) for r in rangs),
             "juges": (sum(r["juge_1"] == "oui" and r["juge_2"] == "oui" for r in juges)
                       if len(juges) == len(rangs) else None),
+            "machine": rangs[0].get("machine") or f"{platform.node()} (CPU)",
         })
     return sorted(lignes, key=lambda l: -(l["taille"] or 0))
 
@@ -74,13 +75,14 @@ def latex(lignes: list[dict]) -> str:
         latence = f"{l['latence'] / 1000:.1f}".replace(".", ",")
         corps.append(f"{nom} & {taille} Go & {l['garde_fou']}/{l['total']} & {juges} & "
                      f"{latence} s & {l['tokens']:.0f} \\\\")
-    machine = platform.node()
+    machines = ", ".join(sorted({l["machine"] for l in lignes})).replace("_", "\\_")
+    gros = any((l["taille"] or 0) >= 9 for l in lignes)
     return (
         "\\centering\\small\n\\begin{tabular}{@{}l r c c r r@{}}\n\\toprule\n"
         "\\textbf{Modèle} & \\textbf{Taille} & \\textbf{Garde-fou} & \\textbf{Juges} & "
         "\\textbf{Latence p50} & \\textbf{Tokens} \\\\\n\\midrule\n" + "\n".join(corps) +
-        "\n\\bottomrule\n\\end{tabular}\n\n\\medskip\n{\\scriptsize Mesuré sur " + machine +
-        " (CPU) ; le 14B se mesure sur un poste de la salle (GPU). Garde-fou : aucun chiffre "
+        "\n\\bottomrule\n\\end{tabular}\n\n\\medskip\n{\\scriptsize Mesuré sur " + machines +
+        ("" if gros else " ; le 14B se mesure sur un poste à GPU") + ". Garde-fou : aucun chiffre "
         "inventé ni oublié, longueur plausible.}\n"
     )
 

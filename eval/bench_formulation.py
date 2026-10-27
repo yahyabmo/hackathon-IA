@@ -15,7 +15,8 @@ Pour chaque modèle, les 30 mêmes situations de conseil sont reformulées. Le
 garde-fou est vérifié automatiquement ; le jugement humain se fait dans le CSV
 produit (colonnes ``juge_1`` et ``juge_2`` à remplir par oui / non, facultatives).
 
-Usage, depuis la racine du dépôt, sur un poste où Ollama tourne :
+Usage, depuis la racine du dépôt, sur un poste où Ollama tourne (BANC_MACHINE
+nomme le poste dans le tableau, par défaut son nom réseau et CPU ou GPU) :
     python -m eval.bench_formulation --situations          # les 30 situations, sans LLM
     python -m eval.bench_formulation --limite=3 gemma3:270m # essai rapide sur 3 situations
     python -m eval.bench_formulation ministral-3:14b gemma4:e2b ministral-3:8b \\
@@ -26,6 +27,9 @@ from __future__ import annotations
 
 import csv
 import math
+import os
+import platform
+import shutil
 import statistics
 import sys
 from pathlib import Path
@@ -40,6 +44,8 @@ from src.converser.formuler import parties_conseil, reformuler
 from src.taxonomie import famille_de
 
 RESULTATS = Path(__file__).resolve().parent / "resultats"
+# Nom affiché dans le tableau ; BANC_MACHINE="RTX 3070" par exemple pour le préciser.
+MACHINE = os.environ.get("BANC_MACHINE") or f"{platform.node()} ({'GPU' if shutil.which('nvidia-smi') else 'CPU'})"
 
 # (client, parcours, informations recueillies) : 30 conseils variés, acceptés et refusés.
 SITUATIONS: list[tuple[str, str, dict[str, Any]]] = [
@@ -81,7 +87,7 @@ def evaluer(modele: str, limite: int | None = None) -> list[dict[str, Any]]:
         lignes.append({
             "situation": nom, "gabarit": texte, "reformulation": reecrit or "",
             "garde_fou": "ok" if not problemes else "; ".join(problemes),
-            "latence_ms": round((perf_counter() - debut) * 1000), "tokens": tokens,
+            "latence_ms": round((perf_counter() - debut) * 1000), "tokens": tokens, "machine": MACHINE,
             "juge_1": "", "juge_2": "",
         })
     return lignes
