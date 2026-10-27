@@ -123,7 +123,7 @@ def generer() -> str:
             )
     sans_llm = sum(1 for r in toutes if r.appels_llm == 0)
     total_ms = sum(resumer(r.trace)["latence_ms"] for r in toutes)
-    mode = (f"aiguilleur, niveau 1 : {tex(llm.MODELE_NIVEAU1)}, niveau 2 : {tex(llm.MODELE_NIVEAU2)}"
+    mode = (f"aiguilleur, niveau 1 : \\texttt{{{tex(llm.MODELE_NIVEAU1)}}}, niveau 2 : \\texttt{{{tex(llm.MODELE_NIVEAU2)}}}"
             if llm.actif() else "aiguilleur sans LLM (niveau 0, et RAG en extrait)")
     par_niveau = ", ".join(f"niveau {n} : {sum(1 for r in toutes if r.niveau == n)}" for n in (0, 1, 2))
     bilan = (f"\\section*{{Bilan}}\n{len(toutes)} tours de conversation, dont \\textbf{{{sans_llm} sans aucun "

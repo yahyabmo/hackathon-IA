@@ -21,21 +21,78 @@
 \begin{document}
 {\LARGE\bfseries\color{mainblue} Démo de secours\par}
 {\large Assistant bancaire frugal --- le script de la démonstration, rejoué par le vrai pipeline\par}
-{\small\color{darkgray} Généré le 27/10/2026 à 16 h 30 sur yahya-bel-hajjam (x86\_64), mode : gabarits, sans LLM.\par}
+{\small\color{darkgray} Généré le 27/10/2026 à 18 h 43 sur yahya-bel-hajjam (x86\_64), mode : aiguilleur, niveau 1 : \texttt{qwen3:1.7b}, niveau 2 : \texttt{qwen3:1.7b}.\par}
 \medskip
 \section*{Bilan}
-13 tours de conversation, dont \textbf{13 sans aucun appel au LLM} ; 82,3~ms de calcul au total, soit 6,33~ms par tour en moyenne ; 0 appel(s) au LLM ; 0 escalade. Mode : gabarits, sans LLM.
-\section{Carte perdue : guider en sécurité}
-\textit{Inès, 34 ans, cadre (C01).} Compris par les mots-clés ; le chatbot guide vers l'espace bancaire sécurisé.
+19 tours de conversation, dont \textbf{15 sans aucun appel au LLM} ; 12055,4~ms de calcul au total, soit 634,49~ms par tour en moyenne ; 4 appel(s) au LLM ; 0 escalade ; niveau 0 : 15, niveau 1 : 2, niveau 2 : 2. Mode : aiguilleur, niveau 1 : \texttt{qwen3:1.7b}, niveau 2 : \texttt{qwen3:1.7b}.
+\section{Le test de l'école : l'aiguilleur change de niveau à chaque message}
+\textit{Inès, 34 ans, cadre (C01).} Deux demandes (la carte d'abord), une réponse libre (niveau 1), une question ouverte (niveau 2, puis reprise), un montant invraisemblable, un renvoi au contexte.
 
-\begin{client}J'ai perdu ma carte hier soir, je fais quoi ?\end{client}
+\begin{client}J'ai perdu ma carte et je veux faire un virement.\end{client}
+\begin{assistant}Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.\par Passons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 0} : plusieurs demandes nettes : traitées par ordre d'urgence
+\item Intention \texttt{lost\_or\_stolen\_card}, comprise par mots\_cles
+\item Information demandée : \texttt{beneficiaire}
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,0~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+
+\begin{client}oui\end{client}
+\begin{assistant}Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 1} : réponse libre, illisible par les règles $\rightarrow$ compris
+\item Intention \texttt{faire\_virement}, comprise par reponse\_attendue
+\item Information demandée : \texttt{beneficiaire}
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 0,1~ms, interpreter 1917,3~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 1}
+
+\begin{client}c'est pour mon papa\end{client}
+\begin{assistant}Quel montant voulez-vous envoyer ?\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 0} : réponse attendue, lue par les règles
+\item Intention \texttt{faire\_virement}, comprise par reponse\_attendue
+\item Information demandée : \texttt{montant}
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+
+\begin{client}Je peux retirer de mon PEL avant 4 ans ?\end{client}
+\begin{assistant}Peut-on retirer de son PEL avant 4 ans ? [1] Oui, mais le fonds ne est pas définitivement bloqué. Le retrait anticipé entraîne la clôture du plan et des conséquences selon l'ancienneté.\par Sources : [1] Plan épargne logement (PEL) (https://www.service-public.gouv.fr/particuliers/vosdroits/F16140, 2026-10-27) ; [2] PEL (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Livret d'épargne populaire (LEP) (https://www.service-public.gouv.fr/particuliers/vosdroits/F2367, 2026-10-27)\par Revenons à un virement : quel montant voulez-vous envoyer ?\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 2} : question ouverte sur un sujet de nos fiches
+\item Intention \texttt{faire\_virement}, comprise par reponse\_attendue
+\item Source [1] : Plan épargne logement (PEL) (https://www,service-public.gouv.fr/particuliers/vosdroits/F16140), score 0.904
+\item Source [2] : PEL (Glossaire de l'équipe (fiches vérifiées)), score 0,870
+\item Source [3] : Livret d'épargne populaire (LEP) (https://www,service-public.gouv.fr/particuliers/vosdroits/F2367), score 0.847
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 0,1~ms, rag 14,5~ms, rediger 2634,6~ms, formuler 0,0~ms --- appels au LLM : 1}
+
+\begin{client}100000000\end{client}
+\begin{assistant}Attention : 100\,000\,000~\texteuro{}, c'est un montant très inhabituel, bien au-delà de votre solde (1\,450~\texteuro{}) : vérifiez-le avant de valider. Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 0} : réponse attendue, lue par les règles
+\item Intention \texttt{faire\_virement}, comprise par reponse\_attendue
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 0,3~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+
+\begin{client}mais ma carte ?\end{client}
 \begin{assistant}Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
-\item Intention \texttt{lost\_or\_stolen\_card}, comprise par mots\_cles
+\item \textbf{Niveau 1} : confiance sous le seuil ; renvoi au contexte $\rightarrow$ compris
+\item Intention \texttt{lost\_or\_stolen\_card}, comprise par interprete
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 16,6~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 14,0~ms, interpreter 2141,8~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 1}
 
 \section{Sans mot-clé : le classifieur comprend}
 \textit{Inès, 34 ans, cadre (C01).} Aucun mot-clé ne conclut : e5-small reconnaît la famille, entraîné sans traduction.
@@ -44,28 +101,31 @@
 \begin{assistant}Je comprends que votre demande concerne l'utilisation de votre carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (classifieur)
 \item Intention \texttt{card\_not\_working}, comprise par classifieur
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 24,3~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 16,4~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \section{L'appartement : questionner, calculer, expliquer}
-\textit{Léa, 31 ans, cadre (C07).} Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, puis recalculé.
+\textit{Léa, 31 ans, cadre (C07).} Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, recalculé ; « pourquoi ? » : le niveau 2 explique le conseil depuis la simulation.
 
 \begin{client}Je veux acheter un appartement\end{client}
 \begin{assistant}C'est un beau projet. J'ai noté vos revenus de 2\,900~\texteuro{} nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25\,000~\texteuro{} d'épargne souhaitez-vous y consacrer ?\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{credit\_immobilier}, comprise par mots\_cles
 \item Information demandée : \texttt{prix\_bien}
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 0,1~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,1~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \begin{client}Autour de 250 000, et je peux mettre les 25 000\end{client}
 \begin{assistant}Non proposé — Crédit immobilier : mensualité indicative de 1\,197~\texteuro{} sur 300 mois, soit 41,3~\% des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 41,3~\% : au-delà du repère de 35~\%. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Pour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : réponse attendue, lue par les règles
 \item Intention \texttt{credit\_immobilier}, comprise par reponse\_attendue
 \item Proposé : Rendez-vous avec un conseiller --- Un conseiller vérifie les justificatifs et décide ; cette orientation ne vaut pas accord.
 \item Écarté : Crédit immobilier --- Mensualité indicative de 1\,197~\texteuro{} sur 300 mois, soit 41,3~\% des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. (\texttt{HCSF-taux-effort})
@@ -79,12 +139,13 @@
 \item Hypothèse : Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,6~ms, converser 0,1~ms, conseiller 0,7~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,2~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \begin{client}Et avec un bien à 200 000 ?\end{client}
 \begin{assistant}Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 933~\texteuro{} sur 300 mois, soit 32,2~\% des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\par Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Pour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (reponse\_attendue)
 \item Intention \texttt{credit\_immobilier}, comprise par reponse\_attendue
 \item Proposé : Crédit immobilier --- Mensualité indicative de 933~\texteuro{} sur 300 mois, soit 32,2~\% des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
 \item Proposé : Rendez-vous avec un conseiller --- Un conseiller vérifie les justificatifs et décide ; cette orientation ne vaut pas accord.
@@ -97,7 +158,19 @@
 \item Hypothèse : Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 24,9~ms, converser 0,2~ms, conseiller 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 15,0~ms, converser 0,1~ms, conseiller 0,2~ms, formuler 0,1~ms --- appels au LLM : 0}
+
+\begin{client}pourquoi ?\end{client}
+\begin{assistant}Pourquoi [1] reste à vivre : reste à vivre : Ce qui vous reste chaque mois une fois payés vos charges et vos crédits.   [2] LEP : LEP : Un livret mieux rémunéré, réservé aux personnes dont les revenus sont sous un plafond.   [3] prélèvement : prélèvement : Un paiement demandé directement à votre banque par une entreprise que vous avez autorisée (énergie, téléphone\dots{}).   Il est possible que vous ayez des questions concernant ces services.\par Sources : [1] reste à vivre (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [2] LEP (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] prélèvement (Glossaire de l'équipe (fiches vérifiées), 2026-10-27)\end{assistant}
+\begin{pourquoi}
+\begin{itemize}
+\item \textbf{Niveau 2} : question ouverte sur un sujet de nos fiches
+\item Source [1] : reste à vivre (Glossaire de l'équipe (fiches vérifiées)), score 0,821
+\item Source [2] : LEP (Glossaire de l'équipe (fiches vérifiées)), score 0,808
+\item Source [3] : prélèvement (Glossaire de l'équipe (fiches vérifiées)), score 0,807
+\end{itemize}
+\end{pourquoi}
+\frugal{comprendre 14,7~ms, rag 119,7~ms, rediger 5155,4~ms, formuler 0,0~ms --- appels au LLM : 1}
 
 \section{Même phrase, deux clients : Sophie}
 \textit{Sophie, 41 ans, employée administrative (C03).} Pour ses enfants : Livret A, Livret Jeune pour l'aîné ; LDDS et LEP écartés.
@@ -106,6 +179,7 @@
 \begin{assistant}Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{epargne\_projet}, comprise par mots\_cles
 \item Information demandée : \texttt{horizon\_mois}
 \end{itemize}
@@ -116,6 +190,7 @@
 \begin{assistant}Voici ce que je vous propose. Livret A : piste au nom de chaque enfant ; vérifier l'absence de Livret A déjà détenu et les représentants légaux. Livret Jeune : piste pour l'enfant de 12 à 25 ans, sous réserve de résidence en France et d'absence de livret identique. Les versements prévus dépassent la place disponible de 1\,600~\texteuro{} ; prévoir une répartition.\par Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret de développement durable et solidaire (LDDS) : éligibilité à vérifier (situation fiscale des enfants), aucune inéligibilité déduite. Livret d'épargne populaire (LEP) : éligibilité à vérifier (situation fiscale des enfants, revenu fiscal des enfants), aucune inéligibilité déduite. Les soldes et la situation fiscale des enfants ne sont pas connus ; ne pas utiliser ceux du parent.\par Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : réponse attendue, lue par les règles
 \item Intention \texttt{epargne\_projet}, comprise par reponse\_attendue
 \item Proposé : Livret A --- Piste au nom de chaque enfant ; vérifier l'absence de Livret A déjà détenu et les représentants légaux.
 \item Proposé : Livret Jeune --- Piste pour l'enfant de 12 à 25 ans, sous réserve de résidence en France et d'absence de livret identique. Les versements prévus dépassent la place disponible de 1\,600~\texteuro{} ; prévoir une répartition.
@@ -126,7 +201,7 @@
 \item Hypothèse : Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,2~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \section{Même phrase, deux clients : Lucas}
 \textit{Lucas, 20 ans, étudiant (C08).} Pour lui, 20 ans : le Livret Jeune passe en premier.
@@ -135,6 +210,7 @@
 \begin{assistant}Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{epargne\_projet}, comprise par mots\_cles
 \item Information demandée : \texttt{horizon\_mois}
 \end{itemize}
@@ -145,6 +221,7 @@
 \begin{assistant}Voici ce que je vous propose. Livret Jeune : à 20 ans, tranche d'âge compatible ; épargne disponible. Les versements prévus dépassent la place disponible de 1\,600~\texteuro{} ; prévoir une répartition. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation.\par Non proposé — Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Livret d'épargne populaire (LEP) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\par Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus.\par Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : réponse attendue, lue par les règles
 \item Intention \texttt{epargne\_projet}, comprise par reponse\_attendue
 \item Proposé : Livret Jeune --- À 20 ans, tranche d'âge compatible ; épargne disponible. Les versements prévus dépassent la place disponible de 1\,600~\texteuro{} ; prévoir une répartition.
 \item Proposé : Livret A --- Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation.
@@ -155,7 +232,7 @@
 \item Hypothèse : Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,3~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,2~ms --- appels au LLM : 0}
 
 \section{Les frais de Marc : expliquer, inclure}
 \textit{Marc, 52 ans, ouvrier (C02).} Sans accès au compte : la cause fréquente, le plafond légal, l'offre clientèle fragile.
@@ -164,10 +241,11 @@
 \begin{assistant}Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8~\texteuro{} par opération et 80~\texteuro{} par mois (4~\texteuro{} et 20~\texteuro{} pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{extra\_charge\_on\_statement}, comprise par mots\_cles
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 0,0~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \section{Julie, mécontente : passer la main}
 \textit{Julie, 37 ans, employée de services (C06).} Pas de justification : excuses, puis le chemin vers un conseiller et la réclamation.
@@ -176,6 +254,7 @@
 \begin{assistant}Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{insatisfaction}, comprise par mots\_cles
 \end{itemize}
 \end{pourquoi}
@@ -188,10 +267,11 @@
 \begin{assistant}D'accord, je vous guide pas à pas.\par Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider.\par Je ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{faire\_virement}, comprise par mots\_cles
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 0,0~ms, formuler 0,9~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,5~ms --- appels au LLM : 0}
 
 \section{Le jargon, même mal écrit}
 \textit{Lucas, 20 ans, étudiant (C08).} Fiche du glossaire retrouvée malgré la faute de frappe, sans LLM.
@@ -200,9 +280,10 @@
 \begin{assistant}TAEG : Le coût total d'un crédit (intérêts, frais, assurance obligatoire) exprimé en pourcentage par an. C'est le chiffre qui permet de comparer deux offres.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
+\item \textbf{Niveau 0} : demande claire (mots\_cles)
 \item Intention \texttt{question\_definition}, comprise par mots\_cles
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 7,0~ms, converser 0,0~ms, formuler 3,3~ms --- appels au LLM : 0}
+\frugal{comprendre 5,1~ms, converser 0,0~ms, formuler 2,4~ms --- appels au LLM : 0}
 
 \end{document}

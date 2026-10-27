@@ -1,0 +1,12 @@
+\scriptsize
+\begin{tabular}{@{}l c c c r r@{}}
+\toprule
+\textbf{Modèle} & \textbf{RAG d'exemples} & \textbf{Justes} & \textbf{JSON valide} & \textbf{Latence p50} & \textbf{Tokens} \\
+\midrule
+\texttt{qwen3:1.7b} & oui & 28/36 & 100\,\% & 2,7 s & 597 \\
+\texttt{qwen3:1.7b} & non & 15/36 & 100\,\% & 1,7 s & 434 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\tiny 36 messages difficiles écrits par l'équipe (réponses libres, demandes mêlées, renvois au contexte). JSON imposé par une grammaire. Mesuré sur portable (CPU, essai avant DeepEirb).}

@@ -1,0 +1,37 @@
+{
+  "configurations": {
+    "sans LLM": {
+      "modele": "sans LLM",
+      "total": 22,
+      "justes": 21,
+      "a_rediger": 18,
+      "acceptes": 0,
+      "latence_p50_ms": 12.356707000435563,
+      "tokens": 0,
+      "erreurs": [
+        {
+          "question": "C'est quoi le taux moyen d'un crédit immobilier en ce moment ?",
+          "repli": "LLM désactivé"
+        }
+      ]
+    },
+    "qwen3:1.7b": {
+      "modele": "qwen3:1.7b",
+      "total": 22,
+      "justes": 22,
+      "a_rediger": 18,
+      "acceptes": 13,
+      "latence_p50_ms": 2636.0796059998393,
+      "tokens": 369,
+      "erreurs": []
+    }
+  },
+  "recherche": {
+    "dans_fiches": 18,
+    "trouvees": 18,
+    "hors_fiches": 4,
+    "refus": 4
+  },
+  "machine": "portable (CPU, essai avant DeepEirb)",
+  "date": "2026-10-27T18:38:41"
+}

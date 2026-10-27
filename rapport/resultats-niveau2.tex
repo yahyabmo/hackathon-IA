@@ -1,0 +1,12 @@
+\scriptsize
+\begin{tabular}{@{}l c c r r@{}}
+\toprule
+\textbf{Rédaction} & \textbf{Garde-fou réussi} & \textbf{Réponses justes} & \textbf{Latence p50} & \textbf{Tokens} \\
+\midrule
+\textit{sans LLM (extrait)} & --- & 21/22 & 0,0 s & 0 \\
+\texttt{qwen3:1.7b} & 13/18 & 22/22 & 2,6 s & 369 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\tiny Recherche (e5-small, 37 fiches) : bonne fiche parmi les 3 passages pour 18/18 questions ; 4/4 questions hors de nos fiches refusées. Mesuré sur portable (CPU, essai avant DeepEirb).}

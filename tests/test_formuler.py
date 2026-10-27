@@ -27,7 +27,7 @@ def test_le_glossaire_repond_sans_llm():
 
 
 def test_llm_injoignable_retombe_sur_le_gabarit(monkeypatch):
-    monkeypatch.setenv("ASSISTANT_LLM", "1")
+    monkeypatch.setenv("ASSISTANT_REFORMULER", "1")
     monkeypatch.setenv("OLLAMA_BASE_URL", "http://127.0.0.1:9")  # port fermé
     monkeypatch.setattr("src.llm.URL", "http://127.0.0.1:9")
     etat = EtatConversation()

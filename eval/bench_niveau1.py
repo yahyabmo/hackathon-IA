@@ -91,8 +91,9 @@ def _pct(x: float) -> str:
 def latex(resultats: dict) -> str:
     lignes = []
     for cle, r in sorted(resultats["configurations"].items(), key=lambda kv: (kv[1]["modele"], not kv[1]["exemples"])):
+        latence = f"{r['latence_p50_ms'] / 1000:.1f}".replace(".", ",")
         lignes.append(f"\\texttt{{{r['modele']}}} & {'oui' if r['exemples'] else 'non'} & {r['justes']}/{r['total']} & "
-                      f"{_pct(r['json_valide'])} & {r['latence_p50_ms'] / 1000:.1f} s & {r['tokens']:.0f} \\\\".replace(".", ","))
+                      f"{_pct(r['json_valide'])} & {latence} s & {r['tokens']:.0f} \\\\")
     return ("\\scriptsize\n\\begin{tabular}{@{}l c c c r r@{}}\n\\toprule\n\\textbf{Modèle} & \\textbf{RAG d'exemples} & "
             "\\textbf{Justes} & \\textbf{JSON valide} & \\textbf{Latence p50} & \\textbf{Tokens} \\\\\n\\midrule\n"
             + "\n".join(lignes) + "\n\\bottomrule\n\\end{tabular}\n\n\\smallskip\n{\\tiny 36 messages difficiles écrits par "

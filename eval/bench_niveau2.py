@@ -56,8 +56,8 @@ def latex(resultats: dict) -> str:
     for r in sorted(resultats["configurations"].values(), key=lambda r: (r["modele"] != "sans LLM", r["modele"])):
         nom = "\\textit{sans LLM (extrait)}" if r["modele"] == "sans LLM" else f"\\texttt{{{r['modele']}}}"
         accepte = "---" if r["modele"] == "sans LLM" else f"{r['acceptes']}/{r['a_rediger']}"
-        lignes.append(f"{nom} & {accepte} & {r['justes']}/{r['total']} & {r['latence_p50_ms'] / 1000:.1f} s & "
-                      f"{r['tokens']:.0f} \\\\".replace(".", ","))
+        latence = f"{r['latence_p50_ms'] / 1000:.1f}".replace(".", ",")
+        lignes.append(f"{nom} & {accepte} & {r['justes']}/{r['total']} & {latence} s & {r['tokens']:.0f} \\\\")
     return ("\\scriptsize\n\\begin{tabular}{@{}l c c r r@{}}\n\\toprule\n\\textbf{Rédaction} & \\textbf{Garde-fou réussi} & "
             "\\textbf{Réponses justes} & \\textbf{Latence p50} & \\textbf{Tokens} \\\\\n\\midrule\n" + "\n".join(lignes)
             + "\n\\bottomrule\n\\end{tabular}\n\n\\smallskip\n{\\tiny Recherche (e5-small, 37 fiches) : bonne fiche parmi "

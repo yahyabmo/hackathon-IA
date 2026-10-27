@@ -1,0 +1,328 @@
+{
+  "configurations": {
+    "qwen3:1.7b|avec": {
+      "modele": "qwen3:1.7b",
+      "exemples": true,
+      "total": 36,
+      "justes": 28,
+      "json_valide": 1.0,
+      "latence_p50_ms": 2716.2033660024463,
+      "tokens": 596.6388888888889,
+      "erreurs": [
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "pret_etudiant"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "le même montant que d'habitude",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ce que je peux, ça dépend des mois",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "attendez, j'ai d'abord une question sur mon prêt immobilier",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "salut, ça va ?",
+          "comprises": [
+            "insatisfaction"
+          ],
+          "attendues": [
+            "hors_sujet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je n'arrive plus à retirer de liquide",
+          "comprises": [
+            "credit_conso",
+            "credit_immobilier",
+            "epargne_projet"
+          ],
+          "attendues": [
+            "declined_cash_withdrawal"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et si je mets plus d'apport ?",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "qwen3:1.7b|sans": {
+      "modele": "qwen3:1.7b",
+      "exemples": false,
+      "total": 36,
+      "justes": 15,
+      "json_valide": 1.0,
+      "latence_p50_ms": 1655.6491290029953,
+      "tokens": 434.4166666666667,
+      "erreurs": [
+        {
+          "message": "c'est pour mon papa",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "à ma frangine",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je sais pas trop, une voiture d'occasion",
+          "comprises": [
+            "faire_virement",
+            "credit_conso"
+          ],
+          "attendues": [
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "un trois pièces en centre-ville",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ce que je peux, ça dépend des mois",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "attendez, j'ai d'abord une question sur mon prêt immobilier",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "il y a des prélèvements bizarres sur mon compte",
+          "comprises": [
+            "insatisfaction",
+            "question_definition"
+          ],
+          "attendues": [
+            "direct_debit_payment_not_recognised"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je compte acheter une baraque l'an prochain",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ma CB a été avalée par le distributeur",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "card_swallowed"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "comment je finance ma dernière année de master",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "pret_etudiant"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je voudrais changer de bagnole mais j'ai pas assez",
+          "comprises": [
+            "faire_virement",
+            "exchange_rate"
+          ],
+          "attendues": [
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "on m'a piqué mon portefeuille avec tout dedans",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli me demande sans arrêt de vérifier mon identité",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "verify_my_identity"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je n'arrive plus à retirer de liquide",
+          "comprises": [
+            "credit_conso",
+            "credit_immobilier",
+            "epargne_projet"
+          ],
+          "attendues": [
+            "declined_cash_withdrawal"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "insatisfaction"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je veux recharger mon compte avec ma carte",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "topping_up_by_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "virer de l'argent à ma sœur, puis me renseigner sur un prêt auto",
+          "comprises": [
+            "faire_virement",
+            "question_definition"
+          ],
+          "attendues": [
+            "faire_virement",
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli plante et en plus on m'a pris des frais bizarres",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "insatisfaction",
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et si je mets plus d'apport ?",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "bon, et mes frais ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        }
+      ]
+    }
+  },
+  "machine": "portable (CPU, essai avant DeepEirb)",
+  "date": "2026-10-27T18:37:34"
+}

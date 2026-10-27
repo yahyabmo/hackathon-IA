@@ -318,7 +318,7 @@ def formuler(
     simple = mots_simples(profil, etat)
 
     corps, question = parties_conseil(decision, conseil) if decision.type == "conseil" else ("", None)
-    if corps and llm.actif():
+    if corps and llm.reformulation_active():  # reformuler un conseil : mesuré, écarté ; désactivé par défaut
         etape.modele, etape.appel_llm = llm.MODELE_FORMULATION, True
         try:
             reecrit, etape.tokens, _ = reformuler(corps, llm.MODELE_FORMULATION, simple)

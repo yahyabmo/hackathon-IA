@@ -64,7 +64,7 @@ def test_un_seul_appel_au_llm_et_seulement_pour_le_conseil(monkeypatch):
         appels.append(role)
         return message.split('"""')[1].strip(), 10  # renvoie le gabarit tel quel
 
-    monkeypatch.setenv("ASSISTANT_LLM", "1")
+    monkeypatch.setenv("ASSISTANT_REFORMULER", "1")
     monkeypatch.setattr(llm, "generer", faux_llm)
     etat = EtatConversation()
     premier, etat = reply("Je veux acheter un appartement", "C07", etat)
@@ -81,7 +81,7 @@ def test_la_suite_conseiller_reste_hors_du_llm(monkeypatch):
         recus.append(message)
         return message.split('"""')[1].strip() + " Je vous contacte demain.", 10
 
-    monkeypatch.setenv("ASSISTANT_LLM", "1")
+    monkeypatch.setenv("ASSISTANT_REFORMULER", "1")
     monkeypatch.setattr(llm, "generer", faux_llm)
     etat = EtatConversation()
     _, etat = reply("Je veux acheter un appartement", "C07", etat)

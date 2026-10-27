@@ -151,22 +151,17 @@
 \end{frame}
 
 \begin{frame}{Choisir le LLM de chaque niveau, en descendant en taille \qui{Yahya}}
-  \begin{columns}[T]
-    \column{0.5\textwidth}
-    \textbf{Niveau 1 --- comprendre} (36 messages difficiles)
-    \smallskip
-
-    \input{resultats-niveau1}
-    \column{0.48\textwidth}
-    \textbf{Niveau 2 --- répondre en citant} (22 questions)
-    \smallskip
-
-    \input{resultats-niveau2}
-  \end{columns}
+  \footnotesize\textbf{Niveau 1 --- comprendre} (36 messages difficiles)\par
+  \resizebox{\linewidth}{!}{\begin{minipage}{1.25\linewidth}\input{resultats-niveau1}\end{minipage}}
   \medskip
-  \footnotesize Seuil fixé avant de mesurer ; on garde \textbf{le plus petit} qui le tient.
-  Déjà appris : \textbf{reformuler} un conseil chiffré n'apporte rien (les gros modèles touchent aux chiffres) :
-  le LLM sert à \emph{comprendre} et à \emph{répondre aux questions ouvertes}, pas à réécrire.
+
+  \textbf{Niveau 2 --- répondre en citant} (22 questions)\par
+  \resizebox{\linewidth}{!}{\begin{minipage}{1.25\linewidth}\input{resultats-niveau2}\end{minipage}}
+  \medskip
+
+  \scriptsize On garde \textbf{le plus petit} modèle qui tient chaque niveau. Le RAG d'exemples fait plus que doubler
+  la justesse du niveau 1. Déjà appris : \emph{reformuler} un conseil chiffré n'apporte rien (les gros modèles
+  touchent aux chiffres) ; le LLM sert à \emph{comprendre} et à \emph{répondre aux questions ouvertes}.
 \end{frame}
 
 % ─────────────────────────────── Younes ───────────────────────────────
