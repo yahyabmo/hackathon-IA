@@ -1,0 +1,13 @@
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}Y c c c c c@{}}
+\toprule
+\textbf{Configuration} & \textbf{Scénarios} & \textbf{Wh / 1\,000 req.} & \textbf{Latence p95} & \textbf{Go} & \textbf{Sans LLM} \\
+\midrule
+A --- un LLM fait tout & \amesurer & \amesurer & \amesurer & --- & --- \\
+\textbf{B --- notre cascade} & \amesurer & \amesurer & \amesurer & --- & --- \\
+C --- cascade, gabarits seuls & 14 / 14 & $<$ 0,001 & 14 ms & 0,5 & 100\,\% \\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+{\tiny Énergie : CodeCarbon hors ligne, lots de 200 requêtes après chauffe, puissance de repos soustraite. Mesuré sur yahya-bel-hajjam (x86\_64).}
