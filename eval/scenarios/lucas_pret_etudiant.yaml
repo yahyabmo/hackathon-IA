@@ -1,0 +1,8 @@
+client: C08
+tours:
+  - client: "Je voudrais un prêt étudiant"
+    attendu: {intention: pret_etudiant, niveau: mots_cles, demande: montant}
+  - client: "5000"
+    attendu: {propose: [pret_etudiant], texte_contient: "Un crédit vous engage"}
+  - client: "oui"
+    attendu: {action: transmettre_conseiller}

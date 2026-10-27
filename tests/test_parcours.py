@@ -4,13 +4,17 @@ import pytest
 
 from eval.run_scenarios import rejouer
 from src.assistant import reply
+from src.comprendre import classifieur
 from src.contrats import EtatConversation
 
 SCENARIOS = sorted((Path(__file__).resolve().parents[1] / "eval" / "scenarios").glob("*.yaml"))
 
 
+@pytest.mark.classifieur  # de bout en bout : avec le vrai classifieur, comme eval/run_scenarios.py
 @pytest.mark.parametrize("fichier", SCENARIOS, ids=lambda f: f.stem)
 def test_scenarios_de_bout_en_bout(fichier):
+    if "classifieur" in fichier.stem and not classifieur.disponible():
+        pytest.skip("scénario du classifieur : sentence-transformers ou e5-small absent")
     assert rejouer(fichier) == []
 
 

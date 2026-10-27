@@ -1,0 +1,7 @@
+# Aucun mot-clé ne conclut : le classifieur (e5-small) reconnaît la famille, sans traduction.
+client: C01
+tours:
+  - client: "Ma carte ne marche plus au distributeur"
+    attendu: {famille: carte_usage, niveau: classifieur, attente: transmettre_conseiller}
+  - client: "oui"
+    attendu: {action: transmettre_conseiller}

@@ -43,6 +43,7 @@ def verifier_tour(reponse: Reponse, etat: EtatConversation, attendu: dict[str, A
             erreurs.append(f"{cle} : attendu {attendu[cle]!r}, obtenu {obtenu!r}")
 
     attendre("intention", c.intention)
+    attendre("famille", c.famille)
     attendre("niveau", c.niveau)
     attendre("demande", reponse.question)
     attendre("escalade", reponse.escalade)
