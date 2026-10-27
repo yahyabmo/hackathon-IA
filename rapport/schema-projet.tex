@@ -1,0 +1,150 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{ent}{RGB}{221,236,247}
+\definecolor{tab}{RGB}{215,237,221}
+\definecolor{mod}{RGB}{233,233,238}
+\definecolor{ext}{RGB}{250,233,207}
+\definecolor{alerte}{RGB}{250,226,226}
+\definecolor{kored}{RGB}{176,42,42}
+
+\newcommand{\f}[1]{\texttt{#1}}
+
+\tikzset{
+  etage/.style={rectangle,draw=mainblue,fill=ent,rounded corners=2pt,
+                align=center,font=\scriptsize,inner sep=4pt,minimum height=0.8cm},
+  donnee/.style={rectangle,draw=mainblue!70,fill=tab,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm,text width=3.3cm},
+  module/.style={rectangle,draw=darkgray!70,fill=mod,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  acteur/.style={rectangle,draw=darkgray,fill=ext,rounded corners=2pt,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  risque/.style={rectangle,draw=kored!80,fill=alerte,rounded corners=2pt,dashed,
+                 align=center,font=\scriptsize,inner sep=4pt,minimum height=0.7cm},
+  test/.style={diamond,aspect=2.4,draw=mainblue,fill=white,align=center,
+               font=\scriptsize,inner sep=1pt},
+  fl/.style={-{Latex[length=1.8mm]},semithick,draw=mainblue!80},
+  flp/.style={-{Latex[length=1.8mm]},semithick,draw=darkgray!75,dashed},
+  flr/.style={-{Latex[length=1.8mm]},semithick,draw=kored!70,dashed},
+  lien/.style={semithick,draw=darkgray!70},
+  et/.style={font=\scriptsize,text=darkgray,inner sep=1.5pt},
+}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,node distance=0.32cm]
+
+  % ── Colonne centrale : la cascade ──
+  \node[acteur,text width=7.8cm] (client)
+    {\textbf{Client} --- interface \og Noria \fg{} (Streamlit) :\\ profil simulé choisi, message écrit};
+  \node[module,text width=7.8cm,below=of client] (reply)
+    {\f{reply(message, client, état)} dans \f{src/assistant.py}\\ point d'entrée unique ; état de la conversation en mémoire};
+  \node[etage,text width=7.8cm,below=of reply] (bar)
+    {\textbf{0. Barrières} (M3) : montant ambigu ($-500$, \og 12.50 \fg) ;\\ reprise d'une question restée en attente};
+  \node[etage,text width=7.8cm,below=of bar] (e1)
+    {\textbf{1. Comprendre} (M1), le moins cher d'abord\\[1pt]
+     réponse à la question en cours $\rightarrow$ entités (regex)\\
+     $\rightarrow$ mots-clés (19\,\% des messages, 100\,\% justes)\\
+     $\rightarrow$ \f{multilingual-e5-small} (118 M paramètres, 0,47 Go)\\
+     + 2 régressions logistiques : famille, puis intention\\ (14 familles, 85 intentions ; 6 ms sur CPU)};
+  \node[test,below=of e1] (d) {compris ?\\ confiance $\geq \tau = 0{,}76$};
+  \node[etage,text width=7.8cm,below=of d] (e2)
+    {\textbf{2. Converser} (M2) : automate + 9 parcours YAML\\
+     une question à la fois ; le profil n'est jamais redemandé ;\\
+     corrections (\og et avec 200\,000 ? \fg), \og je ne sais pas \fg, abandon};
+
+  % ── Les trois suites possibles ──
+  \node[etage,text width=3.7cm,minimum height=2.3cm,below=0.75cm of e2] (e3)
+    {\textbf{3. Conseiller} (M3)\\ règles publiques :\\ HCSF (35\,\%, 25 ans),\\ taux BDF 3,32\,\% daté,\\ plafonds ; proposés /\\ écartés + règle, sources};
+  \node[etage,text width=3.5cm,minimum height=2.3cm,left=0.3cm of e3] (orient)
+    {\textbf{Orienter}\\ carte perdue, virement,\\ frais, réclamation :\\ \textbf{aucun accès au compte},\\ aucune opération};
+  \node[etage,text width=3.5cm,minimum height=2.3cm,right=0.3cm of e3] (fiche)
+    {\textbf{Fiche}\\ définition (glossaire,\\ même mal écrite) ;\\ service sans parcours ;\\ politesse};
+  \node[etage,text width=7.8cm,below=0.75cm of e3] (e4)
+    {\textbf{4. Formuler} (M2) : gabarits écrits par l'équipe\\
+     + hypothèses du calcul + mention légale (crédit)\\
+     mode \og mots simples \fg{} (70 ans et plus) : jargon expliqué};
+  \node[acteur,text width=9cm,below=of e4] (out)
+    {\textbf{Réponse au client}\\ + panneau \og Pourquoi \fg{} : intention, confiance, phrase la plus proche,\\
+     produits proposés et écartés, règles, hypothèses, sources\\
+     + panneau \og Frugalité \fg{} : latence, modèles, appels au LLM};
+
+  \draw[fl] (client) -- (reply);
+  \draw[fl] (reply) -- (bar);
+  \draw[fl] (bar) -- (e1);
+  \draw[fl] (e1) -- (d);
+  \draw[fl] (d) -- node[et,right]{oui} (e2);
+  \draw[fl] (e2.south) -- node[et,above left]{demande sensible} (orient.north);
+  \draw[fl] (e2) -- node[et,right]{projet} (e3);
+  \draw[fl] (e2.south) -- node[et,above right]{question, service} (fiche.north);
+  \draw[fl] (orient) -- (e4);
+  \draw[fl] (e3) -- (e4);
+  \draw[fl] (fiche) -- (e4);
+  \draw[fl] (e4) -- (out);
+
+  % ── À gauche : quand le message n'est pas compris ──
+  \node[module,text width=3.0cm,left=3.4cm of d] (clar)
+    {\textbf{Question fermée}\\ sur les 2 familles\\ les plus probables};
+  \node[donnee,text width=2.4cm,left=0.5cm of clar] (journal) {Journal\\ des incompris};
+  \node[risque,text width=2.7cm,below=0.9cm of journal] (esc) {Escalade LLM 14B\\ \textbf{désactivée}};
+  \draw[fl] (d) -- node[et,above]{non} (clar);
+  \draw[flp] (clar.north) |- node[et,pos=0.2,left]{question} (client.west);
+  \draw[fl] (clar.south) |- node[et,pos=0.25,right]{toujours ambigu} (orient.west);
+  \draw[lien] (clar) -- (journal);
+  \coordinate (milieu) at ($(clar.south)!0.45!(clar.south |- orient.west)$);
+  \draw[flr] (esc.east) -- (milieu);
+
+  % ── Le LLM : mesuré, laissé de côté ──
+  \node[risque,text width=4.0cm,left=1.4cm of e4] (llm)
+    {\textbf{LLM optionnel, désactivé}\\ 1 appel, corps du conseil\\ seulement, sous garde-fou ;\\ 6 LLM mesurés : aucun\\ n'apporte assez};
+  \draw[flr] (llm) -- node[et,above]{si activé} (e4);
+
+  % ── À droite : les données ──
+  \node[donnee,right=1.5cm of e1] (taxo)
+    {\textbf{Taxonomie}\\ 14 familles, 85 intentions\\ (77 Banking77 + 8 nôtres)};
+  \node[module,dashed,text width=4.0cm,above=0.5cm of taxo] (off)
+    {\textit{Hors ligne, une fois}\\ Banking77 anglais (10\,003 phrases,\\ \textbf{non traduit}) + 672 phrases\\ de l'équipe $\rightarrow$ e5-small $\rightarrow$\\ 2 régressions logistiques\\ (4 min sur CPU) $\rightarrow$ têtes\ de 141 Ko ; $\tau$ par balayage};
+  \node[donnee,right=1.5cm of e2] (prof)
+    {\textbf{Profils simulés}\\ 8 clients fictifs, ancrés\\ dans Bank Marketing};
+  \node[donnee,right=0.9cm of fiche,yshift=0.45cm] (glos) {\textbf{Glossaire}\\ fiches vérifiées};
+  \node[donnee,below=0.45cm of glos] (cata)
+    {\textbf{Catalogue}\\ 12 produits et paramètres,\\ sources et dates};
+  \draw[lien] (taxo) -- (e1);
+  \draw[flp] (off.south west) to[out=-115,in=0] ($(e1.east)+(0,0.7)$);
+  \draw[lien] (prof) -- (e2);
+  \draw[lien] (glos.west) -- (glos.west -| fiche.east);
+  \draw[lien] (cata.west) -- ++(-0.35,0) |- ($(e3.south)+(0,-0.3)$) -- (e3.south);
+  \draw[lien] (cata.south west) -- (e4.east);
+
+  % ── Évaluer, et mesurer en continu ──
+  \node[module,text width=4.6cm,right=0.9cm of out] (eval)
+    {\textbf{Évaluer} (DeepEirb, RTX 6000 Ada)\\ 115 tests, 14 scénarios\\
+     compréhension : 92,3\,\% EN, 84,8\,\% FR\\ formulation : 6 LLM, 0,8 à 9,1 Go\\
+     A/B/C + CodeCarbon : plus de 3\,000\\ fois moins d'énergie que le 14B};
+  \path let \p1 = (off.north), \p2 = (eval.south), \p3 = (eval.east), \p4 = (off.east) in
+    node[module,minimum width=0.75cm,minimum height={\y1-\y2},anchor=north west]
+      (mes) at ({max(\x3,\x4)+0.45cm}, \y1) {};
+  \node[rotate=90,font=\scriptsize,align=center] at (mes.center)
+    {\textbf{Mesure continue} : chaque étage est chronométré (latence, modèle, tokens, appel au LLM)};
+
+  % ── Titre et légende ──
+  \node[font=\large\bfseries,text=mainblue,above=1.1cm of client] (titre)
+    {Assistant bancaire frugal : le projet complet};
+  \node[font=\scriptsize,text=darkgray,below=0.1cm of titre]
+    {Hackathon IA La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA --- Sujet 1 --- un tour de conversation, de la demande à la réponse};
+  \path let \p1 = (out.south), \p2 = (eval.south) in
+    node[font=\scriptsize,text=darkgray,anchor=north] at (\x1, {min(\y1,\y2)-0.45cm})
+    {\textcolor{ent!60!mainblue}{\rule{6pt}{6pt}} étages, sans gros modèle \quad
+     \textcolor{tab!70!black}{\rule{6pt}{6pt}} données versionnées \quad
+     \textcolor{kored!70}{\rule{6pt}{6pt}} LLM : mesuré, désactivé \quad
+     \textcolor{mod!70!black}{\rule{6pt}{6pt}} préparation, évaluation, mesure \quad
+     M1 Younes --- M2 Yahya --- M3 Sohayb};
+
+\end{tikzpicture}
+\end{document}
