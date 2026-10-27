@@ -149,16 +149,16 @@
     \textbf{Client} & \textbf{Message} & \textbf{Ce qu'on montre} \\
     \midrule
     Inès, 34 ans & \og J'ai perdu ma carte \fg & Opposition après un \og oui \fg ; aucun LLM \\
-    Léa, 31 ans & \og Je veux acheter un appartement \fg & Revenus non redemandés ; 42,1\,\% $>$ 35\,\% ;
-      \og et avec 200\,000 ? \fg{} recalculé \\
+    Léa, 31 ans & \og Je veux acheter un appartement \fg & Revenus non redemandés ; 41,3\,\% $>$ 35\,\% ;
+      \og et avec 200\,000 ? \fg{} : 32,2\,\% \\
     Sophie / Lucas & \og Je voudrais mettre de côté \fg & Même phrase, deux clients, deux conseils \\
     Marc, 52 ans & \og Pourquoi 8\eur{} de frais ? \fg & Historique, plafond légal, offre clientèle fragile \\
     Julie & \og Votre appli ne marche jamais ! \fg & Excuses, passage de main avec résumé \\
-    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples, pas à pas, confirmation \\
+    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples ; \og oui, mais \fg{} n'est pas un accord ; montant corrigé \\
     \bottomrule
   \end{tabularx}
   \smallskip
-  \scriptsize Démo de secours : 15 tours rejoués par le vrai pipeline, 0 appel au LLM, 2,5~ms par tour
+  \scriptsize Démo de secours : 17 tours rejoués par le vrai pipeline, 0 appel au LLM, moins de 2~ms par tour
   (gabarits, sur un portable).
 \end{frame}
 
@@ -196,7 +196,7 @@
     \midrule
     A --- un LLM 14B fait tout & \amesurer & \amesurer & 9,1 & 0\,\% \\
     \textbf{B --- notre cascade} & \amesurer & \amesurer & 3,5 & \amesurer \\
-    C --- cascade, gabarits seuls & 9 / 9 & \amesurer & 0,5 & 100\,\% \\
+    C --- cascade, gabarits seuls & 10 / 10 & \amesurer & 0,5 & 100\,\% \\
     \bottomrule
   \end{tabularx}
   \medskip
@@ -210,10 +210,12 @@
     \column{0.5\textwidth}
     \textbf{Léa} : 250\,000\eur{}, 25\,000\eur{} d'apport, 2\,900\eur{} nets.
     \begin{itemize}
-      \item Mensualité $\approx$ 1\,220\eur{} sur 25 ans à 3,5\,\% (taux indicatif daté).
-      \item \textcolor{kored}{\textbf{42,1\,\% $>$ 35\,\%}} : règle \f{HCSF-taux-effort}.
+      \item Mensualité $\approx$ 1\,197\eur{} sur 25 ans à 3,32\,\% (taux moyen Banque de France,
+            daté), hors assurance.
+      \item \textcolor{kored}{\textbf{41,3\,\% $>$ 35\,\%}} : règle \f{HCSF-taux-effort} ; non retenu,
+            sans refus bancaire.
       \item Écarté : prêt sur 30 ans (\f{HCSF-duree}).
-      \item Proposé : un bien autour de 212\,000\eur{}, et un conseiller.
+      \item Budget indicatif $\approx$ 215\,000\eur{} ; à 200\,000\eur{}, 32,2\,\% : un conseiller étudie.
     \end{itemize}
     \column{0.46\textwidth}
     \begin{block}{Ce que voit le client}
