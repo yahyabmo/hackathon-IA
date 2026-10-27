@@ -7,7 +7,6 @@ Les signatures publiques restent inchangées :
 ```python
 clients.profil(client_id) -> dict
 conseiller(intention, profil, slots) -> Conseil
-outils.executer(action, profil, etat) -> Action
 reply(message, client_id, etat=None) -> tuple[Reponse, EtatConversation]
 ```
 
@@ -28,29 +27,17 @@ Quatre parcours métier : immobilier, consommation, épargne, prêt étudiant.
 Ils fonctionnent sans LLM et sans entraînement. Bank Marketing n'est pas un
 moteur de recommandation ; aucun modèle d'appétence n'a été ajouté.
 
-## Actions et état
+## Accès et état
 
-Les cinq outils restent disponibles. Toute action sensible exige strictement
-`action.confirmee is True`. Sinon, `resultat.statut=en_attente` et l'exception
-publique `ConfirmationRequise` est levée. Une confirmation textuelle ambiguë
-reste en attente dans `reply` ; un montant corrigé exige un nouvel accord.
+Le périmètre du kick-off ne comprend aucune action bancaire. Le chatbot ne
+possède aucun accès au compte et ne modifie ni solde, ni carte, ni bénéficiaire.
+Les parcours carte perdue, virement et frais guident l'utilisateur vers son
+espace bancaire sécurisé ou un conseiller. Une confirmation dans le chat ne
+déclenche aucune opération.
 
-Les virements utilisent `Decimal`, acceptent deux décimales maximum, refusent
-les montants non positifs/non finis, les bénéficiaires inconnus ou ambigus et
-le solde insuffisant. Les effets sont appliqués sur une copie, publiée uniquement
-après réussite. Aucun appel bancaire externe, aucun véritable rendez-vous.
-
-`Action.identifiant` est ajouté avec une valeur par défaut UUID. Le rejeu de cet
-identifiant renvoie le résultat enregistré sans répéter l'effet ; sa réutilisation
-avec d'autres paramètres est refusée. Une nouvelle action explicitement demandée
-et confirmée est une nouvelle opération, même si son montant est identique.
-
-Nouveaux champs à valeurs par défaut dans `EtatConversation` :
+Les champs d'état utiles au conseil sont :
 
 - `client_id`, `profil_simule` : copie indépendante conservée entre les tours ;
-- `operations` : demandes et résultats indexés par identifiant ;
-- `journal_actions` : opérations traitées, horodatage UTC, paramètres, confirmation,
-  résultat `succes`, `refus` ou `echec` ;
 - `question_m3` : reprise de collecte après un `Conseil.manque`.
 
 L'état est en mémoire, propre à la conversation. Changer de client réinitialise
@@ -86,18 +73,18 @@ autre situation reste à vérifier. Le revenu mensuel ne remplace jamais le RFR.
 
 Éligibilité = conditions connues d'un produit ; pertinence = adéquation au projet ;
 estimation = calcul sous hypothèses ; octroi = décision humaine de la banque.
-Le prototype n'accomplit que les trois premières opérations, conditionnellement.
-Assurance inconnue, frais non couverts et exceptions HCSF sont signalés.
+Le prototype s'arrête au conseil et à l'orientation. Assurance inconnue, frais
+non couverts et exceptions HCSF sont signalés.
 
 ## Coordination avec Yahya et Younes
 
 Seuls `src/assistant.py` et `src/contrats.py` sont modifiés côté socle partagé.
 Les modules `src/comprendre/`, `src/converser/`, les YAML et `app.py` restent intacts.
 
-Dans `assistant.py` : profil de session, confirmations strictes, reprise sur
-`Conseil.manque`, refus d'action explicite, gabarit général pour les conseils
-M3 et ajout des hypothèses hors reformulation LLM. Le gabarit immobilier historique
-présumait un financement sans assurance ; il n'est plus utilisé par `reply`.
+Dans `assistant.py` : profil de session, reprise sur `Conseil.manque`, guidage
+des parcours sensibles, gabarit général pour les
+conseils M3 et ajout des hypothèses hors reformulation LLM. Le gabarit immobilier
+historique présumait un financement sans assurance ; il n'est plus utilisé par `reply`.
 La mention légale crédit reste en dernière position.
 
 Points précis à reprendre ensemble :
@@ -107,9 +94,7 @@ Points précis à reprendre ensemble :
   Le parseur M1 n'a pas été modifié ; les montants en lettres restent hors MVP.
 - **M2** : le panneau Profil recharge toujours le profil initial. Utiliser
   `etat.profil_simule` pour afficher ensuite les soldes/statuts simulés.
-- **M2** : le panneau Action appelle actuellement tout résultat « exécutée ».
-  Afficher `action.resultat['statut']` pour distinguer les refus/échecs ; le texte
-  conversationnel les distingue déjà. Afficher les hypothèses et
+- **M2** : afficher les hypothèses et
   `faits['sources_produits']` si l'on veut compléter le panneau Pourquoi.
 - **M2** : le banc autonome de formulation appelle encore les anciens gabarits
   directement ; ses évaluations LLM ne valent pas validation du nouveau flux M3.
@@ -126,10 +111,9 @@ ASSISTANT_LLM=0 ASSISTANT_ESCALADE=0 .venv/bin/python -m eval.run_scenarios
 ASSISTANT_LLM=0 ASSISTANT_ESCALADE=0 .venv/bin/streamlit run app.py
 ```
 
-Démo : Paul, virement de 500 €, « oui mais pas maintenant », correction « non,
-plutôt 12,50 euros », « oui ». Puis Léa et son appartement ; Sophie et Lucas pour
-montrer des conseils différents. Les tests d'intégration vérifient la persistance,
-l'absence de double débit, la confirmation et l'isolation des clients.
+Démo : Paul et son virement guidé vers l'espace sécurisé. Puis Léa et son
+appartement ; Sophie et Lucas pour montrer des conseils différents. Les tests
+vérifient la collecte, les calculs, les sources et l'isolation des clients.
 
 Limites assumées : pas d'octroi, de TAEG complet, de catalogue commercial exhaustif,
 de vérification des justificatifs, ni de garantie réglementaire sur les cas non

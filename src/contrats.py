@@ -2,7 +2,7 @@
 
 Les dataclasses de ce fichier sont volontairement simples et sérialisables.
 Elles constituent l'interface commune entre les étages de la cascade :
-comprendre (M1), converser et formuler (M2), conseiller et agir (M3), mesurer
+comprendre (M1), converser, conseiller et formuler, mesurer
 (M1). Les noms de champs sont en français et sans accents.
 """
 
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
-from uuid import uuid4
 
 from .taxonomie import INCONNUE
 
@@ -81,17 +80,6 @@ class Conseil:
 
 
 @dataclass
-class Action:
-    """Action bancaire simulée (étage 4), jamais exécutée sans confirmation."""
-
-    outil: str
-    parametres: dict[str, Any] = field(default_factory=dict)
-    confirmee: bool = False
-    resultat: dict[str, Any] | None = None
-    identifiant: str = field(default_factory=lambda: uuid4().hex)
-
-
-@dataclass
 class Etape:
     """Une ligne du panneau « frugalité »."""
 
@@ -109,7 +97,6 @@ class Reponse:
     texte: str
     comprehension: Comprehension = field(default_factory=Comprehension)
     conseil: Conseil | None = None
-    action: Action | None = None
     question: str | None = None  # information demandée au client, s'il y en a une
     escalade: bool = False  # vrai seulement si le LLM d'escalade a été appelé
     trace: list[Etape] = field(default_factory=list)
@@ -132,12 +119,9 @@ class EtatConversation:
     info_attendue: str | None = None  # information demandée au tour précédent
     slots: dict[str, Any] = field(default_factory=dict)  # informations recueillies
     clarification_demandee: bool = False
-    action_en_attente: Action | None = None  # attend un « oui » ou un « non »
     mots_simples: bool = False  # demandé par le client ; automatique dès 70 ans ou « peu à l'aise »
     historique: list[dict[str, str]] = field(default_factory=list)
     derniere_reponse: str | None = None
     client_id: str | None = None
     profil_simule: dict[str, Any] | None = None
-    journal_actions: list[dict[str, Any]] = field(default_factory=list)
-    operations: dict[str, dict[str, Any]] = field(default_factory=dict)
     question_m3: str | None = None

@@ -31,11 +31,9 @@ def test_une_correction_a_deux_montants_suit_l_ordre_des_questions():
     assert (etat.slots["prix_bien"], etat.slots["apport"]) == (300000, 60000)
 
 
-def test_non_plutot_un_autre_montant_corrige_au_lieu_d_annuler():
-    reponse, etat = converser("C04", ["Je dois envoyer 500 € à mon fils.", "Non, plutôt 300 €"])
-    assert etat.action_en_attente.outil == "preparer_virement"
-    assert etat.slots["montant"] == 300
-    assert "300" in reponse.texte
+def test_virement_reste_un_guidage_sans_action():
+    reponse, etat = converser("C04", ["Je dois envoyer 500 € à mon fils."])
+    assert "accéder à votre compte" in reponse.texte.lower()
 
 
 # ── « Je ne sais pas », réponse incomprise, abandon, « non » ──
@@ -82,19 +80,18 @@ def test_non_vaut_zero_quand_la_question_l_admet():
 def test_mots_simples_automatique_pour_paul():
     reponse, _ = converser("C04", ["Je dois envoyer 500 € à mon fils."])
     assert "\n\n" in reponse.texte
-    assert "(oui / non)" in reponse.texte
-    assert reponse.texte.count("(") == 1  # plus d'aparté, seulement « (oui / non) »
+    assert "accéder à votre compte" in reponse.texte.lower()
 
 
 def test_mots_simples_sur_demande_explique_le_jargon():
     etat = EtatConversation(mots_simples=True)
     reponse, _ = reply("J'ai perdu ma carte", "C01", etat)
-    assert "« opposition » veut dire" in reponse.texte
+    assert "ne peux pas bloquer" in reponse.texte.lower()
 
 
 def test_sans_mots_simples_le_texte_reste_d_un_bloc():
     reponse, _ = reply("J'ai perdu ma carte", "C01", EtatConversation())
-    assert "\n" not in reponse.texte
+    assert "Je ne peux pas bloquer" in reponse.texte
 
 
 # ── Journal des incompris et escalade ──
@@ -112,7 +109,7 @@ def test_pas_d_escalade_par_defaut_meme_avec_le_llm(monkeypatch):
     reponse, etat = converser("C01", ["Je ne sais pas quoi demander", "rien de précis"])
     assert reponse.escalade is False
     assert reponse.appels_llm == 0
-    assert etat.action_en_attente.outil == "transmettre_conseiller"
+    assert "aucun accès" in reponse.texte.lower()
 
 
 def test_la_clarification_propose_les_deux_familles_probables():

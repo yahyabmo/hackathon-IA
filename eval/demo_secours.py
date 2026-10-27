@@ -24,14 +24,12 @@ from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation, Reponse
 from src.mesure import resumer
 
-STATUTS_ACTION = {"succes": "exécutée (simulation)", "refus": "refusée", "echec": "échec, rien n'a été modifié"}
-
 SORTIE = Path(__file__).resolve().parents[1] / "rapport" / "demo-secours.tex"
 
 SCENES: list[tuple[str, str, list[str], str]] = [
-    ("Carte perdue : réagir vite et agir", "C01",
-     ["J'ai perdu ma carte hier soir, je fais quoi ?", "oui"],
-     "Compris par les mots-clés ; l'opposition n'est faite qu'après le « oui »."),
+    ("Carte perdue : guider en sécurité", "C01",
+     ["J'ai perdu ma carte hier soir, je fais quoi ?"],
+     "Compris par les mots-clés ; le chatbot guide vers l'espace bancaire sécurisé."),
     ("L'appartement : questionner, calculer, expliquer", "C07",
      ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000",
       "Et avec un bien à 200 000 ?"],
@@ -49,8 +47,8 @@ SCENES: list[tuple[str, str, list[str], str]] = [
      ["Votre appli ne marche jamais !", "oui"],
      "Pas de justification : un conseiller reprend la main avec le résumé."),
     ("Paul, 68 ans : pas à pas, en mots simples", "C04",
-     ["Je dois envoyer 500 € à mon fils.", "Oui, mais pas maintenant", "Non, plutôt 300 €", "oui"],
-     "Mots simples automatiques ; « oui, mais » n'est pas un accord ; le montant se corrige avant le « oui »."),
+     ["Je dois envoyer 500 € à mon fils."],
+     "Mots simples automatiques ; le chatbot guide vers l'espace bancaire sécurisé."),
     ("Le jargon, même mal écrit", "C08",
      ["C'est quoi le TEAG ?"],
      "Fiche du glossaire retrouvée malgré la faute de frappe, sans LLM."),
@@ -85,13 +83,6 @@ def _pourquoi(reponse: Reponse) -> list[str]:
                    + (f" (\\texttt{{{tex(e.regle)}}})" if e.regle else "") for e in reponse.conseil.ecartees]
         lignes += [f"Alerte : {tex(a)}" for a in reponse.conseil.alertes]
         lignes += [f"Hypothèse : {tex(h)}" for h in reponse.conseil.faits.get("hypotheses", [])]
-    if reponse.action:
-        resultat = reponse.action.resultat
-        etat = (STATUTS_ACTION.get(resultat.get("statut"), "exécutée") if resultat is not None
-                else "en attente du « oui »")
-        if resultat and resultat.get("motif"):
-            etat += f" ({resultat['motif']})"
-        lignes.append(f"Action \\texttt{{{tex(reponse.action.outil)}}} : {tex(etat)}")
     return lignes
 
 

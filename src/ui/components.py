@@ -120,23 +120,6 @@ def explication(reponse: Any, classifieur: Any) -> None:
                 st.markdown(f'<div class="source-line">{lien}<br>Relevé le {escape(date)}</div>', unsafe_allow_html=True)
 
 
-def action(reponse: Any, en_attente: bool = True) -> None:
-    if not reponse or not reponse.action:
-        return
-    result = reponse.action.resultat
-    if not result and not en_attente:
-        classe, titre, texte = "", "Demande annulée", "Aucune opération n'a été exécutée."
-    elif not result:
-        classe, titre, texte = "", "Confirmation requise", "Cette action attend votre accord explicite."
-    elif result.get("statut") == "succes":
-        classe, titre, texte = "success", "exécutée (simulation)", "Aucune opération bancaire réelle n'a été effectuée."
-    elif result.get("statut") == "en_attente":
-        classe, titre, texte = "", "Confirmation requise", "Cette action reste en attente d'un oui explicite."
-    else:
-        classe, titre, texte = "danger", "Action non exécutée", result.get("motif", "Aucune modification n'a été appliquée.")
-    st.markdown(f'<div class="action-box {classe}"><div class="action-title">{titre}</div><div class="action-copy">{texte}</div></div>', unsafe_allow_html=True)
-
-
 def frugalite(reponse: Any, reponses: list[Any], resumer: Callable) -> None:
     if not reponse:
         st.markdown('<div class="card-note">Aucune mesure sur cette conversation.</div>', unsafe_allow_html=True)

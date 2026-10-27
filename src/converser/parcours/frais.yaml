@@ -5,5 +5,4 @@ intentions: [extra_charge_on_statement, card_payment_fee_charged, transfer_fee_c
 accroche: "Je regarde les frais de votre compte."
 infos: {}
 fin:
-  type: action
-  outil: expliquer_frais
+  type: orienter

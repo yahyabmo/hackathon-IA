@@ -17,7 +17,7 @@ app.py
                       sinon : question de clarification, puis escalade (LLM 14B, comptée)
       2. converser    automate qui lit les parcours YAML ; ne redemande jamais ce que le profil sait
       3. conseiller   règles publiques (HCSF, plafonds) : propositions, raisons, produits écartés
-      4. agir         outils sur un SI simulé ; tout effet de bord exige un « oui » du client
+      4. orienter     guider l'utilisateur vers son espace bancaire ou un conseiller ; aucun accès au compte
       5. formuler     gabarit, ou petit LLM (ministral-3:3b) sous garde-fou ; mention légale crédit
       ·  mesurer      trace par étage : latence, modèle, tokens, appels au LLM
 ```
@@ -32,7 +32,7 @@ par l'équipe) dans `src/taxonomie.py`.
 |---|---|---|
 | Younes (M1) | Comprendre et mesurer | `src/comprendre/`, `src/mesure/`, bancs dans `eval/` |
 | Yahya (M2) | Converser, formuler, escalade, interface | `src/assistant.py`, `src/converser/`, `src/llm.py`, `app.py` |
-| Sohayb (M3) | Conseiller et agir, rejeu des scénarios | `src/conseiller/`, `eval/run_scenarios.py`, `tests/` |
+| Sohayb (M3) | Profils, catalogue, conseiller, règles métier | `src/conseiller/`, `eval/run_scenarios.py`, `tests/` |
 
 ## Structure
 
@@ -46,7 +46,7 @@ par l'équipe) dans `src/taxonomie.py`.
 │   ├── texte.py                normalisation, format des nombres
 │   ├── comprendre/             mots_cles, entites, classifieur (e5-small), entrainer, escalade
 │   ├── converser/              dialogue, parcours/*.yaml, formuler, garde_fou, glossaire
-│   ├── conseiller/             clients, catalogue, regles, outils
+│   ├── conseiller/             clients, catalogue, regles, validation
 │   └── mesure/                 latence par étage
 ├── data/
 │   ├── raw/                    Banking77 et Bank Marketing, tels que téléchargés (versionnés)
@@ -101,7 +101,7 @@ proposer un conseiller. Le journal sert à enrichir le lexique et l'entraînemen
 ## Tests et scénarios
 
 ```bash
-python -m pytest -q             # contrats, compréhension, règles, outils, garde-fou, interface
+python -m pytest -q             # contrats, compréhension, règles, conseil, garde-fou, interface
 python -m eval.run_scenarios    # les conversations de référence, de bout en bout
 python -m eval.bench_formulation --situations     # les 30 conseils du banc, sans LLM
 python -m eval.bench_formulation ministral-3:14b gemma4:e2b ministral-3:8b ministral-3:3b qwen3:1.7b gemma3:1b

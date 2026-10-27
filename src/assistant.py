@@ -1,41 +1,30 @@
 """Point d'entrée unique de l'assistant : un tour de conversation, la cascade.
 
-comprendre → (clarifier, puis escalader) → converser → conseiller ou agir → formuler
+comprendre → (clarifier, puis escalader) → converser → conseiller → formuler
 
 Chaque étage ne passe la main au suivant que s'il ne sait pas faire lui-même.
 Dans le cas normal, un tour fait au plus un appel au LLM, à la fin (formuler) ;
-l'escalade est l'exception, comptée dans la trace. Aucune action à effet de
-bord ne part sans un « oui » explicite du client.
+l'escalade est l'exception, comptée dans la trace. Le chatbot ne possède aucun
+accès bancaire et guide les demandes sensibles vers le canal approprié.
 
-Les barrières métier de M3 (montant ambigu, confirmation stricte, information
-manquante pour un conseil) produisent des décisions comme les autres : tout
-tour sort par ``formuler()``, avec sa trace et le mode « mots simples ».
+Les barrières métier de M3 (montant ambigu, information manquante pour un
+conseil) produisent des décisions comme les autres : tout tour sort par
+``formuler()``, avec sa trace et le mode « mots simples ».
 """
 
 from __future__ import annotations
 
 from . import incompris
 from .comprendre import comprendre, escalader
-from .comprendre.entites import extraire
-from .conseiller import clients, conseiller, outils
+from .conseiller import clients, conseiller
 from .conseiller import integration as m3
-from .contrats import NIVEAU_REPONSE, Action, Comprehension, Conseil, EtatConversation, Etape, Reponse
+from .contrats import NIVEAU_REPONSE, Comprehension, Conseil, EtatConversation, Etape, Reponse
 from .converser import Decision, avancer, formuler
 from .converser.formuler import question_clarification
 from .mesure import mesurer
 
-# Fiches qui se suffisent : pas de proposition de rappel derrière.
-FICHES_AUTONOMES = ("question_definition", "hors_sujet")
-# Décisions qui gardent l'action en attente telle quelle : on attend encore un « oui » net.
-ATTENTE_MAINTENUE = ("confirmation_attendue", "un_seul_montant")
 # Informations de la question M3 qui complètent le profil plutôt que le projet.
 CHAMPS_PROFIL = {"age": "age", "est_etudiant": "est_etudiant", "ages_enfants": "enfants"}
-
-
-def _executer(action: Action, profil: dict, etat: EtatConversation, trace: list[Etape]) -> Action:
-    action, etape = mesurer("agir", lambda: outils.executer(action, profil, etat), modele=action.outil)
-    trace.append(etape)
-    return action
 
 
 def decision_conseil(etat: EtatConversation) -> Decision:
@@ -44,21 +33,6 @@ def decision_conseil(etat: EtatConversation) -> Decision:
     credit = etat.famille == "credit"
     return Decision("conseil", parcours=etat.parcours, mention_legale="credit" if credit else None,
                     proposer="transmettre_conseiller" if credit else None)
-
-
-def _action_suivante(decision: Decision, action: Action | None) -> Action | None:
-    """L'action à proposer au tour suivant (elle attendra un « oui »)."""
-
-    if decision.type in ("action", "transmettre") and action is not None and not action.confirmee:
-        return action
-    if decision.type == "conseil" and decision.proposer:
-        return Action(outil=decision.proposer)
-    if decision.type == "orienter" or (decision.type == "fiche" and decision.parcours not in FICHES_AUTONOMES):
-        return Action(outil="transmettre_conseiller")
-    if (decision.type == "action_faite" and action is not None and action.outil == "expliquer_frais"
-            and action.resultat and action.resultat.get("proposer_offre_fragile")):
-        return Action(outil="transmettre_conseiller")
-    return None
 
 
 def _reprendre_question_m3(message: str, etat: EtatConversation, profil: dict) -> Decision:
@@ -80,30 +54,6 @@ def _reprendre_question_m3(message: str, etat: EtatConversation, profil: dict) -
     return decision_conseil(etat)
 
 
-def _repondre_a_l_action_en_attente(message: str, etat: EtatConversation, profil: dict,
-                                    trace: list[Etape]) -> tuple[Decision | None, Action | None]:
-    """« oui », « non », une correction de montant, ou rien de net."""
-
-    en_attente, etat.action_en_attente = etat.action_en_attente, None
-    accord = m3.confirmation(message)
-    montants = extraire(message).get("montants")
-    if accord is False and montants:
-        accord = None  # « non, plutôt 300 € » : une correction, pas un refus
-    if accord is True:
-        en_attente.confirmee = True
-        action = _executer(en_attente, profil, etat, trace)
-        return Decision("action_faite", parcours=etat.parcours, outil=action.outil), action
-    if accord is False:
-        return Decision("action_annulee", parcours=etat.parcours, outil=en_attente.outil), en_attente
-    if not montants:  # « oui, mais pas maintenant » n'est pas un accord
-        etat.action_en_attente = en_attente
-        return Decision("confirmation_attendue", parcours=etat.parcours, outil=en_attente.outil), en_attente
-    if en_attente.outil == "preparer_virement" and len(montants) > 1:
-        etat.action_en_attente = en_attente
-        return Decision("un_seul_montant", parcours=etat.parcours, outil=en_attente.outil), en_attente
-    return None, None  # un montant corrigé : la suite du parcours le traite
-
-
 def reply(
     message: str, client_id: str, etat: EtatConversation | None = None
 ) -> tuple[Reponse, EtatConversation]:
@@ -115,23 +65,19 @@ def reply(
     if etat.profil_simule is None:
         etat.profil_simule = clients.profil(client_id)
     etat.client_id = client_id
-    profil = etat.profil_simule  # copie de session : les actions simulées y persistent
+    profil = etat.profil_simule  # copie de session : le contexte client y persiste
     etat.historique.append({"role": "user", "content": message})
     trace: list[Etape] = []
     comprehension = Comprehension()
     conseil: Conseil | None = None
-    action: Action | None = None
     escalade = False
     decision: Decision | None = None
 
-    # 0. Barrières et attentes : montant ambigu, information manquante, action à confirmer.
+    # 0. Barrière de saisie : M1 perd certains nombres mal formés.
     if m3.montant_ambigu(message):
-        etat.action_en_attente = None
         decision = Decision("montant_ambigu")
     elif etat.question_m3:
         decision = _reprendre_question_m3(message, etat, profil)
-    elif etat.action_en_attente is not None:
-        decision, action = _repondre_a_l_action_en_attente(message, etat, profil, trace)
 
     # 1. Comprendre ; sinon clarifier une fois, puis escalader.
     if decision is None:
@@ -160,17 +106,14 @@ def reply(
             if decision is not None:
                 incompris.noter(message, client_id, decision.type, comprehension)
 
-    # 2 et 4. Converser, puis agir.
+    # 2. Converser. Une demande sensible devient un guidage sans accès au compte.
     if decision is None:
         etat.clarification_demandee = False
         decision, etape = mesurer("converser", lambda: avancer(message, comprehension, etat, profil),
                                   modele="automate")
         trace.append(etape)
-        if decision.type in ("action", "transmettre"):
-            action = Action(outil=decision.outil, parametres=dict(etat.slots))
-            if not outils.demande_confirmation(action.outil):
-                action = _executer(action, profil, etat, trace)
-                decision = Decision("action_faite", parcours=etat.parcours, outil=action.outil)
+        if decision.type == "transmettre":
+            decision = Decision("orienter", parcours=etat.parcours, accroche=decision.accroche)
 
     # 3. Conseiller ; s'il manque une information indispensable, on la demande.
     if decision.type == "conseil":
@@ -179,20 +122,17 @@ def reply(
         trace.append(etape)
         if conseil.manque:
             etat.question_m3 = conseil.manque[0]
-            etat.action_en_attente = None
             decision = Decision("question_m3", parcours=etat.parcours, info=etat.question_m3)
 
-    if decision.type not in ATTENTE_MAINTENUE:
-        etat.action_en_attente = _action_suivante(decision, action)
 
     # 5. Formuler : le seul appel LLM du tour, et seulement pour un conseil complet.
-    texte, etape = formuler(decision, conseil, action, profil, etat, message)
+    texte, etape = formuler(decision, conseil, profil, etat, message)
     trace.append(etape)
 
     etat.derniere_reponse = texte
     etat.historique.append({"role": "assistant", "content": texte})
     reponse = Reponse(
-        texte=texte, comprehension=comprehension, conseil=conseil, action=action,
+        texte=texte, comprehension=comprehension, conseil=conseil,
         question=decision.info if decision.type in ("question", "question_m3") else None,
         escalade=escalade, trace=trace,
     )

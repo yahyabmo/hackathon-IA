@@ -1,6 +1,4 @@
 client: C01
 tours:
   - client: "J'ai perdu ma carte hier soir, je fais quoi ?"
-    attendu: {intention: lost_or_stolen_card, niveau: mots_cles, attente: bloquer_carte}
-  - client: "oui"
-    attendu: {action: bloquer_carte, texte_contient: "opposition"}
+    attendu: {intention: lost_or_stolen_card, niveau: mots_cles, texte_contient: "Je ne peux pas bloquer"}

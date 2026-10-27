@@ -63,7 +63,7 @@ REGLAGES = {"requetes": 200, "repetitions": 3, "repos": 60, "chauffe": 10}
 SYSTEME_A = (
     "Tu es l'assistant d'une banque française. Réponds au client en français, au vouvoiement, en "
     "quelques phrases. Utilise uniquement son profil et le catalogue ci-dessous ; n'invente ni chiffre "
-    "ni produit. Avant toute opération (virement, opposition), demande une confirmation explicite.\n\n"
+    "ni produit. Pour une demande sensible, oriente vers l'espace bancaire sécurisé.\n\n"
     "Profil du client : {profil}\n\nCatalogue : {catalogue}"
 )
 

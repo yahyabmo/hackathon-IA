@@ -1,4 +1,4 @@
-"""Étages 3 et 4 : conseiller et agir (module de Sohayb)."""
+"""Moteur de conseil personnalisé (module de Sohayb)."""
 
 from __future__ import annotations
 
