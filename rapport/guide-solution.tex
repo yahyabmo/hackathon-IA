@@ -1,0 +1,468 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[french]{babel}
+\addto\captionsfrench{\renewcommand{\tablename}{Tableau}\renewcommand{\figurename}{Figure}}
+
+\usepackage{lmodern}\usepackage{geometry}\usepackage{setspace}
+\usepackage{microtype}\usepackage{xcolor}
+\usepackage{booktabs}\usepackage{tabularx}\usepackage{array}\usepackage{enumitem}
+\usepackage{titlesec}\usepackage{fancyhdr}\usepackage{caption}\usepackage{float}
+\usepackage{amssymb}\usepackage{amsmath}\usepackage[most]{tcolorbox}\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\geometry{top=2.1cm,bottom=2.1cm,left=2.2cm,right=2.1cm}
+\setstretch{1.05}
+\setlength{\emergencystretch}{1.2em}
+\setlength{\parskip}{0.3em}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{lightblue}{RGB}{238,245,250}
+\definecolor{ent}{RGB}{221,236,247}
+\definecolor{tab}{RGB}{215,237,221}
+\definecolor{mod}{RGB}{233,233,238}
+\definecolor{ext}{RGB}{250,233,207}
+\definecolor{alerte}{RGB}{250,226,226}
+\definecolor{codebg}{RGB}{246,246,248}
+\definecolor{kored}{RGB}{176,42,42}
+
+\hypersetup{colorlinks=true,linkcolor=mainblue,urlcolor=mainblue,
+  pdftitle={Guide de la solution - workflow, code et technologies},pdfauthor={Equipe Yahya, Sohayb, Younes}}
+
+\titleformat{\section}{\Large\bfseries\color{mainblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgray}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.2em}{0.45em}
+\titlespacing*{\subsection}{0pt}{0.9em}{0.3em}
+\captionsetup{font=small,labelfont=bf}
+\setlist[itemize]{leftmargin=1.3em,itemsep=0.1em,topsep=0.2em}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.1em,topsep=0.2em}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small\color{darkgray}Guide de la solution --- workflow, code, technologies}
+\rhead{\small\color{darkgray}Sujet 1}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newtcolorbox{cle}{breakable,colback=lightblue,colframe=mainblue,boxrule=0.7pt,arc=1.4mm,
+  left=3mm,right=3mm,top=1.5mm,bottom=1.5mm}
+\newtcolorbox{code}{breakable,colback=codebg,colframe=darkgray!35,boxrule=0.4pt,arc=1mm,
+  left=2mm,right=2mm,top=0.8mm,bottom=0.8mm}
+
+\DeclareRobustCommand{\f}[1]{{\texttt{\small\renewcommand{\_}{\char`\_\allowbreak}#1}}}
+\newcommand{\eur}{\,\texteuro}
+
+\tikzset{
+  etage/.style={rectangle,draw=mainblue,fill=ent,rounded corners=2pt,align=center,
+                font=\small,inner sep=5pt,minimum height=0.9cm,text width=7.2cm},
+  cote/.style={rectangle,draw=darkgray!70,fill=mod,rounded corners=2pt,align=left,
+               font=\scriptsize,inner sep=4pt,text width=6.6cm},
+  acteur/.style={rectangle,draw=darkgray,fill=ext,rounded corners=2pt,align=center,
+                 font=\small,inner sep=5pt,minimum height=0.8cm,text width=7.2cm},
+  fl/.style={-{Latex[length=2mm]},semithick,draw=mainblue!80},
+  lien/.style={densely dashed,draw=darkgray!60},
+}
+
+\begin{document}
+
+\begin{center}
+{\small\scshape\color{darkgray} Hackathon IA --- La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA --- Sujet 1\par}
+\vspace{0.25cm}
+{\LARGE\bfseries\color{mainblue} Guide de la solution\par}
+\vspace{0.15cm}
+{\large Ce qu'on fait, comment, et dans quel code\par}
+\vspace{0.2cm}
+{\small Yahya (IA) --- Sohayb (génie logiciel) --- Younes (calcul intensif) --- mardi 27 octobre 2026\par}
+{\footnotesize\color{darkgray} État du dépôt : 171 tests et 10 scénarios au vert.\par}
+\end{center}
+
+% ════════════════════════════════════════════════════════════════
+\section{La solution}
+
+\subsection{En une phrase}
+
+Un client écrit à sa banque ; notre assistant \textbf{comprend} la demande, \textbf{pose les
+questions qui manquent}, \textbf{décide} avec des règles bancaires publiques, \textbf{agit} si
+besoin (opposition, virement), puis \textbf{répond} en français --- en n'utilisant un LLM qu'au
+dernier moment, et seulement si c'est utile.
+
+\subsection{Le principe : une cascade}
+
+Chaque étage ne passe la main au suivant que s'il ne sait pas faire lui-même. Le moins cher
+d'abord, le LLM en dernier. C'est l'image donnée par l'organisateur : le vélo pour aller chercher
+le pain, la voiture pour le week-end.
+
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[node distance=0.45cm]
+  \node[acteur] (msg) {Message du client};
+  \node[etage,below=of msg] (e1) {\textbf{1. Comprendre} --- de quoi parle-t-il ?};
+  \node[etage,below=of e1] (e2) {\textbf{2. Converser} --- que me manque-t-il ?};
+  \node[etage,below=of e2] (e3) {\textbf{3. Conseiller} --- quel produit ?\\ pourquoi, pourquoi pas ?};
+  \node[etage,below=of e3] (e4) {\textbf{4. Agir} --- opposition, virement, rappel};
+  \node[etage,below=of e4] (e5) {\textbf{5. Formuler} --- la réponse en français};
+  \node[acteur,below=of e5] (rep) {Réponse\\ + panneaux \og Pourquoi \fg{} et \og Frugalité \fg};
+  \node[cote,right=0.7cm of e1] (c1) {réponse attendue ? $\rightarrow$ mots-clés $\rightarrow$ classifieur\\
+     rien de sûr : question au client, puis conseiller proposé (et journal)};
+  \node[cote,right=0.7cm of e2] (c2) {parcours YAML + profil du client ;\\ on ne redemande jamais ce qu'on sait};
+  \node[cote,right=0.7cm of e3] (c3) {règles publiques (35\,\%, 25 ans, plafonds) ;\\ raisons et produits écartés};
+  \node[cote,right=0.7cm of e4] (c4) {fonctions sur un SI simulé ;\\ rien sans un \og oui \fg{} du client};
+  \node[cote,right=0.7cm of e5] (c5) {gabarit, ou petit LLM une seule fois,\\ sous garde-fou ; mention légale du crédit};
+  \foreach \a/\b in {msg/e1,e1/e2,e2/e3,e3/e4,e4/e5,e5/rep} \draw[fl] (\a) -- (\b);
+  \foreach \i in {1,...,5} \draw[lien] (e\i) -- (c\i);
+\end{tikzpicture}
+\end{adjustbox}
+\caption{La cascade. Selon la demande, l'étage 3 ou l'étage 4 est sauté.}
+\end{figure}
+
+\subsection{Un exemple complet : Léa veut un appartement}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm} Y@{}}
+\toprule
+\textbf{Message} & \textbf{Ce qui se passe} \\
+\midrule
+\og Je veux acheter un appartement \fg &
+  \textbf{Comprendre} : les mots-clés \og acheter un appartement \fg{} donnent
+  \f{credit\_immobilier}, en moins d'une milliseconde, sans modèle.
+  \textbf{Converser} : le parcours \f{credit\_immobilier.yaml} demande 4 informations ; revenus et
+  crédits en cours sont \emph{dans son profil}, donc confirmés ; il manque le prix et l'apport.
+  \textbf{Formuler} : \og C'est un beau projet. J'ai noté vos revenus de 2\,900\eur{} nets par
+  mois. Quel est le prix du bien\dots{} ? \fg{} (gabarit, sans LLM). \\
+\addlinespace
+\og Autour de 250\,000, et je peux mettre les 25\,000 \fg &
+  \textbf{Comprendre} : une question était en attente, donc c'est \emph{la réponse} ; les
+  montants sont extraits par règles. \textbf{Conseiller} : règles HCSF au taux moyen Banque de France de 3,32\,\% : mensualité de
+  1\,197\eur{}, soit \textbf{41,3\,\% des revenus, au-delà des 35\,\%} : projet non retenu, sans refus
+  bancaire ; crédit sur 30 ans écarté (25 ans maximum) ; budget indicatif d'environ 215\,000\eur{} ;
+  hypothèses et sources affichées ; rendez-vous conseiller proposé.
+  \textbf{Formuler} : explication, mention légale, proposition de rappel. \\
+\addlinespace
+\og Et avec un bien à 200\,000 ? \fg &
+  Compris comme une \textbf{correction} : le prix est mis à jour et le conseil recalculé :
+  32,2\,\%, orientation vers un conseiller. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Pendant ce temps, l'interface affiche l'intention et comment elle a été comprise, les règles
+appliquées, les produits proposés et écartés, et le temps de chaque étape --- sans aucun appel au
+LLM.
+
+\subsection{Chaque étage : quoi, comment, pourquoi}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{2.4cm} Y L{3.6cm}@{}}
+\toprule
+\textbf{Étage} & \textbf{Comment} & \textbf{Pourquoi} \\
+\midrule
+1. Comprendre \newline (Younes) &
+  (1) réponse à la question en cours ; (2) mots-clés, qui ne concluent que s'ils sont sûrs ;
+  (3) classifieur \f{multilingual-e5-small} + régression logistique, entraîné sur Banking77
+  \textbf{en anglais, sans traduction} (à faire) ; (4) sinon : question au client, puis conseiller
+  proposé et message noté dans un journal. Pas de gros modèle par défaut. &
+  Comprendre ne demande pas de LLM : rapide, presque gratuit, mesurable. \\
+\addlinespace
+2. Converser \newline (Yahya) &
+  Un parcours par situation, en YAML (quoi demander, où le trouver, quoi faire à la fin) ; un
+  automate les lit. Cas limites : \og je ne sais pas \fg, correction, abandon. &
+  Déterministe, lisible, testable, sans LLM. \\
+\addlinespace
+3. Conseiller \newline (Sohayb) &
+  Règles publiques sourcées : taux d'effort $\leq$ 35\,\%, durée $\leq$ 25 ans, plafonds des
+  livrets, âges. Chaque proposition a ses raisons, chaque produit écarté la sienne. &
+  Une décision financière doit être juste, reproductible et explicable. \\
+\addlinespace
+4. Agir \newline (Sohayb) &
+  5 actions sur un SI simulé : opposition, virement, explication des frais, rappel conseiller,
+  lecture du profil. Tout effet de bord exige un \og oui \fg. &
+  Sécurité du client. \\
+\addlinespace
+5. Formuler \newline (Yahya) &
+  Gabarits par défaut. Si activé, le petit LLM (\f{ministral-3:3b}) reformule un conseil, une
+  seule fois ; le garde-fou refuse tout nombre absent du gabarit. Mode \og mots simples \fg{} pour
+  les clients âgés ou peu à l'aise. &
+  Exact et gratuit d'abord ; le LLM seulement pour le naturel. \\
+\addlinespace
+Mesurer \newline (Younes) &
+  Chaque étage est chronométré, les appels au LLM comptés ; CodeCarbon à venir pour comparer
+  A (tout LLM), B (notre cascade) et C (sans LLM). &
+  La frugalité vaut 20\,\% de la note. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Les données}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{4.6cm} Y@{}}
+\toprule
+\textbf{Donnée} & \textbf{Rôle} \\
+\midrule
+Banking77 (anglais, 77 intentions) & Entraîner le classifieur, \textbf{sans traduction} \\
+Bank Marketing (45\,211 clients) & Ancrer les 8 clients de démo ; futur modèle d'appétence \\
+\f{clients.json} & Inès, Marc, Sophie, Paul, Karim, Julie, Léa, Lucas \\
+\f{catalogue.json} & Produits et paramètres réglementaires, avec leur source \\
+\f{glossaire.json} & Explications du jargon bancaire \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Où on en est}
+
+\textbf{Fait} : toute la chaîne, les 9 parcours, les règles, les actions, l'interface, le mode
+\og mots simples \fg, le journal des incompris, le branchement réel du LLM, la démo de secours et
+le support de soutenance --- 171 tests et 10 scénarios au vert.
+\textbf{À faire} : classifieur (Younes) ; choix du LLM sur un poste de la salle (Yahya) ;
+appétence et sources du catalogue (Sohayb) ; mesures d'énergie, vidéo, diapositives.
+
+\begin{cle}
+\textbf{En 30 secondes.} \emph{Notre assistant comprend avec de simples mots-clés ou un petit
+modèle de 118 millions de paramètres, décide avec des règles bancaires que le client peut lire,
+et n'appelle un LLM qu'une fois, à la fin, pour mettre en mots ce qui est déjà calculé. Chaque
+conseil dit pourquoi, et pourquoi pas. Et on l'a mesuré face à une version où un gros LLM fait
+tout.}
+\end{cle}
+
+% ════════════════════════════════════════════════════════════════
+\section{Le code}
+
+\subsection{Les technologies}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.6cm} L{4.2cm} Y@{}}
+\toprule
+\textbf{Besoin} & \textbf{Technologie} & \textbf{Remarque} \\
+\midrule
+Langage & Python 3.10+ & Tout le projet \\
+Interface & Streamlit & Une page web écrite en Python \\
+Parcours de conversation & YAML (PyYAML) & Fichiers lisibles par un humain \\
+Données & JSON & Clients, catalogue, glossaire \\
+LLM local & Ollama (poste de la salle) ou vLLM (DeepEirb, API compatible OpenAI) & Appelés avec \f{urllib} (bibliothèque standard) ; serveur choisi par rôle ; désactivé par défaut \\
+Tests & pytest + \f{streamlit.testing} & L'interface est testée sans navigateur \\
+À venir (Younes) & sentence-transformers, scikit-learn, CodeCarbon & Classifieur et mesure d'énergie \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Dépendances installées aujourd'hui : \f{streamlit}, \f{pyyaml}, \f{pytest}. Tout le reste vient
+de la bibliothèque standard de Python.
+
+\subsection{L'arborescence}
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+hackathon-IA/
+|-- app.py                  Interface Streamlit                                   (Yahya)
+|-- src/
+|   |-- contrats.py         La langue commune : structures echangees entre modules
+|   |-- taxonomie.py        14 familles, 85 intentions (77 Banking77 + 8 a nous)
+|   |-- assistant.py        reply() : l'orchestrateur, un tour de conversation    (Yahya)
+|   |-- llm.py              Appel a Ollama (desactive par defaut)                 (Yahya)
+|   |-- texte.py            Normaliser un texte, ecrire 1 197 EUR et 41,3 %
+|   |-- incompris.py        Journal des messages non compris                      (Yahya)
+|   |-- comprendre/         ETAGE 1                                               (Younes)
+|   |   |-- __init__.py     comprendre() : reponse attendue -> mots-cles -> classifieur
+|   |   |-- mots_cles.py    Lexique par intention + regle "sur ou pas"
+|   |   |-- entites.py      Regex : montants, durees, liens, oui/non
+|   |   |-- classifieur.py  BOUCHON : e5-small + regression logistique, a entrainer
+|   |   `-- escalade.py     Appel au 14B en dernier recours (desactive par defaut)
+|   |-- converser/          ETAGES 2 et 5                                         (Yahya)
+|   |   |-- dialogue.py     L'automate : lit les parcours, decide quoi faire
+|   |   |-- parcours/*.yaml 9 parcours, un par situation du sujet
+|   |   |-- formuler.py     Gabarits, LLM eventuel, mode "mots simples"
+|   |   |-- garde_fou.py    Refuse les nombres inventes et les promesses
+|   |   `-- glossaire.py    Explication d'un terme bancaire
+|   |-- conseiller/         ETAGES 3 et 4                                         (Sohayb)
+|   |   |-- clients.py      Charge les profils (adaptateur de la base clients)
+|   |   |-- catalogue.py    Charge produits et parametres sources
+|   |   |-- regles.py       Moteur de regles : credit, epargne, pret etudiant
+|   |   `-- outils.py       Les 5 actions + confirmation obligatoire + journal
+|   `-- mesure/__init__.py  Chronometrage de chaque etape                        (Younes)
+|-- data/raw/               Banking77, Bank Marketing (bruts)
+|-- data/processed/         clients.json, catalogue.json, glossaire.json
+|-- eval/scenarios/*.yaml   9 conversations de reference
+|-- eval/run_scenarios.py   Les rejoue et verifie les attentes
+|-- eval/bench_formulation.py   Choisit le LLM en descendant en taille
+`-- tests/                  171 tests pytest
+\end{verbatim}
+\end{code}
+
+\subsection{Le contrat : comment les modules se parlent}
+
+Les modules ne s'appellent pas n'importe comment : ils échangent des \textbf{dataclasses}
+définies une seule fois dans \f{src/contrats.py}. Chacun peut ainsi avancer sans attendre les
+autres.
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{3.3cm} L{2.6cm} Y@{}}
+\toprule
+\textbf{Structure} & \textbf{Rendue par} & \textbf{Contenu} \\
+\midrule
+\f{Comprehension} & Comprendre & famille, intention, confiance, niveau (mots-clés, classifieur,
+  réponse attendue, escalade), entités (montants, durée, lien, objet), alternatives,
+  insatisfaction \\
+\f{Conseil} & Conseiller & propositions (\f{Proposition} : produit, raisons, sources, score),
+  écartés (\f{Ecart} : produit, raison, règle --- le \og pourquoi pas \fg), alertes, faits (les
+  seuls nombres autorisés dans la réponse) \\
+\f{Action} & Agir & outil, paramètres, confirmée (faux par défaut), résultat \\
+\f{Etape} & Mesurer & une ligne du panneau Frugalité : nom, modèle, latence, tokens, appel au LLM \\
+\f{Reponse} & \f{reply()} & texte, compréhension, conseil, action, question posée, escalade, trace \\
+\f{EtatConversation} & \f{reply()} & la mémoire entre deux messages : parcours, information
+  attendue, informations recueillies, action en attente, mots simples, historique \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Le chemin d'un message dans le code}
+
+Tout part de \f{reply(message, client\_id, etat)}, dans \f{src/assistant.py} :
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+profil = clients.profil(client_id)                        # conseiller/clients.py -> clients.json
+
+# 0. Une action attend un "oui" ?          -> outils.executer(action)   (conseiller/outils.py)
+
+# 1. Comprendre                                                  (comprendre/__init__.py)
+comprehension = comprendre(message, etat)
+#    etat.info_attendue ?            -> c'est la reponse a la question posee
+#    mots_cles.detecter(message)     -> sur ? on s'arrete
+#    classifieur.predire(message)    -> au-dessus de tau ? on s'arrete
+#    + entites.extraire(message)     -> montants, durees...
+#    pas compris -> Decision("clarifier"), puis Decision("orienter") + incompris.noter()
+
+# 2. Converser                                                   (converser/dialogue.py)
+decision = avancer(message, comprehension, etat, profil)
+#    lit parcours/<intention>.yaml, remplit etat.slots (profil, puis message)
+#    -> "question" | "conseil" | "action" | "transmettre" | "fiche" | "abandon"
+
+# 3. Conseiller (si conseil)                                     (conseiller/regles.py)
+conseil = conseiller(etat.parcours, profil, etat.slots)
+
+# 4. Agir (si action) : sans effet de bord -> execute ; sinon -> attend un "oui"
+
+# 5. Formuler                                                    (converser/formuler.py)
+texte = formuler(decision, conseil, action, profil, etat, message)
+#    gabarit -> [LLM + garde-fou si ASSISTANT_LLM=1 et conseil] -> mots simples -> mention legale
+
+return Reponse(texte, comprehension, conseil, action, ..., trace)   # chaque etape chronometree
+\end{verbatim}
+\end{code}
+
+\subsection{Les briques une par une}
+
+\paragraph{\f{mots\_cles.py} --- le filtre d'entrée.} Un dictionnaire
+\f{\{intention: (expressions)\}}, cherché dans le message normalisé (\og VOLÉ MA CB \fg{}
+devient \og vole ma cb \fg). Règle \og sûr \fg : une seule intention trouvée, et soit 12 mots au
+plus, soit au moins 2 expressions.
+
+\paragraph{\f{entites.py} --- les informations du message.} Des expressions régulières :
+\og 250\,000 \fg, \og 250k \fg{} et \og 1\,900\eur{} \fg{} deviennent des montants ; \og 10 ans
+\fg{} donne 120 mois ; \og mon fils \fg{} donne le lien ; \og oui \fg{} et \og non \fg{} pour les
+confirmations. Durées et heures sont retirées avant de chercher les montants.
+
+\paragraph{\f{parcours/*.yaml} et \f{dialogue.py} --- l'automate.} Un parcours, par exemple
+\f{credit\_immobilier.yaml} (extrait) :
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+infos:
+  revenus_nets:
+    type: montant
+    source: revenus_nets                     # lu dans le profil...
+    confirmer: "J'ai note vos revenus de {valeur} nets par mois."   # ...et confirme
+  prix_bien:
+    type: montant
+    indices: [prix, bien]                    # pour les corrections
+    question: "Quel est le prix du bien que vous visez ?"
+fin: {type: conseil, mention_legale: credit, proposer: transmettre_conseiller}
+\end{verbatim}
+\end{code}
+
+\f{avancer()} remplit les informations depuis le profil (\f{source}) puis depuis le message
+(selon le \f{type}), pose la première question qui manque, sinon déclenche la fin. Clés
+spéciales : \f{si\_inconnu} (valeur prise sur \og je ne sais pas \fg), \f{si\_non} (valeur prise
+sur \og non \fg), \f{indices} (à quelle information va un montant lors d'une correction).
+
+\paragraph{\f{regles.py} --- le moteur de conseil.} Une fonction par parcours. Le crédit
+immobilier applique la formule d'annuité, capacité $= m \times \frac{1-(1+i)^{-n}}{i}$, avec les
+paramètres du catalogue (35\,\%, 25 ans, frais de notaire, taux indicatif). Il rend un
+\f{Conseil} avec raisons, écarts et identifiant de règle (\f{HCSF-taux-effort}).
+
+\paragraph{\f{outils.py} --- les actions.} \f{OUTILS} déclare chaque outil et s'il a un effet
+de bord. \f{executer()} refuse un outil à effet de bord non confirmé (exception
+\f{ConfirmationRequise}). Le SI est simulé sur une copie du profil ; chaque action est notée dans
+un journal.
+
+\paragraph{\f{formuler.py} et \f{garde\_fou.py} --- la réponse.} Un gabarit par type de décision
+et par outil. Si \f{ASSISTANT\_LLM=1} et que c'est un conseil, un seul appel à Ollama reformule
+le gabarit ; \f{verifier()} compare les nombres de la reformulation à ceux du gabarit et
+refuse les promesses (\og accordé \fg, \og garanti \fg). Il refuse aussi les chiffres
+\emph{oubliés} et les réponses tronquées : un test réel avec \f{gemma3:270m} répondait \og Oui,
+je suis prêt à reformuler le message \fg{} sans le conseil. Au moindre écart, le gabarit est gardé.
+La même fonction \f{reformuler()} sert à l'assistant et au banc de formulation.
+
+\paragraph{\f{glossaire.py} --- le jargon.} Recherche exacte du terme, puis, pour une question
+de définition, recherche approchante (\f{difflib}) qui rattrape les fautes : \og TEAG \fg{} donne
+TAEG. Pas de modèle : une vingtaine de fiches écrites et relues.
+
+\paragraph{\f{app.py} --- l'interface.} Barre latérale : choix du client (C01 à C08), messages de
+démo cliquables, interrupteurs \og Mots simples \fg{} et \og Grand texte \fg. Trois zones : la
+conversation, \og Pourquoi \fg{} (raisons, écarts, sources) et \og Frugalité \fg{} (une ligne par
+étape, totaux de la conversation). La barre latérale affiche l'état \emph{réel} du LLM (serveur
+interrogé, modèle préchargé), pas seulement la configuration.
+
+\subsection{La configuration}
+
+\begin{center}\small
+\begin{tabularx}{\textwidth}{@{}L{4.5cm} L{4.1cm} Y@{}}
+\toprule
+\textbf{Variable} & \textbf{Défaut} & \textbf{Effet} \\
+\midrule
+\f{ASSISTANT\_LLM} & \f{0} & \f{1} : le petit LLM reformule les conseils \\
+\f{ASSISTANT\_ESCALADE} & \f{0} & \f{1} : appel au 14B si un message reste incompris \\
+\f{LLM\_API} (et \f{\_FORMULATION}, \f{\_ESCALADE}) & \f{ollama} & \f{ollama} ou \f{vllm}, par rôle \\
+\f{VLLM\_BASE\_URL} & --- & Serveur vLLM de DeepEirb (\f{\dots/v1}) \\
+\f{OLLAMA\_BASE\_URL} & \f{localhost:11434} & Adresse d'Ollama \\
+\f{OLLAMA\_MODEL} & \f{ministral-3:3b} & Modèle de formulation \\
+\f{OLLAMA\_MODEL\_ESCALADE} & \f{ministral-3:14b} & Modèle d'escalade \\
+\f{INCOMPRIS\_FICHIER} & \f{eval/incompris.jsonl} & Où écrire le journal \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Lancer, tester, évaluer}
+
+\begin{code}
+\footnotesize
+\begin{verbatim}
+streamlit run app.py                               # l'interface
+python -m pytest -q                                # 171 tests
+python -m eval.run_scenarios                       # 9 conversations de bout en bout
+python -m eval.bench_formulation --situations      # le banc LLM (sans modele : les 30 cas)
+python -m src.incompris                            # relire les messages non compris
+python -m eval.demo_secours                        # rejoue la demo -> rapport/demo-secours.tex
+python -m eval.tableau_formulation                 # resultats du banc -> diapositive
+\end{verbatim}
+\end{code}
+
+\textbf{Les tests} vérifient chaque brique : la taxonomie couvre les 77 intentions officielles ;
+les mots-clés reconnaissent les situations des slides, et \og carte \fg{} seul ne suffit pas ; le
+calcul HCSF donne 1\,197\eur{} et 41,3\,\% ; les actions refusent de s'exécuter sans
+confirmation ; le garde-fou refuse les nombres inventés ; l'interface démarre et répond.
+
+\textbf{Les scénarios} rejouent les conversations des 8 clients et vérifient ce qui est demandé,
+ce qui ne doit \emph{pas} l'être, les produits proposés et écartés, et deux règles partout : au
+plus un appel au LLM par tour, aucune action sans confirmation.
+
+\end{document}
