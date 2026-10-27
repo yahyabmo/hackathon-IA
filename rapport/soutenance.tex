@@ -46,7 +46,7 @@
   lien/.style={densely dashed,draw=darkgray!60},
 }
 
-\title{Un assistant bancaire frugal, explicable, et qui agit}
+\title{Un assistant bancaire frugal, explicable et prudent}
 \subtitle{Comprendre, personnaliser, conseiller --- avec le plus petit calcul qui suffit}
 \author{Yahya \and Sohayb \and Younes}
 \institute{Hackathon IA --- La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA --- Sujet 1}
@@ -105,13 +105,13 @@
     \node[acteur] (msg) {Message du client};
     \node[etage,below=of msg] (e1) {\textbf{1. Comprendre}};
     \node[etage,below=of e1] (e2) {\textbf{2. Converser}};
-    \node[etage,below=of e2] (e3) {\textbf{3. Conseiller} \textbar{} \textbf{4. Agir}};
-    \node[etage,below=of e3] (e5) {\textbf{5. Formuler}};
+    \node[etage,below=of e2] (e3) {\textbf{3. Conseiller}};
+    \node[etage,below=of e3] (e5) {\textbf{4. Formuler}};
     \node[acteur,below=of e5] (rep) {Réponse\\ + \og Pourquoi \fg{} + \og Frugalité \fg};
     \node[cote,right=0.5cm of e1] (c1) {réponse attendue $\rightarrow$ mots-clés $\rightarrow$ classifieur e5-small (118 M)};
     \node[cote,right=0.5cm of e2] (c2) {parcours YAML ; le profil n'est jamais redemandé};
-    \node[cote,right=0.5cm of e3] (c3) {règles publiques (HCSF, plafonds) ; actions après un \og oui \fg};
-    \node[cote,right=0.5cm of e5] (c5) {gabarit, ou \textbf{un seul} appel au petit LLM, sous garde-fou};
+    \node[cote,right=0.5cm of e3] (c3) {règles publiques (HCSF, plafonds) ; aucun accès au compte, aucune opération};
+    \node[cote,right=0.5cm of e5] (c5) {gabarits ; un petit LLM mesuré, puis laissé de côté};
     \foreach \a/\b in {msg/e1,e1/e2,e2/e3,e3/e5,e5/rep} \draw[fl] (\a) -- (\b);
     \foreach \i in {1,2,3,5} \draw[lien] (e\i) -- (c\i);
   \end{tikzpicture}}
@@ -134,8 +134,9 @@
       Des règles que le client peut lire ; chaque conseil dit \textbf{pourquoi}, et
       \textbf{pourquoi pas}.
     \end{block}
-    \begin{block}{Le LLM : une fois, à la fin}
-      Il met en mots des faits calculés. Le garde-fou refuse tout chiffre inventé ou oublié.
+    \begin{block}{Le LLM : mesuré, pas indispensable}
+      Six LLM essayés pour reformuler des faits calculés, sous garde-fou. Aucun n'apporte assez :
+      les gabarits suffisent.
     \end{block}
   \end{columns}
   \medskip
@@ -148,18 +149,19 @@
     \toprule
     \textbf{Client} & \textbf{Message} & \textbf{Ce qu'on montre} \\
     \midrule
-    Inès, 34 ans & \og J'ai perdu ma carte \fg & Opposition après un \og oui \fg ; aucun LLM \\
+    Inès, 34 ans & \og J'ai perdu ma carte \fg & Guidée vers l'opposition, sans accès au compte \\
+    Inès & \og Ma carte ne marche plus au distributeur \fg & Pas de mot-clé : le classifieur comprend, sans traduction \\
     Léa, 31 ans & \og Je veux acheter un appartement \fg & Revenus non redemandés ; 41,3\,\% $>$ 35\,\% ;
       \og et avec 200\,000 ? \fg{} : 32,2\,\% \\
     Sophie / Lucas & \og Je voudrais mettre de côté \fg & Même phrase, deux clients, deux conseils \\
-    Marc, 52 ans & \og Pourquoi 8\eur{} de frais ? \fg & Historique, plafond légal, offre clientèle fragile \\
-    Julie & \og Votre appli ne marche jamais ! \fg & Excuses, passage de main avec résumé \\
-    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples ; \og oui, mais \fg{} n'est pas un accord ; montant corrigé \\
+    Marc, 52 ans & \og Pourquoi 8\eur{} de frais ? \fg & Cause fréquente, plafond légal, offre clientèle fragile \\
+    Julie & \og Votre appli ne marche jamais ! \fg & Excuses ; conseiller, réclamation, médiateur \\
+    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples, automatiquement ; guidé vers son espace \\
     \bottomrule
   \end{tabularx}
   \smallskip
-  \scriptsize Démo de secours : 17 tours rejoués par le vrai pipeline, 0 appel au LLM, moins de 3~ms par tour
-  (gabarits, sur un portable).
+  \scriptsize Démo de secours : 13 tours rejoués par le vrai pipeline, 0 appel au LLM, environ 6~ms par tour
+  (sur un portable).
 \end{frame}
 
 \begin{frame}{Choisir le LLM en descendant en taille \qui{Yahya}}
@@ -169,6 +171,11 @@
   \medskip
 
   \input{resultats-formulation}
+  \medskip
+
+  \footnotesize Les plus gros touchent aux chiffres (14B : 23/30). \texttt{qwen3:1.7b} les respecte,
+  mais efface parfois une phrase qui compte (\og aucun refus bancaire \fg) : 13 scénarios sur 14.
+  \textbf{Décision : les gabarits suffisent, le LLM reste désactivé.}
 \end{frame}
 
 % ─────────────────────────────── Younes ───────────────────────────────
@@ -184,7 +191,9 @@
   \input{resultats-frugalite}
   \medskip
 
-  \small La cascade répond sans LLM dans la plupart des tours ; le LLM ne reformule que les conseils.
+  \small Sans LLM, la cascade réussit tous les scénarios avec \textbf{plus de 3\,000 fois moins
+  d'énergie} que le 14B qui fait tout, même sans soustraire le repos (0,04 contre 155 Wh pour
+  1\,000 requêtes).
 \end{frame}
 
 % ─────────────────────────────── Sohayb ───────────────────────────────
@@ -213,7 +222,8 @@
     \item \textbf{Règlement européen sur l'IA} : la notation de solvabilité est à haut risque ;
           nous n'en faisons pas, un conseiller décide. Le client sait qu'il parle à une IA.
     \item \textbf{Mention légale} sur toute réponse de crédit ; aucune promesse.
-    \item \textbf{Aucune action sans un \og oui \fg} ; rappel : jamais de code confidentiel.
+    \item \textbf{Aucun accès au compte, aucune opération} (périmètre du kick-off) : l'assistant
+          explique et oriente ; rappel : jamais de code confidentiel.
     \item \textbf{Données simulées, traitement local} : rien ne sort de la machine.
     \item \textbf{Inclusion} : mots simples, jargon expliqué, offre clientèle fragile.
   \end{itemize}
@@ -240,8 +250,8 @@
   \bigskip
   \begin{minipage}{0.82\textwidth}\centering
     \textit{Notre assistant comprend avec de simples mots-clés ou un modèle de 118 millions de
-    paramètres, décide avec des règles que le client peut lire, et n'appelle un LLM qu'une fois,
-    à la fin, pour mettre en mots ce qui est déjà calculé.}
+    paramètres, décide avec des règles que le client peut lire, et répond sans LLM : nous en avons
+    mesuré six, aucun n'apportait assez pour son coût.}
   \end{minipage}
   \vfill
 \end{frame}

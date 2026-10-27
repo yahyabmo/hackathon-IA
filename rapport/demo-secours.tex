@@ -21,31 +21,33 @@
 \begin{document}
 {\LARGE\bfseries\color{mainblue} Démo de secours\par}
 {\large Assistant bancaire frugal --- le script de la démonstration, rejoué par le vrai pipeline\par}
-{\small\color{darkgray} Généré le 27/10/2026 à 12 h 00 sur yahya-bel-hajjam (x86\_64), mode : gabarits, sans LLM.\par}
+{\small\color{darkgray} Généré le 27/10/2026 à 16 h 30 sur yahya-bel-hajjam (x86\_64), mode : gabarits, sans LLM.\par}
 \medskip
 \section*{Bilan}
-17 tours de conversation, dont \textbf{17 sans aucun appel au LLM} ; 47,0~ms de calcul au total, soit 2,76~ms par tour en moyenne ; 0 appel(s) au LLM ; 0 escalade. Mode : gabarits, sans LLM.
-\section{Carte perdue : réagir vite et agir}
-\textit{Inès, 34 ans, cadre (C01).} Compris par les mots-clés ; l'opposition n'est faite qu'après le « oui ».
+13 tours de conversation, dont \textbf{13 sans aucun appel au LLM} ; 82,3~ms de calcul au total, soit 6,33~ms par tour en moyenne ; 0 appel(s) au LLM ; 0 escalade. Mode : gabarits, sans LLM.
+\section{Carte perdue : guider en sécurité}
+\textit{Inès, 34 ans, cadre (C01).} Compris par les mots-clés ; le chatbot guide vers l'espace bancaire sécurisé.
 
 \begin{client}J'ai perdu ma carte hier soir, je fais quoi ?\end{client}
-\begin{assistant}Je comprends, on sécurise votre carte tout de suite. Je peux faire opposition sur votre carte maintenant : plus aucun paiement ne sera possible avec. Confirmez-vous ? (oui / non)\end{assistant}
+\begin{assistant}Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{lost\_or\_stolen\_card}, comprise par mots\_cles
-\item Action \texttt{bloquer\_carte} : en attente du « oui »
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,2~ms, converser 9,7~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 16,6~ms, formuler 0,0~ms --- appels au LLM : 0}
 
-\begin{client}oui\end{client}
-\begin{assistant}C'est fait : votre carte est en opposition depuis 12 h 00 (référence OPP-C01-6357469e0642). Plus personne ne peut s'en servir, et les opérations frauduleuses faites après l'opposition ne sont pas à votre charge. Une nouvelle carte peut être commandée depuis votre espace client ou avec un conseiller. Rappel : la banque ne vous demandera jamais votre code confidentiel.\par Simulation uniquement : aucune opération réelle ni rappel réel.\end{assistant}
+\section{Sans mot-clé : le classifieur comprend}
+\textit{Inès, 34 ans, cadre (C01).} Aucun mot-clé ne conclut : e5-small reconnaît la famille, entraîné sans traduction.
+
+\begin{client}Ma carte ne marche plus au distributeur\end{client}
+\begin{assistant}Je comprends que votre demande concerne l'utilisation de votre carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
-\item Action \texttt{bloquer\_carte} : exécutée (simulation)
+\item Intention \texttt{card\_not\_working}, comprise par classifieur
 \end{itemize}
 \end{pourquoi}
-\frugal{agir 0,2~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 24,3~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \section{L'appartement : questionner, calculer, expliquer}
 \textit{Léa, 31 ans, cadre (C07).} Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, puis recalculé.
@@ -58,10 +60,10 @@
 \item Information demandée : \texttt{prix\_bien}
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,1~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \begin{client}Autour de 250 000, et je peux mettre les 25 000\end{client}
-\begin{assistant}Non proposé — Crédit immobilier : mensualité indicative de 1\,197~\texteuro{} sur 300 mois, soit 41,3~\% des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 41,3~\% : au-delà du repère de 35~\%. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Voulez-vous qu'un conseiller vous rappelle ? (oui / non)\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
+\begin{assistant}Non proposé — Crédit immobilier : mensualité indicative de 1\,197~\texteuro{} sur 300 mois, soit 41,3~\% des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 41,3~\% : au-delà du repère de 35~\%. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Pour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{credit\_immobilier}, comprise par reponse\_attendue
@@ -77,10 +79,10 @@
 \item Hypothèse : Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,3~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,6~ms, converser 0,1~ms, conseiller 0,7~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \begin{client}Et avec un bien à 200 000 ?\end{client}
-\begin{assistant}Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 933~\texteuro{} sur 300 mois, soit 32,2~\% des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\par Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Voulez-vous qu'un conseiller vous rappelle ? (oui / non)\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
+\begin{assistant}Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 933~\texteuro{} sur 300 mois, soit 32,2~\% des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\par Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\par Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 215\,000~\texteuro{}. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\par Pour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\par Taux annuel de 3,3~\% : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5~\% ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\par Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{credit\_immobilier}, comprise par reponse\_attendue
@@ -95,7 +97,7 @@
 \item Hypothèse : Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 14,2~ms, converser 0,1~ms, conseiller 0,2~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 24,9~ms, converser 0,2~ms, conseiller 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \section{Même phrase, deux clients : Sophie}
 \textit{Sophie, 41 ans, employée administrative (C03).} Pour ses enfants : Livret A, Livret Jeune pour l'aîné ; LDDS et LEP écartés.
@@ -108,7 +110,7 @@
 \item Information demandée : \texttt{horizon\_mois}
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,1~ms, formuler 0,0~ms --- appels au LLM : 0}
 
 \begin{client}Dans 10 ans, 100 euros par mois\end{client}
 \begin{assistant}Voici ce que je vous propose. Livret A : piste au nom de chaque enfant ; vérifier l'absence de Livret A déjà détenu et les représentants légaux. Livret Jeune : piste pour l'enfant de 12 à 25 ans, sous réserve de résidence en France et d'absence de livret identique. Les versements prévus dépassent la place disponible de 1\,600~\texteuro{} ; prévoir une répartition.\par Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret de développement durable et solidaire (LDDS) : éligibilité à vérifier (situation fiscale des enfants), aucune inéligibilité déduite. Livret d'épargne populaire (LEP) : éligibilité à vérifier (situation fiscale des enfants, revenu fiscal des enfants), aucune inéligibilité déduite. Les soldes et la situation fiscale des enfants ne sont pas connus ; ne pas utiliser ceux du parent.\par Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.\end{assistant}
@@ -124,7 +126,7 @@
 \item Hypothèse : Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,1~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \section{Même phrase, deux clients : Lucas}
 \textit{Lucas, 20 ans, étudiant (C08).} Pour lui, 20 ans : le Livret Jeune passe en premier.
@@ -153,83 +155,43 @@
 \item Hypothèse : Disponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,2~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,1~ms, converser 0,0~ms, conseiller 0,3~ms, formuler 0,3~ms --- appels au LLM : 0}
 
 \section{Les frais de Marc : expliquer, inclure}
-\textit{Marc, 52 ans, ouvrier (C02).} Lu dans l'historique ; plafond légal ; offre clientèle fragile proposée.
+\textit{Marc, 52 ans, ouvrier (C02).} Sans accès au compte : la cause fréquente, le plafond légal, l'offre clientèle fragile.
 
 \begin{client}Pourquoi j'ai payé 8 \texteuro{} de frais ce mois-ci ?\end{client}
-\begin{assistant}Le 8 octobre, une commission d'intervention de 8~\texteuro{} : un paiement est passé alors que votre compte dépassait son découvert autorisé. La loi plafonne ces commissions à 8~\texteuro{} par opération et 80~\texteuro{} par mois. Vous avez eu 5 découverts en 12 mois : un conseiller peut vous présenter l'offre clientèle fragile, qui limite ces frais à 4~\texteuro{} par opération et 20~\texteuro{} par mois. Voulez-vous qu'il vous rappelle ? (oui / non)\par Simulation uniquement : aucune opération réelle ni rappel réel.\par Ces plafonds concernent les commissions d'intervention. Le nombre de découverts est seulement un signal interne d'orientation, pas un critère légal de fragilité.\end{assistant}
+\begin{assistant}Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8~\texteuro{} par opération et 80~\texteuro{} par mois (4~\texteuro{} et 20~\texteuro{} pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{extra\_charge\_on\_statement}, comprise par mots\_cles
-\item Action \texttt{expliquer\_frais} : exécutée (simulation)
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, agir 0,3~ms, formuler 0,0~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,0~ms, formuler 0,1~ms --- appels au LLM : 0}
 
 \section{Julie, mécontente : passer la main}
-\textit{Julie, 37 ans, employée de services (C06).} Pas de justification : un conseiller reprend la main avec le résumé.
+\textit{Julie, 37 ans, employée de services (C06).} Pas de justification : excuses, puis le chemin vers un conseiller et la réclamation.
 
 \begin{client}Votre appli ne marche jamais !\end{client}
-\begin{assistant}Je suis désolé pour ce désagrément. C'est votre 3e message aujourd'hui : je préfère qu'un conseiller reprenne la main, avec le résumé de vos échanges. Voulez-vous qu'il vous rappelle ? (oui / non)\end{assistant}
+\begin{assistant}Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{insatisfaction}, comprise par mots\_cles
-\item Action \texttt{transmettre\_conseiller} : en attente du « oui »
 \end{itemize}
 \end{pourquoi}
 \frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,0~ms --- appels au LLM : 0}
 
-\begin{client}oui\end{client}
-\begin{assistant}C'est noté : un conseiller va vous rappeler (demande TCK-C06-1895c8de8a2c). Il aura le résumé de notre échange, vous n'aurez pas à tout répéter.\par Simulation uniquement : aucune opération réelle ni rappel réel.\end{assistant}
-\begin{pourquoi}
-\begin{itemize}
-\item Action \texttt{transmettre\_conseiller} : exécutée (simulation)
-\end{itemize}
-\end{pourquoi}
-\frugal{agir 0,2~ms, formuler 0,0~ms --- appels au LLM : 0}
-
 \section{Paul, 68 ans : pas à pas, en mots simples}
-\textit{Paul, 68 ans, retraité (C04).} Mots simples automatiques ; « oui, mais » n'est pas un accord ; le montant se corrige avant le « oui ».
+\textit{Paul, 68 ans, retraité (C04).} Mots simples automatiques ; le chatbot guide vers l'espace bancaire sécurisé.
 
 \begin{client}Je dois envoyer 500 \texteuro{} à mon fils.\end{client}
-\begin{assistant}D'accord, je vous guide pas à pas.\par Je récapitule : un virement de 500~\texteuro{} vers votre fils, Thomas.\par Confirmez-vous ? (oui / non)\par Rappel : la banque ne vous demandera jamais votre code confidentiel.\end{assistant}
+\begin{assistant}D'accord, je vous guide pas à pas.\par Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider.\par Je ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.\end{assistant}
 \begin{pourquoi}
 \begin{itemize}
 \item Intention \texttt{faire\_virement}, comprise par mots\_cles
-\item Action \texttt{preparer\_virement} : en attente du « oui »
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 0,1~ms, converser 0,0~ms, formuler 0,5~ms --- appels au LLM : 0}
-
-\begin{client}Oui, mais pas maintenant\end{client}
-\begin{assistant}Aucune opération effectuée.\par Confirmez la demande présentée par « oui » ou annulez par « non ».\end{assistant}
-\begin{pourquoi}
-\begin{itemize}
-\item Action \texttt{preparer\_virement} : en attente du « oui »
-\end{itemize}
-\end{pourquoi}
-\frugal{formuler 0,1~ms --- appels au LLM : 0}
-
-\begin{client}Non, plutôt 300 \texteuro{}\end{client}
-\begin{assistant}Je récapitule : un virement de 300~\texteuro{} vers votre fils, Thomas.\par Confirmez-vous ? (oui / non)\par Rappel : la banque ne vous demandera jamais votre code confidentiel.\end{assistant}
-\begin{pourquoi}
-\begin{itemize}
-\item Intention \texttt{faire\_virement}, comprise par reponse\_attendue
-\item Action \texttt{preparer\_virement} : en attente du « oui »
-\end{itemize}
-\end{pourquoi}
-\frugal{comprendre 13,2~ms, converser 0,1~ms, formuler 0,2~ms --- appels au LLM : 0}
-
-\begin{client}oui\end{client}
-\begin{assistant}C'est fait : le virement de 300~\texteuro{} vers Thomas est enregistré, référence VIR-C04-42ac89b51727.\par Simulation uniquement : aucune opération réelle ni rappel réel.\end{assistant}
-\begin{pourquoi}
-\begin{itemize}
-\item Action \texttt{preparer\_virement} : exécutée (simulation)
-\end{itemize}
-\end{pourquoi}
-\frugal{agir 0,3~ms, formuler 0,1~ms --- appels au LLM : 0}
+\frugal{comprendre 0,2~ms, converser 0,0~ms, formuler 0,9~ms --- appels au LLM : 0}
 
 \section{Le jargon, même mal écrit}
 \textit{Lucas, 20 ans, étudiant (C08).} Fiche du glossaire retrouvée malgré la faute de frappe, sans LLM.
@@ -241,6 +203,6 @@
 \item Intention \texttt{question\_definition}, comprise par mots\_cles
 \end{itemize}
 \end{pourquoi}
-\frugal{comprendre 3,6~ms, converser 0,0~ms, formuler 1,7~ms --- appels au LLM : 0}
+\frugal{comprendre 7,0~ms, converser 0,0~ms, formuler 3,3~ms --- appels au LLM : 0}
 
 \end{document}

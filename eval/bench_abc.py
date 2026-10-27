@@ -223,7 +223,8 @@ def _lots(resultats: dict) -> str:
     return f"lots de {courant[0]} requêtes × {courant[1]}" + (f" ({' ; '.join(autres)})" if autres else "")
 
 
-NOMS = {"A": "A --- un LLM fait tout", "B": "\\textbf{B --- notre cascade}", "C": "C --- cascade, gabarits seuls"}
+NOMS = {"A": "A --- un LLM fait tout", "B": "B --- cascade + petit LLM",
+        "C": "\\textbf{C --- notre cascade, sans LLM}"}
 
 
 def latex(resultats: dict) -> str:
