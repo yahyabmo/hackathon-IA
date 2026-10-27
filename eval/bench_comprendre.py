@@ -25,6 +25,7 @@ Usage, depuis la racine du dépôt :
 from __future__ import annotations
 
 import json
+import os
 import platform
 import statistics
 import sys
@@ -230,7 +231,7 @@ def main(arguments: list[str]) -> int:
         resultats["configurations"].update(
             mots_cles=banc_mots_cles(test_fr), e5=banc_e5(test_en, test_fr),
             etage1=banc_etage1(test_fr), tfidf=banc_tfidf(test_en, test_fr))
-    resultats["machine"] = resultats.get("machine") or f"{platform.node()} ({platform.machine()})"
+    resultats["machine"] = os.environ.get("BANC_MACHINE") or f"{platform.node()} ({platform.machine()})"
     resultats["date"] = datetime.now().isoformat(timespec="seconds")
     RESULTATS.parent.mkdir(exist_ok=True)
     RESULTATS.write_text(json.dumps(resultats, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

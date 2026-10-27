@@ -15,7 +15,9 @@ Sorties :
   montrer la plus proche (non versionné, recréé par ce script).
 
 Usage : ``python -m src.comprendre.entrainer [--energie]`` (CodeCarbon autour
-de l'entraînement, pour le coût de la préparation hors ligne).
+de l'entraînement, pour le coût de la préparation hors ligne), ou
+``--exemples-seulement`` pour recréer l'index des phrases sans toucher aux têtes
+versionnées (installation d'un nouveau poste).
 """
 
 from __future__ import annotations
@@ -96,6 +98,16 @@ def _separer(n: int, etiquettes: list[str]) -> tuple[np.ndarray, np.ndarray]:
     return np.flatnonzero(~masque), np.flatnonzero(masque)
 
 
+def indexer_exemples() -> int:
+    """Seulement ``models/exemples.npz`` : les vecteurs des phrases, pour la plus proche."""
+
+    donnees = lire_banking77("train") + lire_exemples_equipe()
+    EXEMPLES.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(EXEMPLES, vecteurs=encoder([t for t, _ in donnees]).astype(np.float16),
+                        textes=np.array([t for t, _ in donnees]), intentions=np.array([i for _, i in donnees]))
+    return len(donnees)
+
+
 def entrainer() -> dict:
     from sklearn.linear_model import LogisticRegression
 
@@ -151,6 +163,9 @@ def entrainer() -> dict:
 
 
 def main(arguments: list[str]) -> int:
+    if "--exemples-seulement" in arguments:
+        print(f"{indexer_exemples()} phrases indexées dans {EXEMPLES}")
+        return 0
     if "--energie" in arguments:
         from codecarbon import OfflineEmissionsTracker
 
