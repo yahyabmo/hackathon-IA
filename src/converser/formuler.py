@@ -43,10 +43,13 @@ MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août
         "septembre", "octobre", "novembre", "décembre")
 
 SYSTEME_FORMULATION = (
-    "Tu es l'assistant d'une banque française. Reformule le message ci-dessous pour un client, en "
-    "français, au vouvoiement, avec des phrases courtes et un ton chaleureux. N'ajoute aucun chiffre, "
-    "aucun produit et aucune promesse. Garde tous les chiffres exactement. Termine par la même question."
+    "Tu es l'assistant d'une banque française. On te donne un message déjà rédigé pour un client. "
+    "Réécris-le en français, au vouvoiement, avec des phrases courtes et un ton chaleureux. Garde "
+    "toutes les informations et tous les chiffres exactement ; n'ajoute aucun chiffre, aucun produit "
+    "et aucune promesse. Termine par la même question. Réponds uniquement par le message réécrit."
 )
+CONSIGNE_MESSAGE = 'Message à réécrire :\n"""\n{texte}\n"""'
+LONGUEUR_MIN_RELATIVE = 0.4
 CONSIGNE_SIMPLE = " Le client est peu à l'aise : phrases très courtes, mots de tous les jours."
 
 
@@ -55,6 +58,22 @@ def mots_simples(profil: dict[str, Any], etat: EtatConversation) -> bool:
 
     return (etat.mots_simples or bool(profil.get("peu_a_laise_en_ligne"))
             or profil.get("age", 0) >= AGE_MOTS_SIMPLES)
+
+
+def reformuler(texte: str, modele: str, simple: bool = False) -> tuple[str | None, int, list[str]]:
+    """Un appel au LLM pour réécrire un gabarit, vérifié par le garde-fou.
+
+    Rend le texte réécrit (``None`` s'il est refusé), les tokens consommés et les
+    problèmes trouvés. Partagé par la formulation et le banc de formulation.
+    """
+
+    systeme = SYSTEME_FORMULATION + (CONSIGNE_SIMPLE if simple else "")
+    reecrit, tokens = llm.generer(modele, systeme, CONSIGNE_MESSAGE.format(texte=texte))
+    reecrit = reecrit.strip().strip('"').strip()
+    reference = set(garde_fou.nombres(texte))
+    problemes = garde_fou.verifier(reecrit, reference, obligatoires=reference,
+                                   longueur_min=int(LONGUEUR_MIN_RELATIVE * len(texte)))
+    return (None if problemes else reecrit), tokens, problemes
 
 
 def simplifier(texte: str, expliquer_jargon: bool = True) -> str:
@@ -175,7 +194,7 @@ def _gabarit_action_faite(action: Action) -> str:
 
 def _gabarit_fiche(decision: Decision, message: str) -> str:
     if decision.parcours == "question_definition":
-        fiche = glossaire.chercher(message)
+        fiche = glossaire.chercher(message, approchant=True)
         if fiche:
             return f"{fiche['terme']} : {fiche['explication']}"
         return "Je n'ai pas encore de fiche sur ce terme : un conseiller pourra vous l'expliquer."
@@ -233,14 +252,13 @@ def formuler(
 
     if decision.type == "conseil" and llm.actif():
         etape.modele, etape.appel_llm = llm.MODELE_FORMULATION, True
-        systeme = SYSTEME_FORMULATION + (CONSIGNE_SIMPLE if simple else "")
         try:
-            reformule, etape.tokens = llm.generer(llm.MODELE_FORMULATION, systeme, texte)
-            if not garde_fou.verifier(reformule, set(garde_fou.nombres(texte))):
-                texte = reformule
+            reecrit, etape.tokens, _ = reformuler(texte, llm.MODELE_FORMULATION, simple)
+            if reecrit is not None:
+                texte = reecrit
             else:
                 etape.modele = f"{llm.MODELE_FORMULATION} (refusé par le garde-fou)"
-        except OSError:
+        except (OSError, KeyError, ValueError):
             etape.modele = f"{llm.MODELE_FORMULATION} (injoignable)"
 
     if simple:

@@ -29,7 +29,8 @@ def escalader(message: str) -> tuple[Comprehension | None, Etape | None]:
     if not llm.escalade_active():
         return None, None
     debut = perf_counter()
-    texte, tokens = llm.generer(llm.MODELE_ESCALADE, _SYSTEME, message, max_tokens=12)
+    texte, tokens = llm.generer(llm.MODELE_ESCALADE, _SYSTEME, message, max_tokens=12,
+                                role="escalade")
     etape = Etape(
         nom="escalade", modele=llm.MODELE_ESCALADE, latence_ms=(perf_counter() - debut) * 1000,
         tokens=tokens, appel_llm=True,

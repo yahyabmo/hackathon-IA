@@ -47,6 +47,31 @@ def _envoyer(texte: str) -> None:
     st.session_state.reponses.append(reponse)
 
 
+@st.cache_data(ttl=30, show_spinner=False)
+def _serveur_joignable(role: str) -> bool:
+    return llm.joignable(role)
+
+
+@st.cache_resource(show_spinner="Chargement du modèle en mémoire…")
+def _prechauffer(modele: str) -> bool:
+    """Une seule fois par session du serveur : le jury ne paie pas le chargement."""
+
+    return llm.prechauffer(modele)
+
+
+def _etat_llm() -> str:
+    """L'état réel du LLM : une configuration présente ne prouve pas que le serveur répond."""
+
+    if not llm.actif():
+        return "LLM : désactivé — réponses par gabarits"
+    if not _serveur_joignable("formulation"):
+        return f"LLM : serveur {llm.serveur()} injoignable — réponses par gabarits"
+    pret = _prechauffer(llm.MODELE_FORMULATION)
+    escalade = "escalade activée" if llm.escalade_active() else "escalade désactivée"
+    return (f"LLM : {llm.MODELE_FORMULATION} sur {llm.serveur()} — "
+            f"{'prêt' if pret else 'non chargé'} — {escalade}")
+
+
 def _frugalite_session(reponses) -> dict:
     """Totaux de la conversation : la preuve de frugalité au fil de la démo."""
 
@@ -89,7 +114,7 @@ st.sidebar.caption("Messages de démo")
 for i, texte in enumerate(MESSAGES_DEMO.get(client_id, [])):
     if st.sidebar.button(texte, key=f"demo-{client_id}-{i}"):
         _envoyer(texte)
-st.sidebar.caption("LLM : " + (f"activé ({llm.MODELE_FORMULATION})" if llm.actif() else "désactivé, gabarits"))
+st.sidebar.caption(_etat_llm())
 
 colonne_chat, colonne_panneaux = st.columns([3, 2])
 

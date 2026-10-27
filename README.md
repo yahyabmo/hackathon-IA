@@ -77,6 +77,11 @@ set -a && source .env && set +a
 streamlit run app.py
 ```
 
+Le serveur se choisit par rôle : Ollama sur un poste de la salle (défaut) ou vLLM
+sur DeepEirb (`LLM_API=vllm`, `VLLM_BASE_URL=…/v1`) ; `LLM_API_FORMULATION` et
+`LLM_API_ESCALADE` permettent de garder le petit modèle en local et le gros sur
+DeepEirb. L'interface affiche l'état réel du serveur et précharge le modèle.
+
 L'escalade vers le gros modèle reste désactivée (`ASSISTANT_ESCALADE=0`) : un
 message incompris après la question de clarification est noté dans
 `eval/incompris.jsonl` (lecture : `python -m src.incompris`) et le client se voit
@@ -102,8 +107,8 @@ Un scénario qui passait et qui échoue bloque la fusion.
 - **M1** : entraîner le classifieur (`src/comprendre/classifieur.py`) ; fixer τ par balayage ;
   compléter le lexique de mots-clés en mesurant la précision de chaque expression ; écrire le
   test français à la main ; banc A/B/C et CodeCarbon.
-- **M2** : lancer le banc de formulation sur un poste de la salle et choisir le LLM ; intégrer le
-  classifieur de M1 ; glossaire par similarité (encodeur de M1) ; vidéo de secours.
+- **M2** : lancer le banc de formulation sur un poste de la salle (modèles installés) et choisir
+  le LLM ; intégrer le classifieur de M1 dès qu'il est livré.
 - **M3** : rattacher chaque client à sa ligne de Bank Marketing ; relever sources et dates du
   catalogue ; modèle d'appétence ; règles complètes ; scénarios jusqu'à 30.
 

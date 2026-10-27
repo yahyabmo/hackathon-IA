@@ -1,4 +1,4 @@
-"""Accès au LLM local (Ollama), partagé par la formulation et l'escalade.
+"""Accès aux LLM locaux, partagé par la formulation et l'escalade.
 
 Désactivé par défaut : sans modèle installé, l'assistant répond avec ses
 gabarits (c'est la configuration C des mesures). ``ASSISTANT_LLM=1`` l'active
@@ -6,8 +6,15 @@ pour la formulation ; ``ASSISTANT_ESCALADE=1`` permet en plus l'escalade.
 Un tour de conversation fait au plus un appel, à la fin (formulation) ;
 l'escalade est l'exception, comptée dans la trace.
 
-Pour un modèle qui raisonne (Qwen3), ajouter ``"think": false`` à la requête :
-la réflexion consomme des tokens sans rien apporter ici.
+Deux serveurs possibles, choisis par rôle :
+- ``ollama`` (défaut) : un poste de la salle, ``OLLAMA_BASE_URL`` ;
+- ``vllm`` : le serveur de DeepEirb, API compatible OpenAI, ``VLLM_BASE_URL``
+  (par exemple ``http://deepeirb:8000/v1``).
+``LLM_API`` fixe le serveur des deux rôles ; ``LLM_API_FORMULATION`` et
+``LLM_API_ESCALADE`` le précisent (petit modèle en local, 14B sur DeepEirb).
+
+Pour les modèles qui raisonnent (Qwen3), la réflexion est coupée : elle
+consomme des tokens sans rien apporter ici.
 """
 
 from __future__ import annotations
@@ -20,6 +27,7 @@ import urllib.request
 URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 MODELE_FORMULATION = os.getenv("OLLAMA_MODEL", "ministral-3:3b")
 MODELE_ESCALADE = os.getenv("OLLAMA_MODEL_ESCALADE", "ministral-3:14b")
+OPTIONS = {"temperature": 0.2, "num_ctx": 4096}
 
 
 def actif() -> bool:
@@ -38,35 +46,71 @@ def escalade_active() -> bool:
     return actif() and os.getenv("ASSISTANT_ESCALADE", "0") == "1"
 
 
-def joignable(delai: float = 2.0) -> bool:
-    """Ollama répond-il vraiment ? Une configuration présente ne prouve rien."""
+def serveur(role: str = "formulation") -> str:
+    """``ollama`` ou ``vllm`` pour ce rôle (``formulation`` ou ``escalade``)."""
 
-    try:
-        with urllib.request.urlopen(f"{URL}/api/tags", timeout=delai):
-            return True
-    except (urllib.error.URLError, OSError):
-        return False
+    return os.getenv(f"LLM_API_{role.upper()}", os.getenv("LLM_API", "ollama"))
 
 
-def generer(modele: str, systeme: str, message: str, max_tokens: int = 200) -> tuple[str, int]:
-    """Un appel au modèle. Rend le texte et le nombre de tokens (entrée + sortie)."""
+def _requete(url: str, corps: dict | None = None, delai: float = 120) -> dict:
+    donnees = json.dumps(corps).encode("utf-8") if corps is not None else None
+    entetes = {"Content-Type": "application/json"}
+    if os.getenv("VLLM_API_KEY"):
+        entetes["Authorization"] = f"Bearer {os.environ['VLLM_API_KEY']}"
+    requete = urllib.request.Request(url, data=donnees, headers=entetes)
+    with urllib.request.urlopen(requete, timeout=delai) as reponse:
+        return json.load(reponse)
+
+
+def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int) -> dict:
+    """Requête ``/api/chat`` d'Ollama (publique pour les tests)."""
 
     corps = {
         "model": modele,
-        "messages": [
-            {"role": "system", "content": systeme},
-            {"role": "user", "content": message},
-        ],
+        "messages": [{"role": "system", "content": systeme}, {"role": "user", "content": message}],
         "stream": False,
         "keep_alive": "30m",
-        "options": {"temperature": 0.2, "num_ctx": 4096, "num_predict": max_tokens},
+        "options": {**OPTIONS, "num_predict": max_tokens},
     }
-    requete = urllib.request.Request(
-        f"{URL}/api/chat",
-        data=json.dumps(corps).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-    )
-    with urllib.request.urlopen(requete, timeout=120) as reponse:
-        donnees = json.load(reponse)
+    if modele.startswith("qwen3"):
+        corps["think"] = False
+    return corps
+
+
+def generer(modele: str, systeme: str, message: str, max_tokens: int = 200,
+            role: str = "formulation") -> tuple[str, int]:
+    """Un appel au modèle. Rend le texte et le nombre de tokens (entrée + sortie)."""
+
+    if serveur(role) == "vllm":
+        base = os.getenv("VLLM_BASE_URL", "http://localhost:8000/v1").rstrip("/")
+        donnees = _requete(f"{base}/chat/completions", {
+            "model": modele, "temperature": OPTIONS["temperature"], "max_tokens": max_tokens,
+            "messages": [{"role": "system", "content": systeme}, {"role": "user", "content": message}],
+        })
+        return donnees["choices"][0]["message"]["content"].strip(), donnees.get("usage", {}).get("total_tokens", 0)
+
+    donnees = _requete(f"{URL}/api/chat", corps_ollama(modele, systeme, message, max_tokens))
     tokens = donnees.get("prompt_eval_count", 0) + donnees.get("eval_count", 0)
     return donnees["message"]["content"].strip(), tokens
+
+
+def joignable(role: str = "formulation", delai: float = 2.0) -> bool:
+    """Le serveur répond-il vraiment ? Une configuration présente ne prouve rien."""
+
+    url = (f"{os.getenv('VLLM_BASE_URL', 'http://localhost:8000/v1').rstrip('/')}/models"
+           if serveur(role) == "vllm" else f"{URL}/api/tags")
+    try:
+        _requete(url, delai=delai)
+        return True
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
+def prechauffer(modele: str | None = None) -> bool:
+    """Charge le modèle en mémoire avant la démo, pour ne pas payer le chargement devant le jury."""
+
+    try:
+        generer(modele or MODELE_FORMULATION, "Réponds « ok ».", "ok", max_tokens=1)
+        return True
+    except (urllib.error.URLError, OSError, KeyError, ValueError):
+        return False

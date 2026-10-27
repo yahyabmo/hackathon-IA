@@ -11,6 +11,7 @@ def test_l_interface_demarre_sans_erreur():
     app.run()
     assert not app.exception
     assert "assistant automatique" in app.info[0].value
+    assert any("LLM : désactivé" in c.value for c in app.sidebar.caption)
 
 
 def test_l_interface_repond_et_change_de_client_proprement():
