@@ -4,18 +4,44 @@
       "configuration": "C",
       "modele": null,
       "reussite": "14 / 14",
-      "wh_par_1000": 0.0009,
-      "wh_par_1000_brut": 0.009,
-      "latence_p50_ms": 0.3,
-      "latence_p95_ms": 14.0,
+      "wh_par_1000": 0.0041,
+      "wh_par_1000_brut": 0.044,
+      "latence_p50_ms": 0.2,
+      "latence_p95_ms": 5.6,
       "go_charges": 0.47,
       "sans_llm": 1.0,
       "requetes": 200,
       "repetitions": 3
+    },
+    "A": {
+      "configuration": "A",
+      "modele": "ministral-3:14b",
+      "reussite": "à juger",
+      "wh_par_1000": 109.3019,
+      "wh_par_1000_brut": 154.655,
+      "latence_p50_ms": 1433.3,
+      "latence_p95_ms": 2020.3,
+      "go_charges": 9.1,
+      "sans_llm": 0.0,
+      "requetes": 40,
+      "repetitions": 1
+    },
+    "B": {
+      "configuration": "B",
+      "modele": "qwen3:1.7b",
+      "reussite": "13 / 14",
+      "wh_par_1000": 6.2158,
+      "wh_par_1000_brut": 9.7366,
+      "latence_p50_ms": 0.4,
+      "latence_p95_ms": 581.0,
+      "go_charges": 1.87,
+      "sans_llm": 0.745,
+      "requetes": 200,
+      "repetitions": 3
     }
   },
-  "machine": "yahya-bel-hajjam (x86_64)",
+  "machine": "deepeirb (x86_64)",
   "requetes": 200,
-  "date": "2026-10-27T11:57:39",
-  "puissance_repos_w": 11.5
+  "date": "2026-10-27T16:22:39",
+  "puissance_repos_w": 126.1
 }

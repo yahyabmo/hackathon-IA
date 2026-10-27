@@ -38,7 +38,7 @@ def test_le_mode_mots_simples_s_active_depuis_l_interface():
 def test_simulation_credit_affiche_calculs_et_sources():
     app = testing.AppTest.from_file(APP, default_timeout=30).run()
     app.sidebar.selectbox[0].set_value("C07").run()
-    app.button(key="suggestion-0").click().run()
+    app.button(key="suggestion-1").click().run()
     app.button(key="suite-demo").click().run()
     assert not app.exception
     assert any(m.label == "Mensualité" for m in app.metric)

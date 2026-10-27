@@ -16,8 +16,8 @@ def carte(titre: str, contenu: Callable[[], None], *, expanded: bool = True) -> 
         contenu()
 
 
-def profil(profil_client: dict[str, Any]) -> None:
-    prenom = profil_client.get("prenom", "Client")
+def profil(profil_client: dict[str, Any], *, titre: str | None = None) -> None:
+    prenom = titre or profil_client.get("prenom", "Client")
     initiale = prenom[:1].upper()
     st.markdown(
         f'<div style="display:flex;gap:.75rem;align-items:center;margin-bottom:1rem">'

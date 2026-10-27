@@ -3,11 +3,11 @@
 \toprule
 \textbf{Configuration} & \textbf{Scénarios} & \textbf{Wh / 1\,000 req.} & \textbf{Latence p95} & \textbf{Go} & \textbf{Sans LLM} \\
 \midrule
-A --- un LLM fait tout & \amesurer & \amesurer & \amesurer & --- & --- \\
-\textbf{B --- notre cascade} & \amesurer & \amesurer & \amesurer & --- & --- \\
-C --- cascade, gabarits seuls & 14 / 14 & $<$ 0,001 & 14 ms & 0,5 & 100\,\% \\
+A --- un LLM fait tout (\texttt{ministral-3:14b}) & à juger & 109,30 & 2020 ms & 9,1 & 0\,\% \\
+\textbf{B --- notre cascade} (\texttt{qwen3:1.7b}) & 13 / 14 & 6,22 & 581 ms & 1,9 & 74\,\% \\
+C --- cascade, gabarits seuls & 14 / 14 & 0,004 & 6 ms & 0,5 & 100\,\% \\
 \bottomrule
 \end{tabularx}
 
 \smallskip
-{\tiny Énergie : CodeCarbon hors ligne, lots de 200 requêtes × 3 après chauffe, puissance de repos soustraite. Mesuré sur yahya-bel-hajjam (x86\_64).}
+{\tiny Énergie : CodeCarbon hors ligne, lots de 200 requêtes × 3 (A : 40 × 1) après chauffe, puissance de repos soustraite. Mesuré sur deepeirb (x86\_64).}

@@ -15,7 +15,7 @@
       "fr_part_acceptee": 0.736,
       "fr_precision_acceptes": 0.962,
       "tau": 0.76,
-      "latence_ms": 13.41,
+      "latence_ms": 6.31,
       "parametres": 117653760,
       "taille_octets": 470759241
     },
@@ -27,17 +27,33 @@
         "classifieur": 143,
         "mots_cles": 48
       },
-      "latence_ms": 13.4
+      "latence_ms": 6.08
     },
     "tfidf": {
       "nom": "TF-IDF + régression logistique",
       "en_intention": 0.8919,
       "en_famille": 0.9532,
       "fr_routage": 0.668,
-      "latence_ms": 0.42,
+      "latence_ms": 0.29,
       "taille_octets": 3876237
+    },
+    "llm:ministral-3:14b": {
+      "nom": "LLM ministral-3:14b, sans exemple",
+      "en_famille": 0.5292,
+      "fr_routage": 0.832,
+      "latence_ms": 77.6,
+      "taille_octets": null,
+      "modele": "ministral-3:14b"
+    },
+    "llm:qwen3:1.7b": {
+      "nom": "LLM qwen3:1.7b, sans exemple",
+      "en_famille": 0.0682,
+      "fr_routage": 0.292,
+      "latence_ms": 17.69,
+      "taille_octets": null,
+      "modele": "qwen3:1.7b"
     }
   },
-  "machine": "yahya-bel-hajjam (x86_64)",
-  "date": "2026-10-27T11:53:32"
+  "machine": "DeepEirb, RTX 6000 Ada 48 Go",
+  "date": "2026-10-27T15:52:41"
 }

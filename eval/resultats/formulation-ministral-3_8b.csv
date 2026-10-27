@@ -1,0 +1,433 @@
+situation,gabarit,reformulation,garde_fou,latence_ms,tokens,machine,juge_1,juge_2
+C07-credit_immobilier-150000-20000,"Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 694 € sur 300 mois, soit 23,9 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 210 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Voici une proposition adaptée à votre situation :
+
+Pour votre projet immobilier, la mensualité indicative s’élève à **694 €** sur **300 mois**. Cela représente **23,9 %** de vos revenus actuels, crédits inclus. Cette offre reste conditionnelle à l’étude complète de votre dossier et à la vérification des éléments manquants.
+
+Je vous informe que le prêt sur **30 ans** ne s’inscrit pas dans notre cadre standard de **25 ans** habituellement proposé.
+
+Concernant l’assurance, celle-ci n’a pas encore été précisée. Les calculs présentés sont donc **hors assurance**, ce qui pourrait modifier l’effort mensuel si cette couverture s’avère nécessaire. Le budget global estimé se situe ainsi autour de **210 000 €**, sous ces hypothèses.
+
+Enfin, sachez que le cadre HCSF (règles de l’autorité bancaire) prévoit des exceptions et une certaine flexibilité, selon les situations particulières.",ok,4518,482,"DeepEirb, RTX 6000 Ada 48 Go",,
+C07-credit_immobilier-250000-25000,"Non proposé — Crédit immobilier : mensualité indicative de 1 197 € sur 300 mois, soit 41,3 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 41,3 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 215 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Nous avons examiné votre projet de crédit immobilier. Voici les éléments clés de notre analyse :
+
+- **Mensualité estimée** : 1 197 € sur une durée de 300 mois.
+- **Ratio d’endettement** : ce montant représente environ 41,3 % de vos revenus, incluant vos crédits en cours. Ce taux dépasse le seuil conseillé de 35 %.
+
+Pour cette raison, votre projet n’a pas pu être retenu dans cette simulation. Aucun refus définitif n’a été prononcé pour l’instant.
+
+Concernant la durée, une option de 30 ans a été envisagée, mais elle sort du cadre standard de 25 ans que nous modélisons généralement.
+
+Enfin, l’assurance n’a pas été prise en compte dans ces calculs. Si elle s’avère nécessaire, votre effort financier pourrait être plus élevé. Le budget estimé à environ 215 000 € serait alors à ajuster.
+
+Nous restons à votre disposition pour en discuter plus en détail. Les règles du Haut Conseil de Stabilité Financière (HCSF) prévoient des exceptions, et chaque situation peut faire l’objet d’une analyse personnalisée.",ok,1978,542,"DeepEirb, RTX 6000 Ada 48 Go",,
+C07-credit_immobilier-320000-60000,"Non proposé — Crédit immobilier : mensualité indicative de 1 395 € sur 300 mois, soit 48,1 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 48,1 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 248 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Nous avons examiné votre demande concernant un crédit immobilier. Voici les éléments clés de notre simulation :
+
+- La mensualité indicative s’élèverait à **1 395 €** sur **300 mois**, ce qui représente **48,1 %** de vos revenus actuels, crédits inclus.
+- Ce projet ne figure pas dans notre simulation actuelle. Aucune décision de refus n’a été prise pour l’instant.
+
+Pour le prêt sur **30 ans**, il s’agit d’une option de durée en dehors du cadre standard de **25 ans** que nous avons modélisé.
+
+Concernant l’assurance, elle n’a pas été précisée. Notre estimation ne tient pas compte de ce poste de dépense, ce qui pourrait augmenter votre effort financier si elle s’avère nécessaire.
+
+Le taux d’effort calculé est donc de **48,1 %**, ce qui dépasse le repère général de **35 %**. Sous ces hypothèses, le budget global estimé est d’environ **248 000 €**. Si vous souscrivez à une assurance, ce montant pourrait évoluer.
+
+Nous rappelons que le cadre HCSF (Haut Conseil de Stabilité Financière) prévoit des exceptions et une certaine flexibilité, selon les situations particulières. Nous restons à votre disposition pour en discuter plus en détail.",ok,2214,574,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_immobilier-150000-20000,"Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 694 € sur 300 mois, soit 21,7 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 230 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Voici une proposition adaptée à votre situation :
+
+Pour votre projet immobilier, voici les éléments clés :
+- Mensualité indicative de **694 €** sur **300 mois**.
+- Cela représente **21,7 %** de vos revenus, incluant vos crédits en cours.
+L’acceptation reste conditionnelle après étude complète de votre dossier et vérification des pièces manquantes.
+
+*Note :*
+- Une durée de **30 ans** n’est pas proposée dans le cadre standard de **25 ans** retenu pour cette simulation.
+- L’assurance n’est pas encore précisée. Le montant de **230 000 €** est une estimation sans assurance. Si celle-ci s’avère nécessaire, l’effort mensuel pourrait augmenter.
+- Les règles du Haut Conseil de Stabilité Financière (HCSF) prévoient des exceptions, mais leur application dépendra de votre situation.
+
+Nous restons à votre disposition pour vous accompagner.",ok,1600,468,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_immobilier-250000-25000,"Non proposé — Crédit immobilier : mensualité indicative de 1 197 € sur 300 mois, soit 37,4 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 37,4 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 235 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.",,nombre oublié : 35,1947,539,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_immobilier-320000-60000,"Non proposé — Crédit immobilier : mensualité indicative de 1 395 € sur 300 mois, soit 43,6 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 43,6 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 267 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.",,nombre oublié : 35,1841,524,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_immobilier-150000-20000,"Non proposé — Crédit immobilier : mensualité indicative de 694 € sur 300 mois, soit 44,4 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 44,4 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 116 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Nous vous informons que votre projet de crédit immobilier, tel que simulé, ne peut être proposé dans les conditions actuelles. Les mensualités estimées s’élèvent à **694 €** sur **300 mois**, ce qui représente **44,4 %** de vos revenus en incluant vos crédits en cours. Ce taux dépasse le repère généralement conseillé de **35 %**.
+
+Aucun refus définitif n’a été émis par notre établissement, mais ce projet ne correspond pas aux critères de notre simulation initiale.
+
+Nous avons également noté que la durée de **30 ans** dépasse le cadre standard de **25 ans** que nous analysons généralement.
+
+Concernant l’assurance, comme elle n’a pas été précisée, notre estimation ne l’inclut pas. Si elle s’avère nécessaire, votre effort financier pourrait être plus élevé.
+
+Le budget global estimé sous ces hypothèses s’élève à environ **116 000 €**. Toutefois, ce montant pourrait varier si une assurance s’ajoute.
+
+Nous tenons à vous rappeler que le cadre fixé par le Haut Conseil de Stabilité Financière (HCSF) prévoit des exceptions et une certaine flexibilité, que nous évaluons au cas par cas.",ok,2052,551,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_immobilier-250000-25000,"Non proposé — Crédit immobilier : mensualité indicative de 1 197 € sur 300 mois, soit 70,9 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 70,9 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 120 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Nous avons examiné votre demande concernant un crédit immobilier. Voici les éléments clés de notre simulation :
+
+- La mensualité indicative s’élèverait à **1 197 €** sur **300 mois**, ce qui représente **70,9 %** de vos revenus actuels, crédits inclus.
+- Ce projet ne correspond pas aux critères retenus dans cette simulation. Aucun refus définitif n’a été prononcé pour l’instant.
+
+Concernant la durée, une option de **30 ans** a été envisagée, mais elle sort du cadre standard de **25 ans** pris en compte dans notre modèle.
+
+L’assurance n’a pas été précisée : cette estimation ne tient pas compte de ce poste de dépense. Si une assurance s’avérait nécessaire, votre effort financier serait donc plus élevé.
+
+Le taux d’effort calculé atteint **70,9 %**, ce qui dépasse le repère habituel de **35 %**. Le budget estimé dans ces conditions se situerait autour de **120 000 €**, sous réserve de l’ajout d’une assurance.
+
+Nous restons attentifs aux particularités du cadre HCSF, qui peut prévoir des exceptions ou des ajustements selon les situations.",ok,2030,550,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_immobilier-320000-60000,"Non proposé — Crédit immobilier : mensualité indicative de 1 395 € sur 300 mois, soit 81,3 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 81,3 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 153 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.","Bonjour,
+
+Nous avons examiné votre projet de crédit immobilier. Voici les éléments clés de notre simulation :
+
+- **Mensualité estimée** : 1 395 € sur 300 mois.
+- **Ratio d’endettement** : 81,3 % de vos revenus, incluant vos crédits en cours. Ce taux dépasse le seuil conseillé de 35 %.
+
+Pour l’instant, votre demande ne peut pas être retenue dans cette simulation. Aucune décision définitive n’a été prise par la banque.
+
+Concernant la durée du prêt, une option de 30 ans a été envisagée, mais elle sort du cadre standard de 25 ans que nous modélisons généralement.
+
+Enfin, l’assurance n’a pas été prise en compte dans ces calculs. Si elle s’avère nécessaire, votre effort financier pourrait être plus élevé. Le budget indicatif reste donc d’environ **153 000 €**, mais il pourrait nécessiter une révision en fonction de l’assurance.
+
+Nous vous rappelons que le cadre HCSF (Haut Conseil de Stabilité Financière) prévoit des exceptions et une certaine flexibilité, selon les situations. Nous restons à votre disposition pour en discuter plus en détail.",ok,2032,548,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_conso-voiture-5000-24,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 222 € sur 24 mois, soit 19,6 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici une proposition que je vous soumets :
+
+Pour un prêt personnel, la mensualité indicative s’élève à **222 €** sur **24 mois**. Cela représente **19,6 %** de vos revenus, en tenant compte des crédits déjà en cours.
+
+Cette offre est conditionnelle à l’étude complète de votre dossier et à la vérification des éléments manquants.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. L’estimation que je vous ai fournie ne tient pas compte de ce poste, ce qui pourrait modifier l’effort mensuel si une assurance s’avère nécessaire.
+
+Je vous précise que le seuil de prudence consommation est un indicateur interne, sans caractère obligatoire selon les règles HCSF.",ok,1275,364,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_conso-voiture-12000-48,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 282 € sur 48 mois, soit 22,7 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici une proposition qui pourrait vous convenir :
+
+Pour un prêt personnel, la mensualité indicative s’élèverait à **282 €** sur une durée de **48 mois**. Cela représenterait environ **22,7 %** de vos revenus, en tenant compte de vos crédits en cours.
+
+Cette offre est conditionnelle à l’étude complète de votre dossier et à la vérification des éléments manquants.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. Sans cette couverture, l’estimation reste indicative et l’effort mensuel pourrait être plus élevé. Sachez que le seuil de prudence consommation est un indicateur interne, sans caractère obligatoire selon les règles HCSF.
+
+Je reste à votre disposition pour toute précision.",ok,1264,365,"DeepEirb, RTX 6000 Ada 48 Go",,
+C05-credit_conso-voiture-20000-60,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 387 € sur 60 mois, soit 28,3 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici les éléments que je vous présente concernant votre demande :
+
+Pour un prêt personnel, la mensualité indicative s’élève à **387 €** sur une durée de **60 mois**. Cela représente **28,3 %** de vos revenus, en tenant compte des crédits déjà en cours.
+
+Cette proposition reste **conditionnelle** : elle dépendra de l’étude complète de votre dossier ainsi que des éventuels frais manquants.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. Dans ce cas, l’estimation que je vous ai fournie ne tient pas compte de ce poste de dépense. Si une assurance s’avérait nécessaire, l’effort mensuel pourrait donc être plus élevé.
+
+Je vous précise également que le seuil de prudence consommation est une référence interne, sans caractère obligatoire selon les directives HCSF.",ok,1401,383,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_conso-voiture-5000-24,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 222 € sur 24 mois, soit 6,9 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici une proposition qui pourrait vous convenir :
+
+Pour un prêt personnel, la mensualité estimée s’élèverait à **222 €** sur une durée de **24 mois**. Cela représenterait environ **6,9 %** de vos revenus, en tenant compte des crédits déjà en cours.
+
+Cette offre est conditionnelle à l’acceptation de votre dossier et à la vérification des éléments manquants.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. Sans cette couverture, l’effort mensuel pourrait être sous-estimé. Sachez que le seuil de prudence consommation est un indicateur interne, sans caractère obligatoire selon les règles HCSF.",ok,1175,351,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_conso-voiture-12000-48,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 282 € sur 48 mois, soit 8,8 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici une proposition qui pourrait vous convenir :
+
+Pour un prêt personnel, la mensualité indicative s’élèverait à **282 €** sur une durée de **48 mois**. Cela représenterait **8,8 %** de vos revenus, en tenant compte de vos crédits en cours.
+
+Cette offre est conditionnelle à l’étude complète de votre dossier et à la vérification des éléments manquants.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. Sans cette couverture, l’effort mensuel pourrait être sous-estimé. Notez que le seuil de prudence consommation est un indicateur interne, sans caractère obligatoire selon les règles HCSF.",ok,1165,349,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-credit_conso-voiture-20000-60,"Voici ce que je vous propose. Prêt personnel : mensualité indicative de 387 € sur 60 mois, soit 12,1 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.","Bonjour,
+
+Voici une proposition qui pourrait vous convenir :
+
+Pour un prêt personnel, la mensualité indicative s’élèverait à **387 €** sur une durée de **60 mois**. Cela représenterait environ **12,1 %** de vos revenus, en tenant compte de vos crédits en cours.
+
+Cette offre est soumise à une **orientation conditionnelle**, sous réserve de l’analyse complète de votre dossier et du complément d’informations nécessaires.
+
+Concernant l’assurance, elle n’a pas été précisée dans votre demande. L’estimation que je vous ai fournie est donc **hors assurance** : si celle-ci s’avère obligatoire, votre effort mensuel pourrait être plus élevé.
+
+Je vous rappelle que le seuil de prudence consommation est un indicateur interne, non une règle imposée par le Haut Conseil de Stabilité Financière (HCSF).",ok,1439,387,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-credit_conso-voiture-5000-24,"Non proposé — Prêt personnel : mensualité indicative de 222 € sur 24 mois, soit 49,3 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF. Taux d'effort indicatif de 49,3 % : au-delà du repère de 35 %.","Bonjour,
+
+Voici les informations concernant votre demande de prêt personnel :
+
+Votre mensualité indicative s’élèverait à **222 €** sur une durée de **24 mois**.
+Cela représenterait **49,3 %** de vos revenus en tenant compte de vos crédits en cours.
+Ce projet n’a pas été retenu dans cette simulation, sans qu’il y ait de refus formel de notre part.
+
+Concernant l’assurance, elle n’a pas été prise en compte dans cette estimation.
+Si elle était nécessaire, votre effort mensuel pourrait être plus élevé.
+Le seuil de **49,3 %** dépasse le repère de prudence de **35 %**, qui est une référence interne et non une obligation réglementaire.",ok,1223,380,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-credit_conso-voiture-12000-48,"Non proposé — Prêt personnel : mensualité indicative de 282 € sur 48 mois, soit 62,7 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF. Taux d'effort indicatif de 62,7 % : au-delà du repère de 35 %.","Bonjour,
+
+Nous avons effectué une simulation pour votre demande de prêt personnel. Voici les éléments clés :
+
+- La mensualité estimée serait de **282 €** sur **48 mois**.
+- Avec vos crédits en cours, cela représenterait **62,7 %** de vos revenus mensuels.
+
+Pour l’instant, votre projet n’est pas retenu dans cette simulation. Aucun refus définitif n’a été prononcé.
+
+Concernant l’assurance, comme elle n’a pas été précisée, cette estimation ne la prend pas en compte. Si vous deviez souscrire une assurance, votre effort mensuel pourrait être plus élevé.
+
+Le seuil de **62,7 %** dépasse le repère de prudence généralement conseillé, soit **35 %**. Ce calcul reste indicatif et ne constitue pas une obligation légale.",ok,1324,396,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-credit_conso-voiture-20000-60,"Non proposé — Prêt personnel : mensualité indicative de 387 € sur 60 mois, soit 86 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé.
+
+Assurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF. Taux d'effort indicatif de 86 % : au-delà du repère de 35 %.","Bonjour,
+
+Voici les éléments concernant votre demande de prêt personnel :
+
+Votre mensualité indicative s’élèverait à **387 €** sur une durée de **60 mois**. Cela représenterait **86 %** de vos revenus actuels, en incluant vos crédits en cours. Votre projet n’a pas été retenu dans cette simulation. Aucune décision de refus n’a été prise pour l’instant.
+
+Concernant l’assurance, comme elle n’a pas été précisée, cette estimation ne la prend pas en compte. Si une assurance était nécessaire, votre effort mensuel pourrait être plus élevé.
+
+Le calcul de votre taux d’effort, à **86 %**, dépasse le repère de prudence généralement recommandé, fixé à **35 %**. Ce seuil est une référence interne et non une obligation légale.",ok,1335,391,"DeepEirb, RTX 6000 Ada 48 Go",,
+C03-epargne_projet-enfants-24-50,"Voici ce que je vous propose. Livret A : piste au nom de chaque enfant ; vérifier l'absence de Livret A déjà détenu et les représentants légaux. Livret Jeune : piste pour l'enfant de 12 à 25 ans, sous réserve de résidence en France et d'absence de livret identique.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret de développement durable et solidaire (LDDS) : éligibilité à vérifier (situation fiscale des enfants), aucune inéligibilité déduite. Livret d'épargne populaire (LEP) : éligibilité à vérifier (situation fiscale des enfants, revenu fiscal des enfants), aucune inéligibilité déduite. Les soldes et la situation fiscale des enfants ne sont pas connus ; ne pas utiliser ceux du parent.","Bonjour,
+
+Voici les informations concernant les livrets que je vous propose pour vos enfants :
+
+**Livret A** :
+- Un livret par enfant.
+- Vérification nécessaire pour s’assurer qu’aucun Livret A n’est déjà ouvert au nom de chacun, ainsi que l’identification des représentants légaux.
+
+**Livret Jeune** :
+- Réservé aux enfants âgés de 12 à 25 ans.
+- Sous réserve de leur résidence en France et de l’absence d’un livret similaire déjà ouvert.
+
+Concernant les versements :
+- Ils s’appuient sur les montants déclarés par vous.
+- Votre capacité d’épargne n’est pas limitée à vos seuls revenus.
+
+**Livret de Développement Durable et Solidaire (LDDS)** :
+- Son éligibilité devra être vérifiée en fonction de la situation fiscale de chaque enfant.
+- Aucune inéligibilité n’est exclue à ce stade.
+
+**Livret d’Épargne Populaire (LEP)** :
+- Son éligibilité dépendra également de la situation fiscale et des revenus fiscaux de chaque enfant.
+- Aucune inéligibilité n’est écartée pour l’instant.
+
+Pour rappel, les soldes et les données fiscales des enfants ne sont pas encore disponibles. Il faudra donc les examiner séparément, sans utiliser celles des parents.",ok,2243,583,"DeepEirb, RTX 6000 Ada 48 Go",,
+C03-epargne_projet-enfants-120-100,"Voici ce que je vous propose. Livret A : piste au nom de chaque enfant ; vérifier l'absence de Livret A déjà détenu et les représentants légaux. Livret Jeune : piste pour l'enfant de 12 à 25 ans, sous réserve de résidence en France et d'absence de livret identique. Les versements prévus dépassent la place disponible de 1 600 € ; prévoir une répartition.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret de développement durable et solidaire (LDDS) : éligibilité à vérifier (situation fiscale des enfants), aucune inéligibilité déduite. Livret d'épargne populaire (LEP) : éligibilité à vérifier (situation fiscale des enfants, revenu fiscal des enfants), aucune inéligibilité déduite. Les soldes et la situation fiscale des enfants ne sont pas connus ; ne pas utiliser ceux du parent.","Bonjour,
+
+Voici les éléments que je vous propose pour les livrets concernés :
+
+**Livret A** :
+- Ouvrir un livret pour chaque enfant.
+- Vérifier qu’aucun Livret A n’est déjà ouvert au nom de ces enfants et identifier les représentants légaux.
+
+**Livret Jeune** :
+- Ce livret est possible pour un enfant âgé de 12 à 25 ans, sous réserve qu’il réside en France et qu’il ne détienne pas déjà un livret similaire.
+- Les montants prévus à verser dépassent la limite autorisée de 1 600 €. Une répartition sera nécessaire.
+
+Les versements mensuels correspondront à ce que vous avez déclaré. Votre capacité d’épargne ne se limite pas uniquement à vos revenus.
+
+**Livret de développement durable et solidaire (LDDS)** :
+- Il faudra vérifier l’éligibilité de chaque enfant en fonction de sa situation fiscale. Aucune inéligibilité n’a été relevée à ce stade.
+
+**Livret d’épargne populaire (LEP)** :
+- Son ouverture dépendra aussi de la situation fiscale des enfants et de leurs revenus. Aucune exclusion n’a été identifiée pour l’instant.
+- Les informations sur les soldes et la fiscalité des enfants ne sont pas encore disponibles. Il ne faudra pas utiliser celles des parents.",ok,2222,608,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-epargne_projet-soi-24-50,"Voici ce que je vous propose. Livret Jeune : à 20 ans, tranche d'âge compatible ; épargne disponible. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation.
+
+Non proposé — Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Livret d'épargne populaire (LEP) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus.",,nombre oublié : 20,1568,462,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-epargne_projet-soi-120-100,"Voici ce que je vous propose. Livret Jeune : à 20 ans, tranche d'âge compatible ; épargne disponible. Les versements prévus dépassent la place disponible de 1 600 € ; prévoir une répartition. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation.
+
+Non proposé — Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Livret d'épargne populaire (LEP) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus.","Bonjour,
+
+Voici une proposition adaptée à votre situation :
+
+Pour commencer, le **Livret Jeune** vous convient parfaitement, car vous avez 20 ans et souhaitez garder votre épargne disponible. Cependant, vos versements prévus dépassent la limite autorisée de **1 600 €**. Il serait judicieux d’envisager une répartition entre ce livret et d’autres solutions.
+
+Le **Livret A** reste une option intéressante pour constituer une réserve ou financer un projet sans engagement de durée.
+
+En revanche, les autres dispositifs ne sont pas adaptés à votre profil :
+- Le **LDDS** et le **LEP** nécessitent un domicile fiscal en France et une imposition séparée.
+- Le **PEL** n’est pas recommandé si vous avez besoin de liquidités ou un horizon temporaire, car un retrait anticipé entraîne sa clôture et peut réduire ses avantages.
+
+Les montants que vous souhaitez placer sont basés sur vos versements déclarés. Votre capacité d’épargne ne se limite pas uniquement à vos revenus.",ok,1763,514,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-epargne_projet-soi-24-50,"Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les solutions que je vous propose pour votre épargne :
+
+- **Livret A** : vous pouvez alimenter le livret que vous possédez déjà. Il reste disponible et idéal pour une réserve ou un projet sans engagement de durée.
+
+- **Livret de développement durable et solidaire (LDDS)** : votre domicile fiscal en France et votre imposition séparée sont bien pris en compte. Votre épargne reste accessible.
+
+Je vous informe également que :
+- Le **Livret Jeune** ne vous est pas accessible, car vous êtes en dehors de la tranche d’âge requise.
+- Le **Plan épargne logement (PEL)** ne convient pas à vos besoins, car un retrait anticipé entraîne sa clôture et peut réduire ses avantages.
+
+Le montant que vous versez chaque mois correspond à ce que vous avez indiqué. Votre capacité d’épargne n’est pas calculée uniquement sur vos revenus.
+
+Enfin, pour le **Livret d’épargne populaire (LEP)**, son éligibilité dépend de votre **revenu fiscal de référence**, du nombre de parts fiscales déclarées, de l’année concernée et de votre territoire fiscal. Aucune inéligibilité n’a été retenue à ce stade.",ok,2030,563,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-epargne_projet-soi-120-100,"Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les solutions que je vous propose pour votre épargne :
+
+- **Livret A** : Continuer à alimenter celui que vous possédez déjà. C’est une épargne disponible, idéale pour une réserve ou un projet sans blocage de fonds.
+
+- **Livret de développement durable et solidaire (LDDS)** : Adapté si votre domicile fiscal est en France et que vos revenus sont déclarés séparément. L’argent reste accessible à tout moment.
+
+Je vous précise que :
+- Le **Livret Jeune** ne vous est pas accessible, car il est réservé à une tranche d’âge spécifique.
+- Le **Plan épargne logement (PEL)** n’est pas recommandé dans votre cas, car un retrait anticipé entraîne la clôture du compte et peut réduire certains avantages. De plus, il n’est pas adapté si vous avez besoin de liquidités rapidement.
+
+Le montant que vous souhaitez épargner chaque mois correspond à ce que vous avez indiqué. Votre capacité d’épargne ne se limite pas à vos seuls revenus.
+
+Enfin, pour le **Livret d’épargne populaire (LEP)**, il faudra vérifier votre éligibilité en fonction de votre revenu fiscal de référence, du nombre de parts fiscales déclarées, de l’année de référence et de votre situation géographique. Aucune exclusion n’a été relevée à ce stade.",ok,2174,590,"DeepEirb, RTX 6000 Ada 48 Go",,
+C07-epargne_projet-soi-24-50,"Voici ce que je vous propose. Livret de développement durable et solidaire (LDDS) : alimenter le livret existant, sans en ouvrir un second. Domicile fiscal français et imposition séparée déclarés ; épargne disponible.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Livret A : plafond des versements atteint ; aucun nouveau versement proposé. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les solutions que je vous propose pour votre épargne :
+
+Pour le **Livret de Développement Durable et Solidaire (LDDS)**, nous pouvons alimenter le livret que vous possédez déjà, sans en ouvrir un nouveau. Ce livret reste disponible et accessible à tout moment.
+
+Le **Livret Jeune** ne vous est pas proposé, car il est réservé à une tranche d’âge spécifique.
+
+Le **Livret A** ne peut pas être alimenté davantage, car son plafond a été atteint.
+
+Quant au **Plan Épargne Logement (PEL)**, il n’est pas adapté à vos besoins actuels, car un retrait anticipé entraînerait sa clôture et pourrait réduire certains avantages.
+
+Le montant que vous versez chaque mois correspond à ce que vous avez déclaré. Votre capacité d’épargne n’est pas calculée uniquement sur vos revenus.
+
+Enfin, pour le **Livret d’Épargne Populaire (LEP)**, il faudrait vérifier votre éligibilité en fonction de votre **revenu fiscal de référence**, du nombre de parts fiscales déclarées, de l’année concernée et de votre territoire fiscal. Aucune inéligibilité n’a été relevée pour l’instant.",ok,2015,561,"DeepEirb, RTX 6000 Ada 48 Go",,
+C07-epargne_projet-soi-120-100,"Voici ce que je vous propose. Livret de développement durable et solidaire (LDDS) : alimenter le livret existant, sans en ouvrir un second. Domicile fiscal français et imposition séparée déclarés ; épargne disponible. Les versements prévus dépassent la place disponible de 9 950 € ; prévoir une répartition.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Livret A : plafond des versements atteint ; aucun nouveau versement proposé. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les solutions que je vous propose pour votre épargne :
+
+Pour le **Livret de développement durable et solidaire (LDDS)**, nous pouvons alimenter le livret existant sans en ouvrir un nouveau. Votre domicile fiscal en France et votre imposition séparée sont bien pris en compte. Votre épargne reste disponible.
+
+Les montants que vous souhaitez verser dépassent la limite actuelle de **9 950 €**. Nous pourrions envisager une répartition adaptée.
+
+Le **Livret Jeune** ne vous est pas proposé, car vous n’êtes pas dans la tranche d’âge requise.
+
+Le **Livret A** est complet : son plafond est atteint, donc aucun versement supplémentaire n’est possible.
+
+Pour le **Plan épargne logement (PEL)**, compte tenu de votre besoin de liquidité ou d’un horizon temporaire, un retrait anticipé entraînerait la clôture du compte et pourrait réduire certains avantages.
+
+Les versements mensuels que vous avez indiqués sont bien pris en compte. Votre capacité d’épargne ne se limite pas à vos seuls revenus.
+
+Enfin, pour le **Livret d’épargne populaire (LEP)**, nous vérifierons votre éligibilité en fonction de votre **revenu fiscal de référence**, du nombre de parts fiscales, de l’année de référence et de votre territoire fiscal. Aucune inéligibilité n’a été relevée à ce stade.",ok,2326,628,"DeepEirb, RTX 6000 Ada 48 Go",,
+C04-epargne_projet-soi-24-50,"Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les solutions que je vous propose pour votre épargne :
+
+Pour le **Livret A**, nous pouvons alimenter le compte que vous possédez déjà. Ce placement reste très accessible et convient parfaitement pour constituer une réserve ou financer un projet sans engagement de durée.
+
+Le **Livret de développement durable et solidaire (LDDS)** est également une option adaptée, sous réserve que votre domicile fiscal soit en France et que votre imposition soit déclarée séparément. Comme le Livret A, il offre une grande disponibilité de vos fonds.
+
+Je vous précise que le **Livret Jeune** et le **Plan épargne logement (PEL)** ne sont pas adaptés à votre situation. Le PEL, en particulier, nécessite un horizon d’épargne plus long et ne permet pas de retraits sans clôture, ce qui pourrait limiter ses avantages.
+
+Le montant que vous souhaitez épargner chaque mois correspond à ce que vous avez indiqué. Votre capacité d’épargne ne se limite pas à vos seuls revenus.
+
+Enfin, pour le **Livret d’épargne populaire (LEP)**, il faudra vérifier votre éligibilité en fonction de votre **revenu fiscal de référence**, du nombre de parts fiscales déclarées, de l’année de référence et de votre territoire fiscal. Aucune exclusion n’a été retenue à ce stade.",ok,2215,588,"DeepEirb, RTX 6000 Ada 48 Go",,
+C04-epargne_projet-soi-120-100,"Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Les versements prévus dépassent la place disponible de 10 950 € ; prévoir une répartition. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.
+
+Non proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.
+
+Le versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.","Bonjour,
+
+Voici les suggestions que je vous propose pour votre épargne :
+
+Pour le **Livret A**, nous pouvons alimenter le compte existant sans en ouvrir un autre. Ce livret convient pour une épargne disponible, idéale pour une réserve ou un projet sans immobilisation. Cependant, vos versements prévus dépassent la capacité actuelle de 10 950 €. Une répartition sera nécessaire.
+
+Le **Livret de développement durable et solidaire (LDDS)** est également adapté à votre situation, sous réserve que votre domicile fiscal soit en France et que votre imposition soit déclarée séparément. Il permet une épargne disponible.
+
+Le **Livret Jeune** et le **Plan épargne logement (PEL)** ne sont pas proposés dans votre cas. Le Livret Jeune n’est pas accessible en dehors de la tranche d’âge prévue. Quant au PEL, il n’est pas adapté si vous avez besoin d’une épargne disponible ou d’un horizon temporaire court, car un retrait anticipé entraîne sa clôture et peut réduire ses avantages.
+
+Les versements mensuels que vous avez déclarés sont pris en compte. Votre capacité d’épargne ne se limite pas uniquement à vos revenus.
+
+Enfin, pour le **Livret d’épargne populaire (LEP)**, il faudra vérifier votre éligibilité en fonction de votre revenu fiscal de référence, du nombre de parts fiscales, de l’année du revenu fiscal et de votre territoire fiscal. Aucune inéligibilité n’a été relevée à ce stade.",ok,2499,651,"DeepEirb, RTX 6000 Ada 48 Go",,
+C08-pret_etudiant-5000,"Voici ce que je vous propose. Prêt étudiant : piste LBP compatible avec l'âge, le montant et le statut déclarés ; justificatif étudiant et étude du prêteur nécessaires. Différé selon contrat, sous réserve d'acceptation du prêteur.","Bonjour,
+
+Voici les informations concernant votre demande de prêt étudiant :
+
+Nous vous proposons une solution adaptée à votre situation : le **Prêt Étudiant** compatible avec votre âge, votre montant demandé et votre statut.
+
+Pour finaliser cette offre, nous aurons besoin de :
+- Votre justificatif d’étudiant.
+- Une étude préalable par notre service prêteur.
+
+Le différé de remboursement sera appliqué selon les termes de votre contrat, sous réserve de l’acceptation définitive de notre part.",ok,892,263,"DeepEirb, RTX 6000 Ada 48 Go",,
+C01-pret_etudiant-8000,Non proposé — Prêt étudiant : statut étudiant non déclaré.,"Bonjour,
+
+Je vous informe que votre demande pour un **Prêt étudiant** ne peut pas être instruite à ce stade, car votre statut d’étudiant n’a pas été déclaré.
+
+N’hésitez pas à nous contacter si vous souhaitez en savoir plus sur les démarches à suivre.
+
+Cordialement,",ok,555,181,"DeepEirb, RTX 6000 Ada 48 Go",,
