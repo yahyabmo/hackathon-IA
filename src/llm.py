@@ -72,7 +72,7 @@ def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int) -> di
         "keep_alive": "30m",
         "options": {**OPTIONS, "num_predict": max_tokens},
     }
-    if modele.startswith("qwen3"):
+    if modele.startswith(("qwen3", "gemma4")):
         corps["think"] = False
     return corps
 
