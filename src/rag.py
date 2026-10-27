@@ -52,7 +52,8 @@ SYSTEME_REDACTION = (
     "courtes, au vouvoiement, en reprenant au plus près les mots des extraits numérotés, et rien "
     "d'autre. Cite l'extrait utilisé entre crochets, par exemple [1]. N'ajoute aucun chiffre ni "
     "aucune affirmation (âge, impôt, condition) qui ne figure pas dans les extraits. Si les extraits "
-    "ne suffisent pas, dis-le et propose un conseiller. Tu n'as aucun accès au compte du client."
+    "ne suffisent pas, dis-le et propose un conseiller. Ne répète pas la question. Tu n'as aucun accès au "
+    "compte du client."
 )
 
 
@@ -166,11 +167,26 @@ def disponible() -> bool:
     return _index() is not None
 
 
+def _passages_explication(explication: list[str]) -> list[dict[str, Any]]:
+    """Le dernier conseil en passages : d'abord ce qui n'est pas proposé (« pourquoi pas ? »)."""
+
+    ordonnees = sorted(explication, key=lambda phrase: "n'est pas proposé" not in phrase)
+    return [{"id": f"simulation:{i}", "titre": "Votre simulation", "texte": phrase,
+             "source": "Calcul du prototype (règles publiques)", "date": "", "mots": [],
+             "score": 1.0, "pertinence": 1.0} for i, phrase in enumerate(ordonnees)]
+
+
 def rechercher(question: str, explication: list[str] | None = None,
                k: int = NOMBRE_PASSAGES) -> list[dict[str, Any]]:
-    """Les k passages les plus proches, avec leur score ; l'explication du dernier conseil en plus."""
+    """Les k passages les plus proches, avec leur score ; l'explication du dernier conseil en plus.
+
+    Un « pourquoi ? » sans autre mot porte sur le dernier conseil : ses phrases sont les passages.
+    """
 
     import torch
+
+    if explication and len(normaliser(question).split()) <= 3:
+        return _passages_explication(explication)[:k]
 
     index = _index()
     if index is None:
@@ -283,6 +299,8 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
             texte, etape.tokens = llm.generer(modele, SYSTEME_REDACTION, _consigne(question, passages),
                                               max_tokens=260, role="niveau2", delai=60)
             texte = texte.strip().strip('"').strip()
+            if normaliser(texte).startswith(normaliser(question)):  # l'écho de la question, retiré
+                texte = texte[len(question):].lstrip(" ?[]0123456789").strip()
             problemes = verifier(texte, passages, question)
         except (OSError, KeyError, ValueError) as erreur:
             texte, problemes = "", [f"LLM injoignable ({type(erreur).__name__})"]
@@ -296,6 +314,7 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
         repli, etapes = "LLM désactivé", [recherche]
     retenus = _extraits_de_repli(question, passages)
     extraits = " ".join(f"{p['texte']} [{n}]" for n, p in enumerate(retenus, start=1))
-    texte = (f"D'après nos fiches : {extraits}\n\nPour votre situation précise, un conseiller peut "
+    origine = "votre simulation" if retenus[0]["id"].startswith("simulation:") else "nos fiches"
+    texte = (f"D'après {origine} : {extraits}\n\nPour votre situation précise, un conseiller peut "
              f"vous répondre.\n\n{_sources_affichees(retenus)}")
     return ReponseRag(texte=texte, sources=passages, etapes=etapes, repli=repli)

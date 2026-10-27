@@ -206,3 +206,12 @@ def test_niveau_1_un_nombre_absent_du_message_est_refuse(monkeypatch):
     reponse, etat = converser("C01", ["Je veux faire un virement", "mon père", "le même que la dernière fois"],
                               llm_actif=True)
     assert "montant" not in etat.slots and reponse.question == "montant"
+
+
+@pytest.mark.classifieur
+def test_pourquoi_apres_un_conseil_explique_le_conseil(monkeypatch, index_rag):
+    monkeypatch.setattr(llm, "generer", faux_llm({}))
+    reponse, _ = converser("C07", ["Je veux acheter un appartement", "250000, apport 25000", "pourquoi ?"],
+                           llm_actif=True)
+    assert reponse.niveau == 2 and reponse.sources[0]["titre"] == "Votre simulation"
+    assert "n'est pas proposé" in reponse.sources[0]["texte"]
