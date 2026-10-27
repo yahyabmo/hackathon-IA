@@ -2,61 +2,75 @@
 
 Prototype pour le hackathon La Banque Postale × CGI × ENSEIRB-MATMECA (sujet 1).
 Un assistant bancaire personnalisé, explicable, local et open source, qui
-comprend, pose les bonnes questions, conseille et agit — avec le plus petit
-calcul qui suffit. La proposition complète est dans [`main-resume.pdf`](main-resume.pdf).
+comprend, pose les bonnes questions, conseille et oriente — avec, à chaque message,
+le plus petit moyen qui suffit. La proposition complète est dans [`main-resume.pdf`](main-resume.pdf).
 
-## Architecture : une cascade
+## Architecture : un aiguilleur
 
-Chaque étage ne passe la main au suivant que s'il ne sait pas faire lui-même.
-Dans le cas normal, un tour de conversation fait **au plus un appel au LLM, à la fin**.
+À chaque message, l'aiguilleur choisit le plus petit moyen qui suffit ; une
+conversation peut passer d'un niveau à l'autre (1 → 2 → 0 → 2). La mémoire est
+commune à tous les niveaux. Schémas : [`rapport/schema-aiguilleur.pdf`](rapport/schema-aiguilleur.pdf).
 
 ```text
-app.py
-  → src.assistant.reply(message, client_id, etat)
-      1. comprendre   réponse attendue ? → mots-clés → classifieur (e5-small + LR, seuil τ)
-                      sinon : question de clarification, puis escalade (LLM 14B, comptée)
-      2. converser    automate qui lit les parcours YAML ; ne redemande jamais ce que le profil sait
-      3. conseiller   règles publiques (HCSF, plafonds) : propositions, raisons, produits écartés
-      4. orienter     guider l'utilisateur vers son espace bancaire ou un conseiller ; aucun accès au compte
-      5. formuler     gabarit, ou petit LLM (ministral-3:3b) sous garde-fou ; mention légale crédit
-      ·  mesurer      trace par étage : latence, modèle, tokens, appels au LLM
+src.assistant.reply(message, client_id, etat)
+  entrée commune (sans LLM, ~6 ms) : barrières, entités (regex), contexte,
+      mots-clés (toutes les demandes), classifieur e5-small + 2 régressions logistiques (τ)
+  aiguilleur (src/aiguilleur.py) : 5 signaux → niveau
+  niveau 0  règles : automate + parcours YAML, file des demandes par urgence, mémoire,
+            reprise après une parenthèse, vraisemblance des montants ; règles de conseil
+            (HCSF, plafonds) ; gabarits, mention légale, mots simples. Aucun LLM.
+  niveau 1  petit LLM interprète (src/comprendre/interprete.py) : RAG d'exemples (8 phrases
+            d'entraînement proches), JSON imposé par une grammaire (sortie contrainte), vérifié
+            par le code ; il ne voit pas le profil et ne répond jamais : retour au niveau 0.
+  niveau 2  RAG (src/rag.py) : 37 fiches sourcées, index e5-small en mémoire, seuil de
+            pertinence ; un LLM rédige en citant [1] ; garde-fou (chiffres des extraits, fidélité,
+            citation), sinon l'extrait de la meilleure fiche.
+  mesure    chaque étape : latence, modèle, tokens, appel au LLM ; niveau et raison dans la réponse
 ```
 
-Les contrats partagés sont dans `src/contrats.py` ; la taxonomie commune
-(14 familles, 85 intentions : les 77 de Banking77, non traduites, et 8 créées
-par l'équipe) dans `src/taxonomie.py`.
+L'assistant n'a **aucun accès au compte** et ne réalise aucune opération
+(périmètre du kick-off) : il explique, conseille et oriente. Les contrats
+partagés sont dans `src/contrats.py` ; la taxonomie commune (14 familles,
+85 intentions : les 77 de Banking77, non traduites, et 8 créées par l'équipe)
+dans `src/taxonomie.py`.
 
 ## Responsabilités
 
 | Membre | Module | Fichiers |
 |---|---|---|
 | Younes (M1) | Comprendre et mesurer | `src/comprendre/`, `src/mesure/`, bancs dans `eval/` |
-| Yahya (M2) | Converser, formuler, escalade, interface | `src/assistant.py`, `src/converser/`, `src/llm.py`, `app.py` |
+| Yahya (M2) | Aiguilleur, niveaux 1 et 2, converser, formuler, interface | `src/assistant.py`, `src/aiguilleur.py`, `src/rag.py`, `src/comprendre/interprete.py`, `src/converser/`, `src/llm.py`, `src/web/` |
 | Sohayb (M3) | Profils, catalogue, conseiller, règles métier | `src/conseiller/`, `eval/run_scenarios.py`, `tests/` |
 
 ## Structure
 
 ```text
-├── app.py                      interface Streamlit
+├── app.py                      interface Streamlit (secours)
 ├── src/
 │   ├── contrats.py             structures partagées
 │   ├── taxonomie.py            14 familles, 85 intentions
-│   ├── assistant.py            reply() : la cascade
-│   ├── llm.py                  accès à Ollama (désactivé par défaut)
+│   ├── assistant.py            reply() : entrée commune, aiguillage, niveaux, mémoire
+│   ├── aiguilleur.py           les 5 signaux et le choix du niveau, l'ordre d'urgence
+│   ├── rag.py                  niveau 2 : fiches, index, recherche, rédaction citée, garde-fou
+│   ├── llm.py                  Ollama ou vLLM, sortie contrainte par un schéma JSON
 │   ├── texte.py                normalisation, format des nombres
-│   ├── comprendre/             mots_cles, entites, classifieur (e5-small), entrainer, escalade
+│   ├── comprendre/             mots_cles, entites, classifieur (e5-small), entrainer, interprete (niveau 1), escalade
 │   ├── converser/              dialogue, parcours/*.yaml, formuler, garde_fou, glossaire
 │   ├── conseiller/             clients, catalogue, regles, validation
+│   ├── web/                    interface de la démo (FastAPI + page HTML, style Timso AI)
 │   └── mesure/                 latence par étage
 ├── data/
 │   ├── raw/                    Banking77 et Bank Marketing, tels que téléchargés (versionnés)
-│   └── processed/              clients, catalogue, glossaire, exemples_fr, test_fr, têtes du classifieur
+│   └── processed/              clients, catalogue, glossaire, fiches (RAG), exemples_fr, test_fr,
+│                               bancs des niveaux, têtes du classifieur
 ├── eval/
 │   ├── scenarios/*.yaml        conversations de référence
 │   ├── run_scenarios.py
 │   ├── bench_comprendre.py     compréhension, anglais et français
-│   ├── bench_formulation.py    choix du LLM en descendant en taille
-│   ├── bench_abc.py            A/B/C : réussite, énergie, latence, mémoire
+│   ├── bench_niveau1.py        niveau 1 : le plus petit LLM qui comprend (avec et sans RAG d'exemples)
+│   ├── bench_niveau2.py        niveau 2 : recherche, rédaction citée, garde-fou
+│   ├── bench_abc.py            A/B/C : réussite, énergie, latence, mémoire, part de chaque niveau
+│   ├── bench_formulation.py    reformuler un conseil (mesuré, écarté)
 │   └── resultats/              mesures (CSV, JSON)
 ├── installer.sh                installation de zéro sur un poste
 ├── mesurer.sh                  les mesures sur le poste à GPU
@@ -65,38 +79,27 @@ par l'équipe) dans `src/taxonomie.py`.
 
 ## Installation et lancement
 
-Python 3.10 ou supérieur. Sur un nouveau poste, une commande installe tout (environnement,
-dépendances, encodeur, modèles Ollama) et lance les tests et les scénarios :
+Python 3.10 ou supérieur. Sur un nouveau poste, une commande installe tout
+(environnement, dépendances, encodeur, modèles Ollama) et lance les tests et
+les scénarios :
 
 ```bash
-./installer.sh          # poste à GPU ; « ./installer.sh cpu » sur un portable
+./installer.sh                    # poste à GPU ; « ./installer.sh cpu » sur un portable
 source .venv/bin/activate
-streamlit run app.py
+ASSISTANT_LLM=1 python -m src.web # interface de la démo : http://localhost:8000
 ```
 
-L'encodeur `multilingual-e5-small` est téléchargé une fois, puis `HF_HUB_OFFLINE=1` évite
-tout accès réseau. Les têtes du classifieur sont versionnées
-(`data/processed/classifieur.npz`) ; `python -m src.comprendre.entrainer` les réentraîne
-(environ 4 min sur CPU) et refixe τ par balayage.
+`ASSISTANT_LLM=1` permet les niveaux 1 et 2 (Ollama ou vLLM) ; sans lui, ou si
+le serveur ne répond pas, l'aiguilleur reste au niveau 0 et le RAG répond par
+l'extrait de la fiche. Les modèles des niveaux se choisissent avec
+`OLLAMA_MODEL_NIVEAU1` et `OLLAMA_MODEL_NIVEAU2`. `?client=C07&rejouer` rejoue
+les exemples d'un profil. L'interface Streamlit de secours reste disponible :
+`streamlit run app.py`.
 
-Sans modèle installé, l'assistant répond avec ses gabarits. Pour activer le LLM
-de formulation (sur un poste de la salle, après `ollama pull ministral-3:3b`) :
-
-```bash
-cp .env.example .env            # puis ASSISTANT_LLM=1
-set -a && source .env && set +a
-streamlit run app.py
-```
-
-Le serveur se choisit par rôle : Ollama sur un poste de la salle (défaut) ou vLLM
-sur DeepEirb (`LLM_API=vllm`, `VLLM_BASE_URL=…/v1`) ; `LLM_API_FORMULATION` et
-`LLM_API_ESCALADE` permettent de garder le petit modèle en local et le gros sur
-DeepEirb. L'interface affiche l'état réel du serveur et précharge le modèle.
-
-L'escalade vers le gros modèle reste désactivée (`ASSISTANT_ESCALADE=0`) : un
-message incompris après la question de clarification est noté dans
-`eval/incompris.jsonl` (lecture : `python -m src.incompris`) et le client se voit
-proposer un conseiller. Le journal sert à enrichir le lexique et l'entraînement.
+L'encodeur `multilingual-e5-small` est téléchargé une fois, puis `HF_HUB_OFFLINE=1`
+évite tout accès réseau. Les têtes du classifieur sont versionnées
+(`data/processed/classifieur.npz`) ; `python -m src.comprendre.entrainer` les
+réentraîne (environ 4 min sur CPU) et refixe τ par balayage.
 
 ## Tests et scénarios
 
@@ -122,26 +125,20 @@ Un scénario qui passait et qui échoue bloque la fusion.
 ## Mesures sur le poste à GPU
 
 ```bash
-./mesurer.sh formulation     # 14B → 1B ; puis juger les CSV de eval/resultats/ (juge_1, juge_2)
-./mesurer.sh comprendre      # compréhension, plus le LLM qui classe seul
-./mesurer.sh abc qwen3:1.7b  # A/B/C et énergie, avec le modèle de formulation retenu
-./mesurer.sh support         # tableaux et support recompilés
+./mesurer.sh niveaux                         # niveaux 1 et 2 : le plus petit modèle qui tient chacun
+./mesurer.sh comprendre                      # compréhension, plus le LLM qui classe seul
+./mesurer.sh abc qwen3:1.7b ministral-3:8b   # A/B/C et énergie, avec les modèles retenus
 ```
 
-Le 14B (9,1 Go) déborde des 8 Go d'une RTX 3070 : il tourne en partie sur le processeur,
-plus lentement, et ses mesures restent valables. S'il est trop lent, le retirer de
-`mesurer.sh formulation` et le mesurer sur une RTX 3060 (12 Go) de la salle.
+Les résultats (`eval/resultats/`) et les tableaux du support (`rapport/resultats-*.tex`)
+sont écrits par ces commandes ; le support se recompile ensuite avec `pdflatex`.
 
 ## Ce qui reste à faire
 
-Tout le code est en place ; il reste des mesures et des décisions d'équipe.
-
-- **Sur le poste à GPU** : `./mesurer.sh formulation`, `comprendre`, puis `abc` (voir plus haut).
-- **Jugement humain** : deux membres jugent les réponses du banc de formulation ; on retient le
-  plus petit modèle à zéro nombre inventé et 27 bonnes réponses sur 30, puis on le met dans
-  `OLLAMA_MODEL`. Les réponses de la configuration A sont aussi à juger
-  (`eval/resultats/abc-A-transcriptions.csv`).
-- **Test français** (`data/processed/test_fr.yaml`) : à relire par l'équipe.
+- **Sur le poste à GPU** : `./mesurer.sh niveaux`, puis `abc` avec les modèles retenus.
+- **Jugement humain** : les réponses de la configuration A sont à juger
+  (`eval/resultats/abc-A-transcriptions.csv`) ; le test français
+  (`data/processed/test_fr.yaml`) est à relire par l'équipe.
 - **M3** : le modèle d'appétence n'est pas fait, par choix : les règles sont explicables et
   aucune notation de client n'est faite. Points de coordination :
   [`infos/M3_INTEGRATION.md`](infos/M3_INTEGRATION.md).

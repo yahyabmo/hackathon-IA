@@ -27,16 +27,19 @@ from src.mesure import resumer
 SORTIE = Path(__file__).resolve().parents[1] / "rapport" / "demo-secours.tex"
 
 SCENES: list[tuple[str, str, list[str], str]] = [
-    ("Carte perdue : guider en sécurité", "C01",
-     ["J'ai perdu ma carte hier soir, je fais quoi ?"],
-     "Compris par les mots-clés ; le chatbot guide vers l'espace bancaire sécurisé."),
+    ("Le test de l'école : l'aiguilleur change de niveau à chaque message", "C01",
+     ["J'ai perdu ma carte et je veux faire un virement.", "oui", "c'est pour mon papa",
+      "Je peux retirer de mon PEL avant 4 ans ?", "100000000", "mais ma carte ?"],
+     "Deux demandes (la carte d'abord), une réponse libre (niveau 1), une question ouverte (niveau 2, "
+     "puis reprise), un montant invraisemblable, un renvoi au contexte."),
     ("Sans mot-clé : le classifieur comprend", "C01",
      ["Ma carte ne marche plus au distributeur"],
      "Aucun mot-clé ne conclut : e5-small reconnaît la famille, entraîné sans traduction."),
     ("L'appartement : questionner, calculer, expliquer", "C07",
      ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000",
-      "Et avec un bien à 200 000 ?"],
-     "Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, puis recalculé."),
+      "Et avec un bien à 200 000 ?", "pourquoi ?"],
+     "Les revenus ne sont pas redemandés ; projet non retenu, chiffré et sourcé, recalculé ; "
+     "« pourquoi ? » : le niveau 2 explique le conseil depuis la simulation."),
     ("Même phrase, deux clients : Sophie", "C03",
      ["Je voudrais mettre de côté pour mes enfants.", "Dans 10 ans, 100 euros par mois"],
      "Pour ses enfants : Livret A, Livret Jeune pour l'aîné ; LDDS et LEP écartés."),
@@ -73,7 +76,7 @@ def tex(texte: str) -> str:
 
 
 def _pourquoi(reponse: Reponse) -> list[str]:
-    lignes = []
+    lignes = [f"\\textbf{{Niveau {reponse.niveau}}} : {tex(reponse.raison_niveau)}"]
     c = reponse.comprehension
     if c.comprise:
         lignes.append(f"Intention \\texttt{{{tex(c.intention)}}}, comprise par {tex(c.niveau)}")
@@ -86,6 +89,8 @@ def _pourquoi(reponse: Reponse) -> list[str]:
                    + (f" (\\texttt{{{tex(e.regle)}}})" if e.regle else "") for e in reponse.conseil.ecartees]
         lignes += [f"Alerte : {tex(a)}" for a in reponse.conseil.alertes]
         lignes += [f"Hypothèse : {tex(h)}" for h in reponse.conseil.faits.get("hypotheses", [])]
+    lignes += [f"Source [{n}] : {tex(s['titre'])} ({tex(s['source'])}), score {s['score']:.3f}".replace(".", ",", 1)
+               for n, s in enumerate(reponse.sources, start=1)]
     return lignes
 
 
@@ -118,11 +123,13 @@ def generer() -> str:
             )
     sans_llm = sum(1 for r in toutes if r.appels_llm == 0)
     total_ms = sum(resumer(r.trace)["latence_ms"] for r in toutes)
-    mode = f"LLM {tex(llm.MODELE_FORMULATION)}" if llm.actif() else "gabarits, sans LLM"
+    mode = (f"aiguilleur, niveau 1 : {tex(llm.MODELE_NIVEAU1)}, niveau 2 : {tex(llm.MODELE_NIVEAU2)}"
+            if llm.actif() else "aiguilleur sans LLM (niveau 0, et RAG en extrait)")
+    par_niveau = ", ".join(f"niveau {n} : {sum(1 for r in toutes if r.niveau == n)}" for n in (0, 1, 2))
     bilan = (f"\\section*{{Bilan}}\n{len(toutes)} tours de conversation, dont \\textbf{{{sans_llm} sans aucun "
              f"appel au LLM}} ; {_ms(total_ms)} de calcul au total, soit {_ms(total_ms / len(toutes), 2)} par "
              f"tour en moyenne ; {sum(r.appels_llm for r in toutes)} appel(s) au LLM ; "
-             f"{sum(1 for r in toutes if r.escalade)} escalade. Mode : {mode}.\n")
+             f"{sum(1 for r in toutes if r.escalade)} escalade ; {par_niveau}. Mode : {mode}.\n")
     entete = (f"Généré le {datetime.now():%d/%m/%Y à %H h %M} sur {tex(platform.node())} "
               f"({tex(platform.processor() or platform.machine())}), mode : {mode}.")
     return GABARIT.replace("%ENTETE%", entete).replace("%CORPS%", bilan + "\n".join(morceaux))

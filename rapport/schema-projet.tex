@@ -14,6 +14,10 @@
 \definecolor{ext}{RGB}{250,233,207}
 \definecolor{alerte}{RGB}{250,226,226}
 \definecolor{kored}{RGB}{176,42,42}
+\definecolor{nunfond}{RGB}{253,244,205}
+\definecolor{nuntrait}{RGB}{176,128,0}
+\definecolor{ndeuxfond}{RGB}{236,228,247}
+\definecolor{ndeuxtrait}{RGB}{96,62,150}
 
 \newcommand{\f}[1]{\texttt{#1}}
 
@@ -35,6 +39,12 @@
   flr/.style={-{Latex[length=1.8mm]},semithick,draw=kored!70,dashed},
   lien/.style={semithick,draw=darkgray!70},
   et/.style={font=\scriptsize,text=darkgray,inner sep=1.5pt},
+  niv1/.style={rectangle,draw=nuntrait,fill=nunfond,rounded corners=2pt,align=center,font=\scriptsize,
+               inner sep=4pt,minimum height=0.7cm,line width=0.8pt},
+  niv2/.style={rectangle,draw=ndeuxtrait,fill=ndeuxfond,rounded corners=2pt,align=center,font=\scriptsize,
+               inner sep=4pt,minimum height=0.7cm,line width=0.8pt},
+  fl1/.style={-{Latex[length=1.8mm]},semithick,draw=nuntrait},
+  fl2/.style={-{Latex[length=1.8mm]},semithick,draw=ndeuxtrait},
 }
 
 \begin{document}
@@ -42,7 +52,7 @@
 
   % ── Colonne centrale : la cascade ──
   \node[acteur,text width=7.8cm] (client)
-    {\textbf{Client} --- interface \og Noria \fg{} (Streamlit) :\\ profil simulé choisi, message écrit};
+    {\textbf{Client} --- interface web (style Timso AI) :\\ profil simulé choisi, message écrit};
   \node[module,text width=7.8cm,below=of client] (reply)
     {\f{reply(message, client, état)} dans \f{src/assistant.py}\\ point d'entrée unique ; état de la conversation en mémoire};
   \node[etage,text width=7.8cm,below=of reply] (bar)
@@ -53,7 +63,7 @@
      $\rightarrow$ mots-clés (19\,\% des messages, 100\,\% justes)\\
      $\rightarrow$ \f{multilingual-e5-small} (118 M paramètres, 0,47 Go)\\
      + 2 régressions logistiques : famille, puis intention\\ (14 familles, 85 intentions ; 6 ms sur CPU)};
-  \node[test,below=of e1] (d) {compris ?\\ confiance $\geq \tau = 0{,}76$};
+  \node[test,below=of e1] (d) {\textbf{Aiguilleur}\\ 5 signaux : niveau\\ 0, 1 ou 2};
   \node[etage,text width=7.8cm,below=of d] (e2)
     {\textbf{2. Converser} (M2) : automate + 9 parcours YAML\\
      une question à la fois ; le profil n'est jamais redemandé ;\\
@@ -64,8 +74,8 @@
     {\textbf{3. Conseiller} (M3)\\ règles publiques :\\ HCSF (35\,\%, 25 ans),\\ taux BDF 3,32\,\% daté,\\ plafonds ; proposés /\\ écartés + règle, sources};
   \node[etage,text width=3.5cm,minimum height=2.3cm,left=0.3cm of e3] (orient)
     {\textbf{Orienter}\\ carte perdue, virement,\\ frais, réclamation :\\ \textbf{aucun accès au compte},\\ aucune opération};
-  \node[etage,text width=3.5cm,minimum height=2.3cm,right=0.3cm of e3] (fiche)
-    {\textbf{Fiche}\\ définition (glossaire,\\ même mal écrite) ;\\ service sans parcours ;\\ politesse};
+  \node[niv2,text width=3.5cm,minimum height=2.3cm,right=0.3cm of e3] (fiche)
+    {\textbf{Niveau 2 : RAG}\\ 3 fiches proches (e5),\\ un LLM rédige en citant ;\\ sinon l'extrait. Et les\\ fiches du glossaire};
   \node[etage,text width=7.8cm,below=0.75cm of e3] (e4)
     {\textbf{4. Formuler} (M2) : gabarits écrits par l'équipe\\
      + hypothèses du calcul + mention légale (crédit)\\
@@ -79,7 +89,7 @@
   \draw[fl] (reply) -- (bar);
   \draw[fl] (bar) -- (e1);
   \draw[fl] (e1) -- (d);
-  \draw[fl] (d) -- node[et,right]{oui} (e2);
+  \draw[fl] (d) -- node[et,right]{clair : niveau 0} (e2);
   \draw[fl] (e2.south) -- node[et,above left]{demande sensible} (orient.north);
   \draw[fl] (e2) -- node[et,right]{projet} (e3);
   \draw[fl] (e2.south) -- node[et,above right]{question, service} (fiche.north);
@@ -89,21 +99,23 @@
   \draw[fl] (e4) -- (out);
 
   % ── À gauche : quand le message n'est pas compris ──
-  \node[module,text width=3.0cm,left=3.4cm of d] (clar)
-    {\textbf{Question fermée}\\ sur les 2 familles\\ les plus probables};
+  \node[niv1,text width=3.2cm,left=3.2cm of d] (n1)
+    {\textbf{Niveau 1 : petit LLM}\\ RAG d'exemples, JSON\\ imposé par une grammaire,\\ vérifié ; ne répond pas};
+  \node[module,text width=3.0cm,below=0.9cm of n1] (clar)
+    {\textbf{Question fermée}\\ (repli) : les 2 familles\\ les plus probables};
   \node[donnee,text width=2.4cm,left=0.5cm of clar] (journal) {Journal\\ des incompris};
-  \node[risque,text width=2.7cm,below=0.9cm of journal] (esc) {Escalade LLM 14B\\ \textbf{désactivée}};
-  \draw[fl] (d) -- node[et,above]{non} (clar);
-  \draw[flp] (clar.north) |- node[et,pos=0.2,left]{question} (client.west);
+  \draw[fl1] (d) -- node[et,above]{flou} (n1);
+  \draw[fl1] (n1.east) -- ++(0.5,0) |- node[et,pos=0.7,below]{compris} (e2.west);
+  \draw[flr] (n1) -- node[et,right]{douteux} (clar);
+  \draw[flp] (clar.west) -- ++(-0.3,0) |- node[et,pos=0.25,left]{question} (client.west);
   \draw[fl] (clar.south) |- node[et,pos=0.25,right]{toujours ambigu} (orient.west);
   \draw[lien] (clar) -- (journal);
-  \coordinate (milieu) at ($(clar.south)!0.45!(clar.south |- orient.west)$);
-  \draw[flr] (esc.east) -- (milieu);
+  \draw[fl2] (d.east) -| node[et,above,pos=0.25]{question ouverte : niveau 2} ($(fiche.north)+(1.2,0)$);
 
-  % ── Le LLM : mesuré, laissé de côté ──
+  % ── Les LLM, encadrés ──
   \node[risque,text width=4.0cm,left=1.4cm of e4] (llm)
-    {\textbf{LLM optionnel, désactivé}\\ 1 appel, corps du conseil\\ seulement, sous garde-fou ;\\ 6 LLM mesurés : aucun\\ n'apporte assez};
-  \draw[flr] (llm) -- node[et,above]{si activé} (e4);
+    {\textbf{Les LLM, encadrés}\\ niveau 1 : JSON imposé, aucun\\ nombre absent du message ;\\ niveau 2 : chiffres et mots\\ des fiches, citation ; sinon repli};
+  \draw[lien,dashed] (llm) -- (e4);
 
   % ── À droite : les données ──
   \node[donnee,right=1.5cm of e1] (taxo)
@@ -114,7 +126,7 @@
     {\textbf{Profils simulés}\\ 8 clients fictifs, ancrés\\ dans Bank Marketing};
   \node[donnee,right=0.9cm of fiche,yshift=0.45cm] (glos) {\textbf{Glossaire}\\ fiches vérifiées};
   \node[donnee,below=0.45cm of glos] (cata)
-    {\textbf{Catalogue}\\ 12 produits et paramètres,\\ sources et dates};
+    {\textbf{Catalogue et fiches}\\ 12 produits, paramètres,\\ 37 fiches sourcées, datées};
   \draw[lien] (taxo) -- (e1);
   \draw[flp] (off.south west) to[out=-115,in=0] ($(e1.east)+(0,0.7)$);
   \draw[lien] (prof) -- (e2);
@@ -124,9 +136,9 @@
 
   % ── Évaluer, et mesurer en continu ──
   \node[module,text width=4.6cm,right=0.9cm of out] (eval)
-    {\textbf{Évaluer} (DeepEirb, RTX 6000 Ada)\\ 115 tests, 14 scénarios\\
+    {\textbf{Évaluer} (DeepEirb, RTX 6000 Ada)\\ 139 tests, 15 scénarios\\
      compréhension : 92,3\,\% EN, 84,8\,\% FR\\ formulation : 6 LLM, 0,8 à 9,1 Go\\
-     A/B/C + CodeCarbon : plus de 3\,000\\ fois moins d'énergie que le 14B};
+     niveaux 1 et 2 : bancs dédiés\\ A/B/C + CodeCarbon : le niveau 0 seul\\ consomme 3\,000 fois moins que le 14B};
   \path let \p1 = (off.north), \p2 = (eval.south), \p3 = (eval.east), \p4 = (off.east) in
     node[module,minimum width=0.75cm,minimum height={\y1-\y2},anchor=north west]
       (mes) at ({max(\x3,\x4)+0.45cm}, \y1) {};
@@ -142,7 +154,8 @@
     node[font=\scriptsize,text=darkgray,anchor=north] at (\x1, {min(\y1,\y2)-0.45cm})
     {\textcolor{ent!60!mainblue}{\rule{6pt}{6pt}} étages, sans gros modèle \quad
      \textcolor{tab!70!black}{\rule{6pt}{6pt}} données versionnées \quad
-     \textcolor{kored!70}{\rule{6pt}{6pt}} LLM : mesuré, désactivé \quad
+     \textcolor{nuntrait}{\rule{6pt}{6pt}} niveau 1 \quad \textcolor{ndeuxtrait}{\rule{6pt}{6pt}} niveau 2 \quad
+     \textcolor{kored!70}{\rule{6pt}{6pt}} replis et garde-fous \quad
      \textcolor{mod!70!black}{\rule{6pt}{6pt}} préparation, évaluation, mesure \quad
      M1 Younes --- M2 Yahya --- M3 Sohayb};
 

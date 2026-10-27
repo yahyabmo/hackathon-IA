@@ -19,8 +19,8 @@ conseil) produisent des décisions comme les autres.
 from __future__ import annotations
 
 from . import incompris, llm, rag
-from .aiguilleur import Aiguillage, aiguiller, renvoi_au_contexte, trier_par_urgence
-from .comprendre import comprendre, escalader, interprete
+from .aiguilleur import URGENCE, Aiguillage, aiguiller, renvoi_au_contexte, trier_par_urgence
+from .comprendre import classifieur, comprendre, escalader, interprete, mots_cles
 from .comprendre.entites import extraire
 from .conseiller import clients, conseiller
 from .conseiller import integration as m3
@@ -31,11 +31,14 @@ from .converser.dialogue import question_en_attente, reponse_lisible
 from .converser.formuler import mots_simples, question_clarification, reprise, simplifier, transition
 from .mesure import mesurer
 from .taxonomie import LIBELLES_FAMILLES, famille_de
+from .texte import normaliser
 
 # Informations de la question M3 qui complètent le profil plutôt que le projet.
 CHAMPS_PROFIL = {"age": "age", "est_etudiant": "est_etudiant", "ages_enfants": "enfants"}
 # Décisions qui terminent une demande : la suivante (file, ou parcours interrompu) peut venir.
 TERMINALES = ("orienter", "fiche", "conseil", "rag", "abandon")
+# Demandes qui n'attendent pas la fin d'une question en cours : la carte perdue ou volée.
+URGENTES = URGENCE[:4]
 
 
 def decision_conseil(etat: EtatConversation) -> Decision:
@@ -85,15 +88,38 @@ def _domaine(intention: str) -> str:
     return famille_de(intention).split("_")[0]  # carte_perdue, carte_usage… → carte
 
 
-def _rattacher(interpretation: interprete.Interpretation, etat: EtatConversation, message: str) -> None:
-    """« mais ma carte ? » renvoie au sujet déjà traité du même domaine, pas à un sujet voisin."""
+# Mots qui désignent un domaine, pour rattacher un renvoi au contexte (« et pour ma carte ? »).
+MOTS_DOMAINES = {"carte": "carte", "cb": "carte", "virement": "virement", "frais": "frais", "epargne": "epargne",
+                 "livret": "epargne", "credit": "credit", "pret": "credit", "apport": "credit", "emprunt": "credit"}
 
-    if not renvoi_au_contexte(message):
-        return
-    for i, intention in enumerate(interpretation.intentions):
-        traite = next((t for t in reversed(etat.traites) if _domaine(t) == _domaine(intention)), None)
-        if traite:
-            interpretation.intentions[i] = traite
+
+def _rattacher(interpretation: interprete.Interpretation, etat: EtatConversation, message: str) -> None:
+    """Ce que le code impose au niveau 1 : l'urgence d'abord, et les renvois au contexte.
+
+    « mais ma carte ? » renvoie au sujet déjà traité du même domaine, pas à un sujet voisin.
+    """
+
+    if renvoi_au_contexte(message):
+        texte = normaliser(message).split()
+        domaines = [d for mot, d in MOTS_DOMAINES.items() if mot in texte]
+        for domaine in domaines:  # un mot du message désigne le domaine : il prime sur le choix du LLM
+            traite = next((t for t in reversed(etat.traites) if _domaine(t) == domaine), None)
+            if traite:
+                interpretation.intentions = [traite, *[i for i in interpretation.intentions if _domaine(i) != domaine]]
+        for i, intention in enumerate(interpretation.intentions):
+            traite = next((t for t in reversed(etat.traites) if _domaine(t) == _domaine(intention)), None)
+            if traite:
+                interpretation.intentions[i] = traite
+    interpretation.intentions = trier_par_urgence(interpretation.intentions)
+
+
+def _confirmee(intention: str, message: str) -> bool:
+    """Une nouvelle demande proposée par le LLM pendant une question : les mots-clés ou le classifieur la voient-ils ?"""
+
+    if intention in mots_cles.expressions_trouvees(message):
+        return True
+    prediction = classifieur.predire(message)
+    return prediction is not None and famille_de(intention) in {a.famille for a in prediction.alternatives}
 
 
 def _appliquer(interpretation: interprete.Interpretation, comprehension: Comprehension,
@@ -102,6 +128,8 @@ def _appliquer(interpretation: interprete.Interpretation, comprehension: Compreh
 
     _rattacher(interpretation, etat, message)
     nouvelles = [i for i in interpretation.intentions if i != etat.parcours and i != "hors_sujet"]
+    if etat.info_attendue:
+        nouvelles = [i for i in nouvelles if _confirmee(i, message)]
     modele = interpretation.etape.modele if interpretation.etape else None
     if etat.info_attendue and etat.parcours:
         for reponse, fermee in ((interpretation.reponse, False), (interpretation.reponse_brute, True)):
@@ -288,6 +316,19 @@ def reply(
             trace.append(etape)
             texte += "\n\n" + transition(suivante) + " " + texte_suite
             decision, conseil = decision_suite, conseil_suite or conseil
+    elif decision.type == "question" and etat.file_demandes and etat.file_demandes[0] in URGENTES:
+        # « mon père, et au fait j'ai perdu ma carte » : l'urgence tout de suite, puis la question.
+        garde = (etat.parcours, etat.famille, dict(etat.slots), etat.info_attendue)
+        urgente = etat.file_demandes.pop(0)
+        decision_u, conseil_u = _traiter(None, "", Comprehension(famille=famille_de(urgente), intention=urgente,
+                                                                 confiance=1.0, niveau=NIVEAU_FILE, modele="file"),
+                                         etat, profil, trace)
+        texte_u, etape = formuler(decision_u, conseil_u, profil, etat, "")
+        trace.append(etape)
+        etat.traites.append(urgente)
+        etat.parcours, etat.famille, etat.slots, etat.info_attendue = garde
+        etat.memoire.pop(garde[0], None)
+        texte = texte_u + "\n\n" + reprise(garde[0], question_en_attente(etat, profil))
     elif en_cours and etat.parcours != en_cours[0] and en_cours[0] not in etat.file_demandes:
         etat.file_demandes.insert(0, en_cours[0])  # la question interrompue reviendra ensuite
 

@@ -47,7 +47,7 @@
 }
 
 \title{Un assistant bancaire frugal, explicable et prudent}
-\subtitle{Comprendre, personnaliser, conseiller --- avec le plus petit calcul qui suffit}
+\subtitle{Un aiguilleur : à chaque message, le plus petit moyen qui suffit}
 \author{Yahya \and Sohayb \and Younes}
 \institute{Hackathon IA --- La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA --- Sujet 1}
 \date{Mercredi 28 octobre 2026}
@@ -98,49 +98,35 @@
   \end{tabularx}
 \end{frame}
 
-\begin{frame}{L'architecture : une cascade \qui{Yahya}}
+\begin{frame}{L'architecture : un aiguilleur \qui{Yahya}}
   \centering
-  \resizebox{!}{0.8\textheight}{%
-  \begin{tikzpicture}[node distance=0.22cm]
-    \node[acteur] (msg) {Message du client};
-    \node[etage,below=of msg] (e1) {\textbf{1. Comprendre}};
-    \node[etage,below=of e1] (e2) {\textbf{2. Converser}};
-    \node[etage,below=of e2] (e3) {\textbf{3. Conseiller}};
-    \node[etage,below=of e3] (e5) {\textbf{4. Formuler}};
-    \node[acteur,below=of e5] (rep) {Réponse\\ + \og Pourquoi \fg{} + \og Frugalité \fg};
-    \node[cote,right=0.5cm of e1] (c1) {réponse attendue $\rightarrow$ mots-clés $\rightarrow$ classifieur e5-small (118 M)};
-    \node[cote,right=0.5cm of e2] (c2) {parcours YAML ; le profil n'est jamais redemandé};
-    \node[cote,right=0.5cm of e3] (c3) {règles publiques (HCSF, plafonds) ; aucun accès au compte, aucune opération};
-    \node[cote,right=0.5cm of e5] (c5) {gabarits ; un petit LLM mesuré, puis laissé de côté};
-    \foreach \a/\b in {msg/e1,e1/e2,e2/e3,e3/e5,e5/rep} \draw[fl] (\a) -- (\b);
-    \foreach \i in {1,2,3,5} \draw[lien] (e\i) -- (c\i);
-  \end{tikzpicture}}
+  \includegraphics[page=1,height=0.86\textheight]{schema-aiguilleur.pdf}
 \end{frame}
 
-\begin{frame}{Le moins cher d'abord \qui{Yahya}}
-  \begin{columns}[T]
-    \column{0.5\textwidth}
-    \begin{block}{Comprendre sans LLM}
-      \begin{enumerate}
-        \item la réponse à la question en cours ;
-        \item les mots-clés, s'ils sont sûrs ;
-        \item le classifieur, au-dessus du seuil $\tau$ ;
-        \item sinon : une question au client, puis un conseiller.
-      \end{enumerate}
-      Les messages incompris sont journalisés pour améliorer le système.
-    \end{block}
-    \column{0.46\textwidth}
-    \begin{block}{Décider sans LLM}
-      Des règles que le client peut lire ; chaque conseil dit \textbf{pourquoi}, et
-      \textbf{pourquoi pas}.
-    \end{block}
-    \begin{block}{Le LLM : mesuré, pas indispensable}
-      Six LLM essayés pour reformuler des faits calculés, sous garde-fou. Aucun n'apporte assez :
-      les gabarits suffisent.
-    \end{block}
-  \end{columns}
+\begin{frame}{Le plus petit moyen qui suffit, message par message \qui{Yahya}}
+  \small
+  \begin{tabularx}{\textwidth}{@{}l Y l@{}}
+    \toprule
+    \textbf{Niveau} & \textbf{Quand, et comment} & \textbf{Coût} \\
+    \midrule
+    \textcolor{mainblue}{\textbf{0 --- règles}} & Demande claire : mots-clés ou classifieur ($\geq \tau$), parcours YAML,
+      règles publiques, gabarits. Plusieurs demandes : l'urgence d'abord. & 0 LLM \\
+    \addlinespace
+    \textcolor{orange!80!black}{\textbf{1 --- comprendre}} & Message flou, réponse libre, renvoi au contexte : un
+      \textbf{petit LLM} + \textbf{RAG d'exemples} rend un \textbf{JSON imposé par une grammaire}, vérifié par le
+      code. Il ne répond jamais au client. & 1 appel \\
+    \addlinespace
+    \textcolor{violet}{\textbf{2 --- répondre}} & Question ouverte : \textbf{RAG sur 37 fiches sourcées}, un LLM
+      rédige en citant ; garde-fou (chiffres, fidélité), sinon l'extrait. & 1 appel \\
+    \bottomrule
+  \end{tabularx}
   \medskip
-  \centering\small\textit{\og Le vélo pour aller chercher le pain, la voiture pour le week-end. \fg}
+
+  La décision est prise \textbf{à chaque message} : une conversation passe de 1 à 2, puis à 0. La mémoire
+  (parcours, demandes en file, informations données) est commune ; après une parenthèse, on reprend.
+  \medskip
+
+  \centering\textit{\og Le vélo pour aller chercher le pain, la voiture pour le week-end. \fg}
 \end{frame}
 
 \begin{frame}{Démonstration en direct \qui{Yahya pilote, Sohayb commente}}
@@ -149,33 +135,38 @@
     \toprule
     \textbf{Client} & \textbf{Message} & \textbf{Ce qu'on montre} \\
     \midrule
-    Inès, 34 ans & \og J'ai perdu ma carte \fg & Guidée vers l'opposition, sans accès au compte \\
-    Inès & \og Ma carte ne marche plus au distributeur \fg & Pas de mot-clé : le classifieur comprend, sans traduction \\
-    Léa, 31 ans & \og Je veux acheter un appartement \fg & Revenus non redemandés ; 41,3\,\% $>$ 35\,\% ;
-      \og et avec 200\,000 ? \fg{} : 32,2\,\% \\
+    Inès, 34 ans & \og J'ai perdu ma carte et je veux faire un virement \fg & Niveau 0 : la carte d'abord, puis le virement \\
+     & \og oui \fg, \og c'est pour mon papa \fg & Niveau 1 : le petit LLM comprend la réponse libre \\
+     & \og Je peux retirer de mon PEL avant 4 ans ? \fg & Niveau 2 : réponse citée, puis \og Revenons à votre virement \fg \\
+     & \og 100000000 \fg & Montant invraisemblable, comparé au solde \\
+    Léa, 31 ans & Appartement, 250\,000, puis \og pourquoi ? \fg & 41,3\,\% $>$ 35\,\% ; le niveau 2 explique le conseil \\
     Sophie / Lucas & \og Je voudrais mettre de côté \fg & Même phrase, deux clients, deux conseils \\
     Marc, 52 ans & \og Pourquoi 8\eur{} de frais ? \fg & Cause fréquente, plafond légal, offre clientèle fragile \\
-    Julie & \og Votre appli ne marche jamais ! \fg & Excuses ; conseiller, réclamation, médiateur \\
-    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples, automatiquement ; guidé vers son espace \\
+    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples, automatiquement \\
     \bottomrule
   \end{tabularx}
   \smallskip
-  \scriptsize Démo de secours : 13 tours rejoués par le vrai pipeline, 0 appel au LLM, environ 6~ms par tour
-  (sur un portable).
+  \scriptsize Interface web (style Timso AI) : badge de niveau, sources, coût de chaque réponse, chaîne des niveaux.
+  Secours : \texttt{?client=C01\&rejouer} rejoue la démo, et le PDF de la démo de secours.
 \end{frame}
 
-\begin{frame}{Choisir le LLM en descendant en taille \qui{Yahya}}
-  \small
-  Seuil fixé avant de mesurer : \textbf{zéro chiffre inventé ni oublié} et \textbf{27 réponses
-  sur 30} jugées bonnes. On garde \textbf{le plus petit} qui tient le seuil.
-  \medskip
+\begin{frame}{Choisir le LLM de chaque niveau, en descendant en taille \qui{Yahya}}
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    \textbf{Niveau 1 --- comprendre} (36 messages difficiles)
+    \smallskip
 
-  \input{resultats-formulation}
-  \medskip
+    \input{resultats-niveau1}
+    \column{0.48\textwidth}
+    \textbf{Niveau 2 --- répondre en citant} (22 questions)
+    \smallskip
 
-  \footnotesize Les plus gros touchent aux chiffres (14B : 23/30). \texttt{qwen3:1.7b} les respecte,
-  mais efface parfois une phrase qui compte (\og aucun refus bancaire \fg) : 13 scénarios sur 14.
-  \textbf{Décision : les gabarits suffisent, le LLM reste désactivé.}
+    \input{resultats-niveau2}
+  \end{columns}
+  \medskip
+  \footnotesize Seuil fixé avant de mesurer ; on garde \textbf{le plus petit} qui le tient.
+  Déjà appris : \textbf{reformuler} un conseil chiffré n'apporte rien (les gros modèles touchent aux chiffres) :
+  le LLM sert à \emph{comprendre} et à \emph{répondre aux questions ouvertes}, pas à réécrire.
 \end{frame}
 
 % ─────────────────────────────── Younes ───────────────────────────────
@@ -191,9 +182,9 @@
   \input{resultats-frugalite}
   \medskip
 
-  \small Sans LLM, la cascade réussit tous les scénarios avec \textbf{plus de 3\,000 fois moins
-  d'énergie} que le 14B qui fait tout, même sans soustraire le repos (0,04 contre 155 Wh pour
-  1\,000 requêtes).
+  \small Le niveau 0 seul réussit tous les scénarios avec \textbf{plus de 3\,000 fois moins d'énergie} que
+  le 14B qui fait tout (0,04 contre 155 Wh pour 1\,000 requêtes, sans même soustraire le repos).
+  L'aiguilleur n'ajoute un petit LLM qu'aux messages qui en ont besoin.
 \end{frame}
 
 % ─────────────────────────────── Sohayb ───────────────────────────────
@@ -224,6 +215,8 @@
     \item \textbf{Mention légale} sur toute réponse de crédit ; aucune promesse.
     \item \textbf{Aucun accès au compte, aucune opération} (périmètre du kick-off) : l'assistant
           explique et oriente ; rappel : jamais de code confidentiel.
+    \item \textbf{LLM encadrés} : au niveau 1, il ne voit pas le profil et ne répond pas ; au niveau 2, il ne
+          répond qu'à partir de fiches sourcées, sinon \og je n'ai pas cette information \fg.
     \item \textbf{Données simulées, traitement local} : rien ne sort de la machine.
     \item \textbf{Inclusion} : mots simples, jargon expliqué, offre clientèle fragile.
   \end{itemize}
@@ -250,8 +243,8 @@
   \bigskip
   \begin{minipage}{0.82\textwidth}\centering
     \textit{Notre assistant comprend avec de simples mots-clés ou un modèle de 118 millions de
-    paramètres, décide avec des règles que le client peut lire, et répond sans LLM : nous en avons
-    mesuré six, aucun n'apportait assez pour son coût.}
+    paramètres, décide avec des règles que le client peut lire, et n'appelle un petit LLM qu'à un
+    instant précis : pour comprendre un message flou, ou répondre en citant nos fiches.}
   \end{minipage}
   \vfill
 \end{frame}

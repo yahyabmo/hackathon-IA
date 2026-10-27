@@ -37,7 +37,9 @@ FICHES_MAIN = Path(__file__).resolve().parents[1] / "data" / "processed" / "fich
 PREFIXE_PASSAGE = "passage: "
 NOMBRE_PASSAGES = 3
 SEUIL_PERTINENCE = 0.82  # cosinus e5 ; fixé sur le banc du niveau 2
-BONUS_LEXICAL = 0.02  # la question nomme le sujet de la fiche : recherche hybride, sémantique et lexicale
+BONUS_LEXICAL = 0.02  # par mot du sujet de la fiche cité dans la question (au plus deux) : recherche hybride
+BONUS_CHIFFRE = 0.015  # une question chiffrée (« combien », « plafond ») préfère une fiche qui donne le chiffre
+QUESTION_CHIFFREE = ("combien", "plafond", "taux", "minimum", "maximum", "quel age", "montant", "a partir de")
 LONGUEUR_MAX = 900
 FIDELITE_MIN = 0.8  # part des mots de la réponse présents dans les extraits ; fixée sur des cas jugés
 MOTS_VIDES = {"vous", "votre", "vos", "cette", "dans", "pour", "avec", "sans", "mais", "tandis", "plus", "tout",
@@ -138,11 +140,15 @@ def fiches() -> tuple[dict[str, Any], ...]:
     return tuple(tout)
 
 
+def _mots_cites(texte: str, fiche: dict[str, Any]) -> int:
+    return sum(1 for m in fiche["mots"] if m and contient(texte, m))
+
+
 def vocabulaire_cite(message: str) -> list[str]:
     """Les fiches dont le message nomme le sujet (produit, terme, règle) : un signal du niveau 2."""
 
     texte = normaliser(message)
-    return [f["id"] for f in fiches() if any(m and contient(texte, m) for m in f["mots"])]
+    return [f["id"] for f in fiches() if _mots_cites(texte, f)]
 
 
 @lru_cache(maxsize=1)
@@ -180,12 +186,17 @@ def rechercher(question: str, explication: list[str] | None = None,
                                                      normalize_embeddings=True, convert_to_tensor=True,
                                                      show_progress_bar=False)])
     q = classifieur._encoder(question)
-    scores = (vecteurs @ q).tolist()
-    cites = set(vocabulaire_cite(question))
-    scores = [s + (BONUS_LEXICAL if i < len(fiches()) and fiches()[i]["id"] in cites else 0.0)
-              for i, s in enumerate(scores)]
+    pertinences = (vecteurs @ q).tolist()  # cosinus seul : c'est lui qui décide si une fiche répond
+    scores = list(pertinences)  # avec les bonus : seulement pour classer les fiches entre elles
+    texte = normaliser(question)
+    chiffree = any(contient(texte, m) for m in QUESTION_CHIFFREE)
+    for i, candidate in enumerate(candidates):
+        scores[i] += BONUS_LEXICAL * min(2, _mots_cites(texte, candidate))
+        if chiffree and any(c.isdigit() for c in candidate["texte"]):
+            scores[i] += BONUS_CHIFFRE
     meilleurs = sorted(range(len(candidates)), key=lambda i: -scores[i])[:k]
-    return [{**candidates[i], "score": round(scores[i], 3)} for i in meilleurs]
+    return [{**candidates[i], "score": round(scores[i], 3), "pertinence": round(pertinences[i], 3)}
+            for i in meilleurs]
 
 
 @dataclass
@@ -242,6 +253,15 @@ def verifier(texte: str, passages: list[dict[str, Any]], question: str) -> list[
     return problemes
 
 
+def _extraits_de_repli(question: str, passages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """La meilleure fiche, et une seconde si la question en nomme deux (« LDDS et Livret A »)."""
+
+    cites = set(vocabulaire_cite(question))
+    second = next((p for p in passages[1:] if p["id"] in cites and p["id"].split(":")[0] == "produit"
+                   and passages[0]["id"].split(":")[0] == "produit"), None)
+    return [passages[0], second] if second else [passages[0]]
+
+
 def repondre(question: str, explication: list[str] | None = None, avec_llm: bool = True,
              modele: str | None = None) -> ReponseRag:
     """Recherche, puis rédaction sous garde-fou, ou repli sur l'extrait de la meilleure fiche."""
@@ -249,7 +269,7 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
     debut = perf_counter()
     passages = rechercher(question, explication)
     recherche = Etape(nom="rag", modele="e5-small", latence_ms=(perf_counter() - debut) * 1000)
-    if not passages or passages[0]["score"] < SEUIL_PERTINENCE:
+    if not passages or max(p["pertinence"] for p in passages) < SEUIL_PERTINENCE:
         return ReponseRag(
             texte="Je n'ai pas cette information dans mes fiches. Un conseiller peut vous répondre : prenez "
                   "rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
@@ -274,7 +294,8 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
         repli, etapes = "garde-fou : " + "; ".join(problemes), [recherche, etape]
     else:
         repli, etapes = "LLM désactivé", [recherche]
-    meilleur = passages[0]
-    texte = (f"D'après nos fiches : {meilleur['texte']} [1]\n\nPour votre situation précise, un conseiller peut "
-             f"vous répondre.\n\n{_sources_affichees([meilleur])}")
+    retenus = _extraits_de_repli(question, passages)
+    extraits = " ".join(f"{p['texte']} [{n}]" for n, p in enumerate(retenus, start=1))
+    texte = (f"D'après nos fiches : {extraits}\n\nPour votre situation précise, un conseiller peut "
+             f"vous répondre.\n\n{_sources_affichees(retenus)}")
     return ReponseRag(texte=texte, sources=passages, etapes=etapes, repli=repli)

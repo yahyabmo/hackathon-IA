@@ -71,11 +71,12 @@ def evaluer(item: dict, modele: str, avec_exemples: bool) -> dict:
     else:
         _rattacher(resultat, etat, message)
     attendues, comprises = item["intentions"], [i for i in resultat.intentions if i != "inconnue"]
-    if not comprises and etat.info_attendue:
-        comprises = [etat.parcours]  # rien de nouveau pendant une question : le même sujet
+    valeur = _valeur_lue(comprehension, etat, depart)
+    if etat.info_attendue and (valeur is not None or not comprises) and etat.parcours not in comprises:
+        comprises = [etat.parcours, *comprises]  # la question en cours reçoit sa réponse (ou rien de nouveau)
     intentions_justes = bool(comprises) and routage_correct(comprises[0], attendues[0]) and all(
         any(routage_correct(c, a) for c in comprises) for a in attendues)
-    valeur, attendue = _valeur_lue(comprehension, etat, depart), item.get("valeur")
+    attendue = item.get("valeur")
     valeur_juste = (normaliser(str(valeur)) == normaliser(str(attendue))) if attendue else valeur is None
     return {"message": message, "comprises": comprises, "attendues": attendues, "valeur": valeur,
             "juste": intentions_justes and (valeur_juste or not etat.info_attendue),
