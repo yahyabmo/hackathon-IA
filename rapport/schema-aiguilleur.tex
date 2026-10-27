@@ -1,0 +1,343 @@
+\documentclass[tikz,border=14pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,fit}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{ent}{RGB}{221,236,247}
+\definecolor{tab}{RGB}{215,237,221}
+\definecolor{mod}{RGB}{233,233,238}
+\definecolor{ext}{RGB}{250,233,207}
+\definecolor{alerte}{RGB}{250,226,226}
+\definecolor{kored}{RGB}{176,42,42}
+\definecolor{okgreen}{RGB}{46,125,50}
+\definecolor{nunfond}{RGB}{253,244,205}
+\definecolor{nuntrait}{RGB}{176,128,0}
+\definecolor{ndeuxfond}{RGB}{236,228,247}
+\definecolor{ndeuxtrait}{RGB}{96,62,150}
+% Interface (thème sombre de Timso AI)
+\definecolor{fond}{HTML}{0F1115}
+\definecolor{panneau}{HTML}{171A21}
+\definecolor{panneaudeux}{HTML}{1E222B}
+\definecolor{ligne}{HTML}{2A2F3A}
+\definecolor{texte}{HTML}{E6E8EC}
+\definecolor{discret}{HTML}{9AA3B2}
+\definecolor{accent}{HTML}{C8794F}
+\definecolor{bleu}{HTML}{3B82F6}
+
+\newcommand{\f}[1]{\texttt{#1}}
+
+\tikzset{
+  boite/.style={rectangle,rounded corners=2pt,align=center,font=\scriptsize,inner sep=4pt,minimum height=0.75cm},
+  etage/.style={boite,draw=mainblue,fill=ent},
+  donnee/.style={boite,draw=mainblue!70,fill=tab},
+  module/.style={boite,draw=darkgray!70,fill=mod},
+  acteur/.style={boite,draw=darkgray,fill=ext},
+  niv0/.style={boite,draw=mainblue,fill=ent,line width=0.9pt},
+  niv1/.style={boite,draw=nuntrait,fill=nunfond,line width=0.9pt},
+  niv2/.style={boite,draw=ndeuxtrait,fill=ndeuxfond,line width=0.9pt},
+  repli/.style={boite,draw=kored!80,fill=alerte,dashed},
+  test/.style={diamond,aspect=2.3,draw=mainblue,fill=white,align=center,font=\scriptsize,inner sep=1pt},
+  bulleclient/.style={boite,draw=darkgray,fill=ext,text width=5.2cm,align=left},
+  bulleassistant/.style={boite,draw=mainblue,fill=white,text width=5.2cm,align=left},
+  json/.style={boite,draw=darkgray!60,fill=white,align=left,font=\ttfamily\scriptsize},
+  fl/.style={-{Latex[length=1.8mm]},semithick,draw=mainblue!80},
+  fl1/.style={-{Latex[length=1.8mm]},semithick,draw=nuntrait},
+  fl2/.style={-{Latex[length=1.8mm]},semithick,draw=ndeuxtrait},
+  flp/.style={-{Latex[length=1.8mm]},semithick,draw=darkgray!75,dashed},
+  flr/.style={-{Latex[length=1.8mm]},semithick,draw=kored!75,dashed},
+  lien/.style={semithick,draw=darkgray!60},
+  et/.style={font=\scriptsize,text=darkgray,inner sep=1.5pt},
+  titre/.style={font=\large\bfseries,text=mainblue},
+  soustitre/.style={font=\scriptsize,text=darkgray},
+}
+
+\begin{document}
+
+% ════════════════════════════════════════════════════════════════════
+% Page 1 — L'aiguilleur, vue d'ensemble
+% ════════════════════════════════════════════════════════════════════
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[titre] (t) at (0,1.5) {L'aiguilleur : le plus petit moyen qui suffit, message par message};
+  \node[soustitre] at (0,1.0) {Vue d'ensemble --- chaque niveau est détaillé dans les pages suivantes};
+  \node[acteur,text width=6cm] (msg) at (0,0) {\textbf{Message du client}\\ dans l'interface (style Timso AI)};
+  \node[module,text width=10.4cm] (entree) at (0,-1.75)
+    {\textbf{Entrée commune, sans LLM} (environ 6 ms)\\[1pt]
+     barrières (montant ambigu) · entités par regex (montants, durées, bénéficiaires)\\
+     contexte : parcours en cours, question en attente, demandes en file\\
+     mots-clés (tous les sujets touchés) · e5-small + 2 régressions logistiques (confiance, 2 familles)};
+  \node[module,text width=5.6cm,align=left] (signaux) at (9.6,-1.75)
+    {\textbf{Les 5 signaux regardés par l'aiguilleur}\\[1pt]
+     1. plusieurs demandes dans le message\\
+     2. confiance sous $\tau = 0{,}76$\\
+     3. réponse attendue illisible par les règles\\
+     4. renvoi au contexte (\og mais ma carte ? \fg)\\
+     5. question ouverte (\og pourquoi \fg, \og différence \fg, \og je peux ? \fg)};
+  \node[test] (aig) at (0,-4.0) {\textbf{Aiguilleur}\\ le plus petit moyen\\ qui suffit};
+  \draw[lien,dashed] (signaux.south) |- (aig.east);
+
+  \node[niv0,text width=4.8cm] (n0) at (-6.2,-6.5)
+    {\textbf{Niveau 0 --- Règles}\\ demande claire, comprise avec confiance,\\ ou réponse lue par les règles\\
+     \textbf{environ 76\,\% des messages, 0 LLM}};
+  \node[niv1,text width=4.8cm] (n1) at (0,-6.5)
+    {\textbf{Niveau 1 --- Petit LLM interprète}\\ signaux 1 à 4 : il \emph{comprend} et rend\\ un JSON vérifié par le code ;\\
+     \textbf{il ne répond jamais au client}};
+  \node[niv2,text width=4.8cm] (n2) at (6.2,-6.5)
+    {\textbf{Niveau 2 --- RAG + LLM rédacteur}\\ signal 5 : question ouverte sur un\\ produit ou une règle ; une fois, à la fin,\\
+     \textbf{uniquement depuis nos fiches}};
+  \draw[fl] (aig.west) -| node[et,above,pos=0.3]{clair} (n0.north);
+  \draw[fl1] (aig.south) -- node[et,right]{flou} (n1.north);
+  \draw[fl2] (aig.east) -- ++(1.6,0) -| node[et,above,pos=0.2]{question ouverte} (n2.north);
+
+  \node[etage,text width=4.8cm] (auto) at (-6.2,-8.85)
+    {\textbf{Automate + parcours YAML}\\ file des demandes, mémoire,\\ vraisemblance des montants ;\\ orienter · conseiller · fiche};
+  \node[etage,text width=4.8cm] (gab) at (-6.2,-10.6)
+    {\textbf{Gabarits}\\ hypothèses du calcul, mention légale,\\ mots simples};
+  \draw[fl] (n0) -- (auto);
+  \draw[fl] (auto) -- (gab);
+  \draw[fl1] ($(n1.south)+(-1.4,0)$) |- node[et,below,pos=0.62]{retour au niveau 0} (auto.east);
+  \node[repli,text width=3.6cm] (clar) at (1.4,-10.6)
+    {JSON invalide ou douteux :\\ \textbf{question de clarification}};
+  \draw[flr] ($(n1.south)+(1.4,0)$) -- (clar.north);
+
+  \node[niv2,text width=4.8cm] (rag) at (6.2,-8.85)
+    {\textbf{Recherche dans nos fiches}\\ e5-small, 3 passages les plus proches\\ (catalogue, glossaire, règles)};
+  \node[test] (gf) at (6.2,-10.6) {garde-fou\\ réussi ?};
+  \draw[fl2] (n2) -- (rag);
+  \draw[fl2] (rag) -- node[et,right]{le LLM rédige} (gf);
+  \node[repli,text width=3.4cm] (rien) at (11.0,-8.85)
+    {score trop bas : \og je n'ai pas\\ cette information \fg{} + conseiller};
+  \draw[flr] (rag) -- (rien);
+  \node[repli,text width=3.4cm] (extrait) at (11.0,-10.6)
+    {échec : extrait de la\\ meilleure fiche + sources};
+  \draw[flr] (gf) -- node[et,above]{non} (extrait);
+
+  \node[acteur,text width=14.2cm] (out) at (0,-12.7)
+    {\textbf{Réponse au client}\\ + badge du niveau (0, 1 ou 2), modèle, latence, coût
+     + volet \og Pourquoi \fg{} (intention, confiance, règles) + volet \og Sources \fg{} (passages, scores)};
+  \draw[fl] (gab.south) -- (gab.south |- out.north);
+  \draw[flr] (clar.south) -- (clar.south |- out.north);
+  \draw[fl2] (gf.south) -- node[et,right]{oui} (gf.south |- out.north);
+
+  \node[font=\scriptsize,text=darkgray,align=center] at (0,-14.0)
+    {\textcolor{mainblue}{\rule{6pt}{6pt}} niveau 0, règles \quad
+     \textcolor{nuntrait}{\rule{6pt}{6pt}} niveau 1, petit LLM qui comprend \quad
+     \textcolor{ndeuxtrait}{\rule{6pt}{6pt}} niveau 2, RAG et LLM qui rédige \quad
+     \textcolor{kored}{\rule{6pt}{6pt}} replis sûrs : jamais de devinette\\[2pt]
+     Si le LLM ne répond pas (serveur coupé, délai dépassé), le message retombe au niveau 0 ou en clarification.};
+\end{tikzpicture}
+
+% ════════════════════════════════════════════════════════════════════
+% Page 2 — Niveau 0, sur l'exemple de votre test
+% ════════════════════════════════════════════════════════════════════
+\begin{tikzpicture}[node distance=0.32cm]
+  \node[bulleclient] (c1) {\textbf{Client} : J'ai perdu ma carte et je veux faire un virement.};
+  \node[niv0,text width=5.6cm,right=1.2cm of c1] (i1)
+    {mots-clés : \textbf{2 sujets} (carte perdue, virement)\\ $\rightarrow$ file par urgence : 1. carte perdue, 2. virement};
+  \node[bulleassistant,below=of c1] (a1)
+    {\textbf{Assistant} : Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre
+     espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. [\dots]\\
+     Passons à votre virement : à qui voulez-vous envoyer l'argent ?};
+  \node[niv0,text width=5.6cm] (i2) at (i1 |- a1)
+    {parcours \og carte perdue \fg{} : consigne \textbf{immédiate},\\ sans demander \og perdue ou volée ? \fg\\
+     puis la demande suivante de la file : le virement};
+  \node[bulleclient,below=of a1] (c2) {\textbf{Client} : mon père};
+  \node[niv0,text width=5.6cm] (i3) at (i1 |- c2)
+    {réponse attendue lue par les règles :\\ bénéficiaire = père (mémorisé)};
+  \node[bulleassistant,below=of c2] (a2) {\textbf{Assistant} : Quel montant voulez-vous envoyer ?};
+  \node[bulleclient,below=of a2] (c3) {\textbf{Client} : 100000000};
+  \node[niv0,text width=5.6cm] (i4) at (i1 |- c3)
+    {\textbf{vraisemblance} : 100\,000\,000\,\texteuro{} comparés au solde\\ (1\,450\,\texteuro) et aux revenus du profil $\rightarrow$ alerte};
+  \node[bulleassistant,below=of c3] (a3)
+    {\textbf{Assistant} : Ce montant dépasse largement votre solde (1\,450\,\texteuro) : vérifiez-le.
+     Pour faire ce virement, utilisez votre espace bancaire sécurisé ; je n'ai aucun accès à votre compte.};
+  \node[niv0,text width=5.6cm] (i5) at (i1 |- a3)
+    {parcours \og virement \fg{} terminé : orientation\\ sans accès au compte (périmètre du kick-off)};
+  \foreach \a/\b in {c1/i1,a1/i2,c2/i3,c3/i4,a3/i5} \draw[lien,dashed] (\a.east) -- (\b.west);
+
+  \node[module,text width=4.3cm,align=left,right=0.9cm of i3] (outils)
+    {\textbf{Ce qui travaille au niveau 0}\\[2pt]
+     · automate de dialogue\\ \hphantom{· }(\f{dialogue.py})\\
+     · 9 parcours YAML\\
+     · \textbf{file des demandes} (nouveau)\\
+     · \textbf{mémoire par parcours} (nouveau)\\
+     · \textbf{vraisemblance des montants}\\ \hphantom{· }(nouveau)\\
+     · règles de conseil (M3)\\
+     · gabarits, glossaire, mots simples\\[2pt]
+     \textbf{Coût} : 0 LLM, quelques ms,\\ environ 0,004 Wh pour 1\,000 messages};
+
+  \node[titre,above=0.9cm of c1.north east,anchor=south] (t) {Niveau 0 --- Règles : la majorité des messages, sans LLM};
+  \node[soustitre,below=0.12cm of t] {Votre test, tel qu'il se déroulera après les corrections --- à gauche la conversation, à droite ce qui se passe};
+\end{tikzpicture}
+
+% ════════════════════════════════════════════════════════════════════
+% Page 3 — Niveau 1 : le petit LLM qui interprète
+% ════════════════════════════════════════════════════════════════════
+\begin{tikzpicture}[node distance=0.42cm]
+  \node[module,text width=8.4cm,align=left] (ctx)
+    {\textbf{Contexte connu}, transmis au LLM en quelques lignes\\[1pt]
+     parcours en cours : virement --- question en attente : bénéficiaire\\
+     demandes en file : aucune --- carte perdue : déjà traitée\\
+     dernière réponse : \og À qui voulez-vous envoyer l'argent ? \fg};
+  \node[bulleclient,text width=7.0cm,below=of ctx] (m)
+    {\textbf{Client} : perdue, mais je veux faire un virement\\
+     \textit{(ou : \og oui \fg, \og je veux envoyer de l'argent \fg, \og mais ma carte ? \fg)}};
+  \node[niv1,text width=7.2cm,below=of m] (pourquoi)
+    {\textbf{Pourquoi le niveau 1} : les règles ne lisent pas la réponse attendue,\\
+     ou le message mêle une réponse et une nouvelle demande, ou renvoie au contexte};
+  \node[niv1,text width=7.2cm,below=of pourquoi] (llm)
+    {\textbf{Petit LLM}, un seul appel, environ 80 tokens\\
+     sortie \textbf{imposée par un schéma JSON} (sortie structurée d'Ollama)\\
+     modèle : le plus petit qui réussit le banc des messages difficiles};
+  \node[json,text width=7.0cm,below=of llm] (j)
+    {\{ "intentions": ["lost\_or\_stolen\_card", "faire\_virement"],\\
+     \ \ "reponse\_a\_la\_question": "perdue",\\
+     \ \ "infos": \{"beneficiaire": null, "montant": null\},\\
+     \ \ "nouveau\_sujet": true \}};
+  \node[test,below=0.5cm of j] (v) {vérifié par\\ le code ?};
+  \node[module,text width=5.4cm,align=left,right=1.0cm of v] (verifs)
+    {· intentions connues de la taxonomie\\
+     · chaque nombre figure dans le message\\
+     · le schéma JSON est respecté};
+  \draw[lien,dashed] (verifs) -- (v);
+  \node[niv0,text width=5.0cm] (ok) at ($(v.south)+(-3.6,-1.5)$)
+    {\textbf{Retour au niveau 0}\\ l'automate range la compréhension\\ (file, mémoire), les gabarits répondent};
+  \node[repli,text width=4.2cm] (ko) at ($(v.south)+(3.6,-1.5)$)
+    {\textbf{Question de clarification}\\ \og votre carte, ou votre virement ? \fg};
+  \draw[fl1] (ctx) -- (m);
+  \draw[fl1] (m) -- (pourquoi);
+  \draw[fl1] (pourquoi) -- (llm);
+  \draw[fl1] (llm) -- (j);
+  \draw[fl1] (j) -- (v);
+  \draw[fl] (v.west) -| node[et,above,pos=0.2]{oui} (ok.north);
+  \draw[flr] (v.south) -- ++(0,-0.4) -| node[et,above,pos=0.3]{non} (ko.north);
+
+  \node[module,text width=4.6cm,align=left,left=0.8cm of llm] (regles)
+    {\textbf{Les règles du niveau 1}\\[2pt]
+     · le LLM ne voit \textbf{pas le profil}\\
+     · il ne \textbf{répond jamais} au client\\
+     · il n'écrit \textbf{aucun chiffre} que le\\ \hphantom{· }client n'a pas écrit\\
+     · s'il est indisponible : retour\\ \hphantom{· }au niveau 0 ou clarification};
+
+  \node[titre,above=0.9cm of ctx] (t) {Niveau 1 --- Un petit LLM qui comprend, sans répondre};
+  \node[soustitre,below=0.12cm of t] {Il remplace la devinette par une compréhension structurée, que le code vérifie avant de s'en servir};
+\end{tikzpicture}
+
+% ════════════════════════════════════════════════════════════════════
+% Page 4 — Niveau 2 : RAG + LLM rédacteur
+% ════════════════════════════════════════════════════════════════════
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[titre] (t) at (6.2,2.2) {Niveau 2 --- RAG : chercher dans nos fiches, puis rédiger en citant};
+  \node[soustitre] at (6.2,1.7) {Le même encodeur que pour comprendre ; un LLM seulement quand il faut rédiger, et sous garde-fou};
+  % Au démarrage
+  \node[donnee,text width=3.3cm] (fiches) at (0,0)
+    {\textbf{Nos fiches vérifiées}\\ 12 produits du catalogue,\\ glossaire, règles (HCSF,\\ commissions, offre fragile),\\ conseil calculé du client};
+  \node[niv2,text width=2.9cm] (decoupe) at (4.1,0) {\textbf{Découpage}\\ environ 60 passages,\\ chacun avec sa source\\ et sa date};
+  \node[niv2,text width=2.9cm] (encode) at (7.9,0) {\textbf{e5-small}\\ préfixe \f{passage:}\\ (déjà chargé : aucun\\ modèle en plus)};
+  \node[niv2,text width=2.9cm] (index) at (11.7,0) {\textbf{Index en mémoire}\\ quelques centaines de Ko,\\ sans base vectorielle};
+  \draw[fl2] (fiches) -- (decoupe);
+  \draw[fl2] (decoupe) -- (encode);
+  \draw[fl2] (encode) -- (index);
+  \node[draw=darkgray!60,dashed,rounded corners=3pt,fit=(fiches)(index),inner sep=7pt] (cadre) {};
+  \node[et,anchor=south west] at (cadre.north west) {\textit{Au démarrage de l'application, une fois (environ 1 s)}};
+
+  % À chaque question ouverte
+  \node[bulleclient,text width=5.2cm] (q) at (2,-3.0)
+    {\textbf{Client} : Je peux retirer de l'argent de mon PEL avant 4 ans ?};
+  \node[niv2,text width=5.0cm] (qe) at (2,-4.35) {\textbf{e5-small}, préfixe \f{query:}\\ puis similarité avec chaque passage};
+  \node[niv2,text width=5.0cm] (top) at (2,-5.6) {\textbf{3 passages les plus proches}, avec leur score};
+  \node[test] (seuil) at (2,-7.0) {score $\geq$ seuil ?};
+  \node[niv2,text width=5.0cm] (red) at (2,-8.6)
+    {\textbf{LLM rédacteur}, une fois, à la fin\\ consigne : répondre \textbf{uniquement} avec\\ les passages, les citer [1] [2], rester bref};
+  \node[test] (gf) at (2,-10.25) {garde-fou\\ réussi ?};
+  \draw[fl2] (q) -- (qe);
+  \draw[fl2] (qe) -- (top);
+  \draw[fl2] (top) -- (seuil);
+  \draw[fl2] (seuil) -- node[et,right]{oui} (red);
+  \draw[fl2] (red) -- (gf);
+  \draw[flp] (index.south) |- node[et,above,pos=0.75]{comparaison} (qe.east);
+
+  \node[repli,text width=3.6cm] (rien) at (6.9,-7.0)
+    {\og Je n'ai pas cette information :\\ un conseiller peut vous répondre \fg\\ --- jamais d'invention};
+  \draw[flr] (seuil) -- node[et,above]{non} (rien);
+  \node[module,text width=4.4cm,align=left] (verifs) at (7.3,-10.25)
+    {· aucun chiffre absent des passages\\ · aucune formule interdite\\ · citations présentes};
+  \draw[lien,dashed] (verifs) -- (gf);
+  \node[module,text width=4.4cm,align=left] (quand) at (11.9,-7.4)
+    {\textbf{Quand le niveau 2 ?}\\[1pt]
+     · question ouverte sur un produit\\ \hphantom{· }ou une règle hors parcours\\
+     · \og pourquoi ? \fg{} après un conseil\\[2pt]
+     \textbf{Les chiffres} restent ceux des fiches\\ et des règles : le LLM ne calcule rien};
+
+  \node[bulleassistant,text width=6.0cm] (rep) at (-0.8,-12.6)
+    {\textbf{Assistant} : Oui, mais tout retrait sur un PEL entraîne sa clôture [1].
+     Si votre projet est à court terme, un livret reste disponible à tout moment [2].\\[2pt]
+     \textit{Sources : [1] fiche PEL (Service-Public, 27/10/2026) ; [2] fiche Livret A}};
+  \node[repli,text width=3.8cm] (ext) at (5.6,-12.6)
+    {\textbf{Repli} : extrait de la meilleure\\ fiche, avec ses sources, sans LLM};
+  \draw[fl2] (gf.west) -| node[et,above,pos=0.2]{oui} (rep.north);
+  \draw[flr] (gf.east) -- ++(0.6,0) |- ($(ext.north)+(0,0.35)$) -- node[et,right,pos=0.1]{non} (ext.north);
+\end{tikzpicture}
+
+% ════════════════════════════════════════════════════════════════════
+% Page 5 — L'interface, dans le style de Timso AI
+% ════════════════════════════════════════════════════════════════════
+\begin{tikzpicture}[x=1cm,y=1cm,font=\scriptsize]
+  \fill[fond] (0,0) rectangle (17,10.4);
+  % Barre de réglages
+  \fill[panneau] (0,0) rectangle (4.2,10.4);
+  \draw[ligne] (4.2,0) -- (4.2,10.4);
+  \node[text=texte,anchor=north west,font=\small\bfseries] at (0.3,10.1) {Assistant bancaire};
+  \node[text=discret,anchor=north west] at (0.3,9.6) {Cascade frugale --- modèles locaux};
+  \foreach \y/\l/\v in {8.8/Profil simulé/{C07 --- Léa, 31 ans}, 7.7/Aiguillage/Automatique, 6.6/Modèle du niveau 1/le plus petit retenu, 5.5/Modèle du niveau 2/le plus petit retenu} {
+    \node[text=discret,anchor=west] at (0.3,\y) {\l};
+    \draw[ligne,fill=panneaudeux,rounded corners=3pt] (0.3,\y-0.75) rectangle (3.9,\y-0.2);
+    \node[text=texte,anchor=west] at (0.45,\y-0.47) {\v};
+  }
+  \node[text=texte,anchor=west] at (0.3,3.95) {$\boxtimes$ Mots simples \quad $\boxtimes$ LLM actif};
+  \draw[ligne] (0.3,3.5) -- (3.9,3.5);
+  \node[text=discret,anchor=north west,align=left] at (0.3,3.35)
+    {\textbf{Cette conversation}\\ niveau 0 : 5 tours\\ niveau 1 : 1 tour\\ niveau 2 : 1 tour\\ énergie estimée : \dots~Wh};
+
+  % Fil de la conversation
+  \fill[bleu,rounded corners=6pt] (10.6,9.3) rectangle (16.6,10.0);
+  \node[text=white,anchor=east] at (16.4,9.65) {Je peux retirer de mon PEL avant 4 ans ?};
+  \draw[ligne,fill=panneau,rounded corners=6pt] (4.6,3.2) rectangle (16.6,9.0);
+  \node[text=texte,anchor=north west,align=left,text width=11.4cm] at (4.8,8.85)
+    {Oui, mais tout retrait sur un PEL entraîne sa clôture [1]. Si votre projet est à court terme,
+     un livret reste disponible à tout moment [2].};
+  \draw[ligne] (4.6,7.75) -- (16.6,7.75);
+  \draw[ndeuxtrait,fill=ndeuxtrait,rounded corners=5pt] (4.85,7.25) rectangle (6.35,7.6);
+  \node[text=texte] at (5.6,7.43) {Niveau 2};
+  \node[text=discret,anchor=west] at (6.5,7.43) {RAG + LLM rédacteur · 3 passages · 0,9 s · 210 tokens · garde-fou réussi};
+  \draw[ligne] (4.6,7.05) -- (16.6,7.05);
+  \fill[panneaudeux] (4.6,6.45) rectangle (16.6,7.05);
+  \node[text=discret,anchor=west] at (4.8,6.75) {$\triangleright$ Pourquoi : question ouverte (signal 5) ; famille épargne ; confiance 0,91};
+  \draw[ligne] (4.6,6.45) -- (16.6,6.45);
+  \node[text=discret,anchor=west] at (4.8,6.15) {$\triangledown$ Sources};
+  \foreach \y/\n/\s/\txt in {5.55/1/{0,86}/{PEL : tout retrait entraîne la clôture du plan --- Service-Public, relevé le 27.10.2026},
+                             4.75/2/{0,81}/{Livret A : épargne disponible à tout moment --- Service-Public, relevé le 27.10.2026},
+                             3.95/3/{0,74}/{Glossaire : plan d'épargne logement}} {
+    \draw[ligne] (4.6,\y+0.35) -- (16.6,\y+0.35);
+    \node[text=discret,anchor=west] at (4.8,\y+0.08) {Passage \n};
+    \node[text=accent,anchor=east] at (16.4,\y+0.08) {\s};
+    \node[text=texte,anchor=west] at (4.8,\y-0.25) {\txt};
+  }
+  % Saisie
+  \draw[ligne] (4.2,1.1) -- (17,1.1);
+  \draw[ligne,fill=panneaudeux,rounded corners=5pt] (4.6,0.25) rectangle (14.9,0.85);
+  \node[text=discret,anchor=west] at (4.8,0.55) {Écrivez votre demande\dots};
+  \fill[accent,rounded corners=5pt] (15.1,0.25) rectangle (16.6,0.85);
+  \node[text=white,font=\scriptsize\bfseries] at (15.85,0.55) {Envoyer};
+
+  \node[titre,anchor=south] at (8.5,11.0) {L'interface de la démo, dans le style de Timso AI};
+  \node[soustitre,anchor=south] at (8.5,10.6) {Page web (FastAPI + HTML), thème sombre : chaque réponse montre son niveau, son coût, son raisonnement et ses sources};
+\end{tikzpicture}
+
+\end{document}
