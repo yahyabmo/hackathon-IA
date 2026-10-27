@@ -183,3 +183,10 @@ def test_la_chaine_1_2_0_2_avec_reprise(monkeypatch, index_rag):
     assert niveaux == [1, 2, 0, 2] and etat.niveaux == niveaux
     assert "Revenons à un virement : quel montant voulez-vous envoyer ?" in reponse.texte
     assert reponse.sources and "[1]" in reponse.texte
+
+
+def test_un_renvoi_au_contexte_retrouve_le_sujet_deja_traite(monkeypatch):
+    monkeypatch.setattr(llm, "generer", faux_llm({"mais ma carte ?": {"intentions": ["carte_usage"],
+                                                                      "reponse_a_la_question": ""}}))
+    reponse, _ = converser("C01", ["J'ai perdu ma carte", "mais ma carte ?"], llm_actif=True)
+    assert reponse.niveau == 1 and "Faites opposition tout de suite" in reponse.texte

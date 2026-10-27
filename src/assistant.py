@@ -19,7 +19,7 @@ conseil) produisent des décisions comme les autres.
 from __future__ import annotations
 
 from . import incompris, llm, rag
-from .aiguilleur import Aiguillage, aiguiller, trier_par_urgence
+from .aiguilleur import Aiguillage, aiguiller, renvoi_au_contexte, trier_par_urgence
 from .comprendre import comprendre, escalader, interprete
 from .comprendre.entites import extraire
 from .conseiller import clients, conseiller
@@ -78,10 +78,26 @@ def _contexte(etat: EtatConversation, profil: dict) -> dict[str, str | None]:
             "traite": ", ".join(deja) if deja else None}
 
 
+def _domaine(intention: str) -> str:
+    return famille_de(intention).split("_")[0]  # carte_perdue, carte_usage… → carte
+
+
+def _rattacher(interpretation: interprete.Interpretation, etat: EtatConversation, message: str) -> None:
+    """« mais ma carte ? » renvoie au sujet déjà traité du même domaine, pas à un sujet voisin."""
+
+    if not renvoi_au_contexte(message):
+        return
+    for i, intention in enumerate(interpretation.intentions):
+        traite = next((t for t in reversed(etat.traites) if _domaine(t) == _domaine(intention)), None)
+        if traite:
+            interpretation.intentions[i] = traite
+
+
 def _appliquer(interpretation: interprete.Interpretation, comprehension: Comprehension,
                etat: EtatConversation, message: str) -> tuple[Comprehension, str, bool]:
     """Ce que le niveau 1 a compris, rendu à l'automate : (compréhension, message lu, même sujet)."""
 
+    _rattacher(interpretation, etat, message)
     nouvelles = [i for i in interpretation.intentions if i != etat.parcours and i != "hors_sujet"]
     modele = interpretation.etape.modele if interpretation.etape else None
     if etat.info_attendue and etat.parcours:
