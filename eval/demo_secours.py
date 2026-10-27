@@ -18,6 +18,7 @@ from pathlib import Path
 
 from src import llm
 from src.assistant import reply
+from src.comprendre import classifieur
 from src.conseiller import clients
 from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation, Reponse
@@ -104,6 +105,7 @@ def _frugalite(reponse: Reponse) -> str:
 
 
 def generer() -> str:
+    classifieur.prechauffer()  # comme l'interface au démarrage : le chargement n'est pas un tour
     morceaux, toutes = [], []
     for titre, client, messages, idee in SCENES:
         profil = clients.profil(client)

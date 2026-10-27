@@ -113,3 +113,13 @@ def test_pas_d_escalade_par_defaut_meme_avec_le_llm(monkeypatch):
     assert reponse.escalade is False
     assert reponse.appels_llm == 0
     assert etat.action_en_attente.outil == "transmettre_conseiller"
+
+
+def test_la_clarification_propose_les_deux_familles_probables():
+    from src.contrats import Alternative
+    from src.converser.formuler import question_clarification
+
+    question = question_clarification([Alternative("virement", 0.58), Alternative("insatisfaction", 0.23)])
+    assert question.endswith("un virement, ou une réclamation ?")
+    assert question_clarification([Alternative("compte_identite", 0.39), Alternative("especes", 0.2)]) is None
+    assert question_clarification([Alternative("insatisfaction", 0.6), Alternative("conversation", 0.3)]) is None

@@ -1,0 +1,21 @@
+{
+  "configurations": {
+    "C": {
+      "configuration": "C",
+      "modele": null,
+      "reussite": "14 / 14",
+      "wh_par_1000": 0.0009,
+      "wh_par_1000_brut": 0.009,
+      "latence_p50_ms": 0.3,
+      "latence_p95_ms": 14.0,
+      "go_charges": 0.47,
+      "sans_llm": 1.0,
+      "requetes": 200,
+      "repetitions": 3
+    }
+  },
+  "machine": "yahya-bel-hajjam (x86_64)",
+  "requetes": 200,
+  "date": "2026-10-27T11:57:39",
+  "puissance_repos_w": 11.5
+}

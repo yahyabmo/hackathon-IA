@@ -1,0 +1,9 @@
+client: C08
+tours:
+  - client: "Je veux un crédit pour acheter une voiture."
+    attendu: {intention: credit_conso, demande: montant}
+  - client: "12000"
+    attendu: {demande: duree_mois}
+  - client: "48 mois"
+    attendu: {ecarte: [pret_personnel], texte_contient: "aucun refus bancaire"}
+    interdit: {propose: [pret_personnel]}

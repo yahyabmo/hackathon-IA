@@ -1,7 +1,12 @@
 streamlit>=1.40,<2
 pyyaml>=6,<7
 pytest>=8,<9
-# Module 1 (classifieur et mesures), à décommenter quand il est branché :
-# sentence-transformers
-# scikit-learn
-# codecarbon
+numpy>=1.26
+# Module 1 : encodeur de compréhension (multilingual-e5-small). Sur un poste sans GPU,
+# installer d'abord torch en version CPU, bien plus légère :
+#   pip install --index-url https://download.pytorch.org/whl/cpu torch
+sentence-transformers>=3,<7
+# Entraînement des têtes (python -m src.comprendre.entrainer) ; inutile pour répondre.
+scikit-learn>=1.4,<2
+# Bancs d'énergie (eval/bench_abc.py).
+codecarbon>=2.5,<4

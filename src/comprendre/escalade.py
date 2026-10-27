@@ -23,24 +23,33 @@ _SYSTEME = (
 )
 
 
+def classer(message: str, modele: str) -> tuple[str | None, int]:
+    """L'intention choisie par le LLM (représentante pour une famille), et les tokens.
+
+    Partagée par l'escalade et le banc de compréhension (le LLM qui classe seul).
+    """
+
+    texte, tokens = llm.generer(modele, _SYSTEME, message, max_tokens=12, role="escalade")
+    choix = normaliser(texte).replace(" ", "_")
+    if choix in NOUVELLES_INTENTIONS:
+        return choix, tokens
+    if choix in FAMILLES:
+        return representante(choix), tokens
+    return None, tokens
+
+
 def escalader(message: str) -> tuple[Comprehension | None, Etape | None]:
     """Compréhension par le LLM d'escalade, ou ``None`` si le LLM est désactivé ou hésite."""
 
     if not llm.escalade_active():
         return None, None
     debut = perf_counter()
-    texte, tokens = llm.generer(llm.MODELE_ESCALADE, _SYSTEME, message, max_tokens=12,
-                                role="escalade")
+    intention, tokens = classer(message, llm.MODELE_ESCALADE)
     etape = Etape(
         nom="escalade", modele=llm.MODELE_ESCALADE, latence_ms=(perf_counter() - debut) * 1000,
         tokens=tokens, appel_llm=True,
     )
-    choix = normaliser(texte).replace(" ", "_")
-    if choix in NOUVELLES_INTENTIONS:
-        intention = choix
-    elif choix in FAMILLES:
-        intention = representante(choix)
-    else:
+    if intention is None:
         return None, etape
     return (
         Comprehension(

@@ -153,6 +153,28 @@ def credit_conso(profil: dict[str, Any], slots: dict[str, Any]) -> Conseil:
     return _credit(profil, slots, False)
 
 
+
+# Libellés lisibles des informations à vérifier : le client ne voit jamais un nom de champ.
+LIBELLES_A_VERIFIER = {
+    "situation_fiscale_enfants": "situation fiscale des enfants",
+    "rfr_enfants": "revenu fiscal des enfants",
+    "residence_france": "résidence en France",
+    "domicile_fiscal_france": "domicile fiscal en France",
+    "rattache_foyer_parents": "rattachement au foyer fiscal des parents",
+    "revenus_personnels": "revenus personnels",
+    "rfr": "revenu fiscal de référence",
+    "parts_fiscales": "nombre de parts fiscales",
+    "annee_rfr": "année du revenu fiscal",
+    "territoire_fiscal": "territoire fiscal",
+    "conditions_catalogue_non_verifiees": "conditions du produit non vérifiées",
+}
+
+
+def _libelle_a_verifier(champ: str) -> str:
+    if champ.startswith("solde_"):
+        return "solde actuel du livret"
+    return LIBELLES_A_VERIFIER.get(champ, champ.replace("_", " "))
+
 def epargne_projet(profil: dict[str, Any], slots: dict[str, Any]) -> Conseil:
     c = Conseil(faits={"eligibilite": {}, "a_verifier": [], "hypotheses": [],
                         "classement": "priorités heuristiques, pas probabilités"})
@@ -180,7 +202,8 @@ def epargne_projet(profil: dict[str, Any], slots: dict[str, Any]) -> Conseil:
     def inconnu(pid: str, champs: list[str]) -> None:
         c.faits["eligibilite"][pid] = "inconnue"
         c.faits["a_verifier"].extend(champs)
-        c.alertes.append(f"{cat.nom(pid)} : éligibilité à vérifier ({', '.join(champs)}), aucune inéligibilité déduite.")
+        libelles = ", ".join(_libelle_a_verifier(champ) for champ in champs)
+        c.alertes.append(f"{cat.nom(pid)} : éligibilité à vérifier ({libelles}), aucune inéligibilité déduite.")
 
     def proposer(pid: str, raison: str, score: float) -> None:
         p = cat.produit(pid)

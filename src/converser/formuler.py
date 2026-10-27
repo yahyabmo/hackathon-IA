@@ -20,7 +20,7 @@ from time import perf_counter
 from typing import Any
 
 from .. import llm
-from ..contrats import Action, Conseil, Etape, EtatConversation
+from ..contrats import Action, Alternative, Conseil, Etape, EtatConversation
 from ..conseiller import catalogue as cat
 from ..conseiller import integration as questions_m3
 from ..taxonomie import LIBELLES_FAMILLES, famille_de
@@ -47,6 +47,7 @@ MESSAGES_FIXES = {
                   "frais, votre épargne ou un projet de crédit."),
 }
 OUI_NON = "(oui / non)"
+CONFIANCE_QUESTION_FERMEE = 0.5
 QUESTION_RAPPEL = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}"
 NOMS_SPECIAUX = {"credit_immobilier_30_ans": "Un prêt immobilier sur 30 ans"}
 AGE_MOTS_SIMPLES = 70
@@ -106,6 +107,22 @@ def simplifier(texte: str, expliquer_jargon: bool = True) -> str:
             explication = fiche["explication"]
             phrases.append(f"« {fiche['terme']} » veut dire : {explication[0].lower()}{explication[1:]}")
     return "\n\n".join(phrases)
+
+
+def question_clarification(alternatives: list[Alternative]) -> str | None:
+    """Sous le seuil τ : une question fermée sur les deux familles les plus probables.
+
+    Seulement si la première a un vrai appui ; sinon (message sans rapport, charabia),
+    la question ouverte, plutôt que deux familles tirées au hasard.
+    """
+
+    if not alternatives or alternatives[0].confiance < CONFIANCE_QUESTION_FERMEE:
+        return None
+    libelles = [LIBELLES_FAMILLES[a.famille] for a in alternatives
+                if a.famille in LIBELLES_FAMILLES and a.famille != "conversation"]
+    if len(libelles) < 2:
+        return None
+    return f"Pour être sûr de bien vous aider : votre demande concerne-t-elle {libelles[0]}, ou {libelles[1]} ?"
 
 
 def nom_produit(produit_id: str) -> str:
@@ -237,6 +254,8 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
 def gabarit(decision, conseil, action, profil, etat, message) -> str:
     """Le texte gabarit d'une décision (public : le banc de formulation s'en sert)."""
 
+    if decision.type == "clarifier" and decision.question:
+        return decision.question
     if decision.type in MESSAGES_FIXES:
         return MESSAGES_FIXES[decision.type]
     if decision.type == "question":

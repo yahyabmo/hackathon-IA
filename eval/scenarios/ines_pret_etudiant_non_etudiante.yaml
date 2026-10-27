@@ -1,0 +1,7 @@
+client: C01
+tours:
+  - client: "Je veux un prêt étudiant"
+    attendu: {intention: pret_etudiant, demande: montant}
+  - client: "8000"
+    attendu: {ecarte: [pret_etudiant], texte_contient: "statut étudiant non déclaré"}
+    interdit: {propose: [pret_etudiant]}

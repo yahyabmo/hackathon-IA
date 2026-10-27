@@ -158,7 +158,7 @@
     \bottomrule
   \end{tabularx}
   \smallskip
-  \scriptsize Démo de secours : 17 tours rejoués par le vrai pipeline, 0 appel au LLM, moins de 2~ms par tour
+  \scriptsize Démo de secours : 17 tours rejoués par le vrai pipeline, 0 appel au LLM, moins de 3~ms par tour
   (gabarits, sur un portable).
 \end{frame}
 
@@ -173,35 +173,18 @@
 
 % ─────────────────────────────── Younes ───────────────────────────────
 \begin{frame}{Résultats : comprendre \qui{Younes}}
-  \begin{tabularx}{\textwidth}{@{}Y c c c c@{}}
-    \toprule
-    \textbf{Configuration} & \textbf{Test anglais} & \textbf{Test français} & \textbf{Latence} & \textbf{Taille} \\
-    \midrule
-    \textit{Référence : BERT affiné (article)} & \textit{93,7\,\%} & --- & --- & \textit{1,4 Go} \\
-    Mots-clés (part acceptée) & --- & \amesurer & $<$ 1 ms & Ko \\
-    TF-IDF + régression logistique & \amesurer & \amesurer & \amesurer & Mo \\
-    \textbf{e5-small + régression logistique} & \amesurer & \amesurer & \amesurer & \textbf{0,47 Go} \\
-    LLM 14B, sans exemple & \amesurer & \amesurer & \amesurer & 9,1 Go \\
-    \bottomrule
-  \end{tabularx}
+  \input{resultats-comprendre}
   \medskip
 
-  \small L'écart anglais $\rightarrow$ français mesure ce que l'encodeur transfère \textbf{sans traduire}.
+  \small Entraîné sur Banking77 \textbf{en anglais, sans traduction} : l'encodeur multilingue
+  transfère au français. Sous $\tau$, une question fermée ; jamais de devinette.
 \end{frame}
 
 \begin{frame}{Résultats : frugalité \qui{Younes}}
-  \begin{tabularx}{\textwidth}{@{}Y c c c c@{}}
-    \toprule
-    \textbf{Configuration} & \textbf{Scénarios réussis} & \textbf{Wh / 1\,000 req.} & \textbf{Go chargés} & \textbf{Sans LLM} \\
-    \midrule
-    A --- un LLM 14B fait tout & \amesurer & \amesurer & 9,1 & 0\,\% \\
-    \textbf{B --- notre cascade} & \amesurer & \amesurer & 3,5 & \amesurer \\
-    C --- cascade, gabarits seuls & 10 / 10 & \amesurer & 0,5 & 100\,\% \\
-    \bottomrule
-  \end{tabularx}
+  \input{resultats-frugalite}
   \medskip
 
-  \small Énergie : CodeCarbon hors ligne, par lots de 200 requêtes, puissance de repos soustraite.
+  \small La cascade répond sans LLM dans la plupart des tours ; le LLM ne reformule que les conseils.
 \end{frame}
 
 % ─────────────────────────────── Sohayb ───────────────────────────────

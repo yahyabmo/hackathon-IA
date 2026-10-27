@@ -26,7 +26,8 @@ LEXIQUE: dict[str, tuple[str, ...]] = {
         "cb volee", "carte est volee", "carte a ete volee", "on m a vole", "faire opposition",
     ),
     "extra_charge_on_statement": (
-        "de frais", "des frais", "ces frais", "frais bancaires", "commission d intervention", "agios",
+        "de frais ce mois", "des frais ce mois", "ces frais", "frais bancaires", "frais sur mon compte",
+        "commission d intervention", "agios",
     ),
     "faire_virement": (
         "faire un virement", "envoyer", "virer de l argent", "transferer de l argent",
@@ -45,11 +46,11 @@ LEXIQUE: dict[str, tuple[str, ...]] = {
     "pret_etudiant": ("pret etudiant", "credit etudiant", "financer mes etudes"),
     "question_definition": (
         "c est quoi", "ca veut dire quoi", "que veut dire", "que signifie", "qu est ce qu un",
-        "qu est ce qu une", "qu est ce que",
+        "qu est ce qu une", "qu est ce que", "signifie quoi", "ce qu est", "ce que sont", "le mot",
     ),
     "insatisfaction": (
         "ne marche jamais", "marche jamais", "j en ai marre", "ras le bol", "inadmissible",
-        "scandaleux", "c est nul", "toujours en panne", "pas normal",
+        "scandaleux", "inacceptable", "c est nul", "toujours en panne", "pas normal",
     ),
     "hors_sujet": ("bonjour", "bonsoir", "salut", "merci", "au revoir"),
 }
@@ -58,16 +59,38 @@ LEXIQUE: dict[str, tuple[str, ...]] = {
 # « Bonjour, j'ai perdu ma carte » est une carte perdue.
 _POLITESSE = "hors_sujet"
 
+# Expressions qui annulent une intention : « m'envoyer de l'argent » est une réception,
+# « envoyer une pièce d'identité » n'est pas un virement.
+EXCLUSIONS: dict[str, tuple[str, ...]] = {
+    "faire_virement": ("m envoyer", "me virer", "envoyer une piece", "envoyer un document",
+                       "envoyer un justificatif", "envoyer mes papiers", "envoyer un mail"),
+}
+
+# Une demande de définition nette l'emporte sur le sujet du terme (« que veut dire agios ? ») ;
+# « c'est quoi… » n'en est une que si un terme du glossaire suit (« c'est quoi le meilleur
+# livret pour moi ? » est une demande de conseil).
+_DEFINITION = "question_definition"
+DEFINITION_NETTE = ("que veut dire", "ca veut dire quoi", "que signifie", "signifie quoi", "ce qu est",
+                    "ce que sont", "le mot")
+
 
 def expressions_trouvees(message: str) -> dict[str, list[str]]:
     """Expressions du lexique présentes dans le message, par intention."""
+
+    from ..converser.glossaire import chercher  # import tardif : converser dépend de comprendre
 
     texte = normaliser(message)
     trouvees = {
         intention: [e for e in expressions if contient(texte, e)]
         for intention, expressions in LEXIQUE.items()
+        if not any(contient(texte, e) for e in EXCLUSIONS.get(intention, ()))
     }
     trouvees = {i: e for i, e in trouvees.items() if e}
+    if _DEFINITION in trouvees:
+        if any(contient(texte, e) for e in DEFINITION_NETTE):
+            return {_DEFINITION: trouvees[_DEFINITION]}
+        if chercher(message, approchant=True) is None:
+            del trouvees[_DEFINITION]
     if len(trouvees) > 1:
         trouvees.pop(_POLITESSE, None)
     return trouvees
