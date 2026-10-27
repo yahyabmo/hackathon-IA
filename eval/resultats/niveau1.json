@@ -4,15 +4,16 @@
       "modele": "qwen3:1.7b",
       "exemples": true,
       "total": 36,
-      "justes": 28,
+      "justes": 30,
       "json_valide": 1.0,
-      "latence_p50_ms": 2716.2033660024463,
+      "latence_p50_ms": 187.58239806629717,
       "tokens": 596.6388888888889,
       "erreurs": [
         {
           "message": "pour la petite dernière, elle est étudiante",
           "comprises": [
-            "pret_etudiant"
+            "pret_etudiant",
+            "epargne_projet"
           ],
           "attendues": [
             "faire_virement"
@@ -50,28 +51,6 @@
           "valeur": null
         },
         {
-          "message": "salut, ça va ?",
-          "comprises": [
-            "insatisfaction"
-          ],
-          "attendues": [
-            "hors_sujet"
-          ],
-          "valeur": null
-        },
-        {
-          "message": "je n'arrive plus à retirer de liquide",
-          "comprises": [
-            "credit_conso",
-            "credit_immobilier",
-            "epargne_projet"
-          ],
-          "attendues": [
-            "declined_cash_withdrawal"
-          ],
-          "valeur": null
-        },
-        {
           "message": "mon salaire n'apparaît toujours pas sur le compte",
           "comprises": [
             "epargne_projet"
@@ -99,8 +78,8 @@
       "total": 36,
       "justes": 15,
       "json_valide": 1.0,
-      "latence_p50_ms": 1655.6491290029953,
-      "tokens": 434.4166666666667,
+      "latence_p50_ms": 188.340422231704,
+      "tokens": 434.77777777777777,
       "erreurs": [
         {
           "message": "c'est pour mon papa",
@@ -125,7 +104,7 @@
         {
           "message": "pour la petite dernière, elle est étudiante",
           "comprises": [
-            "faire_virement"
+            "hors_sujet"
           ],
           "attendues": [
             "faire_virement"
@@ -176,8 +155,8 @@
         {
           "message": "il y a des prélèvements bizarres sur mon compte",
           "comprises": [
-            "insatisfaction",
-            "question_definition"
+            "question_definition",
+            "hors_sujet"
           ],
           "attendues": [
             "direct_debit_payment_not_recognised"
@@ -186,9 +165,7 @@
         },
         {
           "message": "je compte acheter une baraque l'an prochain",
-          "comprises": [
-            "epargne_projet"
-          ],
+          "comprises": [],
           "attendues": [
             "credit_immobilier"
           ],
@@ -238,7 +215,7 @@
         {
           "message": "l'appli me demande sans arrêt de vérifier mon identité",
           "comprises": [
-            "hors_sujet"
+            "question_definition"
           ],
           "attendues": [
             "verify_my_identity"
@@ -248,8 +225,8 @@
         {
           "message": "je n'arrive plus à retirer de liquide",
           "comprises": [
+            "extra_charge_on_statement",
             "credit_conso",
-            "credit_immobilier",
             "epargne_projet"
           ],
           "attendues": [
@@ -321,8 +298,903 @@
           "valeur": null
         }
       ]
+    },
+    "gemma3:1b|avec": {
+      "modele": "gemma3:1b",
+      "exemples": true,
+      "total": 36,
+      "justes": 17,
+      "json_valide": 1.0,
+      "latence_p50_ms": 453.62197468057275,
+      "tokens": 604.1111111111111,
+      "erreurs": [
+        {
+          "message": "c'est pour mon papa",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je sais pas trop, une voiture d'occasion",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "un trois pièces en centre-ville",
+          "comprises": [
+            "credit_conso",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ce que je peux, ça dépend des mois",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": "pere"
+        },
+        {
+          "message": "attendez, j'ai d'abord une question sur mon prêt immobilier",
+          "comprises": [
+            "pret_etudiant",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je compte acheter une baraque l'an prochain",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "comment je finance ma dernière année de master",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "pret_etudiant"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "salut, ça va ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "hors_sujet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli me demande sans arrêt de vérifier mon identité",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "verify_my_identity"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je n'arrive plus à retirer de liquide",
+          "comprises": [
+            "card_not_working"
+          ],
+          "attendues": [
+            "declined_cash_withdrawal"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je veux recharger mon compte avec ma carte",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "topping_up_by_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "j'ai égaré ma carte et je voudrais aussi épargner un peu",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "lost_or_stolen_card",
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli plante et en plus on m'a pris des frais bizarres",
+          "comprises": [
+            "extra_charge_on_statement"
+          ],
+          "attendues": [
+            "insatisfaction",
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et si je mets plus d'apport ?",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et l'épargne pour les enfants alors ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "bon, et mes frais ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "gemma3:1b|sans": {
+      "modele": "gemma3:1b",
+      "exemples": false,
+      "total": 36,
+      "justes": 16,
+      "json_valide": 1.0,
+      "latence_p50_ms": 591.9516696594656,
+      "tokens": 459.5,
+      "erreurs": [
+        {
+          "message": "à ma frangine",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pas tout de suite, plutôt pour la retraite",
+          "comprises": [
+            "pret_etudiant"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "un trois pièces en centre-ville",
+          "comprises": [
+            "credit_conso",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ce que je peux, ça dépend des mois",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "il y a des prélèvements bizarres sur mon compte",
+          "comprises": [
+            "pret_etudiant",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "direct_debit_payment_not_recognised"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je dois payer mon loyer à mon proprio",
+          "comprises": [
+            "pret_etudiant",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je compte acheter une baraque l'an prochain",
+          "comprises": [
+            "faire_virement",
+            "credit_immobilier"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je voudrais changer de bagnole mais j'ai pas assez",
+          "comprises": [
+            "credit_immobilier",
+            "exchange_rate"
+          ],
+          "attendues": [
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "salut, ça va ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "hors_sujet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli me demande sans arrêt de vérifier mon identité",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "verify_my_identity"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je n'arrive plus à retirer de liquide",
+          "comprises": [
+            "pret_etudiant",
+            "credit_conso",
+            "hors_sujet"
+          ],
+          "attendues": [
+            "declined_cash_withdrawal"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "insatisfaction",
+            "credit_conso",
+            "edit_personal_details"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je veux recharger mon compte avec ma carte",
+          "comprises": [
+            "faire_virement",
+            "card_not_working"
+          ],
+          "attendues": [
+            "topping_up_by_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "j'ai égaré ma carte et je voudrais aussi épargner un peu",
+          "comprises": [
+            "lost_or_stolen_card",
+            "atm_support"
+          ],
+          "attendues": [
+            "lost_or_stolen_card",
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "virer de l'argent à ma sœur, puis me renseigner sur un prêt auto",
+          "comprises": [
+            "faire_virement",
+            "pret_etudiant"
+          ],
+          "attendues": [
+            "faire_virement",
+            "credit_conso"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli plante et en plus on m'a pris des frais bizarres",
+          "comprises": [
+            "faire_virement",
+            "extra_charge_on_statement"
+          ],
+          "attendues": [
+            "insatisfaction",
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et l'épargne pour les enfants alors ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "epargne_projet"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "bon, et mes frais ?",
+          "comprises": [
+            "question_definition"
+          ],
+          "attendues": [
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "ministral-3:3b|avec": {
+      "modele": "ministral-3:3b",
+      "exemples": true,
+      "total": 36,
+      "justes": 33,
+      "json_valide": 1.0,
+      "latence_p50_ms": 250.17368141561747,
+      "tokens": 545.3611111111111,
+      "erreurs": [
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "pret_etudiant"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card",
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "ministral-3:3b|sans": {
+      "modele": "ministral-3:3b",
+      "exemples": false,
+      "total": 36,
+      "justes": 31,
+      "json_valide": 1.0,
+      "latence_p50_ms": 250.0980773475021,
+      "tokens": 394,
+      "erreurs": [
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card",
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "il y a des prélèvements bizarres sur mon compte",
+          "comprises": [
+            "insatisfaction",
+            "extra_charge_on_statement"
+          ],
+          "attendues": [
+            "direct_debit_payment_not_recognised"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je dois payer mon loyer à mon proprio",
+          "comprises": [
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "edit_personal_details"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "gemma4:e2b|avec": {
+      "modele": "gemma4:e2b",
+      "exemples": true,
+      "total": 36,
+      "justes": 29,
+      "json_valide": 1.0,
+      "latence_p50_ms": 217.14590047486126,
+      "tokens": 587.3611111111111,
+      "erreurs": [
+        {
+          "message": "c'est pour mon papa",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "à ma maman, pour son anniversaire",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "à ma frangine",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "pret_etudiant"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et si je mets plus d'apport ?",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "gemma4:e2b|sans": {
+      "modele": "gemma4:e2b",
+      "exemples": false,
+      "total": 36,
+      "justes": 23,
+      "json_valide": 1.0,
+      "latence_p50_ms": 236.81307188235223,
+      "tokens": 428.6388888888889,
+      "erreurs": [
+        {
+          "message": "c'est pour mon papa",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "à ma maman, pour son anniversaire",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "oui",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "à ma frangine",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "le même montant que d'habitude",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "il y a des prélèvements bizarres sur mon compte",
+          "comprises": [
+            "insatisfaction"
+          ],
+          "attendues": [
+            "direct_debit_payment_not_recognised"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "je dois payer mon loyer à mon proprio",
+          "comprises": [],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "comment je finance ma dernière année de master",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "pret_etudiant"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "l'appli plante et en plus on m'a pris des frais bizarres",
+          "comprises": [
+            "insatisfaction"
+          ],
+          "attendues": [
+            "insatisfaction",
+            "extra_charge_on_statement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "et si je mets plus d'apport ?",
+          "comprises": [
+            "epargne_projet"
+          ],
+          "attendues": [
+            "credit_immobilier"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "ministral-3:8b|avec": {
+      "modele": "ministral-3:8b",
+      "exemples": true,
+      "total": 36,
+      "justes": 31,
+      "json_valide": 1.0,
+      "latence_p50_ms": 263.92269344069064,
+      "tokens": 541.5833333333334,
+      "erreurs": [
+        {
+          "message": "je veux envoyer de l'argent",
+          "comprises": [
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": "fille"
+        },
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "pret_etudiant",
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card",
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": "pere"
+        },
+        {
+          "message": "l'appli me demande sans arrêt de vérifier mon identité",
+          "comprises": [
+            "insatisfaction",
+            "edit_personal_details"
+          ],
+          "attendues": [
+            "verify_my_identity"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        }
+      ]
+    },
+    "ministral-3:8b|sans": {
+      "modele": "ministral-3:8b",
+      "exemples": false,
+      "total": 36,
+      "justes": 31,
+      "json_valide": 1.0,
+      "latence_p50_ms": 274.8590325936675,
+      "tokens": 390.69444444444446,
+      "erreurs": [
+        {
+          "message": "pour la petite dernière, elle est étudiante",
+          "comprises": [
+            "pret_etudiant",
+            "hors_sujet"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon père, et au fait j'ai perdu ma carte",
+          "comprises": [
+            "lost_or_stolen_card",
+            "faire_virement"
+          ],
+          "attendues": [
+            "faire_virement",
+            "lost_or_stolen_card"
+          ],
+          "valeur": "pere"
+        },
+        {
+          "message": "je dois payer mon loyer à mon proprio",
+          "comprises": [
+            "atm_support",
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "faire_virement"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "ma CB a été avalée par le distributeur",
+          "comprises": [
+            "insatisfaction",
+            "card_not_working"
+          ],
+          "attendues": [
+            "card_swallowed"
+          ],
+          "valeur": null
+        },
+        {
+          "message": "mon salaire n'apparaît toujours pas sur le compte",
+          "comprises": [
+            "automatic_top_up"
+          ],
+          "attendues": [
+            "balance_not_updated_after_bank_transfer"
+          ],
+          "valeur": null
+        }
+      ]
     }
   },
-  "machine": "portable (CPU, essai avant DeepEirb)",
-  "date": "2026-10-27T18:37:34"
+  "machine": "DeepEirb, RTX 6000 Ada 48 Go",
+  "date": "2026-10-27T18:56:21"
 }

@@ -6,7 +6,7 @@
       "justes": 21,
       "a_rediger": 18,
       "acceptes": 0,
-      "latence_p50_ms": 12.356707000435563,
+      "latence_p50_ms": 11.973537737503648,
       "tokens": 0,
       "erreurs": [
         {
@@ -20,10 +20,70 @@
       "total": 22,
       "justes": 22,
       "a_rediger": 18,
-      "acceptes": 13,
-      "latence_p50_ms": 2636.0796059998393,
-      "tokens": 369,
+      "acceptes": 9,
+      "latence_p50_ms": 391.20691595599055,
+      "tokens": 380.95454545454544,
       "erreurs": []
+    },
+    "gemma3:1b": {
+      "modele": "gemma3:1b",
+      "total": 22,
+      "justes": 21,
+      "a_rediger": 18,
+      "acceptes": 1,
+      "latence_p50_ms": 354.99344556592405,
+      "tokens": 354.72727272727275,
+      "erreurs": [
+        {
+          "question": "C'est quoi le taux moyen d'un crédit immobilier en ce moment ?",
+          "repli": "garde-fou : formule interdite : accorde; aucune citation"
+        }
+      ]
+    },
+    "ministral-3:3b": {
+      "modele": "ministral-3:3b",
+      "total": 22,
+      "justes": 21,
+      "a_rediger": 18,
+      "acceptes": 3,
+      "latence_p50_ms": 476.2334297411144,
+      "tokens": 335.40909090909093,
+      "erreurs": [
+        {
+          "question": "C'est quoi le taux moyen d'un crédit immobilier en ce moment ?",
+          "repli": "garde-fou : affirmations absentes des extraits"
+        }
+      ]
+    },
+    "gemma4:e2b": {
+      "modele": "gemma4:e2b",
+      "total": 22,
+      "justes": 21,
+      "a_rediger": 18,
+      "acceptes": 9,
+      "latence_p50_ms": 300.3946910612285,
+      "tokens": 342.59090909090907,
+      "erreurs": [
+        {
+          "question": "Sur combien d'années maximum peut-on emprunter pour un logement ?",
+          "repli": null
+        }
+      ]
+    },
+    "ministral-3:8b": {
+      "modele": "ministral-3:8b",
+      "total": 22,
+      "justes": 21,
+      "a_rediger": 18,
+      "acceptes": 4,
+      "latence_p50_ms": 702.6148810982704,
+      "tokens": 328.8181818181818,
+      "erreurs": [
+        {
+          "question": "C'est quoi le taux moyen d'un crédit immobilier en ce moment ?",
+          "repli": "garde-fou : formule interdite : garantie; affirmations absentes des extraits"
+        }
+      ]
     }
   },
   "recherche": {
@@ -32,6 +92,6 @@
     "hors_fiches": 4,
     "refus": 4
   },
-  "machine": "portable (CPU, essai avant DeepEirb)",
-  "date": "2026-10-27T18:38:41"
+  "machine": "DeepEirb, RTX 6000 Ada 48 Go",
+  "date": "2026-10-27T18:57:18"
 }

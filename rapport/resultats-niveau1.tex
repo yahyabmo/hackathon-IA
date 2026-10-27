@@ -3,10 +3,18 @@
 \toprule
 \textbf{Modèle} & \textbf{RAG d'exemples} & \textbf{Justes} & \textbf{JSON valide} & \textbf{Latence p50} & \textbf{Tokens} \\
 \midrule
-\texttt{qwen3:1.7b} & oui & 28/36 & 100\,\% & 2,7 s & 597 \\
-\texttt{qwen3:1.7b} & non & 15/36 & 100\,\% & 1,7 s & 434 \\
+\texttt{gemma3:1b} & oui & 17/36 & 100\,\% & 0,5 s & 604 \\
+\texttt{gemma3:1b} & non & 16/36 & 100\,\% & 0,6 s & 460 \\
+\texttt{gemma4:e2b} & oui & 29/36 & 100\,\% & 0,2 s & 587 \\
+\texttt{gemma4:e2b} & non & 23/36 & 100\,\% & 0,2 s & 429 \\
+\texttt{ministral-3:3b} & oui & 33/36 & 100\,\% & 0,3 s & 545 \\
+\texttt{ministral-3:3b} & non & 31/36 & 100\,\% & 0,3 s & 394 \\
+\texttt{ministral-3:8b} & oui & 31/36 & 100\,\% & 0,3 s & 542 \\
+\texttt{ministral-3:8b} & non & 31/36 & 100\,\% & 0,3 s & 391 \\
+\texttt{qwen3:1.7b} & oui & 30/36 & 100\,\% & 0,2 s & 597 \\
+\texttt{qwen3:1.7b} & non & 15/36 & 100\,\% & 0,2 s & 435 \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-{\tiny 36 messages difficiles écrits par l'équipe (réponses libres, demandes mêlées, renvois au contexte). JSON imposé par une grammaire. Mesuré sur portable (CPU, essai avant DeepEirb).}
+{\tiny 36 messages difficiles écrits par l'équipe (réponses libres, demandes mêlées, renvois au contexte). JSON imposé par une grammaire. Mesuré sur DeepEirb, RTX 6000 Ada 48 Go.}

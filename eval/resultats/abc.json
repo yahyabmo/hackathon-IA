@@ -3,11 +3,16 @@
     "C": {
       "configuration": "C",
       "modele": null,
-      "reussite": "14 / 14",
-      "wh_par_1000": 0.0041,
-      "wh_par_1000_brut": 0.044,
-      "latence_p50_ms": 0.2,
-      "latence_p95_ms": 5.6,
+      "niveaux": {
+        "0": 0.88,
+        "1": 0.0,
+        "2": 0.12
+      },
+      "reussite": "15 / 15",
+      "wh_par_1000": 0.1784,
+      "wh_par_1000_brut": 0.4007,
+      "latence_p50_ms": 0.4,
+      "latence_p95_ms": 18.9,
       "go_charges": 0.47,
       "sans_llm": 1.0,
       "requetes": 200,
@@ -16,11 +21,16 @@
     "A": {
       "configuration": "A",
       "modele": "ministral-3:14b",
+      "niveaux": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0
+      },
       "reussite": "à juger",
-      "wh_par_1000": 109.3019,
-      "wh_par_1000_brut": 154.655,
-      "latence_p50_ms": 1433.3,
-      "latence_p95_ms": 2020.3,
+      "wh_par_1000": 115.4087,
+      "wh_par_1000_brut": 194.2994,
+      "latence_p50_ms": 1467.1,
+      "latence_p95_ms": 2299.2,
       "go_charges": 9.1,
       "sans_llm": 0.0,
       "requetes": 40,
@@ -38,10 +48,28 @@
       "sans_llm": 0.745,
       "requetes": 200,
       "repetitions": 3
+    },
+    "B": {
+      "configuration": "B",
+      "modele": "qwen3:1.7b",
+      "niveaux": {
+        "0": 0.765,
+        "1": 0.115,
+        "2": 0.12
+      },
+      "reussite": "15 / 15",
+      "wh_par_1000": 5.5262,
+      "wh_par_1000_brut": 11.5238,
+      "latence_p50_ms": 0.4,
+      "latence_p95_ms": 527.3,
+      "go_charges": 1.87,
+      "sans_llm": 0.765,
+      "requetes": 200,
+      "repetitions": 3
     }
   },
   "machine": "DeepEirb, RTX 6000 Ada 48 Go",
-  "requetes": 200,
-  "date": "2026-10-27T16:22:39",
-  "puissance_repos_w": 126.1
+  "requetes": 40,
+  "date": "2026-10-27T19:21:39",
+  "puissance_repos_w": 186.9
 }

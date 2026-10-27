@@ -4,9 +4,13 @@
 \textbf{Rédaction} & \textbf{Garde-fou réussi} & \textbf{Réponses justes} & \textbf{Latence p50} & \textbf{Tokens} \\
 \midrule
 \textit{sans LLM (extrait)} & --- & 21/22 & 0,0 s & 0 \\
-\texttt{qwen3:1.7b} & 13/18 & 22/22 & 2,6 s & 369 \\
+\texttt{gemma3:1b} & 1/18 & 21/22 & 0,4 s & 355 \\
+\texttt{gemma4:e2b} & 9/18 & 21/22 & 0,3 s & 343 \\
+\texttt{ministral-3:3b} & 3/18 & 21/22 & 0,5 s & 335 \\
+\texttt{ministral-3:8b} & 4/18 & 21/22 & 0,7 s & 329 \\
+\texttt{qwen3:1.7b} & 9/18 & 22/22 & 0,4 s & 381 \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-{\tiny Recherche (e5-small, 37 fiches) : bonne fiche parmi les 3 passages pour 18/18 questions ; 4/4 questions hors de nos fiches refusées. Mesuré sur portable (CPU, essai avant DeepEirb).}
+{\tiny Recherche (e5-small, 37 fiches) : bonne fiche parmi les 3 passages pour 18/18 questions ; 4/4 questions hors de nos fiches refusées. Mesuré sur DeepEirb, RTX 6000 Ada 48 Go.}

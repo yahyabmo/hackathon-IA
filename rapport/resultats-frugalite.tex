@@ -3,11 +3,11 @@
 \toprule
 \textbf{Configuration} & \textbf{Scénarios} & \textbf{Wh / 1\,000 req.} & \textbf{Latence p95} & \textbf{Go} & \textbf{Sans LLM} \\
 \midrule
-A --- un LLM fait tout (\texttt{ministral-3:14b}) & à juger & 109,30 & 2020 ms & 9,1 & 0\,\% \\
-\textbf{B --- notre aiguilleur (niveaux 0, 1, 2)} & \amesurer & \amesurer & \amesurer & --- & --- \\
-C --- niveau 0 seul (règles, sans LLM) & 14 / 14 & 0,004 & 6 ms & 0,5 & 100\,\% \\
+A --- un LLM fait tout (\texttt{ministral-3:14b}) & à juger & 115,41 & 2299 ms & 9,1 & 0\,\% \\
+\textbf{B --- notre aiguilleur (niveaux 0, 1, 2)} (\texttt{qwen3:1.7b}) & 15 / 15 & 5,53 & 527 ms & 1,9 & 76\,\% \\
+C --- niveau 0 seul (règles, sans LLM) & 15 / 15 & 0,178 & 19 ms & 0,5 & 100\,\% \\
 \bottomrule
 \end{tabularx}
 
 \smallskip
-{\tiny Énergie : CodeCarbon hors ligne, lots de 200 requêtes × 3 (A : 40 × 1) après chauffe, puissance de repos soustraite. Mesuré sur DeepEirb, RTX 6000 Ada 48 Go.}
+{\tiny Énergie : CodeCarbon hors ligne, lots de 200 requêtes × 3 (A : 40 × 1) après chauffe, puissance de repos soustraite. Mesuré sur DeepEirb, RTX 6000 Ada 48 Go. Aiguilleur : niveau 0 : 76\,\%, niveau 1 : 12\,\%, niveau 2 : 12\,\% des messages.}
