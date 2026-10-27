@@ -160,8 +160,12 @@ def banc_llm(modele: str, test_en: list[tuple[str, str]], test_fr: list[tuple[st
     llm.prechauffer(modele)
     en, _ = evaluer(test_en[::PAS_ECHANTILLON_LLM], par_famille=True)
     fr, latences = evaluer(test_fr, par_famille=False)
+    from eval.tableau_formulation import _tailles
+
+    taille = _tailles().get(modele)
     return {"nom": f"LLM {modele}, sans exemple", "en_famille": en, "fr_routage": fr,
-            "latence_ms": _p50(latences), "taille_octets": None, "modele": modele}
+            "latence_ms": _p50(latences), "taille_octets": int(taille * 1e9) if taille else None,
+            "modele": modele}
 
 
 def _pct(x: float | None) -> str:
@@ -205,6 +209,10 @@ def latex(resultats: dict) -> str:
                       f"{_pct(g['fr_precision_acceptes'])} justes & {_latence(g['latence_ms'])} & --- \\\\")
     llms = [v for k, v in c.items() if k.startswith("llm:")]
     for l in llms:
+        if not l.get("taille_octets"):  # mesures faites avant que la taille soit relevée
+            from eval.tableau_formulation import TAILLES_CONNUES
+
+            l["taille_octets"] = int(TAILLES_CONNUES.get(l["modele"], 0) * 1e9) or None
         lignes.append(f"\\texttt{{{l['modele']}}} seul & famille {_pct(l['en_famille'])} & {_pct(l['fr_routage'])}"
                       f" & {_latence(l['latence_ms'])} & {_taille(l['taille_octets'])} \\\\")
     if not llms:
