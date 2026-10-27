@@ -7,7 +7,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-MODELES="${MODELES:-ministral-3:14b ministral-3:8b gemma4:e2b ministral-3:3b qwen3:1.7b gemma3:1b}"
+MODELES="${MODELES:-ministral-3:14b ministral-3:8b gemma4:e2b ministral-3:3b qwen3:1.7b gemma3:1b}"  # bancs ; la démo n'utilise que les modèles retenus
 
 python3 -m venv .venv
 . .venv/bin/activate
@@ -30,5 +30,5 @@ fi
 python -m pytest -q
 python -m eval.run_scenarios
 echo
-echo "Prêt. Démo : . .venv/bin/activate && streamlit run app.py"
-echo "Mesures : ./mesurer.sh (voir le README)"
+echo "Prêt. Démo : . .venv/bin/activate && ASSISTANT_LLM=1 python -m src.web   (http://localhost:8000)"
+echo "Secours : streamlit run app.py — Mesures : ./mesurer.sh niveaux (voir le README)"
