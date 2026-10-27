@@ -1,0 +1,264 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+
+\definecolor{mainblue}{RGB}{28,74,102}
+\definecolor{darkgray}{RGB}{62,62,66}
+\definecolor{ent}{RGB}{221,236,247}
+\definecolor{tab}{RGB}{215,237,221}
+\definecolor{mod}{RGB}{233,233,238}
+\definecolor{ext}{RGB}{250,233,207}
+\definecolor{alerte}{RGB}{250,226,226}
+\definecolor{kored}{RGB}{176,42,42}
+\definecolor{okgreen}{RGB}{46,125,50}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{frametitle}{fg=mainblue}
+\setbeamercolor{title}{fg=mainblue}
+\setbeamercolor{structure}{fg=mainblue}
+\setbeamercolor{normal text}{fg=darkgray}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{footline}{\hfill\scriptsize\color{darkgray}\insertframenumber\hspace{0.4cm}\vspace{0.25cm}}
+
+\newcommand{\eur}{\,\texteuro}
+\newcommand{\qui}[1]{\hfill{\scriptsize\color{darkgray}\mdseries #1}}
+\newcommand{\amesurer}{{\color{kored}\textit{à mesurer}}}
+\newcommand{\f}[1]{{\ttfamily\small #1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\tikzset{
+  etage/.style={rectangle,draw=mainblue,fill=ent,rounded corners=2pt,align=center,
+                font=\small,inner sep=4pt,minimum height=0.75cm,text width=4.6cm},
+  cote/.style={rectangle,draw=darkgray!60,fill=mod,rounded corners=2pt,align=left,
+               font=\scriptsize,inner sep=3pt,text width=6.3cm},
+  acteur/.style={rectangle,draw=darkgray,fill=ext,rounded corners=2pt,align=center,
+                 font=\small,inner sep=4pt,minimum height=0.65cm,text width=4.6cm},
+  fl/.style={-{Latex[length=1.8mm]},semithick,draw=mainblue!80},
+  lien/.style={densely dashed,draw=darkgray!60},
+}
+
+\title{Un assistant bancaire frugal, explicable, et qui agit}
+\subtitle{Comprendre, personnaliser, conseiller --- avec le plus petit calcul qui suffit}
+\author{Yahya \and Sohayb \and Younes}
+\institute{Hackathon IA --- La Banque Postale $\times$ CGI $\times$ ENSEIRB-MATMECA --- Sujet 1}
+\date{Mercredi 28 octobre 2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ─────────────────────────────── Yahya ───────────────────────────────
+\begin{frame}{Le problème \qui{Yahya}}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \begin{block}{Un client écrit à sa banque}
+      \og Je veux acheter un appartement. \fg\\
+      \og J'ai perdu ma carte hier soir, je fais quoi ? \fg\\
+      \og Pourquoi j'ai payé 8\eur{} de frais ce mois-ci ? \fg
+    \end{block}
+    \medskip
+    L'assistant doit \textbf{comprendre}, \textbf{poser les bonnes questions}, tenir compte de
+    \textbf{la situation du client} et proposer une piste.
+    \column{0.44\textwidth}
+    \begin{itemize}
+      \item Un Français sur quatre est client de La Banque Postale.
+      \item L'expérience client est sa \textbf{priorité IA n\textsuperscript{o}\,1}.
+      \item La règle : \textbf{open source, local}, le plus petit modèle qui suffit,
+            frugalité \textbf{mesurée}.
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Notre démarche, en quatre temps \qui{Yahya}}
+  \begin{tabularx}{\textwidth}{@{}l Y@{}}
+    \toprule
+    \textbf{Cadrer} & Les 9 situations du sujet. Constat : Banking77 couvre le \emph{service}
+      (carte, frais, virements), pas le \emph{conseil} (épargne, crédit, logement). \\
+    \addlinespace
+    \textbf{Préparer} & \textbf{Banking77 n'est pas traduit} : un encodeur multilingue comprend le
+      français. 8 intentions créées ; un test français écrit à la main ; la colonne \f{duration}
+      de Bank Marketing exclue (fuite). \\
+    \addlinespace
+    \textbf{Concevoir} & Une cascade : chaque étage ne passe la main que s'il ne sait pas faire. \\
+    \addlinespace
+    \textbf{Démontrer} & Tests officiels, scénarios de bout en bout, comparaison avec une version
+      \og tout LLM \fg, démo en direct. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+\begin{frame}{L'architecture : une cascade \qui{Yahya}}
+  \centering
+  \resizebox{!}{0.8\textheight}{%
+  \begin{tikzpicture}[node distance=0.22cm]
+    \node[acteur] (msg) {Message du client};
+    \node[etage,below=of msg] (e1) {\textbf{1. Comprendre}};
+    \node[etage,below=of e1] (e2) {\textbf{2. Converser}};
+    \node[etage,below=of e2] (e3) {\textbf{3. Conseiller} \textbar{} \textbf{4. Agir}};
+    \node[etage,below=of e3] (e5) {\textbf{5. Formuler}};
+    \node[acteur,below=of e5] (rep) {Réponse\\ + \og Pourquoi \fg{} + \og Frugalité \fg};
+    \node[cote,right=0.5cm of e1] (c1) {réponse attendue $\rightarrow$ mots-clés $\rightarrow$ classifieur e5-small (118 M)};
+    \node[cote,right=0.5cm of e2] (c2) {parcours YAML ; le profil n'est jamais redemandé};
+    \node[cote,right=0.5cm of e3] (c3) {règles publiques (HCSF, plafonds) ; actions après un \og oui \fg};
+    \node[cote,right=0.5cm of e5] (c5) {gabarit, ou \textbf{un seul} appel au petit LLM, sous garde-fou};
+    \foreach \a/\b in {msg/e1,e1/e2,e2/e3,e3/e5,e5/rep} \draw[fl] (\a) -- (\b);
+    \foreach \i in {1,2,3,5} \draw[lien] (e\i) -- (c\i);
+  \end{tikzpicture}}
+\end{frame}
+
+\begin{frame}{Le moins cher d'abord \qui{Yahya}}
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    \begin{block}{Comprendre sans LLM}
+      \begin{enumerate}
+        \item la réponse à la question en cours ;
+        \item les mots-clés, s'ils sont sûrs ;
+        \item le classifieur, au-dessus du seuil $\tau$ ;
+        \item sinon : une question au client, puis un conseiller.
+      \end{enumerate}
+      Les messages incompris sont journalisés pour améliorer le système.
+    \end{block}
+    \column{0.46\textwidth}
+    \begin{block}{Décider sans LLM}
+      Des règles que le client peut lire ; chaque conseil dit \textbf{pourquoi}, et
+      \textbf{pourquoi pas}.
+    \end{block}
+    \begin{block}{Le LLM : une fois, à la fin}
+      Il met en mots des faits calculés. Le garde-fou refuse tout chiffre inventé ou oublié.
+    \end{block}
+  \end{columns}
+  \medskip
+  \centering\small\textit{\og Le vélo pour aller chercher le pain, la voiture pour le week-end. \fg}
+\end{frame}
+
+\begin{frame}{Démonstration en direct \qui{Yahya pilote, Sohayb commente}}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{@{}l l Y@{}}
+    \toprule
+    \textbf{Client} & \textbf{Message} & \textbf{Ce qu'on montre} \\
+    \midrule
+    Inès, 34 ans & \og J'ai perdu ma carte \fg & Opposition après un \og oui \fg ; aucun LLM \\
+    Léa, 31 ans & \og Je veux acheter un appartement \fg & Revenus non redemandés ; 42,1\,\% $>$ 35\,\% ;
+      \og et avec 200\,000 ? \fg{} recalculé \\
+    Sophie / Lucas & \og Je voudrais mettre de côté \fg & Même phrase, deux clients, deux conseils \\
+    Marc, 52 ans & \og Pourquoi 8\eur{} de frais ? \fg & Historique, plafond légal, offre clientèle fragile \\
+    Julie & \og Votre appli ne marche jamais ! \fg & Excuses, passage de main avec résumé \\
+    Paul, 68 ans & \og Envoyer 500\eur{} à mon fils \fg & Mots simples, pas à pas, confirmation \\
+    \bottomrule
+  \end{tabularx}
+  \smallskip
+  \scriptsize Démo de secours : 15 tours rejoués par le vrai pipeline, 0 appel au LLM, 2,5~ms par tour
+  (gabarits, sur un portable).
+\end{frame}
+
+\begin{frame}{Choisir le LLM en descendant en taille \qui{Yahya}}
+  \small
+  Seuil fixé avant de mesurer : \textbf{zéro chiffre inventé ni oublié} et \textbf{27 réponses
+  sur 30} jugées bonnes. On garde \textbf{le plus petit} qui tient le seuil.
+  \medskip
+
+  \input{resultats-formulation}
+\end{frame}
+
+% ─────────────────────────────── Younes ───────────────────────────────
+\begin{frame}{Résultats : comprendre \qui{Younes}}
+  \begin{tabularx}{\textwidth}{@{}Y c c c c@{}}
+    \toprule
+    \textbf{Configuration} & \textbf{Test anglais} & \textbf{Test français} & \textbf{Latence} & \textbf{Taille} \\
+    \midrule
+    \textit{Référence : BERT affiné (article)} & \textit{93,7\,\%} & --- & --- & \textit{1,4 Go} \\
+    Mots-clés (part acceptée) & --- & \amesurer & $<$ 1 ms & Ko \\
+    TF-IDF + régression logistique & \amesurer & \amesurer & \amesurer & Mo \\
+    \textbf{e5-small + régression logistique} & \amesurer & \amesurer & \amesurer & \textbf{0,47 Go} \\
+    LLM 14B, sans exemple & \amesurer & \amesurer & \amesurer & 9,1 Go \\
+    \bottomrule
+  \end{tabularx}
+  \medskip
+
+  \small L'écart anglais $\rightarrow$ français mesure ce que l'encodeur transfère \textbf{sans traduire}.
+\end{frame}
+
+\begin{frame}{Résultats : frugalité \qui{Younes}}
+  \begin{tabularx}{\textwidth}{@{}Y c c c c@{}}
+    \toprule
+    \textbf{Configuration} & \textbf{Scénarios réussis} & \textbf{Wh / 1\,000 req.} & \textbf{Go chargés} & \textbf{Sans LLM} \\
+    \midrule
+    A --- un LLM 14B fait tout & \amesurer & \amesurer & 9,1 & 0\,\% \\
+    \textbf{B --- notre cascade} & \amesurer & \amesurer & 3,5 & \amesurer \\
+    C --- cascade, gabarits seuls & 9 / 9 & \amesurer & 0,5 & 100\,\% \\
+    \bottomrule
+  \end{tabularx}
+  \medskip
+
+  \small Énergie : CodeCarbon hors ligne, par lots de 200 requêtes, puissance de repos soustraite.
+\end{frame}
+
+% ─────────────────────────────── Sohayb ───────────────────────────────
+\begin{frame}{Explicabilité : pourquoi, et pourquoi pas \qui{Sohayb}}
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    \textbf{Léa} : 250\,000\eur{}, 25\,000\eur{} d'apport, 2\,900\eur{} nets.
+    \begin{itemize}
+      \item Mensualité $\approx$ 1\,220\eur{} sur 25 ans à 3,5\,\% (taux indicatif daté).
+      \item \textcolor{kored}{\textbf{42,1\,\% $>$ 35\,\%}} : règle \f{HCSF-taux-effort}.
+      \item Écarté : prêt sur 30 ans (\f{HCSF-duree}).
+      \item Proposé : un bien autour de 212\,000\eur{}, et un conseiller.
+    \end{itemize}
+    \column{0.46\textwidth}
+    \begin{block}{Ce que voit le client}
+      Les règles appliquées, les produits proposés \emph{et écartés}, la source de chaque
+      paramètre. Le calcul se vérifie à la main.
+    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Confiance et conformité \qui{Sohayb}}
+  \begin{itemize}
+    \item \textbf{Règlement européen sur l'IA} : la notation de solvabilité est à haut risque ;
+          nous n'en faisons pas, un conseiller décide. Le client sait qu'il parle à une IA.
+    \item \textbf{Mention légale} sur toute réponse de crédit ; aucune promesse.
+    \item \textbf{Aucune action sans un \og oui \fg} ; rappel : jamais de code confidentiel.
+    \item \textbf{Données simulées, traitement local} : rien ne sort de la machine.
+    \item \textbf{Inclusion} : mots simples, jargon expliqué, offre clientèle fragile.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Limites et suite \qui{Younes}}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{Ce qui est simulé}
+      Profils et historiques (Bank Marketing enrichi), système bancaire, taux indicatifs.
+    \end{block}
+    \column{0.48\textwidth}
+    \begin{block}{Pour 17\,000 bureaux}
+      Coût par requête mesuré, donc extrapolable ; compréhension et règles sur CPU ; un serveur
+      partagé pour le petit LLM ; voix locale et réponse dans la langue du client.
+    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \vfill
+  {\Large\color{mainblue}\textbf{Merci}}\par
+  \bigskip
+  \begin{minipage}{0.82\textwidth}\centering
+    \textit{Notre assistant comprend avec de simples mots-clés ou un modèle de 118 millions de
+    paramètres, décide avec des règles que le client peut lire, et n'appelle un LLM qu'une fois,
+    à la fin, pour mettre en mots ce qui est déjà calculé.}
+  \end{minipage}
+  \vfill
+\end{frame}
+
+\end{document}
