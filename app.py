@@ -7,7 +7,7 @@ import streamlit as st
 from src import llm
 from src.assistant import reply
 from src.conseiller import clients
-from src.conseiller.catalogue import nom as nom_produit
+from src.converser.formuler import nom_produit
 from src.contrats import EtatConversation
 from src.mesure import resumer
 
@@ -21,13 +21,6 @@ MESSAGES_DEMO = {
     "C07": ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000"],
     "C08": ["Je voudrais mettre de côté", "Dans 2 ans", "50 euros", "C'est quoi un TAEG ?"],
 }
-
-
-def _nom(produit_id: str) -> str:
-    try:
-        return nom_produit(produit_id)
-    except KeyError:
-        return produit_id
 
 
 def _reinitialiser(client_id: str) -> None:
@@ -148,11 +141,11 @@ with colonne_panneaux:
                 st.markdown(f"**Information demandée** : `{reponse.question}`")
             if reponse.conseil:
                 for p in reponse.conseil.propositions:
-                    st.markdown(f"✅ **{_nom(p.produit_id)}** — " + " ".join(p.raisons))
+                    st.markdown(f"✅ **{nom_produit(p.produit_id)}** — " + " ".join(p.raisons))
                     if p.sources:
                         st.caption("Source : " + " ; ".join(dict.fromkeys(p.sources)))
                 for e in reponse.conseil.ecartees:
-                    st.markdown(f"❌ **{_nom(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
+                    st.markdown(f"❌ **{nom_produit(e.produit_id)}** — {e.raison}" + (f" `{e.regle}`" if e.regle else ""))
                 for a in reponse.conseil.alertes:
                     st.warning(a)
             if reponse.action:

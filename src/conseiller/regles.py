@@ -38,14 +38,14 @@ def credit_immobilier(profil: dict[str, Any], slots: dict[str, Any]) -> Conseil:
     mensualite = besoin / facteur
     effort = (mensualite + en_cours) / revenus
     mensualite_max = max(effort_max * revenus - en_cours, 0)
-    prix_max = (mensualite_max * facteur + apport) / (1 + notaire)
+    prix_max = round((mensualite_max * facteur + apport) / (1 + notaire), -3)
 
     conseil = Conseil(faits={
         "prix_bien": prix, "apport": apport, "revenus_nets": revenus,
         "mensualites_en_cours": en_cours, "taux_frais_notaire": notaire,
         "besoin": round(besoin), "taux_indicatif": taux, "duree_ans": duree_ans,
         "mensualite": round(mensualite), "taux_effort": round(effort, 4),
-        "taux_effort_max": effort_max, "prix_max": round(prix_max, -3),
+        "taux_effort_max": effort_max, "prix_max": prix_max,
     })
     sources = [cat.source_parametre("taux_effort_max"), cat.source_parametre("taux_indicatif_credit_immobilier")]
     if effort <= effort_max:

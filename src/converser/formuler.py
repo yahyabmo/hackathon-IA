@@ -89,7 +89,9 @@ def simplifier(texte: str, expliquer_jargon: bool = True) -> str:
     return "\n\n".join(phrases)
 
 
-def _nom(produit_id: str) -> str:
+def nom_produit(produit_id: str) -> str:
+    """Nom lisible d'un produit, y compris ceux qui n'existent que comme écart."""
+
     try:
         return cat.nom(produit_id)
     except KeyError:
@@ -130,10 +132,10 @@ def _conseil_general(conseil: Conseil) -> str:
     morceaux = []
     if proposes:
         morceaux.append("Voici ce que je vous propose. " + " ".join(
-            f"{_nom(p.produit_id)} : {p.raisons[0][0].lower()}{p.raisons[0][1:]}" for p in proposes if p.raisons))
+            f"{nom_produit(p.produit_id)} : {p.raisons[0][0].lower()}{p.raisons[0][1:]}" for p in proposes if p.raisons))
     if conseil.ecartees:
         morceaux.append("Je ne vous propose pas : " + " ; ".join(
-            f"{_nom(e.produit_id)}, {e.raison}" for e in conseil.ecartees) + ".")
+            f"{nom_produit(e.produit_id)}, {e.raison}" for e in conseil.ecartees) + ".")
     morceaux += conseil.alertes
     return " ".join(morceaux)
 
