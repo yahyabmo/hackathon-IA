@@ -19,7 +19,9 @@ case "${1:-}" in
         python -m eval.bench_comprendre
         python -m eval.bench_comprendre --llm=ministral-3:14b --llm=qwen3:1.7b ;;
     abc)
-        python -m eval.bench_abc C B A --modele-b="${2:?modèle de formulation retenu, ex. qwen3:1.7b}" ;;
+        python -m eval.bench_abc C B --modele-b="${2:?modèle de formulation retenu, ex. qwen3:1.7b}"
+        # A : le 14B répond à chaque message ; un lot de 40 suffit pour l'énergie par requête.
+        python -m eval.bench_abc A --requetes=40 --repetitions=1 ;;
     support)
         python -m eval.tableau_formulation
         (cd rapport && pdflatex -interaction=nonstopmode soutenance.tex >/dev/null \

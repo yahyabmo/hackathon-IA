@@ -212,6 +212,17 @@ def _energie(wh: float) -> str:
     return "$<$ 0,001" if wh < 0.001 else _nombre(wh, 2 if wh >= 1 else 3)
 
 
+def _lots(resultats: dict) -> str:
+    """« lots de 200 requêtes × 3 (A : 40 × 1) » : les réglages réels de chaque configuration."""
+
+    reglages = {c: (r["requetes"], r["repetitions"]) for c, r in sorted(resultats["configurations"].items())}
+    if not reglages:
+        return "lots de requêtes"
+    courant = max(set(reglages.values()), key=list(reglages.values()).count)
+    autres = [f"{c} : {n} × {k}" for c, (n, k) in reglages.items() if (n, k) != courant]
+    return f"lots de {courant[0]} requêtes × {courant[1]}" + (f" ({' ; '.join(autres)})" if autres else "")
+
+
 NOMS = {"A": "A --- un LLM fait tout", "B": "\\textbf{B --- notre cascade}", "C": "C --- cascade, gabarits seuls"}
 
 
@@ -230,8 +241,8 @@ def latex(resultats: dict) -> str:
         "\\scriptsize\n\\begin{tabularx}{\\textwidth}{@{}Y c c c c c@{}}\n\\toprule\n"
         "\\textbf{Configuration} & \\textbf{Scénarios} & \\textbf{Wh / 1\\,000 req.} & \\textbf{Latence p95} & "
         "\\textbf{Go} & \\textbf{Sans LLM} \\\\\n\\midrule\n" + "\n".join(lignes) +
-        "\n\\bottomrule\n\\end{tabularx}\n\n\\smallskip\n{\\tiny Énergie : CodeCarbon hors ligne, lots de "
-        f"{resultats.get('requetes', 200)} requêtes après chauffe, puissance de repos soustraite. Mesuré sur "
+        "\n\\bottomrule\n\\end{tabularx}\n\n\\smallskip\n{\\tiny Énergie : CodeCarbon hors ligne, "
+        + _lots(resultats) + " après chauffe, puissance de repos soustraite. Mesuré sur "
         + resultats["machine"].replace("_", "\\_") + ".}\n"
     )
 

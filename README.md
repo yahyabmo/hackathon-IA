@@ -128,6 +128,10 @@ Un scénario qui passait et qui échoue bloque la fusion.
 ./mesurer.sh support         # tableaux et support recompilés
 ```
 
+Le 14B (9,1 Go) déborde des 8 Go d'une RTX 3070 : il tourne en partie sur le processeur,
+plus lentement, et ses mesures restent valables. S'il est trop lent, le retirer de
+`mesurer.sh formulation` et le mesurer sur une RTX 3060 (12 Go) de la salle.
+
 ## Ce qui reste à faire
 
 Tout le code est en place ; il reste des mesures et des décisions d'équipe.
