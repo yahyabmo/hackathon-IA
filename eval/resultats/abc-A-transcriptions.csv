@@ -1,0 +1,234 @@
+client,message,reponse,juge
+C01,Je ne sais pas quoi demander,"Bonjour Inès,
+
+Avez-vous un projet précis en tête ? Par exemple, souhaitez-vous :
+- **Optimiser votre épargne** (votre Livret A est déjà bien utilisé, mais d’autres solutions comme le LDDS ou le LEP pourraient compléter votre stratégie) ?
+- **Financer un projet** (immobilier, études, etc.) ?
+- **Améliorer votre quotidien bancaire** (cartes, outils en ligne, etc.) ?
+
+N’hésitez pas à me préciser vos besoins, je suis là pour vous guider. Si vous préférez échanger avec un conseiller, un rendez-vous peut être organisé.",
+C01,euh rien de précis,"Bonjour Inès,
+
+Pas de problème ! Voici quelques pistes simples pour commencer :
+- **Votre épargne** : Votre Livret A est bien rempli (8 000 € sur 22 950 € de plafond). Souhaitez-vous explorer d’autres solutions comme le **LDDS** (pour un projet écologique) ou le **PEL** (pour un projet immobilier futur) ?
+- **Vos finances au quotidien** : Votre solde est de 1 450 €. Un **prêt personnel** (si besoin) ou un accompagnement pour mieux gérer vos dépenses pourrait vous intéresser.
+- **Vos services bancaires** : Votre carte Visa est active. Avez-vous besoin d’une **option en ligne** (pour consulter vos comptes à distance) ou d’un **rendez-vous avec un conseiller** pour en discuter ?
+
+Dites-moi ce qui vous semble le plus pertinent !",
+C01,non,"Très bien, Inès. Dans ce cas, je reste à votre disposition si jamais une idée ou un besoin émerge.
+
+N’hésitez pas à revenir vers moi pour toute question, même informelle. Bonne journée !",
+C01,"J'ai perdu ma carte hier soir, je fais quoi ?","Bonjour Inès,
+
+Je vous invite à **bloquer immédiatement votre carte Visa** via l'espace bancaire sécurisé ou en appelant le **0892 700 700** (service 24h/24). Une nouvelle carte vous sera ensuite envoyée sous 48h à votre domicile.
+
+N’hésitez pas à vérifier vos derniers relevés pour signaler tout mouvement suspect.",
+C01,Ma carte ne marche plus au distributeur,"Bonjour Inès,
+
+Votre carte **Visa** est bien active dans notre système. Pour vérifier son bon fonctionnement, je vous invite à **redémarrer votre terminal** ou à **nettoyer le lecteur de carte** au distributeur.
+
+Si le problème persiste, je vous recommande de vous connecter à **votre espace bancaire sécurisé** pour vérifier son statut ou de contacter notre service client au **36 54** pour un blocage éventuel.
+
+Souhaitez-vous que je vous guide pour un rendez-vous avec un conseiller si nécessaire ?",
+C01,Je veux un prêt étudiant,"Bonjour Inès,
+
+Je vois que vous avez 34 ans, ce qui dépasse légèrement l’âge maximal pour notre prêt étudiant (35 ans révolus). Cependant, je peux vérifier si une dérogation est envisageable selon votre situation.
+
+Pour avancer, je vous invite à **prendre rendez-vous avec un conseiller** via notre espace sécurisé ou en agence. Il étudiera votre dossier et vous guidera vers la solution la plus adaptée.
+
+Souhaitez-vous que je vous oriente vers la prise de rendez-vous ?",
+C01,8000,"Bonjour Inès,
+
+Votre épargne actuelle de **8 000 €** sur Livret A est déjà un bon point de départ. Cependant, pour un prêt étudiant, il nous faudrait analyser votre capacité de remboursement, notamment en tenant compte de vos revenus nets de **3 200 €** et de l’absence de mensualités en cours.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** via notre espace sécurisé pour une étude personnalisée. Il pourra vous indiquer les modalités et vérifier si une solution est adaptée à votre profil.
+
+Souhaitez-vous que je vous guide pour prendre ce rendez-vous ?",
+C06,Votre appli ne marche jamais !,"Bonjour Julie,
+
+Je vous prie de m’excuser pour ce désagrément. Pour résoudre ce problème rapidement, je vous invite à consulter notre **espace bancaire sécurisé** via notre site ou application, où vous pourrez vérifier l’état de votre connexion ou contacter notre assistance dédiée.
+
+Si le problème persiste, un **rendez-vous avec un conseiller** peut être organisé pour vous accompagner en agence. Souhaitez-vous que je vous guide pour en prendre un ?",
+C05,Je veux un crédit pour acheter une voiture.,"Bonjour Karim,
+
+Pour un prêt destiné à l’achat d’un véhicule, il s’agit d’un **prêt personnel**, qui est adapté à votre situation. Cependant, afin d’étudier votre capacité de remboursement et de vous proposer une offre adaptée, je vous invite à prendre rendez-vous avec un conseiller via notre [espace bancaire sécurisé](lien_hypothetique).
+
+N’hésitez pas à vérifier votre éligibilité et à préparer les justificatifs nécessaires.",
+C05,12000,"Bonjour Karim,
+
+Votre projet de **12 000 €** dépasse votre capacité d’épargne et votre solde disponible. Étant donné vos revenus nets de **1 900 €**, vos mensualités de crédit actuelles (**150 €**) et votre besoin de trésorerie, un prêt de cette envergure nécessiterait une étude approfondie.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** via notre [espace sécurisé](lien_hypothetique) pour évaluer votre éligibilité et les modalités adaptées à votre situation.",
+C05,48 mois,"Bonjour Karim,
+
+Pour un prêt sur **48 mois**, votre mensualité potentielle pourrait atteindre environ **250 €** (hors assurance et frais éventuels). Cependant, cela réduirait significativement votre capacité d’épargne et votre marge de manœuvre financière.
+
+Je vous conseille vivement de **prendre rendez-vous avec un conseiller** via notre [espace sécurisé](lien_hypothetique) pour affiner cette estimation et vérifier votre éligibilité. Nous pourrons aussi explorer des solutions adaptées à votre budget.",
+C07,Je veux acheter un appartement,"Bonjour Léa,
+
+Pour un projet immobilier, je vous invite à prendre rendez-vous avec un conseiller bancaire afin d’étudier ensemble votre capacité d’emprunt. En effet, votre situation (revenus, épargne, absence de crédits en cours) sera analysée pour évaluer les solutions adaptées, comme un **crédit immobilier** ou un **Prêt à taux zéro (PTZ)** si vous y êtes éligible.
+
+Pour commencer, je vous propose de **prendre rendez-vous** via notre espace sécurisé ou en agence. N’hésitez pas à consulter vos comptes pour préparer ce projet.
+
+Cordialement,
+Votre banque",
+C07,"Autour de 250 000, et je peux mettre les 25 000","Bonjour Léa,
+
+Votre apport de **25 000 €** est un bon point de départ, mais pour un projet autour de **250 000 €**, il conviendra d’étudier en détail votre capacité d’emprunt. Votre solde actuel (1 800 €) et vos mensualités nulles sont des atouts, mais une analyse complète (revenus, charges, durée de prêt) sera nécessaire.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** via notre espace sécurisé pour affiner cette étude. Un **Prêt à taux zéro (PTZ)** pourrait éventuellement compléter votre financement, sous conditions de ressources et de zone géographique.
+
+À très vite pour concrétiser cela !",
+C08,Je veux un crédit pour acheter une voiture.,"Bonjour Lucas,
+
+Pour un crédit automobile, je vous oriente vers un **prêt personnel** ou un **prêt étudiant** (si vous remplissez les conditions). Votre situation d’étudiant avec des revenus nets de **450 €** sera étudiée pour évaluer votre capacité de remboursement.
+
+Pour une étude précise et une offre adaptée, je vous invite à prendre rendez-vous avec un conseiller via notre [espace bancaire sécurisé](lien_hypothétique) ou en agence. N’hésitez pas à préparer vos justificatifs (relevés de compte, attestation de bourse, etc.).
+
+Souhaitez-vous que je vous guide pour prendre ce rendez-vous ?",
+C08,12000,"Bonjour Lucas,
+
+Votre solde actuel de **120 €** et vos revenus de **450 €** ne permettent pas d’envisager un prêt de **12 000 €** sans étude approfondie. Les prêts étudiants ou personnels nécessitent une analyse de votre capacité de remboursement sur la durée.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** pour évaluer ensemble les solutions adaptées à votre situation. Vous pouvez le faire directement via notre [espace sécurisé](lien_hypothétique).
+
+Souhaitez-vous que je vous aide à planifier ce rendez-vous ?",
+C08,48 mois,"Bonjour Lucas,
+
+Pour un prêt sur **48 mois**, votre capacité de remboursement sera examinée en détail. Avec vos revenus de **450 € nets**, les mensualités proposées devront rester compatibles avec votre budget.
+
+Je vous invite à **contacter un conseiller** pour une simulation précise. Vous pouvez prendre rendez-vous via notre [espace bancaire sécurisé](lien_hypothétique) ou en agence. Préparez vos documents (relevés bancaires, attestation de bourse, etc.).
+
+Souhaitez-vous que je vous aide à organiser ce rendez-vous ?",
+C08,Je voudrais mettre de côté,"Bonjour Lucas,
+
+En tant qu’étudiant de 20 ans, vous pourriez ouvrir un **Livret Jeune**, réservé aux 12-25 ans, avec un plafond de **1 600 €**. C’est une solution simple et sécurisée pour commencer à épargner.
+
+Souhaitez-vous que je vous guide pour en faire la demande directement depuis votre espace sécurisé ?",
+C08,Dans 2 ans,"Je comprends, Lucas. Dans ce cas, je vous conseille de surveiller votre situation financière d’ici là. Si vos revenus évoluent ou si vous souhaitez explorer d’autres options d’épargne (comme le **Livret A** sans plafond d’âge), n’hésitez pas à revenir vers moi.
+
+En attendant, vous pouvez déjà consulter votre solde actuel (**120 €**) ou activer vos services en ligne pour préparer votre projet. Un rendez-vous avec un conseiller reste possible si besoin.",
+C08,50 euros,"Bonjour Lucas,
+
+Vous pouvez tout à fait déposer **50 €** sur un **Livret Jeune** dès aujourd’hui, si vous le souhaitez. Cela vous permettrait de commencer à épargner dans le cadre de ce produit adapté à votre âge.
+
+Souhaitez-vous que je vous oriente vers votre espace sécurisé pour effectuer ce versement directement ?",
+C08,C'est quoi un TAEG ?,"Bonjour Lucas,
+
+Le **TAEG** (*Taux Annuel Effectif Global*) représente le coût total d’un crédit (ou d’un placement) exprimé en pourcentage annuel. Il inclut les intérêts, les frais et les assurances éventuelles, pour vous donner une vision claire et comparable des offres.
+
+Pour votre épargne, ce terme n’est pas applicable, mais il est utile à connaître si vous envisagez un prêt à l’avenir. Souhaitez-vous que je vous explique d’autres notions liées à vos projets financiers ?",
+C08,Je voudrais un prêt étudiant,"Bonjour Lucas,
+
+Je vois que vous êtes bien étudiant et éligible à notre offre de **prêt étudiant** pour les 18-35 ans. Ce prêt nécessite une étude de votre situation, avec des justificatifs à fournir (avis d’imposition, relevés bancaires, etc.). Un différé de remboursement peut être prévu selon votre contrat.
+
+Pour avancer, je vous invite à prendre rendez-vous avec un conseiller via notre **espace bancaire sécurisé** ou à contacter notre service dédié. Souhaitez-vous que je vous guide pour y accéder ?",
+C08,5000,"Bonjour Lucas,
+
+Votre demande de **5 000 €** sera étudiée lors de l’examen de votre dossier par nos services. Aucun accord n’est automatique : le montant dépendra de votre capacité de remboursement future, de votre projet et des garanties apportées.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** via notre espace sécurisé pour discuter des modalités. Souhaitez-vous que je vous y guide ?",
+C02,Pourquoi j'ai payé 8 € de frais ce mois-ci ?,"Bonjour Monsieur,
+
+Ces **8 €** correspondent à une **commission d’intervention** pour un paiement effectué alors que votre compte dépassait son découvert autorisé. Vous avez connu **5 incidents similaires** ces 12 derniers mois.
+
+Pour éviter ces frais, je vous invite à consulter votre espace bancaire sécurisé ou à prendre rendez-vous avec un conseiller pour en discuter. Vous pouvez aussi activer des alertes pour les découverts.
+
+Cordialement,
+Votre banque",
+C04,Je dois envoyer 500 € à mon fils.,"Bonjour Monsieur Paul,
+
+Vous pouvez effectuer ce virement directement depuis votre espace bancaire en ligne, via l’onglet **""Paiements""** puis **""Virements""**. Votre fils Thomas est déjà enregistré comme bénéficiaire.
+
+Si vous préférez, je peux aussi vous guider pour le faire par téléphone en toute sécurité. Souhaitez-vous que je vous connecte à notre service dédié ?",
+C04,Je dois envoyer 500 € à mon fils.,"Bonjour Monsieur Paul,
+
+Vous pouvez effectuer ce virement directement depuis votre espace bancaire en ligne, via l’onglet **""Virements""** et en sélectionnant votre fils Thomas comme bénéficiaire enregistré. Aucun frais ne sera appliqué pour ce type d’opération.
+
+Si vous préférez, un rendez-vous avec un conseiller est également possible pour vous accompagner dans cette démarche. Souhaitez-vous que je vous en propose un ?",
+C03,Je voudrais mettre de côté pour mes enfants.,"Bonjour Sophie,
+
+Pour épargner en faveur de vos enfants, vous avez plusieurs options adaptées à leur âge :
+
+- **Livret A** : Ils peuvent en ouvrir un chacun dès leur naissance (vous pouvez le faire pour eux, sous conditions).
+- **Compte Épargne Logement (CEL)** : Accessible dès 12 ans, avec un plafond de 15 300 €.
+
+Souhaitez-vous des précisions sur l’une de ces solutions ? Pour une étude personnalisée, je vous invite à prendre rendez-vous avec un conseiller via notre espace sécurisé.",
+C03,"Dans 10 ans, 100 euros par mois","Bonjour Sophie,
+
+Avec un apport de **100 €/mois** pendant 10 ans, vous pourriez envisager :
+- **Un Livret A** pour vos enfants (plafond de **22 950 €/enfant**), idéal pour une épargne flexible et sécurisée.
+- **Un CEL** (si vos enfants ont 12 ans ou plus), avec un plafond de **15 300 €**, offrant une prime d’État sous conditions.
+
+Pour affiner cette stratégie et vérifier les montants exacts, je vous recommande de consulter un conseiller via notre **espace bancaire sécurisé**. Souhaitez-vous que je vous guide pour y accéder ?",
+C01,Je ne sais pas quoi demander,"Bonjour Inès,
+
+Avez-vous un projet précis en tête (épargne, investissement, crédit, etc.) ou souhaitez-vous simplement explorer les solutions adaptées à votre situation actuelle ? Je peux vous orienter vers des options comme l’optimisation de votre Livret A (vous êtes encore loin du plafond de 22 950 €) ou vous proposer un rendez-vous avec un conseiller pour échanger plus en détail.
+
+N’hésitez pas à préciser vos attentes !",
+C01,euh rien de précis,"Bonjour Inès,
+
+Pas de problème ! Voici quelques pistes adaptées à votre profil :
+- **Optimiser votre Livret A** : Vous avez 8 000 € placés (plafond à 22 950 €). Souhaitez-vous alimenter ce livret ou en savoir plus sur d’autres solutions d’épargne (comme le LDDS ou le LEP, sous conditions) ?
+- **Préparer un projet** : Un crédit immobilier, un prêt personnel ou un rendez-vous avec un conseiller pour en discuter ?
+- **Automatiser votre épargne** : Nous pourrions mettre en place des virements réguliers depuis votre solde (1 450 €) pour renforcer votre épargne sans effort.
+
+Dites-moi ce qui vous intéresse le plus, ou je peux vous guider vers un conseiller pour affiner vos options.",
+C01,non,"Pas de souci, Inès. Si vous n’avez pas de projet immédiat, je vous propose simplement de **surveiller votre solde** (1 450 €) et votre Livret A (8 000 € sur 22 950 € possible).
+
+Un jour, si vous souhaitez discuter d’un projet ou d’une solution, n’hésitez pas à me recontacter ou à prendre rendez-vous avec un conseiller via notre espace sécurisé. Bonne journée !",
+C01,"J'ai perdu ma carte hier soir, je fais quoi ?","Bonjour Inès,
+
+Je vous invite à **bloquer immédiatement votre carte Visa** via l’espace client sécurisé de notre banque (disponible [ici](https://www.votrebank.fr/espace-client)) ou en composant le **09 70 20 20 20** depuis votre téléphone. Vous pourrez ensuite en demander une nouvelle, **sans frais**, en agence ou en ligne.
+
+N’hésitez pas à vérifier vos derniers relevés pour toute opération suspecte. Pour toute urgence, notre service client reste à votre disposition.
+
+Cordialement,
+Votre banque",
+C01,Ma carte ne marche plus au distributeur,"Bonjour Inès,
+
+Votre carte **Visa** est bien active dans notre système. Pour vérifier son bon fonctionnement, je vous invite à **redémarrer votre terminal** ou à **nettoyer le contact** (si c'est une carte à puce).
+
+Si le problème persiste, je vous recommande de **vous connecter à votre espace bancaire sécurisé** pour la désactiver temporairement et en demander une nouvelle, ou de contacter notre service client au **3919** (0,12€/appel) pour un diagnostic rapide.
+
+Souhaitez-vous que je vous guide pour un rendez-vous en agence si nécessaire ?",
+C01,Je veux un prêt étudiant,"Bonjour Inès,
+
+Je vois que vous avez 34 ans, ce qui dépasse légèrement l’âge maximal (35 ans révolus) pour notre offre de prêt étudiant. Cependant, je peux vérifier si une exception est possible selon votre situation.
+
+Pour avancer, je vous invite à prendre rendez-vous avec un conseiller via [l’espace bancaire sécurisé](lien_hypothetique) pour étudier votre demande. N’hésitez pas à me préciser si vous souhaitez que je vous guide pour en prendre un.",
+C01,8000,"Bonjour Inès,
+
+Votre épargne de **8 000 €** sur Livret A est déjà un bon point de départ. Cependant, pour un prêt étudiant, il faudrait évaluer votre capacité d’endettement et votre projet.
+
+Comme évoqué précédemment, votre âge ne correspond pas exactement aux critères. Je vous recommande vivement de **prendre rendez-vous avec un conseiller** via [l’espace sécurisé](lien_hypothetique) pour une étude personnalisée. Il pourra vous orienter vers la solution la plus adaptée à votre situation. Souhaitez-vous que je vous aide à planifier ce rendez-vous ?",
+C06,Votre appli ne marche jamais !,"Bonjour Julie,
+
+Je vous prie de m’excuser pour ces difficultés techniques. Pour résoudre ce problème rapidement, je vous invite à consulter notre **espace bancaire sécurisé** via notre site web ou notre appli (en vous connectant avec vos identifiants habituels). Si le souci persiste, un conseiller est à votre disposition pour un **rendez-vous** afin d’examiner la situation de plus près.
+
+N’hésitez pas à me dire si vous souhaitez que je vous guide pour prendre ce rendez-vous.",
+C05,Je veux un crédit pour acheter une voiture.,"Bonjour Karim,
+
+Pour un prêt destiné à l’achat d’un véhicule, il s’agit d’un **prêt personnel**, qui nécessite une étude de votre capacité de remboursement. Avec vos revenus nets de **1 900 €**, une mensualité de **150 €** est déjà dédiée à un crédit en cours.
+
+Je vous invite à consulter notre **espace bancaire sécurisé** pour simuler votre éligibilité ou prendre rendez-vous avec un conseiller, qui pourra vous accompagner dans cette démarche. N’hésitez pas à me solliciter pour toute autre question.",
+C05,12000,"Bonjour Karim,
+
+Votre **Livret A** est déjà pleinement utilisé (1 500 €/22 950 €). En revanche, vous n’êtes pas éligible au **LDDS** (Livret de Développement Durable et Solidaire), car les revenus de votre foyer fiscal (vous seul) ne sont pas connus pour ce produit.
+
+Pour une demande de prêt ou d’épargne plus adaptée, je vous recommande de consulter notre **espace sécurisé** ou de prendre rendez-vous avec un conseiller.",
+C05,48 mois,"Bonjour Karim,
+
+Pour un prêt sur **48 mois**, votre capacité de remboursement sera examinée en tenant compte de vos **1 900 € nets**, de vos **150 €** de mensualité actuelle et de votre solde disponible (**640 €**).
+
+Je vous invite à **simuler votre demande en ligne** via notre espace sécurisé ou à prendre rendez-vous avec un conseiller pour étudier votre éligibilité. Nous pourrons ainsi vous proposer une solution adaptée.",
+C07,Je veux acheter un appartement,"Bonjour Léa,
+
+Pour un projet immobilier, je vous invite à prendre rendez-vous avec un conseiller bancaire pour étudier votre situation financière et vos besoins. Nous pourrons ainsi examiner ensemble la faisabilité d’un **crédit immobilier** ou d’un **Prêt à taux zéro (PTZ)** si vous y êtes éligible.
+
+Vous pouvez réserver un rendez-vous directement via notre espace bancaire sécurisé ou en contactant notre service client.",
+C07,"Autour de 250 000, et je peux mettre les 25 000","Bonjour Léa,
+
+Votre épargne de **25 000 €** (dont **22 950 €** sur Livret A et **2 050 €** sur LDDS) sera prise en compte, mais un projet à **250 000 €** nécessite une étude approfondie de votre capacité d’emprunt. Votre solde actuel de **1 800 €** et vos revenus nets de **2 900 €** seront analysés pour évaluer votre éligibilité.
+
+Je vous recommande de **prendre rendez-vous avec un conseiller** via notre espace sécurisé pour examiner cette demande. Un prêt immobilier dépend de nombreux critères (durée, taux, assurance, etc.), et aucun accord ne peut être donné sans analyse complète.",
