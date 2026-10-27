@@ -11,6 +11,7 @@ produit (colonnes ``juge_1`` et ``juge_2`` à remplir par oui / non, facultative
 
 Usage, depuis la racine du dépôt, sur un poste où Ollama tourne :
     python -m eval.bench_formulation --situations          # les 30 situations, sans LLM
+    python -m eval.bench_formulation --limite=3 gemma3:270m # essai rapide sur 3 situations
     python -m eval.bench_formulation ministral-3:14b gemma4:e2b ministral-3:8b \\
         ministral-3:3b qwen3:1.7b gemma3:1b
 """
@@ -28,8 +29,7 @@ from src import llm
 from src.conseiller import clients, conseiller
 from src.contrats import EtatConversation
 from src.converser.dialogue import Decision, parcours_disponibles
-from src.converser.formuler import SYSTEME_FORMULATION, gabarit
-from src.converser.garde_fou import nombres, verifier
+from src.converser.formuler import gabarit, reformuler
 from src.taxonomie import famille_de
 
 RESULTATS = Path(__file__).resolve().parent / "resultats"
@@ -64,15 +64,17 @@ def preparer(client: str, parcours: str, infos: dict[str, Any]) -> tuple[str, st
         gabarit(decision, conseiller(parcours, profil, slots), None, profil, etat, "")
 
 
-def evaluer(modele: str) -> list[dict[str, Any]]:
+def evaluer(modele: str, limite: int | None = None) -> list[dict[str, Any]]:
     lignes = []
-    for client, parcours, infos in SITUATIONS:
+    for client, parcours, infos in SITUATIONS[:limite]:
         nom, texte = preparer(client, parcours, infos)
         debut = perf_counter()
-        reformule, tokens = llm.generer(modele, SYSTEME_FORMULATION, texte)
-        problemes = verifier(reformule, set(nombres(texte)))
+        try:
+            reecrit, tokens, problemes = reformuler(texte, modele)
+        except OSError as erreur:  # modèle absent du serveur, serveur coupé
+            reecrit, tokens, problemes = None, 0, [f"appel impossible : {erreur}"]
         lignes.append({
-            "situation": nom, "gabarit": texte, "reformulation": reformule,
+            "situation": nom, "gabarit": texte, "reformulation": reecrit or "",
             "garde_fou": "ok" if not problemes else "; ".join(problemes),
             "latence_ms": round((perf_counter() - debut) * 1000), "tokens": tokens,
             "juge_1": "", "juge_2": "",
@@ -81,6 +83,9 @@ def evaluer(modele: str) -> list[dict[str, Any]]:
 
 
 def main(arguments: list[str]) -> int:
+    limite = None
+    if arguments and arguments[0].startswith("--limite="):
+        limite, arguments = int(arguments[0].split("=")[1]), arguments[1:]
     if not arguments or arguments == ["--situations"]:
         for client, parcours, infos in SITUATIONS:
             nom, texte = preparer(client, parcours, infos)
@@ -93,7 +98,7 @@ def main(arguments: list[str]) -> int:
     RESULTATS.mkdir(exist_ok=True)
     print(f"{'modèle':22} {'garde-fou ok':>13} {'latence p50':>12} {'p95':>8} {'tokens':>7}")
     for modele in arguments:
-        lignes = evaluer(modele)
+        lignes = evaluer(modele, limite)
         chemin = RESULTATS / f"formulation-{modele.replace(':', '_')}.csv"
         with chemin.open("w", newline="", encoding="utf-8") as f:
             ecrivain = csv.DictWriter(f, fieldnames=list(lignes[0]))
