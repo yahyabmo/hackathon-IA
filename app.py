@@ -13,10 +13,10 @@ from src.mesure import resumer
 from src.ui import components, theme
 
 MESSAGES_DEMO = {
-    "C01": [("Carte perdue", "J'ai perdu ma carte hier soir, je fais quoi ?"), ("Confirmer", "oui")],
+    "C01": [("Carte perdue", "J'ai perdu ma carte hier soir, je fais quoi ?")],
     "C02": [("Frais", "Pourquoi j'ai payé 8 € de frais ce mois-ci ?")],
     "C03": [("Épargne enfants", "Je voudrais mettre de côté pour mes enfants."), ("Projet", "Dans 10 ans, 100 euros par mois")],
-    "C04": [("Virement", "Je dois envoyer 500 € à mon fils."), ("Confirmer", "oui")],
+    "C04": [("Virement", "Je dois envoyer 500 € à mon fils.")],
     "C05": [("Crédit auto", "Je veux un crédit pour acheter une voiture."), ("Montant", "12000"), ("Durée", "48 mois")],
     "C06": [("Insatisfaction", "Votre appli ne marche jamais !")],
     "C07": [("Immobilier", "Je veux acheter un appartement"), ("Budget", "Autour de 250 000, et je peux mettre les 25 000"), ("Alternative", "Et avec un bien à 200 000 ?")],

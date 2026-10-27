@@ -1,7 +1,7 @@
 # Inès : « J'ai perdu ma carte hier soir, je fais quoi ? » — réagir vite, opposition, rassurer.
 famille: carte_perdue
 intentions: [lost_or_stolen_card, compromised_card, card_swallowed]
-accroche: "Je comprends, on sécurise votre carte tout de suite."
+accroche: "Je comprends, il faut agir vite."
 infos:
   perte_ou_vol:
     type: choix

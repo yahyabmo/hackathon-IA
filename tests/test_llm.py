@@ -4,7 +4,7 @@ from src import llm
 from src.assistant import reply
 from src.contrats import EtatConversation
 from src.converser import garde_fou
-from src.converser.formuler import reformuler
+from src.converser.formuler import SUITE_CONSEILLER, reformuler
 from src.converser.glossaire import chercher
 
 GABARIT = "La mensualité serait d'environ 1 220 €, soit 42,1 % de vos revenus. Voulez-vous un rendez-vous ?"
@@ -74,20 +74,20 @@ def test_un_seul_appel_au_llm_et_seulement_pour_le_conseil(monkeypatch):
     assert "41,3" in second.texte  # taux statistique BDF de 3,32 %
 
 
-def test_la_question_de_rappel_reste_hors_du_llm(monkeypatch):
+def test_la_suite_conseiller_reste_hors_du_llm(monkeypatch):
     recus = []
 
     def faux_llm(modele, systeme, message, max_tokens=200, role="formulation"):
         recus.append(message)
-        return message.split('"""')[1].strip() + " Souhaitez-vous que je vous contacte ?", 10
+        return message.split('"""')[1].strip() + " Je vous contacte demain.", 10
 
     monkeypatch.setenv("ASSISTANT_LLM", "1")
     monkeypatch.setattr(llm, "generer", faux_llm)
     etat = EtatConversation()
     _, etat = reply("Je veux acheter un appartement", "C07", etat)
     reponse, _ = reply("250 000, apport 25 000", "C07", etat)
-    assert "rappelle" not in recus[0]
-    assert "Voulez-vous qu'un conseiller vous rappelle ? (oui / non)" in reponse.texte
+    assert "rendez-vous" not in recus[0]
+    assert SUITE_CONSEILLER in reponse.texte
 
 
 def test_glossaire_tolere_les_fautes_seulement_pour_une_definition():

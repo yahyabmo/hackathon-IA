@@ -35,13 +35,18 @@ MENTIONS = {
 RAPPEL_CODE = "Rappel : la banque ne vous demandera jamais votre code confidentiel."
 MESSAGES_FIXES = {
     "abandon": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?",
-    "orienter": "Je préfère ne pas deviner. Voulez-vous qu'un conseiller vous rappelle ? (oui / non)",
+    "orienter": ("Je préfère ne pas deviner. Un conseiller peut reprendre votre demande : prenez rendez-vous "
+                 "depuis votre espace bancaire sécurisé ou contactez votre agence."),
     "clarifier": ("Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des "
                   "frais, votre épargne ou un projet de crédit."),
 }
-OUI_NON = "(oui / non)"
 CONFIANCE_QUESTION_FERMEE = 0.5
-QUESTION_RAPPEL = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}"
+# Le chatbot n'a aucun accès au compte et ne transmet rien (périmètre du kick-off) : il dit comment
+# joindre un conseiller, sans poser de question oui / non qui n'aurait aucune suite.
+ORIENTATION_CONSEILLER = ("Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace "
+                          "bancaire sécurisé ou contactez votre agence.")
+SUITE_CONSEILLER = ("Pour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis "
+                    "votre espace bancaire sécurisé.")
 NOMS_SPECIAUX = {"credit_immobilier_30_ans": "Un prêt immobilier sur 30 ans"}
 AGE_MOTS_SIMPLES = 70
 RELANCES = {
@@ -174,7 +179,7 @@ def parties_conseil(decision: Decision, conseil: Conseil) -> tuple[str, str | No
     """
 
     corps = _joindre(decision.accroche, *decision.confirmations, _conseil_general(conseil))
-    return corps, QUESTION_RAPPEL if decision.proposer else None
+    return corps, SUITE_CONSEILLER if decision.proposer else None
 
 
 def _gabarit_fiche(decision: Decision, message: str) -> str:
@@ -188,25 +193,43 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
         return (f"{debut} Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un "
                 "projet de crédit. Que puis-je faire pour vous ?")
     sujet = LIBELLES_FAMILLES.get(famille_de(decision.parcours or ""), "ce sujet")
-    return (f"Je comprends que votre demande concerne {sujet}. Je n'ai pas encore de parcours guidé pour ce "
-            f"point : un conseiller peut le traiter. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
+    return (f"Je comprends que votre demande concerne {sujet}. Je n'ai pas de parcours guidé pour ce point, "
+            f"et aucun accès à votre compte. {ORIENTATION_CONSEILLER}")
 
 
 def _gabarit_orientation(decision: Decision) -> str:
     """Guide l'utilisateur sans accès au compte et sans exécution d'opération."""
     if decision.parcours == "lost_or_stolen_card":
-        return _joindre(decision.accroche, "Pour sécuriser votre carte, ouvrez votre espace bancaire sécurisé "
-                        "et utilisez la rubrique Opposition, ou contactez immédiatement votre conseiller. "
-                        "Je ne peux pas bloquer votre carte depuis cette conversation.")
+        return _joindre(decision.accroche, "Faites opposition tout de suite : dans votre espace bancaire "
+                        "sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer "
+                        "votre carte depuis cette conversation.", RAPPEL_CODE)
     if decision.parcours == "faire_virement":
         return _joindre(decision.accroche, "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé "
                         "et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni "
                         "exécuter le virement depuis cette conversation.")
-    if decision.parcours == "frais_contestation":
-        return _joindre(decision.accroche, "Je peux vous expliquer les frais affichés dans votre historique simulé. "
-                        "Pour une contestation réelle, utilisez votre espace bancaire sécurisé ou contactez un conseiller.")
-    return _joindre(decision.accroche, "Je peux vous orienter vers un conseiller, mais je n'ai aucun accès à votre compte. "
-                     "Souhaitez-vous poursuivre avec un conseiller ?", OUI_NON)
+    if famille_de(decision.parcours or "") == "frais_contestation":
+        return _joindre(decision.accroche, _explication_frais())
+    if decision.parcours == "insatisfaction":
+        return _joindre(decision.accroche, "Je n'ai aucun accès à votre compte, mais votre réclamation compte.",
+                        ORIENTATION_CONSEILLER, "Si le problème persiste, le service réclamations puis le "
+                        "médiateur bancaire peuvent être saisis.")
+    return _joindre(decision.accroche, "Je n'ai aucun accès à votre compte.", ORIENTATION_CONSEILLER)
+
+
+def _explication_frais() -> str:
+    """Sans accès au compte : la cause la plus fréquente et les plafonds légaux (catalogue sourcé)."""
+
+    normal = cat.parametre_detail("commission_intervention_max")
+    fragile = cat.parametre_detail("commission_intervention_max_fragile")
+    return (
+        "Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une "
+        "commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou "
+        f"votre découvert autorisé. La loi la plafonne à {euros(normal['valeur'])} par opération et "
+        f"{euros(normal['par_mois'])} par mois ({euros(fragile['valeur'])} et {euros(fragile['par_mois'])} pour "
+        "la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces "
+        "frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y "
+        "avez droit, et c'est aussi à lui qu'on conteste un frais."
+    )
 
 
 def gabarit(decision, conseil, profil, etat, message) -> str:

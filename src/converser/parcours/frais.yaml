@@ -2,7 +2,7 @@
 famille: frais_contestation
 intentions: [extra_charge_on_statement, card_payment_fee_charged, transfer_fee_charged,
              cash_withdrawal_charge, exchange_charge]
-accroche: "Je regarde les frais de votre compte."
+accroche: "Je vous explique."
 infos: {}
 fin:
   type: orienter
