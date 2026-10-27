@@ -10,7 +10,7 @@ def test_l_interface_demarre_sans_erreur():
     app = testing.AppTest.from_file(APP, default_timeout=30)
     app.run()
     assert not app.exception
-    assert "assistant automatique" in app.info[0].value
+    assert any("assistant automatique" in c.value for c in app.caption)
     assert any("LLM : désactivé" in c.value for c in app.sidebar.caption)
 
 
@@ -44,4 +44,39 @@ def test_le_profil_et_l_action_refletent_la_simulation():
     assert not app.exception
     textes = " ".join(m.value for m in app.markdown)
     assert "exécutée (simulation)" in textes
-    assert "**Solde** : *1800.0* (simulé)" in textes  # 2 300 € avant le virement de 500 €
+    assert "1 800,00 €" in textes
+    assert app.session_state.etat.profil_simule["solde"] == 1800
+
+
+def test_bouton_confirmation_et_rerun_sans_double_debit():
+    app = testing.AppTest.from_file(APP, default_timeout=30).run()
+    app.sidebar.selectbox[0].set_value("C04").run()
+    app.button(key="suggestion-0").click().run()
+    assert app.session_state.etat.profil_simule["solde"] == 2300
+    bouton = next(b for b in app.button if b.label == "Confirmer la simulation")
+    bouton.click().run()
+    assert not app.exception
+    assert app.session_state.etat.profil_simule["solde"] == 1800
+    app.run()
+    assert app.session_state.etat.profil_simule["solde"] == 1800
+    assert not any(b.label == "Confirmer la simulation" for b in app.button)
+
+
+def test_simulation_credit_affiche_calculs_et_sources():
+    app = testing.AppTest.from_file(APP, default_timeout=30).run()
+    app.sidebar.selectbox[0].set_value("C07").run()
+    app.button(key="suggestion-0").click().run()
+    app.button(key="suite-demo").click().run()
+    assert not app.exception
+    assert any(m.label == "Mensualité" for m in app.metric)
+    assert any("Relevé le" in m.value for m in app.markdown)
+    assert app.session_state.derniere.conseil.faits["mensualite"] > 0
+
+
+def test_annulation_interface_sans_opposition():
+    app = testing.AppTest.from_file(APP, default_timeout=30).run()
+    app.button(key="suggestion-0").click().run()
+    next(b for b in app.button if b.label == "Annuler").click().run()
+    assert not app.exception
+    assert app.session_state.etat.profil_simule["cartes"][0]["statut"] == "active"
+    assert any("Demande annulée" in m.value for m in app.markdown)
