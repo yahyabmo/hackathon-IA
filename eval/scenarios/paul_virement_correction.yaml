@@ -1,0 +1,12 @@
+client: C04
+tours:
+  - client: "Je dois envoyer 500 € à mon fils."
+    attendu: {attente: preparer_virement, journal_operations: 0}
+  - client: "oui mais pas maintenant"
+    attendu: {attente: preparer_virement, journal_operations: 0, texte_contient: "Aucune opération"}
+  - client: "Non, plutôt 12,50 euros"
+    attendu: {attente: preparer_virement, journal_operations: 0}
+  - client: "oui"
+    attendu: {action: preparer_virement, journal_operations: 1, texte_contient: "Simulation uniquement"}
+  - client: "oui"
+    attendu: {journal_operations: 1}

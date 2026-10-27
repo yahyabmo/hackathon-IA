@@ -4,4 +4,4 @@ tours:
     attendu: {intention: epargne_projet, demande: horizon_mois}
     interdit: {demande: [pour_qui]}
   - client: "Dans 10 ans, 100 euros par mois"
-    attendu: {niveau: reponse_attendue, propose: [livret_a, livret_jeune], ecarte: [ldds, lep]}
+    attendu: {niveau: reponse_attendue, propose: [livret_a, livret_jeune], eligibilite: {ldds: inconnue, lep: inconnue}}

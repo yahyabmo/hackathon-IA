@@ -48,6 +48,13 @@ def verifier_tour(reponse: Reponse, etat: EtatConversation, attendu: dict[str, A
     attendre("escalade", reponse.escalade)
     attendre("attente", etat.action_en_attente.outil if etat.action_en_attente else None)
     attendre("action", action.outil if action and action.resultat is not None else None)
+    attendre("solde", (etat.profil_simule or {}).get("solde"))
+    attendre("journal_operations", len(etat.journal_actions))
+    if "action" in attendu and action and action.resultat and not action.resultat.get("ok"):
+        erreurs.append("action attendue mais refusée ou échouée")
+    for produit, statut in attendu.get("eligibilite", {}).items():
+        if not conseil or conseil.faits.get("eligibilite", {}).get(produit) != statut:
+            erreurs.append(f"éligibilité inattendue : {produit}")
     erreurs += [f"produit non proposé : {p}" for p in attendu.get("propose", []) if p not in proposes]
     erreurs += [f"produit non écarté : {p}" for p in attendu.get("ecarte", []) if p not in ecartes]
     if "alerte" in attendu and not any(attendu["alerte"] in a for a in (conseil.alertes if conseil else [])):

@@ -1,90 +1,1664 @@
 {
-  "_note": "Les 8 clients de démonstration. Les champs listés dans « simule » sont inventés (graine fixe) et affichés en italique. « ancrage_bank_marketing » rattache chaque client à une ligne réelle de data/raw/bank-marketing/bank/bank-full.csv : numéro de ligne à fixer par M3.",
+  "_note": "Personnages fictifs. Champs CGI identifiés par provenance ; tous les autres champs sont simulés. Les ancrages Bank Marketing sont des rapprochements documentaires vérifiés, pas l'identité ni la source complète d'un client. Aucun balance annuel n'est utilisé comme solde courant.",
   "clients": [
     {
-      "id": "C01", "prenom": "Inès", "age": 34, "metier": "cadre", "situation": "célibataire",
-      "revenus_nets": 3200, "epargne": 8000, "solde": 1450, "mensualites_credits": 0,
-      "enfants": [], "livrets": {"livret_a": 8000}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C01-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["revenus_nets", "epargne", "solde", "livrets", "cartes"],
-      "ancrage_bank_marketing": {"age": 34, "job": "management", "marital": "single", "ligne": null}
+      "id": "C01",
+      "prenom": "Inès",
+      "age": 34,
+      "metier": "cadre",
+      "situation": "célibataire",
+      "revenus_nets": 3200,
+      "epargne": 8000,
+      "solde": 1450,
+      "mensualites_credits": 0,
+      "enfants": [],
+      "livrets": {
+        "livret_a": 8000
+      },
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C01-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 34,
+        "job": "management",
+        "marital": "single",
+        "ligne": 263,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "age": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "metier": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C02", "prenom": "Marc", "age": 52, "metier": "ouvrier", "situation": "marié",
-      "revenus_nets": 1850, "epargne": 0, "solde": -120, "mensualites_credits": 0,
-      "enfants": [], "livrets": {}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 5,
-      "cartes": [{"id": "CB-C02-1", "type": "Visa", "statut": "active"}],
+      "id": "C02",
+      "prenom": "Marc",
+      "age": 52,
+      "metier": "ouvrier",
+      "situation": "marié",
+      "revenus_nets": 1850,
+      "epargne": 0,
+      "solde": -120,
+      "mensualites_credits": 0,
+      "enfants": [],
+      "livrets": {},
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 5,
+      "cartes": [
+        {
+          "id": "CB-C02-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
       "beneficiaires": [],
       "historique_frais": [
-        {"date": "2026-10-08", "libelle": "commission d'intervention", "montant": 8,
-         "cause": "un paiement est passé alors que votre compte dépassait son découvert autorisé"}
+        {
+          "date": "2026-10-08",
+          "libelle": "commission d'intervention",
+          "montant": 8,
+          "cause": "un paiement est passé alors que votre compte dépassait son découvert autorisé"
+        }
       ],
-      "simule": ["revenus_nets", "solde", "decouverts_12_mois", "historique_frais"],
-      "ancrage_bank_marketing": {"age": 52, "job": "blue-collar", "marital": "married", "ligne": null}
+      "simule": [
+        "id",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 52,
+        "job": "blue-collar",
+        "marital": "married",
+        "ligne": 104,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "age": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C03", "prenom": "Sophie", "age": 41, "metier": "employée administrative", "situation": "mariée",
-      "revenus_nets": 2400, "epargne": 6000, "solde": 980, "mensualites_credits": 0,
-      "enfants": [8, 12], "livrets": {"livret_a": 6000}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C03-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["revenus_nets", "epargne", "solde", "enfants", "livrets"],
-      "ancrage_bank_marketing": {"age": 41, "job": "admin.", "marital": "married", "ligne": null}
-    },
-    {
-      "id": "C04", "prenom": "Paul", "age": 68, "metier": "retraité", "situation": "veuf",
-      "revenus_nets": 1600, "epargne": 12000, "solde": 2300, "mensualites_credits": 0,
-      "enfants": [41], "livrets": {"livret_a": 12000}, "peu_a_laise_en_ligne": true,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C04-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [{"nom": "Thomas", "lien": "fils", "iban_masque": "FR76 •••• 4521"}],
+      "id": "C03",
+      "prenom": "Sophie",
+      "age": 41,
+      "metier": "employée administrative",
+      "situation": "mariée",
+      "revenus_nets": 2400,
+      "epargne": 6000,
+      "solde": 980,
+      "mensualites_credits": 0,
+      "enfants": [
+        8,
+        12
+      ],
+      "livrets": {
+        "livret_a": 6000
+      },
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C03-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
       "historique_frais": [],
-      "simule": ["revenus_nets", "epargne", "solde", "beneficiaires", "peu_a_laise_en_ligne"],
-      "ancrage_bank_marketing": {"age": 68, "job": "retired", "marital": "divorced", "ligne": null}
+      "simule": [
+        "id",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 41,
+        "job": "admin.",
+        "marital": "married",
+        "ligne": 118,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "age": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Deux enfants selon CGI ; âges simulés."
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C05", "prenom": "Karim", "age": 29, "metier": "technicien", "situation": "célibataire",
-      "revenus_nets": 1900, "epargne": 1500, "solde": 640, "mensualites_credits": 150,
-      "enfants": [], "livrets": {"livret_a": 1500}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 1,
-      "cartes": [{"id": "CB-C05-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["epargne", "solde", "mensualites_credits"],
-      "ancrage_bank_marketing": {"age": 29, "job": "technician", "marital": "single", "loan": "yes", "ligne": null}
+      "id": "C04",
+      "prenom": "Paul",
+      "age": 68,
+      "metier": "retraité",
+      "situation": "veuf",
+      "revenus_nets": 1600,
+      "epargne": 12000,
+      "solde": 2300,
+      "mensualites_credits": 0,
+      "enfants": [
+        41
+      ],
+      "livrets": {
+        "livret_a": 12000
+      },
+      "peu_a_laise_en_ligne": true,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C04-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [
+        {
+          "nom": "Thomas",
+          "lien": "fils",
+          "iban_masque": "FR76 •••• 4521"
+        }
+      ],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 68,
+        "job": "retired",
+        "marital": "divorced",
+        "ligne": 29466,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "age": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Veuf simulé ; la catégorie UCI divorced regroupe divorcés et veufs, sans distinction."
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C06", "prenom": "Julie", "age": 37, "metier": "employée de services", "situation": "célibataire",
-      "revenus_nets": 2100, "epargne": 3000, "solde": 410, "mensualites_credits": 0,
-      "enfants": [], "livrets": {"livret_a": 3000}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 3, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C06-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["revenus_nets", "epargne", "solde", "contacts_aujourdhui"],
-      "ancrage_bank_marketing": {"age": 37, "job": "services", "marital": "single", "ligne": null}
+      "id": "C05",
+      "prenom": "Karim",
+      "age": 29,
+      "metier": "technicien",
+      "situation": "célibataire",
+      "revenus_nets": 1900,
+      "epargne": 1500,
+      "solde": 640,
+      "mensualites_credits": 150,
+      "enfants": [],
+      "livrets": {
+        "livret_a": 1500
+      },
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 1,
+      "cartes": [
+        {
+          "id": "CB-C05-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "metier",
+        "situation",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 29,
+        "job": "technician",
+        "marital": "single",
+        "loan": "yes",
+        "ligne": 6406,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "age": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C07", "prenom": "Léa", "age": 31, "metier": "cadre", "situation": "célibataire",
-      "revenus_nets": 2900, "epargne": 25000, "solde": 1800, "mensualites_credits": 0,
-      "enfants": [], "livrets": {"livret_a": 22950, "ldds": 2050}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C07-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["revenus_nets", "epargne", "solde", "livrets"],
-      "ancrage_bank_marketing": {"age": 31, "job": "management", "marital": "single", "housing": "no", "ligne": null}
+      "id": "C06",
+      "prenom": "Julie",
+      "age": 37,
+      "metier": "employée de services",
+      "situation": "célibataire",
+      "revenus_nets": 2100,
+      "epargne": 3000,
+      "solde": 410,
+      "mensualites_credits": 0,
+      "enfants": [],
+      "livrets": {
+        "livret_a": 3000
+      },
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 3,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C06-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "prenom",
+        "age",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 37,
+        "job": "services",
+        "marital": "single",
+        "ligne": 604,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "age": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "scenario_cgi",
+          "source": "Présentation CGI du 26 octobre 2026, exemples sujet 1",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     },
     {
-      "id": "C08", "prenom": "Lucas", "age": 20, "metier": "étudiant", "situation": "célibataire",
-      "revenus_nets": 450, "epargne": 0, "solde": 120, "mensualites_credits": 0,
-      "enfants": [], "livrets": {}, "peu_a_laise_en_ligne": false,
-      "contacts_aujourdhui": 0, "decouverts_12_mois": 0,
-      "cartes": [{"id": "CB-C08-1", "type": "Visa", "statut": "active"}],
-      "beneficiaires": [], "historique_frais": [],
-      "simule": ["revenus_nets", "solde"],
-      "ancrage_bank_marketing": {"age": 20, "job": "student", "marital": "single", "ligne": null}
+      "id": "C07",
+      "prenom": "Léa",
+      "age": 31,
+      "metier": "cadre",
+      "situation": "célibataire",
+      "revenus_nets": 2900,
+      "epargne": 25000,
+      "solde": 1800,
+      "mensualites_credits": 0,
+      "enfants": [],
+      "livrets": {
+        "livret_a": 22950,
+        "ldds": 2050
+      },
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C07-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "prenom",
+        "age",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 31,
+        "job": "management",
+        "marital": "single",
+        "housing": "no",
+        "ligne": 6977,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": false,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": false,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "age": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "prenom": "Lucas",
+      "age": 20,
+      "metier": "étudiant",
+      "situation": "célibataire",
+      "revenus_nets": 450,
+      "epargne": 0,
+      "solde": 120,
+      "mensualites_credits": 0,
+      "enfants": [],
+      "livrets": {},
+      "peu_a_laise_en_ligne": false,
+      "contacts_aujourdhui": 0,
+      "decouverts_12_mois": 0,
+      "cartes": [
+        {
+          "id": "CB-C08-1",
+          "type": "Visa",
+          "statut": "active"
+        }
+      ],
+      "beneficiaires": [],
+      "historique_frais": [],
+      "simule": [
+        "id",
+        "prenom",
+        "age",
+        "metier",
+        "situation",
+        "revenus_nets",
+        "epargne",
+        "solde",
+        "mensualites_credits",
+        "enfants",
+        "livrets",
+        "peu_a_laise_en_ligne",
+        "contacts_aujourdhui",
+        "decouverts_12_mois",
+        "cartes",
+        "beneficiaires",
+        "historique_frais",
+        "residence_france",
+        "domicile_fiscal_france",
+        "rattache_foyer_parents",
+        "revenus_nature",
+        "rfr",
+        "parts_fiscales",
+        "annee_rfr",
+        "territoire_fiscal",
+        "est_etudiant"
+      ],
+      "ancrage_bank_marketing": {
+        "age": 20,
+        "job": "student",
+        "marital": "single",
+        "ligne": 3162,
+        "fichier": "data/raw/bank-marketing/bank/bank-full.csv",
+        "convention": "Ligne physique 1-based, en-tête ligne 1",
+        "sha256": "d1513ec63b385506f7cfce9f2c5caa9fe99e7ba4e8c3fa264b3aaf0f849ed32d",
+        "nature": "rapprochement_documentaire",
+        "verifie_le": "2026-10-27"
+      },
+      "residence_france": true,
+      "domicile_fiscal_france": true,
+      "rattache_foyer_parents": true,
+      "revenus_nature": "net_avant_impot",
+      "rfr": null,
+      "parts_fiscales": null,
+      "annee_rfr": null,
+      "territoire_fiscal": "metropole",
+      "est_etudiant": true,
+      "provenance": {
+        "id": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "prenom": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "age": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "metier": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "situation": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "epargne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "solde": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": "Solde disponible simulé, indépendant de balance (moyenne annuelle UCI)."
+        },
+        "mensualites_credits": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "enfants": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "livrets": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "peu_a_laise_en_ligne": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "contacts_aujourdhui": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "decouverts_12_mois": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "cartes": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "beneficiaires": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "historique_frais": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "residence_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "domicile_fiscal_france": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rattache_foyer_parents": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "revenus_nature": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "parts_fiscales": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "annee_rfr": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "territoire_fiscal": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        },
+        "est_etudiant": {
+          "nature": "simulation",
+          "source": "Construction manuelle du personnage fictif M3",
+          "note": ""
+        }
+      }
     }
   ]
 }

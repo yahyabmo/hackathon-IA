@@ -1,100 +1,136 @@
-"""Étage 4 : les outils, sur un système bancaire simulé.
-
-La séparation qui compte : la **déclaration** (nom, effet de bord ou non) et
-l'**exécution**. La lecture est libre ; un outil à effet de bord refuse de
-s'exécuter sans confirmation explicite du client, et chaque exécution laisse
-une trace dans le journal.
-"""
-
+"""Outils exclusivement simulés, état et journal isolés par conversation."""
 from __future__ import annotations
 
-from datetime import datetime
-from itertools import count
+from copy import deepcopy
+from datetime import date, datetime, timezone
+from decimal import Decimal
+import logging
 from typing import Any
 
 from ..contrats import Action, EtatConversation
 from . import catalogue as cat
+from .validation import monnaie
 
-OUTILS: dict[str, dict[str, Any]] = {
-    "consulter_profil": {"effet": False, "description": "Lit le profil et l'historique du client"},
-    "expliquer_frais": {"effet": False, "description": "Retrouve les frais du mois et leur cause"},
-    "bloquer_carte": {"effet": True, "description": "Met la carte en opposition"},
-    "preparer_virement": {"effet": True, "description": "Enregistre un virement vers un bénéficiaire connu"},
-    "transmettre_conseiller": {"effet": True, "description": "Crée une demande de rappel avec un résumé"},
+OUTILS = {
+    "consulter_profil": {"effet": False}, "expliquer_frais": {"effet": False},
+    "bloquer_carte": {"effet": True}, "preparer_virement": {"effet": True},
+    "transmettre_conseiller": {"effet": True},
 }
-
-JOURNAL: list[dict[str, Any]] = []
-_NUMEROS = count(1)
 
 
 class ConfirmationRequise(RuntimeError):
-    """Un outil à effet de bord a été appelé sans l'accord du client."""
+    """L'appelant doit demander un accord explicite avant de réessayer."""
 
 
 def demande_confirmation(outil: str) -> bool:
-    return OUTILS[outil]["effet"]
+    """Tout outil inconnu est sensible par défaut."""
+    return OUTILS.get(outil, {"effet": True})["effet"]
 
 
-def _reference(prefixe: str, profil: dict[str, Any]) -> str:
-    return f"{prefixe}-{profil['id']}-{next(_NUMEROS):04d}"
+def _ref(prefixe: str, profil: dict, action: Action) -> str:
+    return f"{prefixe}-{profil['id']}-{action.identifiant[:12]}"
 
 
-def _bloquer_carte(profil, parametres, etat):
-    carte = profil["cartes"][0]
+def _refus(motif: str) -> dict:
+    return {"ok": False, "statut": "refus", "simule": True, "motif": motif}
+
+
+def _bloquer_carte(profil: dict, action: Action, etat: EtatConversation) -> dict:
+    cartes = profil.get("cartes", [])
+    cible = action.parametres.get("carte_id")
+    cartes = [c for c in cartes if c["id"] == cible] if cible else cartes
+    if len(cartes) != 1:
+        return _refus("précisez une carte existante et unique")
+    carte = cartes[0]
+    if carte["statut"] != "active":
+        return _refus("carte déjà bloquée ou inactive ; aucune nouvelle opposition")
     carte["statut"] = "opposition"
-    return {"reference": _reference("OPP", profil), "carte": carte["id"],
+    return {"reference": _ref("OPP", profil, action), "carte": carte["id"],
             "heure": datetime.now().strftime("%H h %M")}
 
 
-def _expliquer_frais(profil, parametres, etat):
-    frais = profil.get("historique_frais", [])
-    seuil = cat.parametre("seuil_incidents_offre_fragile")
-    plafond, plafond_fragile = (cat.parametre_detail("commission_intervention_max"),
-                                cat.parametre_detail("commission_intervention_max_fragile"))
-    return {
-        "frais": frais,
-        "total": sum(f["montant"] for f in frais),
-        "plafond_operation": plafond["valeur"], "plafond_mois": plafond["par_mois"],
-        "plafond_fragile_operation": plafond_fragile["valeur"],
-        "plafond_fragile_mois": plafond_fragile["par_mois"],
-        "decouverts_12_mois": profil.get("decouverts_12_mois", 0),
-        "proposer_offre_fragile": profil.get("decouverts_12_mois", 0) >= seuil,
-    }
+def _expliquer_frais(profil: dict, action: Action, etat: EtatConversation) -> dict:
+    periode = action.parametres.get("periode", date.today().strftime("%Y-%m"))
+    date.fromisoformat(periode + "-01")
+    frais = deepcopy([f for f in profil.get("historique_frais", []) if f["date"].startswith(periode + "-")])
+    normal = cat.parametre_detail("commission_intervention_max")
+    fragile = cat.parametre_detail("commission_intervention_max_fragile")
+    return {"frais": frais, "periode": periode,
+            "total": float(sum((monnaie(f["montant"]) for f in frais), Decimal(0))),
+            "plafond_operation": normal["valeur"], "plafond_mois": normal["par_mois"],
+            "plafond_fragile_operation": fragile["valeur"], "plafond_fragile_mois": fragile["par_mois"],
+            "decouverts_12_mois": profil.get("decouverts_12_mois", 0),
+            "proposer_offre_fragile": profil.get("decouverts_12_mois", 0) >= cat.parametre("seuil_incidents_offre_fragile"),
+            "sources": [normal["source"], fragile["source"]],
+            "limites": "Ces plafonds concernent les commissions d'intervention. Le nombre de découverts est seulement un signal interne d'orientation, pas un critère légal de fragilité."}
 
 
-def _preparer_virement(profil, parametres, etat):
-    montant, lien = parametres.get("montant"), parametres.get("beneficiaire")
-    beneficiaire = next((b for b in profil.get("beneficiaires", []) if b["lien"] == lien), None)
-    if beneficiaire is None:
-        return {"ok": False, "motif": "bénéficiaire non enregistré : il faut d'abord l'ajouter"}
-    if montant is None or montant > profil["solde"]:
-        return {"ok": False, "motif": "solde insuffisant pour ce montant"}
-    profil["solde"] -= montant
-    return {"ok": True, "reference": _reference("VIR", profil), "montant": montant,
-            "beneficiaire": beneficiaire["nom"], "iban_masque": beneficiaire["iban_masque"]}
+def _preparer_virement(profil: dict, action: Action, etat: EtatConversation) -> dict:
+    montant = monnaie(action.parametres.get("montant"), positif=True)
+    cible = action.parametres.get("beneficiaire")
+    beneficiaires = [b for b in profil.get("beneficiaires", []) if cible in (b.get("id"), b.get("lien")) and cible]
+    if len(beneficiaires) != 1:
+        return _refus("bénéficiaire non enregistré ou ambigu")
+    solde = monnaie(profil["solde"])
+    if montant > solde:
+        return _refus("solde insuffisant pour ce montant")
+    b = beneficiaires[0]
+    profil["solde"] = float(solde - montant)
+    return {"reference": _ref("VIR", profil, action), "montant": float(montant),
+            "beneficiaire": b["nom"], "iban_masque": b["iban_masque"], "solde_apres": profil["solde"]}
 
 
-def _transmettre_conseiller(profil, parametres, etat: EtatConversation):
-    demandes = [m["content"] for m in etat.historique if m["role"] == "user"][-3:]
-    return {"ticket": _reference("TCK", profil),
-            "resume": {"client": profil["id"], "sujet": etat.parcours, "infos": dict(etat.slots),
-                       "derniers_messages": demandes}}
+def _transmettre_conseiller(profil: dict, action: Action, etat: EtatConversation) -> dict:
+    return {"ticket": _ref("TCK", profil, action), "resume": {
+        "client": profil["id"], "sujet": etat.parcours, "infos": deepcopy(etat.slots),
+        "derniers_messages": [m["content"] for m in etat.historique if m["role"] == "user"][-3:]}}
 
 
 _EXECUTION = {
-    "consulter_profil": lambda profil, parametres, etat: {"profil": profil},
-    "expliquer_frais": _expliquer_frais,
-    "bloquer_carte": _bloquer_carte,
-    "preparer_virement": _preparer_virement,
-    "transmettre_conseiller": _transmettre_conseiller,
+    "consulter_profil": lambda p, a, e: {"profil": deepcopy(p)},
+    "expliquer_frais": _expliquer_frais, "bloquer_carte": _bloquer_carte,
+    "preparer_virement": _preparer_virement, "transmettre_conseiller": _transmettre_conseiller,
 }
 
 
 def executer(action: Action, profil: dict[str, Any], etat: EtatConversation) -> Action:
-    """Exécute l'action sur le SI simulé et la journalise."""
+    """Valide, exécute sur une copie, puis publie l'effet en mémoire.
 
-    if demande_confirmation(action.outil) and not action.confirmee:
+    Le rejeu du même identifiant restitue son résultat. Un identifiant réutilisé
+    avec d'autres paramètres est refusé. Pas de SI externe ni de journal global.
+    """
+    if etat.client_id is not None and etat.client_id != profil.get("id"):
+        action.resultat = _refus("client différent de celui de la conversation")
+        return action
+    etat.client_id = profil.get("id")
+    if demande_confirmation(action.outil) and action.confirmee is not True:
+        action.resultat = {"ok": False, "statut": "en_attente", "simule": True}
         raise ConfirmationRequise(action.outil)
-    action.resultat = _EXECUTION[action.outil](profil, action.parametres, etat)
-    JOURNAL.append({"outil": action.outil, "client": profil["id"], "resultat": action.resultat})
+    empreinte = {"client": profil.get("id"), "outil": action.outil, "parametres": deepcopy(action.parametres)}
+    precedent = etat.operations.get(action.identifiant)
+    if precedent:
+        action.resultat = (deepcopy(precedent["resultat"]) if precedent["demande"] == empreinte
+                           else _refus("identifiant déjà utilisé avec une autre demande"))
+        return action
+    travail = deepcopy(profil)
+    try:
+        if action.outil not in _EXECUTION:
+            resultat = _refus("outil inconnu")
+        else:
+            resultat = _EXECUTION[action.outil](travail, action, etat)
+            resultat = {"ok": True, "statut": "succes", "simule": True, **resultat}
+    except (ValueError, TypeError, KeyError, IndexError) as exc:
+        resultat = _refus(f"paramètres invalides : {exc}")
+    except Exception:
+        # Publier uniquement une réussite complète : aucun effet partiel.
+        logging.getLogger(__name__).exception("Échec de l'outil simulé %s", action.outil)
+        resultat = {"ok": False, "statut": "echec", "simule": True,
+                    "motif": "erreur interne ; aucune modification appliquée"}
+    if resultat["ok"]:
+        profil.clear()
+        profil.update(travail)
+    action.resultat = deepcopy(resultat)
+    etat.operations[action.identifiant] = {"demande": empreinte, "resultat": deepcopy(resultat)}
+    etat.journal_actions.append({"id": action.identifiant, "horodatage": datetime.now(timezone.utc).isoformat(),
+        **empreinte, "confirmee": action.confirmee, "resultat": deepcopy(resultat)})
     return action

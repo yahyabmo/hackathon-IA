@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any
+from uuid import uuid4
 
 from .taxonomie import INCONNUE
 
@@ -87,6 +88,7 @@ class Action:
     parametres: dict[str, Any] = field(default_factory=dict)
     confirmee: bool = False
     resultat: dict[str, Any] | None = None
+    identifiant: str = field(default_factory=lambda: uuid4().hex)
 
 
 @dataclass
@@ -134,3 +136,8 @@ class EtatConversation:
     mots_simples: bool = False  # demandé par le client ; automatique dès 70 ans ou « peu à l'aise »
     historique: list[dict[str, str]] = field(default_factory=list)
     derniere_reponse: str | None = None
+    client_id: str | None = None
+    profil_simule: dict[str, Any] | None = None
+    journal_actions: list[dict[str, Any]] = field(default_factory=list)
+    operations: dict[str, dict[str, Any]] = field(default_factory=dict)
+    question_m3: str | None = None
