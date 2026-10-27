@@ -91,7 +91,7 @@ class Tetes:
 
 
 @lru_cache(maxsize=1)
-def _charger() -> tuple[Any, Tetes, dict[str, np.ndarray] | None] | None:
+def _charger() -> tuple[Any, Tetes, dict[str, Any] | None] | None:
     if os.environ.get("ASSISTANT_CLASSIFIEUR", "1") == "0" or not TETES.exists():
         return None
     try:
@@ -102,8 +102,12 @@ def _charger() -> tuple[Any, Tetes, dict[str, np.ndarray] | None] | None:
         return None
     exemples = None
     if EXEMPLES.exists():
+        import torch
+
+        # Recherche de la phrase proche en torch, comme l'encodeur : alterner les fils de torch
+        # et ceux de numpy pour un grand produit matriciel coûtait 130 ms par message.
         with np.load(EXEMPLES) as d:
-            exemples = {"vecteurs": d["vecteurs"].astype(np.float32), "textes": d["textes"]}
+            exemples = {"vecteurs": torch.from_numpy(d["vecteurs"].astype(np.float32)), "textes": d["textes"]}
     return encodeur, Tetes.charger(TETES), exemples
 
 
@@ -111,12 +115,13 @@ def disponible() -> bool:
     return _charger() is not None
 
 
+def _encoder(message: str) -> Any:
+    return _charger()[0].encode([PREFIXE + message], normalize_embeddings=True, convert_to_tensor=True,
+                                show_progress_bar=False)[0]
+
+
 def vecteur(message: str) -> np.ndarray | None:
-    charge = _charger()
-    if charge is None:
-        return None
-    return charge[0].encode([PREFIXE + message], normalize_embeddings=True, convert_to_numpy=True,
-                            show_progress_bar=False)[0]
+    return None if _charger() is None else _encoder(message).numpy()
 
 
 def predire(message: str) -> Comprehension | None:
@@ -126,14 +131,14 @@ def predire(message: str) -> Comprehension | None:
     probables, même sous le seuil : elles servent à la question de clarification.
     """
 
-    v = vecteur(message)
-    if v is None:
+    if _charger() is None:
         return None
     _, tetes, exemples = _charger()
-    famille, intention, confiance, alternatives = tetes.predire(v)
+    v = _encoder(message)
+    famille, intention, confiance, alternatives = tetes.predire(v.numpy())
     proche = None
     if exemples is not None:
-        proche = str(exemples["textes"][int(np.argmax(exemples["vecteurs"] @ v))])
+        proche = str(exemples["textes"][int((exemples["vecteurs"] @ v).argmax())])
     return Comprehension(
         famille=famille, intention=intention, confiance=confiance, niveau=NIVEAU_CLASSIFIEUR,
         modele=MODELE, alternatives=[Alternative(f, p) for f, p in alternatives], exemple_proche=proche,

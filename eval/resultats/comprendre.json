@@ -1,0 +1,43 @@
+{
+  "configurations": {
+    "mots_cles": {
+      "nom": "Mots-clés",
+      "fr_part_acceptee": 0.212,
+      "fr_precision_acceptes": 0.8868,
+      "latence_ms": 0.02,
+      "taille_octets": 1393
+    },
+    "e5": {
+      "nom": "e5-small + régression logistique",
+      "en_intention": 0.9231,
+      "en_famille": 0.9432,
+      "fr_routage": 0.848,
+      "fr_part_acceptee": 0.736,
+      "fr_precision_acceptes": 0.962,
+      "tau": 0.76,
+      "latence_ms": 140.95,
+      "parametres": 117653760,
+      "taille_octets": 470759241
+    },
+    "etage1": {
+      "nom": "Étage 1 : mots-clés, puis e5-small au-dessus de τ",
+      "fr_part_acceptee": 0.764,
+      "fr_precision_acceptes": 0.9372,
+      "niveaux": {
+        "classifieur": 138,
+        "mots_cles": 53
+      },
+      "latence_ms": 138.74
+    },
+    "tfidf": {
+      "nom": "TF-IDF + régression logistique",
+      "en_intention": 0.8919,
+      "en_famille": 0.9532,
+      "fr_routage": 0.668,
+      "latence_ms": 0.43,
+      "taille_octets": 3876237
+    }
+  },
+  "machine": "yahya-bel-hajjam (x86_64)",
+  "date": "2026-10-27T11:43:17"
+}
