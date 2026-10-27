@@ -1,0 +1,120 @@
+# Banc du niveau 1 : des messages que les règles ne savent pas trancher.
+# Écrits par l'équipe, absents de l'entraînement et du test français.
+#
+# contexte : parcours en cours, information attendue, demandes déjà traitées.
+# intentions : ce que le client demande (la première est la plus importante).
+# valeur : ce que l'assistant doit retenir pour l'information attendue (null : rien).
+
+# ── Réponses libres à une question en attente ──
+- message: "c'est pour mon papa"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: pere
+- message: "à ma maman, pour son anniversaire"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: mere
+- message: "oui"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: null
+- message: "je veux envoyer de l'argent"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: null
+- message: "à ma frangine"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: soeur
+- message: "pour la petite dernière, elle est étudiante"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement]
+  valeur: fille
+- message: "le même montant que d'habitude"
+  contexte: {parcours: faire_virement, info: montant}
+  intentions: [faire_virement]
+  valeur: null
+- message: "pas tout de suite, plutôt pour la retraite"
+  contexte: {parcours: epargne_projet, info: horizon_mois}
+  intentions: [epargne_projet]
+  valeur: null
+- message: "je sais pas trop, une voiture d'occasion"
+  contexte: {parcours: credit_conso, info: montant}
+  intentions: [credit_conso]
+  valeur: null
+- message: "un trois pièces en centre-ville"
+  contexte: {parcours: credit_immobilier, info: prix_bien}
+  intentions: [credit_immobilier]
+  valeur: null
+- message: "ce que je peux, ça dépend des mois"
+  contexte: {parcours: epargne_projet, info: montant_mensuel}
+  intentions: [epargne_projet]
+  valeur: null
+
+# ── Une réponse et une nouvelle demande dans le même message ──
+- message: "mon père, et au fait j'ai perdu ma carte"
+  contexte: {parcours: faire_virement, info: beneficiaire}
+  intentions: [faire_virement, lost_or_stolen_card]
+  valeur: pere
+- message: "attendez, j'ai d'abord une question sur mon prêt immobilier"
+  contexte: {parcours: faire_virement, info: montant}
+  intentions: [credit_immobilier]
+  valeur: null
+
+# ── Messages flous, sans question en attente ──
+- message: "il y a des prélèvements bizarres sur mon compte"
+  intentions: [direct_debit_payment_not_recognised]
+- message: "je dois payer mon loyer à mon proprio"
+  intentions: [faire_virement]
+- message: "je compte acheter une baraque l'an prochain"
+  intentions: [credit_immobilier]
+- message: "ma CB a été avalée par le distributeur"
+  intentions: [card_swallowed]
+- message: "j'aimerais mettre des sous de côté pour plus tard"
+  intentions: [epargne_projet]
+- message: "comment je finance ma dernière année de master"
+  intentions: [pret_etudiant]
+- message: "vous êtes nuls, rien ne marche chez vous"
+  intentions: [insatisfaction]
+- message: "je voudrais changer de bagnole mais j'ai pas assez"
+  intentions: [credit_conso]
+- message: "salut, ça va ?"
+  intentions: [hors_sujet]
+- message: "on m'a piqué mon portefeuille avec tout dedans"
+  intentions: [lost_or_stolen_card]
+- message: "l'appli me demande sans arrêt de vérifier mon identité"
+  intentions: [verify_my_identity]
+- message: "je n'arrive plus à retirer de liquide"
+  intentions: [declined_cash_withdrawal]
+- message: "mon salaire n'apparaît toujours pas sur le compte"
+  intentions: [balance_not_updated_after_bank_transfer]
+- message: "je veux recharger mon compte avec ma carte"
+  intentions: [topping_up_by_card]
+
+# ── Plusieurs demandes ──
+- message: "j'ai égaré ma carte et je voudrais aussi épargner un peu"
+  intentions: [lost_or_stolen_card, epargne_projet]
+- message: "virer de l'argent à ma sœur, puis me renseigner sur un prêt auto"
+  intentions: [faire_virement, credit_conso]
+- message: "l'appli plante et en plus on m'a pris des frais bizarres"
+  intentions: [insatisfaction, extra_charge_on_statement]
+
+# ── Renvois au contexte ──
+- message: "et pour ma carte du coup ?"
+  contexte: {traites: [lost_or_stolen_card]}
+  intentions: [lost_or_stolen_card]
+- message: "au fait, et le virement ?"
+  contexte: {traites: [faire_virement]}
+  intentions: [faire_virement]
+- message: "et si je mets plus d'apport ?"
+  contexte: {parcours: credit_immobilier, traites: [credit_immobilier]}
+  intentions: [credit_immobilier]
+- message: "mais ma carte ?"
+  contexte: {parcours: faire_virement, traites: [lost_or_stolen_card, faire_virement]}
+  intentions: [lost_or_stolen_card]
+- message: "et l'épargne pour les enfants alors ?"
+  contexte: {traites: [epargne_projet]}
+  intentions: [epargne_projet]
+- message: "bon, et mes frais ?"
+  contexte: {traites: [extra_charge_on_statement]}
+  intentions: [extra_charge_on_statement]

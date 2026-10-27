@@ -190,3 +190,19 @@ def test_un_renvoi_au_contexte_retrouve_le_sujet_deja_traite(monkeypatch):
                                                                       "reponse_a_la_question": ""}}))
     reponse, _ = converser("C01", ["J'ai perdu ma carte", "mais ma carte ?"], llm_actif=True)
     assert reponse.niveau == 1 and "Faites opposition tout de suite" in reponse.texte
+
+
+def test_niveau_1_une_valeur_de_liste_fermee_est_acceptee(monkeypatch):
+    monkeypatch.setattr(llm, "generer", faux_llm({"pour la petite dernière de la famille": {
+        "intentions": ["faire_virement"], "reponse_a_la_question": "ma fille"}}))
+    reponse, etat = converser("C01", ["Je veux faire un virement", "pour la petite dernière de la famille"],
+                              llm_actif=True)
+    assert etat.slots["beneficiaire"] == "fille" and reponse.question == "montant"
+
+
+def test_niveau_1_un_nombre_absent_du_message_est_refuse(monkeypatch):
+    monkeypatch.setattr(llm, "generer", faux_llm({"le même que la dernière fois": {
+        "intentions": ["faire_virement"], "reponse_a_la_question": "300 €"}}))
+    reponse, etat = converser("C01", ["Je veux faire un virement", "mon père", "le même que la dernière fois"],
+                              llm_actif=True)
+    assert "montant" not in etat.slots and reponse.question == "montant"

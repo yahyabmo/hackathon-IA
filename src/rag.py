@@ -37,6 +37,7 @@ FICHES_MAIN = Path(__file__).resolve().parents[1] / "data" / "processed" / "fich
 PREFIXE_PASSAGE = "passage: "
 NOMBRE_PASSAGES = 3
 SEUIL_PERTINENCE = 0.82  # cosinus e5 ; fixé sur le banc du niveau 2
+BONUS_LEXICAL = 0.02  # la question nomme le sujet de la fiche : recherche hybride, sémantique et lexicale
 LONGUEUR_MAX = 900
 FIDELITE_MIN = 0.8  # part des mots de la réponse présents dans les extraits ; fixée sur des cas jugés
 MOTS_VIDES = {"vous", "votre", "vos", "cette", "dans", "pour", "avec", "sans", "mais", "tandis", "plus", "tout",
@@ -92,12 +93,14 @@ def _fiches_parametres() -> list[dict[str, Any]]:
     ancien, neuf = cat.parametre_detail("frais_notaire_ancien"), cat.parametre_detail("frais_notaire_neuf")
     immo, perso = cat.parametre_detail("taux_indicatif_credit_immobilier"), cat.parametre_detail("taux_indicatif_pret_personnel")
     return [
-        {"id": "regle:hcsf", "titre": "Crédit immobilier : le cadre du HCSF",
-         "texte": f"Pour un crédit immobilier, le cadre du HCSF limite le taux d'effort à {_pourcent(effort['valeur'])} "
-                  f"des revenus, assurance comprise, et la durée à {duree['valeur']} ans. La banque garde une part "
-                  "de flexibilité et décide après étude du dossier : aucun accord n'est automatique.",
+        {"id": "regle:hcsf", "titre": "Emprunter pour un logement : durée maximale et taux d'effort (HCSF)",
+         "texte": f"Pour emprunter et acheter un logement, le cadre du HCSF limite la durée du crédit immobilier à "
+                  f"{duree['valeur']} ans et le taux d'effort à {_pourcent(effort['valeur'])} des revenus, assurance "
+                  "comprise. La banque garde une part de flexibilité et décide après étude du dossier : aucun accord "
+                  "n'est automatique.",
          "source": effort["source"], "date": effort["releve_le"],
-         "mots": ["hcsf", "taux d effort", "endettement", "duree", "credit immobilier", "pret immobilier"]},
+         "mots": ["hcsf", "taux d effort", "endettement", "credit immobilier", "pret immobilier", "emprunter",
+                  "duree maximale", "combien d annees"]},
         {"id": "regle:commission", "titre": "Commission d'intervention",
          "texte": "La commission d'intervention est prélevée quand la banque traite une opération qui dépasse "
                   f"votre solde ou votre découvert autorisé. Elle est plafonnée à {euros(ci['valeur'])} par opération "
@@ -110,12 +113,12 @@ def _fiches_parametres() -> list[dict[str, Any]]:
                   f"du prix dans l'ancien et {_pourcent(neuf['valeur'])} dans le neuf ; le notaire donne le montant exact.",
          "source": ancien["source"], "date": ancien["releve_le"],
          "mots": ["frais de notaire", "notaire", "frais d acquisition", "ancien", "neuf"]},
-        {"id": "regle:taux", "titre": "Repères de taux de la Banque de France",
-         "texte": f"Repères statistiques de la Banque de France : environ {_pourcent(immo['valeur'])} pour un crédit "
+        {"id": "regle:taux", "titre": "Taux moyen des crédits : repères de la Banque de France",
+         "texte": f"Taux moyens relevés par la Banque de France : environ {_pourcent(immo['valeur'])} pour un crédit "
                   f"immobilier et {_pourcent(perso['valeur'])} pour un prêt personnel. Ce sont des moyennes, ni des "
                   "offres ni des TAEG.",
          "source": immo["source"], "date": immo["releve_le"],
-         "mots": ["taux", "taux d interet", "taux moyen", "banque de france"]},
+         "mots": ["taux d interet", "taux moyen", "banque de france", "taux du credit", "taux actuel"]},
     ]
 
 
@@ -178,6 +181,9 @@ def rechercher(question: str, explication: list[str] | None = None,
                                                      show_progress_bar=False)])
     q = classifieur._encoder(question)
     scores = (vecteurs @ q).tolist()
+    cites = set(vocabulaire_cite(question))
+    scores = [s + (BONUS_LEXICAL if i < len(fiches()) and fiches()[i]["id"] in cites else 0.0)
+              for i, s in enumerate(scores)]
     meilleurs = sorted(range(len(candidates)), key=lambda i: -scores[i])[:k]
     return [{**candidates[i], "score": round(scores[i], 3)} for i in meilleurs]
 

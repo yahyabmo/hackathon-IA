@@ -1,0 +1,66 @@
+# Banc du niveau 2 : des questions ouvertes, et la fiche qui doit y répondre.
+# faits : mots qui doivent figurer dans la réponse finale (normalisés, sans accents ; « a|b » : l'un ou l'autre).
+# hors_fiches : l'assistant doit dire qu'il n'a pas l'information.
+
+- question: "Je peux retirer de l'argent de mon PEL avant 4 ans ?"
+  fiche: produit:pel
+  faits: [cloture]
+- question: "Quel est le plafond du Livret A ?"
+  fiche: produit:livret_a
+  faits: ["22 950"]
+- question: "Jusqu'à quel âge on peut avoir un Livret Jeune ?"
+  fiche: produit:livret_jeune
+  faits: ["25"]
+- question: "Quelle est la différence entre le LDDS et le Livret A ?"
+  fiche: produit:ldds
+  faits: [ldds, livret a]
+- question: "Est-ce que je peux ouvrir un LEP ?"
+  fiche: produit:lep
+  faits: ["rfr|revenu"]
+- question: "Combien faut-il garder au minimum sur un CEL ?"
+  fiche: produit:cel
+  faits: ["300"]
+- question: "Quel est le versement minimum pour ouvrir un PEL ?"
+  fiche: produit:pel
+  faits: ["225"]
+- question: "Le taux d'effort maximum pour un crédit immobilier, c'est combien ?"
+  fiche: regle:hcsf
+  faits: ["35"]
+- question: "Sur combien d'années maximum peut-on emprunter pour un logement ?"
+  fiche: regle:hcsf
+  faits: ["25"]
+- question: "Combien de frais de notaire pour un appartement ancien ?"
+  fiche: regle:notaire
+  faits: ["7,5"]
+- question: "La commission d'intervention est plafonnée à combien ?"
+  fiche: regle:commission
+  faits: ["8", "80"]
+- question: "C'est quoi le taux moyen d'un crédit immobilier en ce moment ?"
+  fiche: regle:taux
+  faits: ["3,32"]
+- question: "Qui peut avoir un prêt étudiant chez vous ?"
+  fiche: produit:pret_etudiant
+  faits: [etudiant]
+- question: "Quelles sont les conditions du prêt à taux zéro ?"
+  fiche: produit:ptz
+  faits: [primo]
+- question: "Comment je fais une réclamation ?"
+  fiche: reclamation
+  faits: [mediateur]
+- question: "Pourquoi vous ne pouvez pas faire le virement vous-même ?"
+  fiche: perimetre
+  faits: [acces]
+- question: "Ai-je le droit à l'offre clientèle fragile ?"
+  fiche: produit:offre_clientele_fragile
+  faits: [fragil]
+- question: "Comment fonctionne une opposition sur carte ?"
+  fiche: opposition
+  faits: [opposition]
+- question: "Qui a gagné le match de rugby hier ?"
+  hors_fiches: true
+- question: "Quelle est la meilleure recette de crêpes ?"
+  hors_fiches: true
+- question: "Pourquoi le ciel est bleu ?"
+  hors_fiches: true
+- question: "Combien coûte un billet de train pour Paris ?"
+  hors_fiches: true

@@ -4,8 +4,8 @@
 \textbf{Configuration} & \textbf{Scénarios} & \textbf{Wh / 1\,000 req.} & \textbf{Latence p95} & \textbf{Go} & \textbf{Sans LLM} \\
 \midrule
 A --- un LLM fait tout (\texttt{ministral-3:14b}) & à juger & 109,30 & 2020 ms & 9,1 & 0\,\% \\
-B --- cascade + petit LLM (\texttt{qwen3:1.7b}) & 13 / 14 & 6,22 & 581 ms & 1,9 & 74\,\% \\
-\textbf{C --- notre cascade, sans LLM} & 14 / 14 & 0,004 & 6 ms & 0,5 & 100\,\% \\
+\textbf{B --- notre aiguilleur (niveaux 0, 1, 2)} & \amesurer & \amesurer & \amesurer & --- & --- \\
+C --- niveau 0 seul (règles, sans LLM) & 14 / 14 & 0,004 & 6 ms & 0,5 & 100\,\% \\
 \bottomrule
 \end{tabularx}
 

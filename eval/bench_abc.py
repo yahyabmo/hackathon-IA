@@ -2,12 +2,14 @@
 
 - A : un LLM fait tout (``ministral-3:14b``) : profil, catalogue et historique
   dans la consigne, une réponse libre par message ;
-- B : notre cascade : mots-clés, classifieur, automate, règles, gabarits, et un
-  petit LLM pour formuler les conseils ;
-- C : la cascade, gabarits seuls (aucun LLM).
+- B : notre aiguilleur : niveau 0 (règles), niveau 1 (petit LLM interprète),
+  niveau 2 (RAG et LLM rédacteur), choisi à chaque message ;
+- C : le niveau 0 seul (règles et gabarits, aucun LLM).
 
-Requêtes : les messages des scénarios de référence (``eval/scenarios``), rejoués
-comme des conversations, en boucle jusqu'à N requêtes par lot.
+Requêtes : les messages des scénarios de référence (``eval/scenarios``) et
+quelques conversations libres qui sollicitent les niveaux 1 et 2, rejoués comme
+des conversations, en boucle jusqu'à N requêtes par lot. La part de chaque
+niveau est relevée.
 
 Réussite : B et C par les vérifications des scénarios. A n'a pas de structure à
 vérifier (ni intention, ni action, ni conseil) : ses réponses sont écrites dans
@@ -20,7 +22,7 @@ sans accès RAPL, le processeur est estimé par CodeCarbon (le tableau le signal
 
 Usage, depuis la racine du dépôt (poste à GPU, Ollama lancé) :
     python -m eval.bench_abc C B A                      # les trois, réglages du rapport
-    python -m eval.bench_abc B --modele-b=qwen3:1.7b    # le modèle de formulation retenu
+    python -m eval.bench_abc B --modele-n1=qwen3:1.7b --modele-n2=ministral-3:8b   # modèles retenus
     python -m eval.bench_abc C --requetes=50 --repetitions=1 --repos=10   # essai rapide
 Écrit ``eval/resultats/abc.json`` (les mesures s'ajoutent) et
 ``rapport/resultats-frugalite.tex`` (inclus par le support).
@@ -47,7 +49,7 @@ os.environ.setdefault("INCOMPRIS_FICHIER", str(Path(tempfile.gettempdir()) / "in
 
 from eval.run_scenarios import DOSSIER, rejouer  # noqa: E402
 from eval.tableau_formulation import _tailles  # noqa: E402
-from src import llm  # noqa: E402
+from src import llm, rag  # noqa: E402
 from src.assistant import reply  # noqa: E402
 from src.comprendre import classifieur  # noqa: E402
 from src.conseiller import catalogue, clients  # noqa: E402
@@ -68,9 +70,20 @@ SYSTEME_A = (
 )
 
 
+# Conversations libres, comme au test fait à l'école : des messages flous et des questions ouvertes.
+LIBRES = [
+    ("C01", ["J'ai perdu ma carte et je veux faire un virement.", "oui", "c'est pour mon papa",
+             "Je peux retirer de mon PEL avant 4 ans ?", "200", "mais ma carte ?"]),
+    ("C07", ["Je veux acheter un appartement", "Autour de 250 000, et je peux mettre les 25 000", "pourquoi ?",
+             "Combien de frais de notaire pour un appartement ancien ?"]),
+    ("C04", ["Je dois envoyer 500 € à mon fils.", "Pourquoi vous ne pouvez pas faire le virement vous-même ?"]),
+    ("C08", ["j'aimerais mettre des sous de côté pour plus tard", "Quelle est la différence entre le LDDS et le Livret A ?"]),
+]
+
+
 def conversations() -> list[tuple[str, list[str]]]:
     scenarios = [yaml.safe_load(f.read_text(encoding="utf-8")) for f in sorted(DOSSIER.glob("*.yaml"))]
-    return [(s["client"], [t["client"] for t in s["tours"]]) for s in scenarios]
+    return [(s["client"], [t["client"] for t in s["tours"]]) for s in scenarios] + LIBRES
 
 
 def _profil_court(client_id: str) -> str:
@@ -102,7 +115,7 @@ def repondeur_a(modele: str) -> Callable[[str, str, list[str]], tuple[str, int]]
 def lot(configuration: str, n: int, modele_a: str, transcrire: list | None = None) -> dict[str, Any]:
     """N requêtes, conversations rejouées en boucle ; latences et appels au LLM."""
 
-    latences, sans_llm, faites = [], 0, 0
+    latences, sans_llm, faites, niveaux = [], 0, 0, {0: 0, 1: 0, 2: 0}
     repondre_a = repondeur_a(modele_a) if configuration == "A" else None
     while faites < n:
         for client_id, messages in conversations():
@@ -116,6 +129,7 @@ def lot(configuration: str, n: int, modele_a: str, transcrire: list | None = Non
                 else:
                     reponse, etat = reply(message, client_id, etat)
                     texte, appels = reponse.texte, reponse.appels_llm
+                    niveaux[reponse.niveau] += 1
                 latences.append((perf_counter() - debut) * 1000)
                 sans_llm += appels == 0
                 faites += 1
@@ -123,7 +137,7 @@ def lot(configuration: str, n: int, modele_a: str, transcrire: list | None = Non
                     transcrire.append({"client": client_id, "message": message, "reponse": texte, "juge": ""})
             if faites >= n:
                 break
-    return {"latences": latences, "sans_llm": sans_llm, "n": faites}
+    return {"latences": latences, "sans_llm": sans_llm, "n": faites, "niveaux": niveaux}
 
 
 def _mesurer(fonction: Callable[[], Any]) -> tuple[float, float, Any]:
@@ -153,25 +167,29 @@ def reussite(configuration: str) -> str:
     return f"{sum(not rejouer(f) for f in fichiers)} / {len(fichiers)}"
 
 
-def preparer(configuration: str, modele_b: str) -> str | None:
-    """Règle l'assistant pour la configuration ; rend le modèle de formulation (B) ou None."""
+def preparer(configuration: str, modeles_b: tuple[str, str]) -> tuple[str, str] | None:
+    """Règle l'assistant pour la configuration ; rend les modèles des niveaux 1 et 2 (B) ou None."""
 
     os.environ["ASSISTANT_ESCALADE"] = "0"
+    os.environ["ASSISTANT_REFORMULER"] = "0"
     if configuration == "B":
         os.environ["ASSISTANT_LLM"] = "1"
-        llm.MODELE_FORMULATION = modele_b
-        return modele_b
+        llm.MODELE_NIVEAU1, llm.MODELE_NIVEAU2 = modeles_b
+        return modeles_b
     os.environ["ASSISTANT_LLM"] = "0"
     return None
 
 
-def banc(configuration: str, reglages: dict[str, int], modele_a: str, modele_b: str, p0: float) -> dict:
-    modele = preparer(configuration, modele_b)
+def banc(configuration: str, reglages: dict[str, int], modele_a: str, modeles_b: tuple[str, str],
+         p0: float) -> dict:
+    modeles = preparer(configuration, modeles_b)
     classifieur.prechauffer()
+    rag.disponible()
     if configuration == "A":
         llm.prechauffer(modele_a)
-    elif modele:
-        llm.prechauffer(modele)
+    elif modeles:
+        for modele in set(modeles):
+            llm.prechauffer(modele)
     lot(configuration, reglages["chauffe"], modele_a)
     transcriptions: list[dict] = [] if configuration == "A" else None
     mesures = []
@@ -187,10 +205,13 @@ def banc(configuration: str, reglages: dict[str, int], modele_a: str, modele_b: 
     latences = sorted(l for m in mesures for l in m["latences"])
     par_requete = [(m["energie_wh"] - p0 * m["duree_s"]) / m["n"] for m in mesures]
     tailles = _tailles()
-    go = {"A": tailles.get(modele_a), "B": TAILLE_ENCODEUR_GO + (tailles.get(modele_b) or 0),
-          "C": TAILLE_ENCODEUR_GO}[configuration]
+    go = {"A": tailles.get(modele_a), "C": TAILLE_ENCODEUR_GO,
+          "B": TAILLE_ENCODEUR_GO + sum(tailles.get(m) or 0 for m in set(modeles_b))}[configuration]
+    total = sum(m["n"] for m in mesures)
+    niveaux = {str(k): round(sum(m["niveaux"][k] for m in mesures) / total, 3) for k in (0, 1, 2)}
+    modele = {"A": modele_a, "B": " + ".join(dict.fromkeys(modeles_b)), "C": None}[configuration]
     return {
-        "configuration": configuration, "modele": {"A": modele_a, "B": modele_b, "C": None}[configuration],
+        "configuration": configuration, "modele": modele, "niveaux": niveaux,
         "reussite": reussite(configuration),
         "wh_par_1000": round(max(0.0, 1000 * statistics.mean(par_requete)), 4),
         "wh_par_1000_brut": round(1000 * statistics.mean(m["energie_wh"] / m["n"] for m in mesures), 4),
@@ -223,8 +244,8 @@ def _lots(resultats: dict) -> str:
     return f"lots de {courant[0]} requêtes × {courant[1]}" + (f" ({' ; '.join(autres)})" if autres else "")
 
 
-NOMS = {"A": "A --- un LLM fait tout", "B": "B --- cascade + petit LLM",
-        "C": "\\textbf{C --- notre cascade, sans LLM}"}
+NOMS = {"A": "A --- un LLM fait tout", "B": "\\textbf{B --- notre aiguilleur (niveaux 0, 1, 2)}",
+        "C": "C --- niveau 0 seul (règles, sans LLM)"}
 
 
 def latex(resultats: dict) -> str:
@@ -244,19 +265,31 @@ def latex(resultats: dict) -> str:
         "\\textbf{Go} & \\textbf{Sans LLM} \\\\\n\\midrule\n" + "\n".join(lignes) +
         "\n\\bottomrule\n\\end{tabularx}\n\n\\smallskip\n{\\tiny Énergie : CodeCarbon hors ligne, "
         + _lots(resultats) + " après chauffe, puissance de repos soustraite. Mesuré sur "
-        + resultats["machine"].replace("_", "\\_") + ".}\n"
+        + resultats["machine"].replace("_", "\\_") + "." + _repartition(resultats) + "}\n"
     )
+
+
+def _repartition(resultats: dict) -> str:
+    b = resultats["configurations"].get("B") or {}
+    if "niveaux" not in b:
+        return ""
+    parts = ", ".join(f"niveau {k} : {_nombre(100 * v, 0)}\\,\\%" for k, v in sorted(b["niveaux"].items()))
+    return f" Aiguilleur : {parts} des messages."
 
 
 def main(arguments: list[str]) -> int:
     reglages = dict(REGLAGES)
-    modele_a, modele_b = llm.MODELE_ESCALADE, llm.MODELE_FORMULATION
+    modele_a, modeles_b = llm.MODELE_ESCALADE, [llm.MODELE_NIVEAU1, llm.MODELE_NIVEAU2]
     configurations = []
     for argument in arguments:
         if argument.startswith("--modele-a="):
             modele_a = argument.split("=", 1)[1]
         elif argument.startswith("--modele-b="):
-            modele_b = argument.split("=", 1)[1]
+            modeles_b = [argument.split("=", 1)[1]] * 2
+        elif argument.startswith("--modele-n1="):
+            modeles_b[0] = argument.split("=", 1)[1]
+        elif argument.startswith("--modele-n2="):
+            modeles_b[1] = argument.split("=", 1)[1]
         elif argument.startswith("--") and argument[2:].split("=")[0] in reglages:
             cle, valeur = argument[2:].split("=", 1)
             reglages[cle] = int(valeur)
@@ -274,7 +307,7 @@ def main(arguments: list[str]) -> int:
     p0 = puissance_repos(reglages["repos"])
     for configuration in configurations:
         print(f"Configuration {configuration}…")
-        resultats["configurations"][configuration] = banc(configuration, reglages, modele_a, modele_b, p0)
+        resultats["configurations"][configuration] = banc(configuration, reglages, modele_a, tuple(modeles_b), p0)
         print(json.dumps(resultats["configurations"][configuration], ensure_ascii=False))
     resultats.update(machine=os.environ.get("BANC_MACHINE") or f"{platform.node()} ({platform.machine()})",
                      requetes=reglages["requetes"], date=datetime.now().isoformat(timespec="seconds"),

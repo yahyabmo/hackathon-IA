@@ -78,6 +78,9 @@ def _contexte(etat: EtatConversation, profil: dict) -> dict[str, str | None]:
             "traite": ", ".join(deja) if deja else None}
 
 
+TYPES_FERMES = ("lien", "objet")  # valeurs d'une liste fermée : sans risque d'invention
+
+
 def _domaine(intention: str) -> str:
     return famille_de(intention).split("_")[0]  # carte_perdue, carte_usage… → carte
 
@@ -101,12 +104,18 @@ def _appliquer(interpretation: interprete.Interpretation, comprehension: Compreh
     nouvelles = [i for i in interpretation.intentions if i != etat.parcours and i != "hors_sujet"]
     modele = interpretation.etape.modele if interpretation.etape else None
     if etat.info_attendue and etat.parcours:
-        if interpretation.reponse:
-            entites = extraire(interpretation.reponse)
-            if reponse_lisible(interpretation.reponse, entites, etat):
+        for reponse, fermee in ((interpretation.reponse, False), (interpretation.reponse_brute, True)):
+            if not reponse:
+                continue
+            entites = extraire(reponse)
+            if fermee:  # hors des mots du message : seulement une valeur d'une liste fermée, jamais un nombre
+                entites = {k: v for k, v in entites.items() if k in TYPES_FERMES}
+                if not entites:
+                    continue
+            if reponse_lisible(reponse, entites, etat):
                 return (Comprehension(famille=etat.famille or famille_de(etat.parcours), intention=etat.parcours,
                                       confiance=1.0, niveau=NIVEAU_REPONSE, modele=modele, entites=entites,
-                                      autres_intentions=nouvelles), interpretation.reponse, False)
+                                      autres_intentions=nouvelles), reponse, False)
         if nouvelles:
             # Une nouvelle demande pendant une question : la question attendra, en mémoire.
             etat.file_demandes = trier_par_urgence([etat.parcours, *etat.file_demandes])

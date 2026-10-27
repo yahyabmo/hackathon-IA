@@ -11,7 +11,8 @@ confiance du classifieur sous τ.
   vLLM) ; les sujets sont une liste fermée. Même un très petit modèle ne peut
   pas produire un JSON invalide ni un sujet inconnu.
 - **Vérifié par le code** : la réponse extraite doit reprendre des mots du
-  message, et aucun nombre absent du message n'est accepté.
+  message, sauf une valeur d'une liste fermée (« à ma frangine » → sœur) ;
+  aucun nombre absent du message n'est accepté.
 
 Le LLM ne voit pas le profil du client et ne lui répond jamais : ce qu'il a
 compris repart dans l'automate (niveau 0), qui répond avec ses gabarits.
@@ -81,6 +82,7 @@ def _intention_de(choix: str) -> str | None:
 class Interpretation:
     intentions: list[str] = field(default_factory=list)  # intentions de la taxonomie, dans l'ordre
     reponse: str | None = None  # les mots du message qui répondent à la question en attente
+    reponse_brute: str | None = None  # telle que rendue par le LLM (valeur d'une liste fermée, par exemple)
     valide: bool = False
     raison: str = ""
     etape: Etape | None = None
@@ -127,8 +129,8 @@ def lire(sortie: str, message: str) -> Interpretation:
     raison = "compris" if intentions or reponse_ok else "rien de net"
     if reponse and not reponse_ok:
         raison += " (réponse écartée : absente du message)"
-    return Interpretation(intentions=intentions, reponse=reponse_ok, valide=bool(intentions or reponse_ok),
-                          raison=raison)
+    return Interpretation(intentions=intentions, reponse=reponse_ok, reponse_brute=reponse or None,
+                          valide=bool(intentions or reponse_ok or reponse), raison=raison)
 
 
 def interpreter(message: str, contexte: dict[str, str | None], modele: str | None = None,

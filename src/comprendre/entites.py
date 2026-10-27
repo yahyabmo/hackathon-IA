@@ -21,7 +21,8 @@ _MONTANT = re.compile(
 LIENS = ("fils", "fille", "enfants", "enfant", "mere", "pere", "frere", "soeur", "conjoint",
          "femme", "mari", "compagne", "compagnon")
 SYNONYMES_LIENS = {"papa": "pere", "maman": "mere", "epouse": "femme", "epoux": "mari", "copine": "compagne",
-                   "copain": "compagnon", "fiston": "fils"}
+                   "copain": "compagnon", "fiston": "fils", "frangin": "frere", "frerot": "frere",
+                   "frangine": "soeur", "soeurette": "soeur"}
 OBJETS = ("voiture", "appartement", "maison", "logement", "etudes", "travaux", "moto")
 MOMENTS = ("hier soir", "hier", "ce matin", "ce soir", "aujourd hui", "cette nuit")
 OUI = ("oui", "ok", "d accord", "vas y", "allez y", "je confirme", "confirme", "bien sur", "yes")

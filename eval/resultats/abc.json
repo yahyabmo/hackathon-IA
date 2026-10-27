@@ -26,7 +26,7 @@
       "requetes": 40,
       "repetitions": 1
     },
-    "B": {
+    "B_reformulation": {
       "configuration": "B",
       "modele": "qwen3:1.7b",
       "reussite": "13 / 14",

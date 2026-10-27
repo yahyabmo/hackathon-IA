@@ -67,7 +67,8 @@ def _cout_par_niveau() -> dict[int, float] | None:
 
     try:
         configurations = json.loads(MESURES_ABC.read_text(encoding="utf-8"))["configurations"]
-        c, b = configurations["C"], configurations["B"]
+        c = configurations["C"]
+        b = configurations.get("B") or configurations["B_reformulation"]  # coût d'un appel au petit LLM
     except (OSError, KeyError, ValueError):
         return None
     sans_llm = c["wh_par_1000"] / 1000
