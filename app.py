@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import streamlit as st
-from html import escape
 
 from src import llm
 from src.assistant import reply
@@ -72,14 +71,16 @@ if "client" not in st.session_state:
 # Navigation latérale discrète : elle contient les choix de démo, pas le contenu principal.
 with st.sidebar:
     st.markdown('<div class="brand"><span class="brand-mark">n.</span><div><strong>noria</strong><small>La banque, en clair.</small></div></div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-label">Client de démonstration</div>', unsafe_allow_html=True)
-    selection = st.selectbox("Client", list(libelles), index=list(libelles).index(st.session_state.client), format_func=libelles.get, label_visibility="collapsed")
-    if selection != st.session_state.client:
-        _initialiser(selection)
+    with st.expander("Réglages de démonstration", expanded=False):
+        st.caption("La personnalisation utilise un profil fictif, sans connexion bancaire.")
+        selection = st.selectbox("Profil simulé", list(libelles), index=list(libelles).index(st.session_state.client), format_func=lambda identifiant: f"Profil simulé {identifiant}")
+        if selection != st.session_state.client:
+            _initialiser(selection)
+        components.profil(st.session_state.etat.profil_simule or clients.profil(selection), titre=f"Profil simulé {selection}")
     if st.button("Nouvelle conversation", use_container_width=True):
         _initialiser(st.session_state.client)
     st.divider()
-    st.markdown('<div class="section-label">Scénarios rapides</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Exemples pour ce profil simulé</div>', unsafe_allow_html=True)
     for index, (label, message) in enumerate(MESSAGES_DEMO.get(st.session_state.client, [])):
         if message == "oui":
             continue  # L'accord se donne uniquement sur le récapitulatif actif.
@@ -104,13 +105,13 @@ left, right = st.columns([2.25, 1], gap="large")
 with left:
     st.markdown('<div class="conversation-title">Conversation <span>Privée · session de démonstration</span></div>', unsafe_allow_html=True)
     if not st.session_state.messages:
-        st.markdown(f'<div class="welcome"><span class="eyebrow">UN PEU PLUS DE CLARTÉ</span><h1>Bonjour {escape(profil.get("prenom", ""))}.<br>Parlons de vos projets.</h1><p>Un achat à préparer, une question sur votre compte ?<br>On avance ensemble, une étape à la fois.</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="welcome"><span class="eyebrow">LA BANQUE, EN CLAIR</span><h1>Bonjour.<br>Comment puis-je vous aider ?</h1><p>Comprendre vos frais, préparer un projet ou choisir une épargne.<br>Parlons de ce qui compte pour vous.</p></div>', unsafe_allow_html=True)
     for message in st.session_state.messages:
         with st.chat_message(message["role"], avatar="assistant" if message["role"] == "assistant" else "user"):
             st.markdown(message["content"])
     components.chiffres(reponse)
     if not st.session_state.messages:
-        suggestions = [MESSAGES_DEMO[client_id][0], ("Un projet immobilier", "Je veux acheter un appartement"), ("Une question d’épargne", "Je voudrais mettre de côté")]
+        suggestions = [("Une carte perdue", "J'ai perdu ma carte"), ("Un projet immobilier", "Je veux acheter un appartement"), ("Une question d’épargne", "Je voudrais mettre de côté")]
         suggestion_cols = st.columns(3)
         for index, (col, (titre, texte)) in enumerate(zip(suggestion_cols, suggestions)):
             with col:
@@ -133,8 +134,6 @@ with left:
         st.rerun()
 
 with right:
-    with st.container(border=True, key="profile"):
-        components.profil(profil)
     if reponse and reponse.conseil:
         components.carte("Vos pistes", lambda: components.recommandations(reponse))
     if reponse:
@@ -143,4 +142,4 @@ with right:
     else:
         st.markdown('<div class="promise"><span>01</span><div><strong>À votre mesure</strong><p>Votre situation guide chaque réponse.</p></div></div><div class="promise"><span>02</span><div><strong>Des choix expliqués</strong><p>Les raisons, les limites et les sources.</p></div></div><div class="promise"><span>03</span><div><strong>Le calcul juste nécessaire</strong><p>Une cascade qui privilégie la simplicité.</p></div></div>', unsafe_allow_html=True)
 
-st.caption("Vous échangez avec un assistant automatique. Données fictives · Aucune opération bancaire réelle.")
+st.caption(f"Vous échangez avec un assistant automatique. Personnalisation : profil fictif {client_id} · Aucun accès bancaire.")
