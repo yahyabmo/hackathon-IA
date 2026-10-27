@@ -1,0 +1,13 @@
+# Le test fait à l'école : deux demandes, une parenthèse, un montant invraisemblable. Sans LLM.
+client: C01
+tours:
+  - client: "J'ai perdu ma carte et je veux faire un virement."
+    attendu: {intention: lost_or_stolen_card, aiguillage: 0, demande: beneficiaire, texte_contient: "Passons maintenant à votre autre demande"}
+  - client: "mon père"
+    attendu: {aiguillage: 0, demande: montant}
+  - client: "Je peux retirer de mon PEL avant 4 ans ?"
+    attendu: {aiguillage: 2, texte_contient: "Revenons à un virement : quel montant"}
+  - client: "100000000"
+    attendu: {aiguillage: 0, texte_contient: "très inhabituel"}
+  - client: "merci"
+    attendu: {texte_contient: "Avec plaisir"}
