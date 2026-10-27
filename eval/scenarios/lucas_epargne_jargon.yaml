@@ -5,6 +5,6 @@ tours:
   - client: "Dans 2 ans"
     attendu: {demande: montant_mensuel}
   - client: "50 euros"
-    attendu: {propose: [livret_jeune, livret_a, ldds], ecarte: [lep, pel]}
+    attendu: {propose: [livret_jeune, livret_a], ecarte: [ldds, lep, pel]}
   - client: "C'est quoi un TAEG ?"
     attendu: {intention: question_definition, texte_contient: "coût total d'un crédit"}

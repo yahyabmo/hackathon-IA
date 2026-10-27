@@ -104,8 +104,9 @@ Un scénario qui passait et qui échoue bloque la fusion.
   test français à la main ; banc A/B/C et CodeCarbon.
 - **M2** : lancer le banc de formulation sur un poste de la salle et choisir le LLM ; intégrer le
   classifieur de M1 ; glossaire par similarité (encodeur de M1) ; vidéo de secours.
-- **M3** : rattacher chaque client à sa ligne de Bank Marketing ; relever sources et dates du
-  catalogue ; modèle d'appétence ; règles complètes ; scénarios jusqu'à 30.
+- **M3** : règles déterministes, profils traçables, catalogue sourcé et actions simulées
+  persistantes livrés. Contrats, tests et points de coordination M2 :
+  [`infos/M3_INTEGRATION.md`](infos/M3_INTEGRATION.md). Le modèle d'appétence reste facultatif.
 
 ## Conventions Git
 
