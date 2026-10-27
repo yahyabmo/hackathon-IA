@@ -93,5 +93,6 @@
     "refus": 4
   },
   "machine": "DeepEirb, RTX 6000 Ada 48 Go",
-  "date": "2026-10-27T18:57:18"
+  "date": "2026-10-27T18:57:18",
+  "retenu": "qwen3:1.7b"
 }

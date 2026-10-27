@@ -138,7 +138,7 @@
   \node[module,text width=4.6cm,right=0.9cm of out] (eval)
     {\textbf{Évaluer} (DeepEirb, RTX 6000 Ada)\\ 139 tests, 15 scénarios\\
      compréhension : 92,3\,\% EN, 84,8\,\% FR\\ formulation : 6 LLM, 0,8 à 9,1 Go\\
-     niveaux 1 et 2 : bancs dédiés\\ A/B/C + CodeCarbon : le niveau 0 seul\\ consomme 3\,000 fois moins que le 14B};
+     niveaux 1 et 2 : qwen3:1.7b retenu\\ A/B/C + CodeCarbon : l'aiguilleur\\ consomme 17 fois moins que le 14B};
   \path let \p1 = (off.north), \p2 = (eval.south), \p3 = (eval.east), \p4 = (off.east) in
     node[module,minimum width=0.75cm,minimum height={\y1-\y2},anchor=north west]
       (mes) at ({max(\x3,\x4)+0.45cm}, \y1) {};

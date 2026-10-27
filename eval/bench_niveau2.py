@@ -52,9 +52,15 @@ def evaluer(item: dict, modele: str | None) -> dict:
 
 def latex(resultats: dict) -> str:
     rech = resultats["recherche"]
+    from eval.tableau_formulation import TAILLES_CONNUES
+
     lignes = []
-    for r in sorted(resultats["configurations"].values(), key=lambda r: (r["modele"] != "sans LLM", r["modele"])):
+    retenu = resultats.get("retenu")
+    for r in sorted(resultats["configurations"].values(),
+                    key=lambda r: (r["modele"] != "sans LLM", -TAILLES_CONNUES.get(r["modele"], 0))):
         nom = "\\textit{sans LLM (extrait)}" if r["modele"] == "sans LLM" else f"\\texttt{{{r['modele']}}}"
+        if r["modele"] == retenu:
+            nom = f"\\textbf{{{nom}}} \\textcolor{{okgreen}}{{(retenu)}}"
         accepte = "---" if r["modele"] == "sans LLM" else f"{r['acceptes']}/{r['a_rediger']}"
         latence = f"{r['latence_p50_ms'] / 1000:.1f}".replace(".", ",")
         lignes.append(f"{nom} & {accepte} & {r['justes']}/{r['total']} & {latence} s & {r['tokens']:.0f} \\\\")

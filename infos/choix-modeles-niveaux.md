@@ -54,6 +54,24 @@ et refuse les 4 questions hors de nos fiches.
 - **Les gros modèles réécrivent plus librement**, donc le garde-fou de fidélité les écarte plus souvent.
   On l'avait déjà vu en reformulant les conseils : plus gros ne veut pas dire plus fidèle.
 
+## Énergie : l'aiguilleur contre le 14B qui fait tout
+
+Mesuré sur DeepEirb avec `./mesurer.sh abc qwen3:1.7b`. L'énergie vient de CodeCarbon hors ligne, par lots
+de 200 messages, en trois répétitions ; la configuration A (le 14B répond à chaque message) est mesurée sur
+un lot de 40.
+
+| Configuration | Scénarios | Wh / 1 000 messages (repos soustrait) | Wh / 1 000 (brut) | Latence p95 | Mémoire | Sans LLM |
+|---|---|---|---|---|---|---|
+| A : `ministral-3:14b` fait tout | à juger | 115 | 194 | 2,3 s | 9,1 Go | 0 % |
+| **B : notre aiguilleur (`qwen3:1.7b`)** | **15 / 15** | **5,5** | **11,5** | **0,53 s** | **1,9 Go** | **76 %** |
+| C : niveau 0 seul | 15 / 15 | 0,18 | 0,40 | 19 ms | 0,5 Go | 100 % |
+
+Répartition des messages dans l'aiguilleur : 76 % au niveau 0, 12 % au niveau 1, 12 % au niveau 2.
+
+**À dire au jury** : l'aiguilleur consomme **17 fois moins** d'énergie que le 14B, sans même soustraire la
+consommation au repos (11,5 contre 194 Wh pour 1 000 messages). Il utilise 5 fois moins de mémoire, et sa
+latence p95 passe de 2,3 s à 0,5 s. Le niveau 0 seul consomme près de 500 fois moins.
+
 ## Comment chaque mesure est faite
 
 ### « Juste », au niveau 1

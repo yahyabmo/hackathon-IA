@@ -1196,5 +1196,6 @@
     }
   },
   "machine": "DeepEirb, RTX 6000 Ada 48 Go",
-  "date": "2026-10-27T18:56:21"
+  "date": "2026-10-27T18:56:21",
+  "retenu": "qwen3:1.7b"
 }

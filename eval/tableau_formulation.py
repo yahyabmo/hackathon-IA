@@ -21,7 +21,7 @@ RESULTATS = Path(__file__).resolve().parent / "resultats"
 SORTIE = Path(__file__).resolve().parents[1] / "rapport" / "resultats-formulation.tex"
 SEUIL_JUGES = 27
 TAILLES_CONNUES = {  # Go, bibliothèque Ollama, si le serveur ne répond pas
-    "ministral-3:14b": 9.1, "gemma4:e2b": 7.2, "ministral-3:8b": 6.0, "ministral-3:3b": 3.0,
+    "ministral-3:14b": 9.1, "gemma4:e2b": 4.6, "ministral-3:8b": 6.0, "ministral-3:3b": 3.0,
     "qwen3:1.7b": 1.4, "gemma3:1b": 0.8, "qwen3:0.6b": 0.5, "gemma3:270m": 0.3,
 }
 

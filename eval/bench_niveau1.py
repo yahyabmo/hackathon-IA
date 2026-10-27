@@ -89,16 +89,30 @@ def _pct(x: float) -> str:
 
 
 def latex(resultats: dict) -> str:
+    """Une ligne par modèle, du plus gros au plus petit : justes avec et sans RAG d'exemples."""
+
+    from eval.tableau_formulation import TAILLES_CONNUES
+
+    par_modele: dict[str, dict] = {}
+    for r in resultats["configurations"].values():
+        par_modele.setdefault(r["modele"], {})["avec" if r["exemples"] else "sans"] = r
     lignes = []
-    for cle, r in sorted(resultats["configurations"].items(), key=lambda kv: (kv[1]["modele"], not kv[1]["exemples"])):
-        latence = f"{r['latence_p50_ms'] / 1000:.1f}".replace(".", ",")
-        lignes.append(f"\\texttt{{{r['modele']}}} & {'oui' if r['exemples'] else 'non'} & {r['justes']}/{r['total']} & "
-                      f"{_pct(r['json_valide'])} & {latence} s & {r['tokens']:.0f} \\\\")
-    return ("\\scriptsize\n\\begin{tabular}{@{}l c c c r r@{}}\n\\toprule\n\\textbf{Modèle} & \\textbf{RAG d'exemples} & "
-            "\\textbf{Justes} & \\textbf{JSON valide} & \\textbf{Latence p50} & \\textbf{Tokens} \\\\\n\\midrule\n"
-            + "\n".join(lignes) + "\n\\bottomrule\n\\end{tabular}\n\n\\smallskip\n{\\tiny 36 messages difficiles écrits par "
-            "l'équipe (réponses libres, demandes mêlées, renvois au contexte). JSON imposé par une grammaire. Mesuré sur "
-            + resultats["machine"].replace("_", "\\_") + ".}\n")
+    for modele in sorted(par_modele, key=lambda m: -TAILLES_CONNUES.get(m, 0)):
+        avec, sans = par_modele[modele].get("avec"), par_modele[modele].get("sans")
+        ref = avec or sans
+        nom = f"\\texttt{{{modele}}}"
+        if modele == resultats.get("retenu"):
+            nom = f"\\textbf{{{nom}}} \\textcolor{{okgreen}}{{(retenu)}}"
+        taille = f"{TAILLES_CONNUES[modele]:.1f} Go".replace(".", ",") if modele in TAILLES_CONNUES else "?"
+        justes = lambda r: f"{r['justes']}/{r['total']}" if r else "---"
+        latence = f"{ref['latence_p50_ms'] / 1000:.1f}".replace(".", ",")
+        lignes.append(f"{nom} & {taille} & \\textbf{{{justes(avec)}}} & {justes(sans)} & {_pct(ref['json_valide'])} & "
+                      f"{latence} s \\\\")
+    return ("\\scriptsize\n\\begin{tabular}{@{}l r c c c r@{}}\n\\toprule\n\\textbf{Modèle} & \\textbf{Taille} & "
+            "\\textbf{Justes, avec RAG d'exemples} & \\textbf{sans} & \\textbf{JSON valide} & \\textbf{Latence p50} \\\\\n"
+            "\\midrule\n" + "\n".join(lignes) + "\n\\bottomrule\n\\end{tabular}\n\n\\smallskip\n{\\tiny 36 messages difficiles "
+            "écrits par l'équipe (réponses libres, demandes mêlées, renvois au contexte). JSON imposé par une grammaire. "
+            "Mesuré sur " + resultats["machine"].replace("_", "\\_") + ".}\n")
 
 
 def main(modeles: list[str]) -> int:

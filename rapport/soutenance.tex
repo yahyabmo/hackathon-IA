@@ -159,9 +159,8 @@
   \resizebox{\linewidth}{!}{\begin{minipage}{1.25\linewidth}\input{resultats-niveau2}\end{minipage}}
   \medskip
 
-  \scriptsize On garde \textbf{le plus petit} modèle qui tient chaque niveau. Le RAG d'exemples fait plus que doubler
-  la justesse du niveau 1. Déjà appris : \emph{reformuler} un conseil chiffré n'apporte rien (les gros modèles
-  touchent aux chiffres) ; le LLM sert à \emph{comprendre} et à \emph{répondre aux questions ouvertes}.
+  \scriptsize \textbf{Retenu : \texttt{qwen3:1.7b} (1,4 Go) pour les deux niveaux}, le plus petit qui tient chacun ; un
+  seul modèle chargé. Le RAG d'exemples double sa justesse (15 $\rightarrow$ 30). Plus gros n'est pas plus fidèle.
 \end{frame}
 
 % ─────────────────────────────── Younes ───────────────────────────────
@@ -177,9 +176,9 @@
   \input{resultats-frugalite}
   \medskip
 
-  \small Le niveau 0 seul réussit tous les scénarios avec \textbf{plus de 3\,000 fois moins d'énergie} que
-  le 14B qui fait tout (0,04 contre 155 Wh pour 1\,000 requêtes, sans même soustraire le repos).
-  L'aiguilleur n'ajoute un petit LLM qu'aux messages qui en ont besoin.
+  \small Notre aiguilleur réussit les 15 scénarios avec \textbf{17 fois moins d'énergie} que le 14B qui fait
+  tout (11,5 contre 194 Wh pour 1\,000 messages, sans même soustraire le repos), 5 fois moins de mémoire
+  et une latence p95 de 0,5~s au lieu de 2,3~s : 76\,\% des messages n'appellent aucun LLM.
 \end{frame}
 
 % ─────────────────────────────── Sohayb ───────────────────────────────
