@@ -1,4 +1,4 @@
-"""Adaptation M3/M2 : questions métier et confirmation stricte, sans changer M1."""
+"""Adaptation M3/M2 : questions métier et lecture stricte des réponses, sans changer M1."""
 from __future__ import annotations
 
 import re

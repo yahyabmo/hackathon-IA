@@ -20,7 +20,7 @@ from time import perf_counter
 from typing import Any
 
 from .. import llm
-from ..contrats import Action, Alternative, Conseil, Etape, EtatConversation
+from ..contrats import Alternative, Conseil, Etape, EtatConversation
 from ..conseiller import catalogue as cat
 from ..conseiller import integration as questions_m3
 from ..taxonomie import LIBELLES_FAMILLES, famille_de
@@ -33,15 +33,8 @@ MENTIONS = {
               "Vérifiez vos capacités de remboursement avant de vous engager.",
 }
 RAPPEL_CODE = "Rappel : la banque ne vous demandera jamais votre code confidentiel."
-SIMULATION = "Simulation uniquement : aucune opération réelle ni rappel réel."
 MESSAGES_FIXES = {
     "abandon": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?",
-    "action_annulee": "D'accord, je ne fais rien. Puis-je vous aider pour autre chose ?",
-    "montant_ambigu": ("Montant ambigu ou négatif : aucune opération effectuée. Utilisez un montant positif "
-                       "avec une virgule pour les centimes, puis confirmez de nouveau."),
-    "confirmation_attendue": ("Aucune opération effectuée. Confirmez la demande présentée par « oui » ou "
-                              "annulez par « non »."),
-    "un_seul_montant": "Indiquez un seul montant corrigé ; une nouvelle confirmation sera demandée.",
     "orienter": "Je préfère ne pas deviner. Voulez-vous qu'un conseiller vous rappelle ? (oui / non)",
     "clarifier": ("Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des "
                   "frais, votre épargne ou un projet de crédit."),
@@ -184,58 +177,6 @@ def parties_conseil(decision: Decision, conseil: Conseil) -> tuple[str, str | No
     return corps, QUESTION_RAPPEL if decision.proposer else None
 
 
-def _gabarit_action_a_confirmer(decision: Decision, profil: dict[str, Any], etat: EtatConversation) -> str:
-    if decision.outil == "bloquer_carte":
-        return _joindre(decision.accroche, "Je peux faire opposition sur votre carte maintenant : plus aucun "
-                        f"paiement ne sera possible avec. Confirmez-vous ? {OUI_NON}")
-    if decision.outil == "preparer_virement":
-        lien, montant = etat.slots.get("beneficiaire"), etat.slots.get("montant")
-        connu = next((b for b in profil.get("beneficiaires", []) if b["lien"] == lien), None)
-        vers = f"votre {lien}, {connu['nom']}" if connu else f"votre {lien}"
-        return _joindre(decision.accroche, f"Je récapitule : un virement de {euros(montant)} vers {vers}. "
-                        f"Confirmez-vous ? {OUI_NON}", RAPPEL_CODE)
-    return _joindre(decision.accroche, f"Confirmez-vous ? {OUI_NON}")
-
-
-def _gabarit_action_faite(action: Action) -> str:
-    r = action.resultat or {}
-    if r.get("statut") == "echec":
-        return f"L'opération simulée n'a pas pu aboutir : {r.get('motif', 'erreur interne')}. Rien n'a été modifié."
-    if r.get("ok") is False:
-        return f"Opération simulée refusée : {r.get('motif', 'demande invalide')}."
-    return _joindre(_gabarit_action_reussie(action), SIMULATION, r.get("limites"), sep="\n\n")
-
-
-def _gabarit_action_reussie(action: Action) -> str:
-    r = action.resultat or {}
-    if action.outil == "bloquer_carte":
-        return _joindre(f"C'est fait : votre carte est en opposition depuis {r['heure']} "
-                        f"(référence {r['reference']}). Plus personne ne peut s'en servir, et les opérations "
-                        "frauduleuses faites après l'opposition ne sont pas à votre charge. Une nouvelle carte "
-                        "peut être commandée depuis votre espace client ou avec un conseiller.", RAPPEL_CODE)
-    if action.outil == "preparer_virement":
-        return (f"C'est fait : le virement de {euros(r['montant'])} vers {r['beneficiaire']} "
-                f"({r['iban_masque']}) est enregistré, référence {r['reference']}.")
-    if action.outil == "expliquer_frais":
-        if not r["frais"]:
-            return "Je ne trouve aucun frais ce mois-ci sur votre compte."
-        lignes = " ".join(f"Le {_date(f['date'])}, une {f['libelle']} de {euros(f['montant'])} : {f['cause']}."
-                          for f in r["frais"])
-        loi = (f"La loi plafonne ces commissions à {euros(r['plafond_operation'])} par opération "
-               f"et {euros(r['plafond_mois'])} par mois.")
-        fragile = None
-        if r["proposer_offre_fragile"]:
-            fragile = (f"Vous avez eu {r['decouverts_12_mois']} découverts en 12 mois : un conseiller peut vous "
-                       f"présenter l'offre clientèle fragile, qui limite ces frais à "
-                       f"{euros(r['plafond_fragile_operation'])} par opération et "
-                       f"{euros(r['plafond_fragile_mois'])} par mois. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
-        return _joindre(lignes, loi, fragile)
-    if action.outil == "transmettre_conseiller":
-        return (f"C'est noté : un conseiller va vous rappeler (demande {r['ticket']}). Il aura le résumé de "
-                "notre échange, vous n'aurez pas à tout répéter.")
-    return "C'est fait."
-
-
 def _gabarit_fiche(decision: Decision, message: str) -> str:
     if decision.parcours == "question_definition":
         fiche = glossaire.chercher(message, approchant=True)
@@ -251,11 +192,30 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
             f"point : un conseiller peut le traiter. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
 
 
-def gabarit(decision, conseil, action, profil, etat, message) -> str:
+def _gabarit_orientation(decision: Decision) -> str:
+    """Guide l'utilisateur sans accès au compte et sans exécution d'opération."""
+    if decision.parcours == "lost_or_stolen_card":
+        return _joindre(decision.accroche, "Pour sécuriser votre carte, ouvrez votre espace bancaire sécurisé "
+                        "et utilisez la rubrique Opposition, ou contactez immédiatement votre conseiller. "
+                        "Je ne peux pas bloquer votre carte depuis cette conversation.")
+    if decision.parcours == "faire_virement":
+        return _joindre(decision.accroche, "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé "
+                        "et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni "
+                        "exécuter le virement depuis cette conversation.")
+    if decision.parcours == "frais_contestation":
+        return _joindre(decision.accroche, "Je peux vous expliquer les frais affichés dans votre historique simulé. "
+                        "Pour une contestation réelle, utilisez votre espace bancaire sécurisé ou contactez un conseiller.")
+    return _joindre(decision.accroche, "Je peux vous orienter vers un conseiller, mais je n'ai aucun accès à votre compte. "
+                     "Souhaitez-vous poursuivre avec un conseiller ?", OUI_NON)
+
+
+def gabarit(decision, conseil, profil, etat, message) -> str:
     """Le texte gabarit d'une décision (public : le banc de formulation s'en sert)."""
 
     if decision.type == "clarifier" and decision.question:
         return decision.question
+    if decision.type == "orienter":
+        return _gabarit_orientation(decision)
     if decision.type in MESSAGES_FIXES:
         return MESSAGES_FIXES[decision.type]
     if decision.type == "question":
@@ -265,15 +225,6 @@ def gabarit(decision, conseil, action, profil, etat, message) -> str:
         return _joindre(RELANCES.get(decision.relance), questions_m3.question(decision.info))
     if decision.type == "conseil":
         return _joindre(*parties_conseil(decision, conseil), sep="\n\n")
-    if decision.type == "action":
-        return _gabarit_action_a_confirmer(decision, profil, etat)
-    if decision.type == "action_faite":
-        return _gabarit_action_faite(action)
-    if decision.type == "transmettre":
-        n = profil.get("contacts_aujourdhui", 0)
-        contexte = f"C'est votre {n}e message aujourd'hui : je" if n >= 2 else "Je"
-        return _joindre(decision.accroche, f"{contexte} préfère qu'un conseiller reprenne la main, avec le résumé "
-                        f"de vos échanges. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
     if decision.type == "fiche":
         return _gabarit_fiche(decision, message)
     raise ValueError(f"type de décision inconnu : {decision.type}")
@@ -282,13 +233,13 @@ def gabarit(decision, conseil, action, profil, etat, message) -> str:
 # ── Point d'entrée ───────────────────────────────────────────────────
 
 def formuler(
-    decision: Decision, conseil: Conseil | None, action: Action | None,
+    decision: Decision, conseil: Conseil | None,
     profil: dict[str, Any], etat: EtatConversation, message: str,
 ) -> tuple[str, Etape]:
     """Le texte affiché au client, et l'étape mesurée (avec ou sans appel au LLM)."""
 
     debut = perf_counter()
-    texte = gabarit(decision, conseil, action, profil, etat, message)
+    texte = gabarit(decision, conseil, profil, etat, message)
     etape = Etape(nom="formuler", modele="gabarit")
     simple = mots_simples(profil, etat)
 

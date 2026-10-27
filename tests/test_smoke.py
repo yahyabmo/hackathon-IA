@@ -1,6 +1,5 @@
 from src.assistant import reply
 from src.contrats import (
-    Action,
     Comprehension,
     Conseil,
     Ecart,
@@ -17,7 +16,6 @@ def test_contracts_are_constructible():
     assert isinstance(Proposition("demo").raisons, list)
     assert Ecart("lep", "raison").regle is None
     assert isinstance(Conseil().ecartees, list)
-    assert Action("bloquer_carte").confirmee is False
     assert Etape("test").appel_llm is False
     assert Reponse("ok").appels_llm == 0
 
@@ -29,8 +27,7 @@ def test_reply_returns_contracts_and_updates_state():
     assert reponse.comprehension.intention == "lost_or_stolen_card"
     assert etat.parcours == "lost_or_stolen_card"
     assert len(etat.historique) == 2
-    assert reponse.action is not None and reponse.action.confirmee is False
-    assert reponse.action.resultat is None
+    assert "ne peux pas bloquer" in reponse.texte
 
 
 def test_reply_without_state_starts_a_conversation():

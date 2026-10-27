@@ -24,9 +24,6 @@ MESSAGES_DEMO = {
     "C08": [("Épargne", "Je voudrais mettre de côté"), ("Horizon", "Dans 2 ans"), ("Versement", "50 euros"), ("TAEG", "C'est quoi un TAEG ?")],
 }
 
-STATUTS = {"succes": "Exécutée · simulation", "refus": "Refusée", "echec": "Échec · rien modifié", "en_attente": "En attente de confirmation"}
-
-
 def _initialiser(client_id: str) -> None:
     st.session_state.client = client_id
     st.session_state.etat = EtatConversation()
@@ -112,18 +109,6 @@ with left:
         with st.chat_message(message["role"], avatar="assistant" if message["role"] == "assistant" else "user"):
             st.markdown(message["content"])
     components.chiffres(reponse)
-    pending = st.session_state.etat.action_en_attente
-    if pending:
-        with st.container(border=True, key="confirmation"):
-            st.markdown("**Votre confirmation est nécessaire**")
-            st.caption("L'accord porte sur la demande récapitulée ci-dessus. Cette opération est simulée.")
-            oui, non = st.columns(2)
-            if oui.button("Confirmer la simulation", key=f"confirm-{pending.identifiant}", type="primary", use_container_width=True):
-                _envoyer("oui")
-                st.rerun()
-            if non.button("Annuler", key=f"cancel-{pending.identifiant}", use_container_width=True):
-                _envoyer("non")
-                st.rerun()
     if not st.session_state.messages:
         suggestions = [MESSAGES_DEMO[client_id][0], ("Un projet immobilier", "Je veux acheter un appartement"), ("Une question d’épargne", "Je voudrais mettre de côté")]
         suggestion_cols = st.columns(3)
@@ -132,7 +117,7 @@ with left:
                 if st.button(titre + "  ↗", key=f"suggestion-{index}", use_container_width=True):
                     _envoyer(texte)
                     st.rerun()
-    elif not pending and reponse and reponse.question:
+    elif reponse and reponse.question:
         exemples = {
             "prix_bien": "250000, apport 25000", "apport": "25000",
             "horizon_mois": "Dans 2 ans", "montant_mensuel": "50 euros",
@@ -150,8 +135,6 @@ with left:
 with right:
     with st.container(border=True, key="profile"):
         components.profil(profil)
-    if reponse and reponse.action:
-        components.action(reponse, en_attente=bool(st.session_state.etat.action_en_attente))
     if reponse and reponse.conseil:
         components.carte("Vos pistes", lambda: components.recommandations(reponse))
     if reponse:

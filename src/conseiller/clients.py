@@ -96,7 +96,7 @@ def valider_profil(client: dict[str, Any]) -> None:
 
 
 def profil(client_id: str) -> dict[str, Any]:
-    """Copie du profil : les outils peuvent la modifier sans toucher à la source."""
+    """Copie du profil : le chatbot peut personnaliser ses conseils sans modifier la source."""
 
     try:
         return copy.deepcopy(_clients()[client_id])

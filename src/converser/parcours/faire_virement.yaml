@@ -11,5 +11,4 @@ infos:
     indices: [envoyer, virer, montant]
     question: "Quel montant voulez-vous envoyer ?"
 fin:
-  type: action
-  outil: preparer_virement
+  type: orienter

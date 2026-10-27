@@ -4,10 +4,9 @@ Usage, depuis la racine du dépôt : ``python -m eval.run_scenarios``
 
 Un scénario est une conversation avec un client de démonstration. Pour chaque
 tour : ce qui est attendu (intention, niveau, information demandée, produits
-proposés ou écartés, action exécutée ou en attente, texte) et ce qui est
-interdit (redemander une information connue, proposer un produit). Deux
-invariants sont vérifiés partout : au plus un appel au LLM par tour hors
-escalade, et aucune action à effet de bord sans confirmation.
+proposés ou écartés, texte) et ce qui est interdit (redemander une information
+connue, proposer un produit). Le chatbot reste sans accès au compte et sans
+effet de bord.
 """
 
 from __future__ import annotations
@@ -19,7 +18,6 @@ from typing import Any
 import yaml
 
 from src.assistant import reply
-from src.conseiller import outils
 from src.contrats import EtatConversation, Reponse
 
 DOSSIER = Path(__file__).resolve().parent / "scenarios"
@@ -34,7 +32,7 @@ def verifier_tour(reponse: Reponse, etat: EtatConversation, attendu: dict[str, A
     """Écarts entre la réponse et les attentes du tour ; vide si tout va bien."""
 
     erreurs: list[str] = []
-    c, conseil, action = reponse.comprehension, reponse.conseil, reponse.action
+    c, conseil = reponse.comprehension, reponse.conseil
     proposes = _ids(conseil.propositions) if conseil else []
     ecartes = _ids(conseil.ecartees) if conseil else []
 
@@ -47,12 +45,7 @@ def verifier_tour(reponse: Reponse, etat: EtatConversation, attendu: dict[str, A
     attendre("niveau", c.niveau)
     attendre("demande", reponse.question)
     attendre("escalade", reponse.escalade)
-    attendre("attente", etat.action_en_attente.outil if etat.action_en_attente else None)
-    attendre("action", action.outil if action and action.resultat is not None else None)
-    attendre("solde", (etat.profil_simule or {}).get("solde"))
-    attendre("journal_operations", len(etat.journal_actions))
-    if "action" in attendu and action and action.resultat and not action.resultat.get("ok"):
-        erreurs.append("action attendue mais refusée ou échouée")
+    # Le kick-off demande un guidage ; aucune action bancaire n'est exécutée.
     for produit, statut in attendu.get("eligibilite", {}).items():
         if not conseil or conseil.faits.get("eligibilite", {}).get(produit) != statut:
             erreurs.append(f"éligibilité inattendue : {produit}")
@@ -68,8 +61,6 @@ def verifier_tour(reponse: Reponse, etat: EtatConversation, attendu: dict[str, A
 
     if reponse.appels_llm > (1 if not reponse.escalade else 2):
         erreurs.append(f"{reponse.appels_llm} appels au LLM dans un tour")
-    if action and action.resultat is not None and outils.demande_confirmation(action.outil) and not action.confirmee:
-        erreurs.append(f"action {action.outil} exécutée sans confirmation")
     return erreurs
 
 

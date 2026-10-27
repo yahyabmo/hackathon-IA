@@ -38,12 +38,10 @@ REFUS = ("non", "laisse tomber", "annule", "annuler", "finalement non", "pas mai
 class Decision:
     """Ce que l'orchestrateur doit faire de ce tour."""
 
-    type: str  # question | conseil | action | transmettre | fiche | clarifier | orienter
-    #            | action_faite | action_annulee | abandon
+    type: str  # question | conseil | fiche | clarifier | orienter | abandon
     parcours: str | None = None
     info: str | None = None
     question: str | None = None
-    outil: str | None = None
     accroche: str | None = None
     confirmations: list[str] = field(default_factory=list)
     relance: str | None = None  # "incompris" | "ne_sait_pas" quand la question est reposée
@@ -193,7 +191,7 @@ def avancer(
     etat.info_attendue = None
     fin = spec["fin"]
     return Decision(
-        fin["type"], parcours=etat.parcours, outil=fin.get("outil"), accroche=accroche,
+        fin["type"], parcours=etat.parcours, accroche=accroche,
         confirmations=confirmations, mention_legale=fin.get("mention_legale"),
         proposer=fin.get("proposer"),
     )

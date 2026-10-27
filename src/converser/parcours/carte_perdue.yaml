@@ -10,5 +10,4 @@ infos:
       vol: [vole, volee, vol, piratee, compromise]
     question: "Votre carte a-t-elle été perdue ou volée ?"
 fin:
-  type: action
-  outil: bloquer_carte
+  type: orienter

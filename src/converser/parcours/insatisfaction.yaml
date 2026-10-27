@@ -4,5 +4,4 @@ intentions: [insatisfaction]
 accroche: "Je suis désolé pour ce désagrément."
 infos: {}
 fin:
-  type: transmettre
-  outil: transmettre_conseiller
+  type: orienter

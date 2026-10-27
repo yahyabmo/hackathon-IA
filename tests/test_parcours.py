@@ -38,12 +38,9 @@ def test_meme_phrase_deux_clients_deux_conseils():
     assert lucas[0] == "livret_jeune"
 
 
-def test_refuser_une_action_ne_l_execute_pas():
-    etat = EtatConversation()
-    _, etat = reply("J'ai perdu ma carte", "C01", etat)
-    reponse, etat = reply("non", "C01", etat)
-    assert reponse.action.resultat is None
-    assert "je ne fais rien" in reponse.texte
+def test_une_demande_sensible_reste_un_guidage():
+    reponse, etat = reply("J'ai perdu ma carte", "C01", EtatConversation())
+    assert "Je ne peux pas bloquer" in reponse.texte
 
 
 def test_sans_llm_aucun_appel_ni_escalade():
@@ -52,7 +49,7 @@ def test_sans_llm_aucun_appel_ni_escalade():
         reponse, etat = reply(message, "C01", etat)
         assert reponse.appels_llm == 0
         assert reponse.escalade is False
-    assert etat.action_en_attente.outil == "transmettre_conseiller"
+    assert "aucun accès" in reponse.texte.lower()
 
 
 def test_trace_mesure_chaque_etage():
