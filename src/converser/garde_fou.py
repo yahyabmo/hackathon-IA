@@ -32,7 +32,7 @@ def _present(n: float, valeurs) -> bool:
 
 
 def verifier(texte: str, autorises: set[float], obligatoires: set[float] | None = None,
-             longueur_min: int = 0) -> list[str]:
+             longueur_min: int = 0, longueur_max: int = LONGUEUR_MAX) -> list[str]:
     """Liste des problèmes ; vide si le texte peut être affiché."""
 
     trouves = nombres(texte)
@@ -40,7 +40,7 @@ def verifier(texte: str, autorises: set[float], obligatoires: set[float] | None 
     problemes += [f"nombre oublié : {n:g}" for n in sorted(obligatoires or ()) if not _present(n, trouves)]
     texte_normalise = normaliser(texte)
     problemes += [f"formule interdite : {f}" for f in INTERDITS if contient(texte_normalise, normaliser(f))]
-    if len(texte) > LONGUEUR_MAX:
+    if len(texte) > longueur_max:
         problemes.append("réponse trop longue")
     if len(texte) < longueur_min:
         problemes.append("réponse tronquée")

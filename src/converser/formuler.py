@@ -47,6 +47,7 @@ MESSAGES_FIXES = {
                   "frais, votre épargne ou un projet de crédit."),
 }
 OUI_NON = "(oui / non)"
+QUESTION_RAPPEL = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}"
 NOMS_SPECIAUX = {"credit_immobilier_30_ans": "Un prêt immobilier sur 30 ans"}
 AGE_MOTS_SIMPLES = 70
 RELANCES = {
@@ -59,11 +60,13 @@ MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août
 SYSTEME_FORMULATION = (
     "Tu es l'assistant d'une banque française. On te donne un message déjà rédigé pour un client. "
     "Réécris-le en français, au vouvoiement, avec des phrases courtes et un ton chaleureux. Garde "
-    "toutes les informations et tous les chiffres exactement ; n'ajoute aucun chiffre, aucun produit "
-    "et aucune promesse. Termine par la même question. Réponds uniquement par le message réécrit."
+    "toutes les informations et tous les chiffres exactement ; n'ajoute aucun chiffre, aucun produit, "
+    "aucune promesse ni aucune question. Réponds uniquement par le message réécrit."
 )
 CONSIGNE_MESSAGE = 'Message à réécrire :\n"""\n{texte}\n"""'
 LONGUEUR_MIN_RELATIVE = 0.4
+LONGUEUR_MAX_RELATIVE = 1.5
+CARACTERES_PAR_TOKEN = 2  # un token fait 3 à 4 caractères en français : la marge couvre une réécriture plus longue
 CONSIGNE_SIMPLE = " Le client est peu à l'aise : phrases très courtes, mots de tous les jours."
 
 
@@ -82,11 +85,13 @@ def reformuler(texte: str, modele: str, simple: bool = False) -> tuple[str | Non
     """
 
     systeme = SYSTEME_FORMULATION + (CONSIGNE_SIMPLE if simple else "")
-    reecrit, tokens = llm.generer(modele, systeme, CONSIGNE_MESSAGE.format(texte=texte))
+    reecrit, tokens = llm.generer(modele, systeme, CONSIGNE_MESSAGE.format(texte=texte),
+                                  max_tokens=max(200, len(texte) // CARACTERES_PAR_TOKEN))
     reecrit = reecrit.strip().strip('"').strip()
     reference = set(garde_fou.nombres(texte))
-    problemes = garde_fou.verifier(reecrit, reference, obligatoires=reference,
-                                   longueur_min=int(LONGUEUR_MIN_RELATIVE * len(texte)))
+    problemes = garde_fou.verifier(
+        reecrit, reference, obligatoires=reference, longueur_min=int(LONGUEUR_MIN_RELATIVE * len(texte)),
+        longueur_max=max(garde_fou.LONGUEUR_MAX, int(LONGUEUR_MAX_RELATIVE * len(texte))))
     return (None if problemes else reecrit), tokens, problemes
 
 
@@ -149,12 +154,17 @@ def _conseil_general(conseil: Conseil) -> str:
     return "\n\n".join(paragraphes)
 
 
-def _gabarit_conseil(decision: Decision, conseil: Conseil) -> str:
-    """Le même gabarit pour tous les parcours : les règles de M3 calculent les raisons, les
-    écarts et les alertes (assurance inconnue, frais non couverts…), le gabarit les restitue."""
+def parties_conseil(decision: Decision, conseil: Conseil) -> tuple[str, str | None]:
+    """Le conseil en deux parties : le corps, que le LLM peut réécrire, et la question finale.
 
-    question = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}" if decision.proposer else None
-    return _joindre(_conseil_general(conseil), question, sep="\n\n")
+    Le même gabarit sert tous les parcours : les règles de M3 calculent les raisons, les
+    écarts et les alertes (assurance inconnue, frais non couverts…), le gabarit les restitue.
+    La question reste mot pour mot hors LLM : le tour suivant attend un « oui » ou un
+    « non » à cette question précise (un petit modèle l'a réécrite en « que je vous contacte »).
+    """
+
+    corps = _joindre(decision.accroche, *decision.confirmations, _conseil_general(conseil))
+    return corps, QUESTION_RAPPEL if decision.proposer else None
 
 
 def _gabarit_action_a_confirmer(decision: Decision, profil: dict[str, Any], etat: EtatConversation) -> str:
@@ -235,7 +245,7 @@ def gabarit(decision, conseil, action, profil, etat, message) -> str:
     if decision.type == "question_m3":  # une information indispensable au conseil (Conseil.manque)
         return _joindre(RELANCES.get(decision.relance), questions_m3.question(decision.info))
     if decision.type == "conseil":
-        return _joindre(decision.accroche, *decision.confirmations, _gabarit_conseil(decision, conseil))
+        return _joindre(*parties_conseil(decision, conseil), sep="\n\n")
     if decision.type == "action":
         return _gabarit_action_a_confirmer(decision, profil, etat)
     if decision.type == "action_faite":
@@ -263,12 +273,13 @@ def formuler(
     etape = Etape(nom="formuler", modele="gabarit")
     simple = mots_simples(profil, etat)
 
-    if decision.type == "conseil" and llm.actif():
+    corps, question = parties_conseil(decision, conseil) if decision.type == "conseil" else ("", None)
+    if corps and llm.actif():
         etape.modele, etape.appel_llm = llm.MODELE_FORMULATION, True
         try:
-            reecrit, etape.tokens, _ = reformuler(texte, llm.MODELE_FORMULATION, simple)
+            reecrit, etape.tokens, _ = reformuler(corps, llm.MODELE_FORMULATION, simple)
             if reecrit is not None:
-                texte = reecrit
+                texte = _joindre(reecrit, question, sep="\n\n")
             else:
                 etape.modele = f"{llm.MODELE_FORMULATION} (refusé par le garde-fou)"
         except (OSError, KeyError, ValueError):

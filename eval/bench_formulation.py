@@ -6,8 +6,9 @@ descend, et on garde le plus petit qui tient le seuil fixé à l'avance :
 bonnes** (exact, clair, ton juste) par deux membres de l'équipe.
 
 Les situations passent par le même chemin que l'assistant : règles de M3,
-décision de conseil de l'orchestrateur, gabarit de formuler(), puis la même
-fonction reformuler() et le même garde-fou. Le banc mesure donc exactement ce
+décision de conseil de l'orchestrateur, corps du conseil de formuler() (la
+question oui / non reste hors LLM), puis la même fonction reformuler() et le
+même garde-fou. Le banc mesure donc exactement ce
 que l'assistant affichera.
 
 Pour chaque modèle, les 30 mêmes situations de conseil sont reformulées. Le
@@ -24,6 +25,7 @@ Usage, depuis la racine du dépôt, sur un poste où Ollama tourne :
 from __future__ import annotations
 
 import csv
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -34,7 +36,7 @@ from src import llm
 from src.conseiller import clients, conseiller
 from src.contrats import EtatConversation
 from src.assistant import decision_conseil
-from src.converser.formuler import gabarit, reformuler
+from src.converser.formuler import parties_conseil, reformuler
 from src.taxonomie import famille_de
 
 RESULTATS = Path(__file__).resolve().parent / "resultats"
@@ -63,8 +65,8 @@ def preparer(client: str, parcours: str, infos: dict[str, Any]) -> tuple[str, st
              **infos}
     etat = EtatConversation(parcours=parcours, famille=famille_de(parcours), slots=slots)
     decision = decision_conseil(etat)
-    return f"{client}-{parcours}-{'-'.join(str(v) for v in infos.values())}", \
-        gabarit(decision, conseiller(parcours, profil, slots), None, profil, etat, "")
+    corps, _ = parties_conseil(decision, conseiller(parcours, profil, slots))  # la question reste hors LLM
+    return f"{client}-{parcours}-{'-'.join(str(v) for v in infos.values())}", corps
 
 
 def evaluer(modele: str, limite: int | None = None) -> list[dict[str, Any]]:
@@ -110,7 +112,7 @@ def main(arguments: list[str]) -> int:
         latences = sorted(l["latence_ms"] for l in lignes)
         ok = sum(l["garde_fou"] == "ok" for l in lignes)
         print(f"{modele:22} {ok:>9}/{len(lignes)} {statistics.median(latences):>10} ms "
-              f"{latences[int(0.95 * (len(latences) - 1))]:>5} ms {statistics.mean(l['tokens'] for l in lignes):>7.0f}")
+              f"{latences[math.ceil(0.95 * len(latences)) - 1]:>5} ms {statistics.mean(l['tokens'] for l in lignes):>7.0f}")
     print(f"\nCSV dans {RESULTATS} : remplir juge_1 et juge_2 (oui / non), puis garder le plus petit "
           "modèle à zéro nombre inventé et 27 bonnes réponses sur 30.")
     return 0
