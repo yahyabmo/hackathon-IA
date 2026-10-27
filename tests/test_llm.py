@@ -70,7 +70,7 @@ def test_un_seul_appel_au_llm_et_seulement_pour_le_conseil(monkeypatch):
     second, _ = reply("250 000, apport 25 000", "C07", etat)
     assert premier.appels_llm == 0  # une question : gabarit
     assert second.appels_llm == 1 and appels == ["formulation"]
-    assert "42,1" in second.texte
+    assert "41,3" in second.texte  # taux statistique BDF de 3,32 %
 
 
 def test_glossaire_tolere_les_fautes_seulement_pour_une_definition():

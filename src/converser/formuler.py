@@ -22,8 +22,9 @@ from typing import Any
 from .. import llm
 from ..contrats import Action, Conseil, Etape, EtatConversation
 from ..conseiller import catalogue as cat
+from ..conseiller import integration as questions_m3
 from ..taxonomie import LIBELLES_FAMILLES, famille_de
-from ..texte import euros, normaliser, pourcent
+from ..texte import euros, normaliser
 from . import garde_fou, glossaire
 from .dialogue import Decision
 
@@ -32,6 +33,19 @@ MENTIONS = {
               "Vérifiez vos capacités de remboursement avant de vous engager.",
 }
 RAPPEL_CODE = "Rappel : la banque ne vous demandera jamais votre code confidentiel."
+SIMULATION = "Simulation uniquement : aucune opération réelle ni rappel réel."
+MESSAGES_FIXES = {
+    "abandon": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?",
+    "action_annulee": "D'accord, je ne fais rien. Puis-je vous aider pour autre chose ?",
+    "montant_ambigu": ("Montant ambigu ou négatif : aucune opération effectuée. Utilisez un montant positif "
+                       "avec une virgule pour les centimes, puis confirmez de nouveau."),
+    "confirmation_attendue": ("Aucune opération effectuée. Confirmez la demande présentée par « oui » ou "
+                              "annulez par « non »."),
+    "un_seul_montant": "Indiquez un seul montant corrigé ; une nouvelle confirmation sera demandée.",
+    "orienter": "Je préfère ne pas deviner. Voulez-vous qu'un conseiller vous rappelle ? (oui / non)",
+    "clarifier": ("Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des "
+                  "frais, votre épargne ou un projet de crédit."),
+}
 OUI_NON = "(oui / non)"
 NOMS_SPECIAUX = {"credit_immobilier_30_ans": "Un prêt immobilier sur 30 ans"}
 AGE_MOTS_SIMPLES = 70
@@ -103,29 +117,11 @@ def _date(iso: str) -> str:
     return f"{int(jour)} {MOIS[int(mois) - 1]}"
 
 
-def _joindre(*morceaux: str | None) -> str:
-    return " ".join(m for m in morceaux if m)
+def _joindre(*morceaux: str | None, sep: str = " ") -> str:
+    return sep.join(m for m in morceaux if m)
 
 
 # ── Gabarits ──────────────────────────────────────────────────────────
-
-def _conseil_credit_immobilier(faits: dict[str, Any]) -> str:
-    texte = (
-        f"Avec un prix de {euros(faits['prix_bien'])} et un apport de {euros(faits['apport'])}, il faudrait "
-        f"emprunter environ {euros(faits['besoin'])}, frais de notaire estimés à "
-        f"{pourcent(faits['taux_frais_notaire'])} compris. Sur {faits['duree_ans']} ans, à un taux indicatif "
-        f"de {pourcent(faits['taux_indicatif'])}, la mensualité serait d'environ {euros(faits['mensualite'])}, "
-        f"soit {pourcent(faits['taux_effort'])} de vos revenus"
-    )
-    if faits["taux_effort"] <= faits["taux_effort_max"]:
-        return texte + f" : c'est sous les {pourcent(faits['taux_effort_max'])}, le projet paraît finançable."
-    return texte + (
-        f" : c'est au-delà des {pourcent(faits['taux_effort_max'])} retenus pour un crédit immobilier. "
-        f"Avec votre apport, un bien autour de {euros(faits['prix_max'])} resterait dans cette limite. "
-        f"Un conseiller peut étudier les leviers : un apport plus élevé, un co-emprunteur, des aides comme "
-        f"le PTZ selon conditions."
-    )
-
 
 def _conseil_general(conseil: Conseil) -> str:
     proposes = [p for p in conseil.propositions if p.produit_id != "rdv_conseiller"]
@@ -141,12 +137,11 @@ def _conseil_general(conseil: Conseil) -> str:
 
 
 def _gabarit_conseil(decision: Decision, conseil: Conseil) -> str:
-    if decision.parcours == "credit_immobilier":
-        corps = _conseil_credit_immobilier(conseil.faits)
-    else:
-        corps = _conseil_general(conseil)
+    """Le même gabarit pour tous les parcours : les règles de M3 calculent les raisons, les
+    écarts et les alertes (assurance inconnue, frais non couverts…), le gabarit les restitue."""
+
     question = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}" if decision.proposer else None
-    return _joindre(corps, question)
+    return _joindre(_conseil_general(conseil), question)
 
 
 def _gabarit_action_a_confirmer(decision: Decision, profil: dict[str, Any], etat: EtatConversation) -> str:
@@ -164,14 +159,21 @@ def _gabarit_action_a_confirmer(decision: Decision, profil: dict[str, Any], etat
 
 def _gabarit_action_faite(action: Action) -> str:
     r = action.resultat or {}
+    if r.get("statut") == "echec":
+        return f"L'opération simulée n'a pas pu aboutir : {r.get('motif', 'erreur interne')}. Rien n'a été modifié."
+    if r.get("ok") is False:
+        return f"Opération simulée refusée : {r.get('motif', 'demande invalide')}."
+    return _joindre(_gabarit_action_reussie(action), SIMULATION, r.get("limites"), sep="\n\n")
+
+
+def _gabarit_action_reussie(action: Action) -> str:
+    r = action.resultat or {}
     if action.outil == "bloquer_carte":
         return _joindre(f"C'est fait : votre carte est en opposition depuis {r['heure']} "
                         f"(référence {r['reference']}). Plus personne ne peut s'en servir, et les opérations "
                         "frauduleuses faites après l'opposition ne sont pas à votre charge. Une nouvelle carte "
                         "peut être commandée depuis votre espace client ou avec un conseiller.", RAPPEL_CODE)
     if action.outil == "preparer_virement":
-        if not r.get("ok"):
-            return f"Je ne peux pas préparer ce virement : {r['motif']}. Un conseiller peut vous aider."
         return (f"C'est fait : le virement de {euros(r['montant'])} vers {r['beneficiaire']} "
                 f"({r['iban_masque']}) est enregistré, référence {r['reference']}.")
     if action.outil == "expliquer_frais":
@@ -212,19 +214,19 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
 def gabarit(decision, conseil, action, profil, etat, message) -> str:
     """Le texte gabarit d'une décision (public : le banc de formulation s'en sert)."""
 
+    if decision.type in MESSAGES_FIXES:
+        return MESSAGES_FIXES[decision.type]
     if decision.type == "question":
         return _joindre(decision.accroche, *decision.confirmations, RELANCES.get(decision.relance),
                         decision.question)
-    if decision.type == "abandon":
-        return "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?"
+    if decision.type == "question_m3":  # une information indispensable au conseil (Conseil.manque)
+        return _joindre(RELANCES.get(decision.relance), questions_m3.question(decision.info))
     if decision.type == "conseil":
         return _joindre(decision.accroche, *decision.confirmations, _gabarit_conseil(decision, conseil))
     if decision.type == "action":
         return _gabarit_action_a_confirmer(decision, profil, etat)
     if decision.type == "action_faite":
         return _gabarit_action_faite(action)
-    if decision.type == "action_annulee":
-        return "D'accord, je ne fais rien. Puis-je vous aider pour autre chose ?"
     if decision.type == "transmettre":
         n = profil.get("contacts_aujourdhui", 0)
         contexte = f"C'est votre {n}e message aujourd'hui : je" if n >= 2 else "Je"
@@ -232,11 +234,7 @@ def gabarit(decision, conseil, action, profil, etat, message) -> str:
                         f"de vos échanges. Voulez-vous qu'il vous rappelle ? {OUI_NON}")
     if decision.type == "fiche":
         return _gabarit_fiche(decision, message)
-    if decision.type == "orienter":
-        return f"Je préfère ne pas deviner. Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}"
-    # clarifier
-    return ("Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des frais, "
-            "votre épargne ou un projet de crédit.")
+    raise ValueError(f"type de décision inconnu : {decision.type}")
 
 
 # ── Point d'entrée ───────────────────────────────────────────────────
@@ -265,7 +263,11 @@ def formuler(
 
     if simple:
         texte = simplifier(texte, expliquer_jargon=decision.type != "fiche")
+    if decision.type == "conseil" and conseil and conseil.faits.get("hypotheses"):
+        # Les hypothèses du calcul, hors LLM : la reformulation ne peut pas les omettre.
+        texte = _joindre(texte, " ".join(conseil.faits["hypotheses"]), sep="\n\n")
     if decision.mention_legale:
-        texte = (texte + "\n\n" if simple else texte + " ") + MENTIONS[decision.mention_legale]
+        texte = _joindre(texte, MENTIONS[decision.mention_legale],
+                         sep="\n\n" if simple or "\n\n" in texte else " ")
     etape.latence_ms = (perf_counter() - debut) * 1000
     return texte, etape
