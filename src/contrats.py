@@ -19,6 +19,8 @@ NIVEAU_REPONSE = "reponse_attendue"  # réponse à la question posée au tour pr
 NIVEAU_MOTS_CLES = "mots_cles"
 NIVEAU_CLASSIFIEUR = "classifieur"
 NIVEAU_ESCALADE = "escalade"  # le LLM d'escalade a été appelé
+NIVEAU_INTERPRETE = "interprete"  # le petit LLM du niveau 1 a lu le message
+NIVEAU_FILE = "file"  # demande mise en file par un message précédent
 NIVEAU_AUCUN = "aucun"
 
 
@@ -43,6 +45,7 @@ class Comprehension:
     entites: dict[str, Any] = field(default_factory=dict)
     insatisfaction: bool = False
     exemple_proche: str | None = None
+    autres_intentions: list[str] = field(default_factory=list)  # autres demandes du même message
 
     @property
     def comprise(self) -> bool:
@@ -100,6 +103,9 @@ class Reponse:
     question: str | None = None  # information demandée au client, s'il y en a une
     escalade: bool = False  # vrai seulement si le LLM d'escalade a été appelé
     trace: list[Etape] = field(default_factory=list)
+    niveau: int = 0  # niveau choisi par l'aiguilleur : 0 règles, 1 petit LLM interprète, 2 RAG
+    raison_niveau: str = ""
+    sources: list[dict[str, Any]] = field(default_factory=list)  # passages du RAG cités
 
     @property
     def appels_llm(self) -> int:
@@ -125,3 +131,11 @@ class EtatConversation:
     client_id: str | None = None
     profil_simule: dict[str, Any] | None = None
     question_m3: str | None = None
+    # Aiguilleur : la mémoire est commune aux niveaux, qui peuvent changer à chaque message.
+    file_demandes: list[str] = field(default_factory=list)  # demandes à traiter ensuite, par urgence
+    memoire: dict[str, dict[str, Any]] = field(default_factory=dict)  # parcours interrompus : infos déjà données
+    niveaux: list[int] = field(default_factory=list)  # chaîne des niveaux de la conversation
+    explication: list[str] = field(default_factory=list)  # dernier conseil, pour un « pourquoi ? »
+    traites: list[str] = field(default_factory=list)  # demandes déjà traitées dans la conversation
+    llm_actif: bool | None = None  # choix de l'interface ; None : ASSISTANT_LLM
+    niveau_force: int | None = None  # démonstration : forcer un niveau

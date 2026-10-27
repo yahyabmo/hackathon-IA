@@ -107,7 +107,8 @@ def _charger() -> tuple[Any, Tetes, dict[str, Any] | None] | None:
         # Recherche de la phrase proche en torch, comme l'encodeur : alterner les fils de torch
         # et ceux de numpy pour un grand produit matriciel coûtait 130 ms par message.
         with np.load(EXEMPLES) as d:
-            exemples = {"vecteurs": torch.from_numpy(d["vecteurs"].astype(np.float32)), "textes": d["textes"]}
+            exemples = {"vecteurs": torch.from_numpy(d["vecteurs"].astype(np.float32)), "textes": d["textes"],
+                        "intentions": d["intentions"]}
     return encodeur, Tetes.charger(TETES), exemples
 
 
@@ -143,6 +144,21 @@ def predire(message: str) -> Comprehension | None:
         famille=famille, intention=intention, confiance=confiance, niveau=NIVEAU_CLASSIFIEUR,
         modele=MODELE, alternatives=[Alternative(f, p) for f, p in alternatives], exemple_proche=proche,
     )
+
+
+def exemples_proches(message: str, k: int = 8) -> list[tuple[str, str]]:
+    """Les k phrases d'entraînement les plus proches et leur intention (le RAG d'exemples du niveau 1).
+
+    L'index ne contient que l'entraînement (Banking77 et nos phrases) : jamais les jeux de test.
+    """
+
+    charge = _charger()
+    if charge is None or charge[2] is None:
+        return []
+    exemples = charge[2]
+    scores = exemples["vecteurs"] @ _encoder(message)
+    rangs = scores.argsort(descending=True)[:k].tolist()
+    return [(str(exemples["textes"][i]), str(exemples["intentions"][i])) for i in rangs]
 
 
 def prechauffer() -> bool:

@@ -137,6 +137,46 @@ def corriger(message: str, entites: dict[str, Any], etat: EtatConversation, spec
     return modifie
 
 
+def reponse_lisible(message: str, entites: dict[str, Any], etat: EtatConversation) -> bool:
+    """Les règles savent-elles lire, dans ce message, l'information attendue ?
+
+    Sinon, l'aiguilleur confie le message au niveau 1 (petit LLM interprète).
+    """
+
+    spec = parcours_disponibles().get(etat.parcours or "")
+    info = spec["infos"].get(etat.info_attendue or "") if spec else None
+    if info is None:
+        return True
+    texte = normaliser(message)
+    if _est(texte, NE_SAIT_PAS) or _est(texte, REFUS):
+        return True
+    if info["type"] == "montant":
+        return bool(entites.get("montants"))
+    if info["type"] == "duree":
+        return bool(entites.get("duree_mois"))
+    if info["type"] in ("lien", "objet"):
+        return bool(entites.get(info["type"]))
+    if info["type"] == "choix":
+        return any(contient(texte, normaliser(m)) for mots in info["options"].values() for m in mots)
+    return True
+
+
+def question_en_attente(etat: EtatConversation, profil: dict[str, Any]) -> str | None:
+    """Le texte de la question posée au client et restée sans réponse, s'il y en a une."""
+
+    spec = parcours_disponibles().get(etat.parcours or "")
+    info = spec["infos"].get(etat.info_attendue or "") if spec else None
+    return info["question"].format(**_profil_affiche(profil)) if info else None
+
+
+def _mettre_de_cote(etat: EtatConversation) -> None:
+    """Un parcours inachevé laissé pour un autre : ses informations sont gardées pour y revenir."""
+
+    spec = parcours_disponibles().get(etat.parcours or "")
+    if spec and (etat.slots or etat.info_attendue) and any(n not in etat.slots for n in spec["infos"]):
+        etat.memoire[etat.parcours] = {"slots": dict(etat.slots), "famille": etat.famille}
+
+
 def avancer(
     message: str, comprehension: Comprehension, etat: EtatConversation, profil: dict[str, Any]
 ) -> Decision:
@@ -144,8 +184,10 @@ def avancer(
 
     nouveau = comprehension.niveau != NIVEAU_REPONSE and comprehension.intention != etat.parcours
     if nouveau:
+        _mettre_de_cote(etat)
         etat.parcours, etat.famille = comprehension.intention, comprehension.famille
-        etat.slots, etat.info_attendue = {}, None
+        etat.slots = dict(etat.memoire.pop(comprehension.intention, {}).get("slots", {}))
+        etat.info_attendue = None
 
     spec = parcours_disponibles().get(etat.parcours)
     if spec is None:  # intention de service sans parcours guidé

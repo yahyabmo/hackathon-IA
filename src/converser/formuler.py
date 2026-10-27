@@ -52,7 +52,10 @@ AGE_MOTS_SIMPLES = 70
 RELANCES = {
     "incompris": "Je n'ai pas bien compris.",
     "ne_sait_pas": "Pas de souci, une estimation suffit.",
+    "meme_sujet": "Bien sûr.",
 }
+ACCORDS = ("oui", "ok", "d accord", "merci", "parfait", "tres bien", "super", "non", "non merci", "c est bon")
+SEUIL_MONTANT_INHABITUEL = 10  # fois les revenus mensuels
 MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre")
 
@@ -123,6 +126,50 @@ def question_clarification(alternatives: list[Alternative]) -> str | None:
     return f"Pour être sûr de bien vous aider : votre demande concerne-t-elle {libelles[0]}, ou {libelles[1]} ?"
 
 
+def _libelle_demande(intention: str) -> str:
+    return LIBELLES_FAMILLES.get(famille_de(intention), "votre demande")
+
+
+def _exemples_de_reponse(decision: Decision) -> str | None:
+    """Après une réponse qui ne répondait pas, des exemples de réponses attendues."""
+
+    from .dialogue import parcours_disponibles
+
+    if decision.relance not in ("meme_sujet", "incompris"):
+        return None
+    info = (parcours_disponibles().get(decision.parcours or "") or {}).get("infos", {}).get(decision.info or "", {})
+    return {"lien": "Par exemple : votre fils, votre mère, un ami.",
+            "montant": "Par exemple : 200 €.", "duree": "Par exemple : 2 ans, ou 48 mois."}.get(info.get("type"))
+
+
+def transition(intention: str) -> str:
+    """Entre deux demandes d'un même message : « Passons maintenant à votre autre demande : … »."""
+
+    return f"Passons maintenant à votre autre demande : {_libelle_demande(intention)}."
+
+
+def reprise(parcours: str, question: str | None) -> str:
+    """Après une parenthèse, la question restée en attente."""
+
+    return f"Revenons à {_libelle_demande(parcours)} : {question[0].lower()}{question[1:]}" if question else \
+        f"Revenons à {_libelle_demande(parcours)}."
+
+
+def _vraisemblance(montant: Any, profil: dict[str, Any]) -> str | None:
+    """Un montant de virement comparé au solde et aux revenus du profil simulé."""
+
+    if not isinstance(montant, (int, float)) or montant <= 0:
+        return None
+    solde, revenus = profil.get("solde"), profil.get("revenus_nets") or 0
+    if revenus and montant >= SEUIL_MONTANT_INHABITUEL * revenus:
+        return (f"Attention : {euros(montant)}, c'est un montant très inhabituel, bien au-delà de votre solde "
+                f"({euros(solde)}) : vérifiez-le avant de valider." if solde is not None else
+                f"Attention : {euros(montant)}, c'est un montant très inhabituel : vérifiez-le avant de valider.")
+    if solde is not None and montant > solde:
+        return f"Attention : {euros(montant)} dépasse votre solde ({euros(solde)}) : vérifiez le montant avant de valider."
+    return None
+
+
 def nom_produit(produit_id: str) -> str:
     """Nom lisible d'un produit, y compris ceux qui n'existent que comme écart."""
 
@@ -189,6 +236,9 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
             return f"{fiche['terme']} : {fiche['explication']}"
         return "Je n'ai pas encore de fiche sur ce terme : un conseiller pourra vous l'expliquer."
     if decision.parcours == "hors_sujet":
+        if normaliser(message) in ACCORDS:
+            debut = "Avec plaisir." if "merci" in normaliser(message) else "D'accord."
+            return f"{debut} Puis-je vous aider pour autre chose ?"
         debut = "Avec plaisir !" if "merci" in normaliser(message) else "Bonjour !"
         return (f"{debut} Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un "
                 "projet de crédit. Que puis-je faire pour vous ?")
@@ -197,14 +247,15 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
             f"et aucun accès à votre compte. {ORIENTATION_CONSEILLER}")
 
 
-def _gabarit_orientation(decision: Decision) -> str:
+def _gabarit_orientation(decision: Decision, profil: dict[str, Any], etat: EtatConversation) -> str:
     """Guide l'utilisateur sans accès au compte et sans exécution d'opération."""
     if decision.parcours == "lost_or_stolen_card":
         return _joindre(decision.accroche, "Faites opposition tout de suite : dans votre espace bancaire "
                         "sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer "
                         "votre carte depuis cette conversation.", RAPPEL_CODE)
     if decision.parcours == "faire_virement":
-        return _joindre(decision.accroche, "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé "
+        return _joindre(decision.accroche, _vraisemblance(etat.slots.get("montant"), profil),
+                        "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé "
                         "et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni "
                         "exécuter le virement depuis cette conversation.")
     if famille_de(decision.parcours or "") == "frais_contestation":
@@ -238,12 +289,12 @@ def gabarit(decision, conseil, profil, etat, message) -> str:
     if decision.type == "clarifier" and decision.question:
         return decision.question
     if decision.type == "orienter":
-        return _gabarit_orientation(decision)
+        return _gabarit_orientation(decision, profil, etat)
     if decision.type in MESSAGES_FIXES:
         return MESSAGES_FIXES[decision.type]
     if decision.type == "question":
         return _joindre(decision.accroche, *decision.confirmations, RELANCES.get(decision.relance),
-                        decision.question)
+                        decision.question, _exemples_de_reponse(decision))
     if decision.type == "question_m3":  # une information indispensable au conseil (Conseil.manque)
         return _joindre(RELANCES.get(decision.relance), questions_m3.question(decision.info))
     if decision.type == "conseil":

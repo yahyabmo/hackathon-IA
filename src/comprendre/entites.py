@@ -20,6 +20,8 @@ _MONTANT = re.compile(
 
 LIENS = ("fils", "fille", "enfants", "enfant", "mere", "pere", "frere", "soeur", "conjoint",
          "femme", "mari", "compagne", "compagnon")
+SYNONYMES_LIENS = {"papa": "pere", "maman": "mere", "epouse": "femme", "epoux": "mari", "copine": "compagne",
+                   "copain": "compagnon", "fiston": "fils"}
 OBJETS = ("voiture", "appartement", "maison", "logement", "etudes", "travaux", "moto")
 MOMENTS = ("hier soir", "hier", "ce matin", "ce soir", "aujourd hui", "cette nuit")
 OUI = ("oui", "ok", "d accord", "vas y", "allez y", "je confirme", "confirme", "bien sur", "yes")
@@ -51,6 +53,10 @@ def extraire(message: str) -> dict[str, Any]:
         trouve = next((v for v in valeurs if contient(texte, v)), None)
         if trouve:
             entites[cle] = trouve
+    if "lien" not in entites:
+        trouve = next((v for k, v in SYNONYMES_LIENS.items() if contient(texte, k)), None)
+        if trouve:
+            entites["lien"] = trouve
     return entites
 
 

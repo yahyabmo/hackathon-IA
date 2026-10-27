@@ -1,0 +1,47 @@
+# Fiches écrites à la main pour le RAG du niveau 2 (questions ouvertes).
+#
+# Les fiches des produits, des paramètres réglementaires et du glossaire sont
+# construites à partir de catalogue.json et glossaire.json (src/rag.py) : un
+# seul endroit pour chaque fait. Ici, seulement ce qui n'y figure pas, avec sa
+# source. Aucun fait non sourcé ; une consigne du prototype est dite comme telle.
+
+- id: perimetre
+  titre: Ce que l'assistant peut faire
+  texte: >-
+    L'assistant n'a aucun accès à votre compte et ne réalise aucune opération : ni virement,
+    ni opposition, ni modification. Il explique, conseille à partir de règles publiques et
+    vous oriente vers votre espace bancaire sécurisé ou un conseiller.
+  source: Périmètre du prototype (kick-off du hackathon)
+  date: "2026-10-26"
+  mots: [acces, compte, operation, faire vous meme, pouvez vous, peux tu, effectuer, executer]
+
+- id: opposition
+  titre: Carte perdue ou volée
+  texte: >-
+    En cas de perte ou de vol de votre carte, faites opposition immédiatement : depuis votre
+    espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Les
+    opérations frauduleuses faites après l'opposition ne sont pas à votre charge. La banque ne
+    vous demandera jamais votre code confidentiel.
+  source: Service-Public, perte ou vol de carte bancaire
+  date: "2026-10-27"
+  mots: [opposition, carte, perdue, volee, vol, perte, bloquer, code confidentiel, fraude]
+
+- id: reclamation
+  titre: Faire une réclamation
+  texte: >-
+    En cas de désaccord, adressez d'abord une réclamation à votre banque : à votre conseiller,
+    puis au service réclamations. Si la réponse ne vous convient pas, ou sans réponse, vous
+    pouvez saisir gratuitement le médiateur bancaire.
+  source: Service-Public, litige avec sa banque et médiation bancaire
+  date: "2026-10-27"
+  mots: [reclamation, plainte, mediateur, litige, contester, desaccord, mecontent]
+
+- id: virement
+  titre: Faire un virement
+  texte: >-
+    Un virement se fait depuis votre espace bancaire sécurisé : choisissez ou ajoutez le
+    bénéficiaire, vérifiez son IBAN, puis validez. Vérifiez toujours le bénéficiaire avant de
+    valider, et méfiez-vous d'une demande pressante d'un inconnu.
+  source: Consigne du prototype
+  date: "2026-10-27"
+  mots: [virement, virer, envoyer, beneficiaire, iban, transfert]

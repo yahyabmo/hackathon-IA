@@ -22,23 +22,37 @@ __all__ = ["comprendre", "escalader"]
 def comprendre(message: str, etat: EtatConversation) -> Comprehension:
     """Compréhension du message, compte tenu de la conversation en cours."""
 
+    from ..aiguilleur import trier_par_urgence  # import tardif : l'aiguilleur lit les parcours
+
     entites = extraire(message)
     par_mots_cles = mots_cles.detecter(message)
-    insatisfait = "insatisfaction" in mots_cles.expressions_trouvees(message)
+    trouvees = mots_cles.expressions_trouvees(message)
+    insatisfait = "insatisfaction" in trouvees
+    sujets = trier_par_urgence([i for i in trouvees if i != "hors_sujet"])
 
     nouveau_sujet = (
         par_mots_cles is not None
         and par_mots_cles.intention not in (etat.parcours, "hors_sujet")
     )
     if etat.info_attendue and etat.parcours and not nouveau_sujet:
+        # « mon père, et j'ai perdu ma carte » : la réponse, et une autre demande à mettre en file.
         return Comprehension(
             famille=etat.famille or famille_de(etat.parcours), intention=etat.parcours, confiance=1.0,
             niveau=NIVEAU_REPONSE, modele="regles", entites=entites, insatisfaction=insatisfait,
+            autres_intentions=[s for s in sujets if s != etat.parcours] if len(sujets) >= 2 or (
+                sujets and sujets[0] != etat.parcours) else [],
         )
 
     if par_mots_cles is not None:
         par_mots_cles.entites = entites
         return par_mots_cles
+
+    if len(sujets) >= 2:
+        # Plusieurs demandes nettes : la plus urgente d'abord, les autres en file.
+        return Comprehension(
+            famille=famille_de(sujets[0]), intention=sujets[0], confiance=0.9, niveau=mots_cles.NIVEAU_MOTS_CLES,
+            modele=mots_cles.MODELE, entites=entites, insatisfaction=insatisfait, autres_intentions=sujets[1:],
+        )
 
     par_classifieur = classifieur.predire(message)
     if par_classifieur is not None and par_classifieur.confiance >= classifieur.SEUIL_TAU:

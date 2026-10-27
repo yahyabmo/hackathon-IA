@@ -2,12 +2,7 @@
 famille: carte_perdue
 intentions: [lost_or_stolen_card, compromised_card, card_swallowed]
 accroche: "Je comprends, il faut agir vite."
-infos:
-  perte_ou_vol:
-    type: choix
-    options:
-      perte: [perdu, perdue, perte, egare, egaree]
-      vol: [vole, volee, vol, piratee, compromise]
-    question: "Votre carte a-t-elle été perdue ou volée ?"
+# La consigne est la même pour une perte ou un vol : on la donne tout de suite, sans question.
+infos: {}
 fin:
   type: orienter

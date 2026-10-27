@@ -27,6 +27,9 @@ import urllib.request
 URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 MODELE_FORMULATION = os.getenv("OLLAMA_MODEL", "ministral-3:3b")
 MODELE_ESCALADE = os.getenv("OLLAMA_MODEL_ESCALADE", "ministral-3:14b")
+# Aiguilleur : le plus petit modèle qui tient chaque rôle, choisi par les bancs des niveaux.
+MODELE_NIVEAU1 = os.getenv("OLLAMA_MODEL_NIVEAU1", "qwen3:1.7b")  # comprendre un message flou (JSON imposé)
+MODELE_NIVEAU2 = os.getenv("OLLAMA_MODEL_NIVEAU2", "qwen3:1.7b")  # rédiger depuis les fiches (RAG)
 OPTIONS = {"temperature": 0.2, "num_ctx": 4096}
 MODELES_A_REFLEXION = ("qwen3", "gemma4")
 
@@ -63,7 +66,14 @@ def _requete(url: str, corps: dict | None = None, delai: float = 120) -> dict:
         return json.load(reponse)
 
 
-def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int) -> dict:
+def reformulation_active() -> bool:
+    """L'ancienne reformulation des conseils par le LLM (mesurée, écartée) : désactivée par défaut."""
+
+    return os.getenv("ASSISTANT_REFORMULER", "0") == "1"
+
+
+def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int,
+                 schema: dict | None = None) -> dict:
     """Requête ``/api/chat`` d'Ollama (publique pour les tests)."""
 
     corps = {
@@ -75,22 +85,32 @@ def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int) -> di
     }
     if modele.startswith(MODELES_A_REFLEXION):
         corps["think"] = False  # sinon la réflexion consomme le budget de tokens et la réponse reste vide
+    if schema is not None:
+        # Sortie contrainte : une grammaire tirée du schéma n'autorise que les tokens qui le respectent.
+        corps["format"] = schema
     return corps
 
 
 def generer(modele: str, systeme: str, message: str, max_tokens: int = 200,
-            role: str = "formulation") -> tuple[str, int]:
-    """Un appel au modèle. Rend le texte et le nombre de tokens (entrée + sortie)."""
+            role: str = "formulation", schema: dict | None = None, delai: float = 120) -> tuple[str, int]:
+    """Un appel au modèle. Rend le texte et le nombre de tokens (entrée + sortie).
+
+    Avec ``schema``, la sortie est imposée par une grammaire (JSON valide et conforme).
+    """
 
     if serveur(role) == "vllm":
         base = os.getenv("VLLM_BASE_URL", "http://localhost:8000/v1").rstrip("/")
-        donnees = _requete(f"{base}/chat/completions", {
+        corps = {
             "model": modele, "temperature": OPTIONS["temperature"], "max_tokens": max_tokens,
             "messages": [{"role": "system", "content": systeme}, {"role": "user", "content": message}],
-        })
+        }
+        if schema is not None:
+            corps["response_format"] = {"type": "json_schema",
+                                        "json_schema": {"name": "sortie", "schema": schema}}
+        donnees = _requete(f"{base}/chat/completions", corps, delai)
         return donnees["choices"][0]["message"]["content"].strip(), donnees.get("usage", {}).get("total_tokens", 0)
 
-    donnees = _requete(f"{URL}/api/chat", corps_ollama(modele, systeme, message, max_tokens))
+    donnees = _requete(f"{URL}/api/chat", corps_ollama(modele, systeme, message, max_tokens, schema), delai)
     tokens = donnees.get("prompt_eval_count", 0) + donnees.get("eval_count", 0)
     return donnees["message"]["content"].strip(), tokens
 

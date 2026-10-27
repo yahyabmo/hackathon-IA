@@ -1,30 +1,41 @@
-"""Point d'entrée unique de l'assistant : un tour de conversation, la cascade.
+"""Point d'entrée unique de l'assistant : un tour de conversation, aiguillé.
 
-comprendre → (clarifier, puis escalader) → converser → conseiller → formuler
+entrée commune (barrières, entités, mots-clés, classifieur) → aiguilleur →
+  niveau 0 : converser → conseiller → formuler (règles et gabarits, sans LLM)
+  niveau 1 : un petit LLM comprend le message (JSON imposé), puis niveau 0
+  niveau 2 : RAG sur nos fiches, un LLM rédige en citant, sous garde-fou
 
-Chaque étage ne passe la main au suivant que s'il ne sait pas faire lui-même.
-Dans le cas normal, un tour fait au plus un appel au LLM, à la fin (formuler) ;
-l'escalade est l'exception, comptée dans la trace. Le chatbot ne possède aucun
-accès bancaire et guide les demandes sensibles vers le canal approprié.
+L'aiguilleur décide à chaque message : une conversation peut passer de 1 à 2,
+puis à 0, puis à 2. La mémoire est commune à tous les niveaux : parcours en
+cours, demandes en file (plusieurs demandes dans un même message, traitées par
+urgence), informations déjà données, question restée en attente, reprise après
+une parenthèse. Le chatbot n'a aucun accès bancaire ; il guide les demandes
+sensibles vers le canal approprié.
 
 Les barrières métier de M3 (montant ambigu, information manquante pour un
-conseil) produisent des décisions comme les autres : tout tour sort par
-``formuler()``, avec sa trace et le mode « mots simples ».
+conseil) produisent des décisions comme les autres.
 """
 
 from __future__ import annotations
 
-from . import incompris
-from .comprendre import comprendre, escalader
+from . import incompris, llm, rag
+from .aiguilleur import Aiguillage, aiguiller, trier_par_urgence
+from .comprendre import comprendre, escalader, interprete
+from .comprendre.entites import extraire
 from .conseiller import clients, conseiller
 from .conseiller import integration as m3
-from .contrats import NIVEAU_REPONSE, Comprehension, Conseil, EtatConversation, Etape, Reponse
+from .contrats import (NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_REPONSE, Comprehension, Conseil,
+                       EtatConversation, Etape, Reponse)
 from .converser import Decision, avancer, formuler
-from .converser.formuler import question_clarification
+from .converser.dialogue import question_en_attente, reponse_lisible
+from .converser.formuler import mots_simples, question_clarification, reprise, simplifier, transition
 from .mesure import mesurer
+from .taxonomie import LIBELLES_FAMILLES, famille_de
 
 # Informations de la question M3 qui complètent le profil plutôt que le projet.
 CHAMPS_PROFIL = {"age": "age", "est_etudiant": "est_etudiant", "ages_enfants": "enfants"}
+# Décisions qui terminent une demande : la suivante (file, ou parcours interrompu) peut venir.
+TERMINALES = ("orienter", "fiche", "conseil", "rag", "abandon")
 
 
 def decision_conseil(etat: EtatConversation) -> Decision:
@@ -54,6 +65,83 @@ def _reprendre_question_m3(message: str, etat: EtatConversation, profil: dict) -
     return decision_conseil(etat)
 
 
+def _llm_permis(etat: EtatConversation) -> bool:
+    return etat.llm_actif if etat.llm_actif is not None else llm.actif()
+
+
+def _contexte(etat: EtatConversation, profil: dict) -> dict[str, str | None]:
+    """Ce que le niveau 1 sait de la conversation : jamais le profil du client."""
+
+    sujet = LIBELLES_FAMILLES.get(etat.famille or famille_de(etat.parcours or "")) if etat.parcours else None
+    deja = list(dict.fromkeys(LIBELLES_FAMILLES.get(famille_de(i), i) for i in etat.traites))
+    return {"sujet": sujet, "question": question_en_attente(etat, profil),
+            "traite": ", ".join(deja) if deja else None}
+
+
+def _appliquer(interpretation: interprete.Interpretation, comprehension: Comprehension,
+               etat: EtatConversation, message: str) -> tuple[Comprehension, str, bool]:
+    """Ce que le niveau 1 a compris, rendu à l'automate : (compréhension, message lu, même sujet)."""
+
+    nouvelles = [i for i in interpretation.intentions if i != etat.parcours and i != "hors_sujet"]
+    modele = interpretation.etape.modele if interpretation.etape else None
+    if etat.info_attendue and etat.parcours:
+        if interpretation.reponse:
+            entites = extraire(interpretation.reponse)
+            if reponse_lisible(interpretation.reponse, entites, etat):
+                return (Comprehension(famille=etat.famille or famille_de(etat.parcours), intention=etat.parcours,
+                                      confiance=1.0, niveau=NIVEAU_REPONSE, modele=modele, entites=entites,
+                                      autres_intentions=nouvelles), interpretation.reponse, False)
+        if nouvelles:
+            # Une nouvelle demande pendant une question : la question attendra, en mémoire.
+            etat.file_demandes = trier_par_urgence([etat.parcours, *etat.file_demandes])
+            return (Comprehension(famille=famille_de(nouvelles[0]), intention=nouvelles[0], confiance=0.0,
+                                  niveau=NIVEAU_INTERPRETE, modele=modele, entites=comprehension.entites,
+                                  autres_intentions=nouvelles[1:]), message, False)
+        if etat.parcours in interpretation.intentions:
+            return comprehension, message, True  # même sujet, pas de réponse : on repose la question, doucement
+        return comprehension, message, False
+    if interpretation.intentions:
+        premiere = interpretation.intentions[0]
+        return (Comprehension(famille=famille_de(premiere), intention=premiere, confiance=0.0,
+                              niveau=NIVEAU_INTERPRETE, modele=modele, entites=comprehension.entites,
+                              autres_intentions=interpretation.intentions[1:]), message, False)
+    return comprehension, message, False
+
+
+def _explication(conseil: Conseil) -> list[str]:
+    """Le conseil en phrases, pour répondre à un « pourquoi ? » au tour suivant (niveau 2)."""
+
+    from .converser.formuler import nom_produit
+
+    phrases = [f"{nom_produit(p.produit_id)} : {' '.join(p.raisons)}" for p in conseil.propositions if p.raisons]
+    phrases += [f"{nom_produit(e.produit_id)} n'est pas proposé : {e.raison}" for e in conseil.ecartees]
+    return phrases + list(conseil.alertes) + list(conseil.faits.get("hypotheses", []))
+
+
+def _traiter(decision: Decision, message: str, comprehension: Comprehension, etat: EtatConversation,
+             profil: dict, trace: list[Etape]) -> tuple[Decision, Conseil | None]:
+    """Converser puis conseiller, à partir d'une compréhension (niveau 0)."""
+
+    conseil = None
+    if decision is None:
+        etat.clarification_demandee = False
+        decision, etape = mesurer("converser", lambda: avancer(message, comprehension, etat, profil),
+                                  modele="automate")
+        trace.append(etape)
+        if decision.type == "transmettre":
+            decision = Decision("orienter", parcours=etat.parcours, accroche=decision.accroche)
+    if decision.type == "conseil":
+        conseil, etape = mesurer("conseiller", lambda: conseiller(etat.parcours, profil, etat.slots),
+                                 modele="regles")
+        trace.append(etape)
+        if conseil.manque:
+            etat.question_m3 = conseil.manque[0]
+            decision = Decision("question_m3", parcours=etat.parcours, info=etat.question_m3)
+        else:
+            etat.explication = _explication(conseil)
+    return decision, conseil
+
+
 def reply(
     message: str, client_id: str, etat: EtatConversation | None = None
 ) -> tuple[Reponse, EtatConversation]:
@@ -61,7 +149,8 @@ def reply(
 
     etat = etat if etat is not None else EtatConversation()
     if etat.client_id is not None and etat.client_id != client_id:
-        etat = EtatConversation(mots_simples=etat.mots_simples)
+        etat = EtatConversation(mots_simples=etat.mots_simples, llm_actif=etat.llm_actif,
+                                niveau_force=etat.niveau_force)
     if etat.profil_simule is None:
         etat.profil_simule = clients.profil(client_id)
     etat.client_id = client_id
@@ -72,14 +161,21 @@ def reply(
     conseil: Conseil | None = None
     escalade = False
     decision: Decision | None = None
+    aiguillage = Aiguillage(0, "règles")
+    sources: list[dict] = []
+    texte_rag: str | None = None
+    meme_sujet = False
+    lu = message
+    # Une question restait en attente : après une parenthèse, on y revient.
+    en_cours = (etat.parcours, etat.famille, dict(etat.slots), etat.info_attendue) if etat.info_attendue else None
 
-    # 0. Barrière de saisie : M1 perd certains nombres mal formés.
+    # 0. Barrières : montant ambigu, information manquante pour un conseil.
     if m3.montant_ambigu(message):
         decision = Decision("montant_ambigu")
     elif etat.question_m3:
         decision = _reprendre_question_m3(message, etat, profil)
 
-    # 1. Comprendre ; sinon clarifier une fois, puis escalader.
+    # 1. Entrée commune, puis l'aiguilleur choisit le niveau de ce message.
     if decision is None:
         comprehension, etape = mesurer("comprendre", lambda: comprendre(message, etat))
         etape.modele = comprehension.modele
@@ -90,7 +186,35 @@ def reply(
             comprehension = Comprehension(
                 famille=etat.famille or "", intention=etat.parcours, confiance=1.0,
                 niveau=NIVEAU_REPONSE, modele="regles", entites=comprehension.entites)
-        if not comprehension.comprise:
+        lisible = comprehension.niveau != NIVEAU_REPONSE or reponse_lisible(message, comprehension.entites, etat)
+        llm_ok = _llm_permis(etat)
+        aiguillage = aiguiller(message, comprehension, etat, lisible=lisible,
+                               sujets_cites=rag.vocabulaire_cite(message), llm_ok=llm_ok,
+                               rag_ok=rag.disponible())
+        if etat.niveau_force is not None:
+            aiguillage = Aiguillage(etat.niveau_force, "niveau forcé (démonstration)", aiguillage.signaux)
+
+        if aiguillage.niveau == 2:
+            pourquoi = message.strip().lower().startswith("pourquoi")
+            reponse_rag = rag.repondre(message, etat.explication if pourquoi else None, avec_llm=llm_ok)
+            trace += reponse_rag.etapes
+            sources = reponse_rag.sources
+            if reponse_rag.pertinent or etat.niveau_force == 2:
+                texte_rag, decision = reponse_rag.texte, Decision("rag")
+            else:
+                aiguillage = Aiguillage(0, "aucune fiche assez proche : retour aux règles", aiguillage.signaux)
+        elif aiguillage.niveau == 1 and llm_ok:
+            interpretation = interprete.interpreter(message, _contexte(etat, profil))
+            trace.append(interpretation.etape)
+            if interpretation.valide:
+                comprehension, lu, meme_sujet = _appliquer(interpretation, comprehension, etat, message)
+            aiguillage.raison += f" → {interpretation.raison}"
+
+        if comprehension.autres_intentions:
+            etat.file_demandes = trier_par_urgence(
+                [*etat.file_demandes, *[i for i in comprehension.autres_intentions if i != comprehension.intention]])
+
+        if decision is None and not comprehension.comprise:
             if not etat.clarification_demandee:
                 etat.clarification_demandee = True
                 decision = Decision("clarifier", question=question_clarification(comprehension.alternatives))
@@ -106,34 +230,49 @@ def reply(
             if decision is not None:
                 incompris.noter(message, client_id, decision.type, comprehension)
 
-    # 2. Converser. Une demande sensible devient un guidage sans accès au compte.
-    if decision is None:
-        etat.clarification_demandee = False
-        decision, etape = mesurer("converser", lambda: avancer(message, comprehension, etat, profil),
-                                  modele="automate")
+    # 2 et 3. Converser, puis conseiller (niveau 0, ou après le niveau 1).
+    if decision is None or decision.type == "conseil":
+        decision, conseil = _traiter(decision, lu, comprehension, etat, profil, trace)
+    if meme_sujet and decision.type == "question" and decision.relance == "incompris":
+        decision.relance = "meme_sujet"
+
+    # 4. Formuler (le niveau 2 a déjà rédigé sa réponse).
+    if texte_rag is not None:
+        texte = simplifier(texte_rag, expliquer_jargon=False) if mots_simples(profil, etat) else texte_rag
+        trace.append(Etape(nom="formuler", modele="rag"))
+    else:
+        texte, etape = formuler(decision, conseil, profil, etat, message)
         trace.append(etape)
-        if decision.type == "transmettre":
-            decision = Decision("orienter", parcours=etat.parcours, accroche=decision.accroche)
 
-    # 3. Conseiller ; s'il manque une information indispensable, on la demande.
-    if decision.type == "conseil":
-        conseil, etape = mesurer("conseiller", lambda: conseiller(etat.parcours, profil, etat.slots),
-                                 modele="regles")
-        trace.append(etape)
-        if conseil.manque:
-            etat.question_m3 = conseil.manque[0]
-            decision = Decision("question_m3", parcours=etat.parcours, info=etat.question_m3)
+    # 5. La suite : reprendre la question interrompue, ou passer à la demande suivante en file.
+    if decision.type in TERMINALES and decision.type != "rag" and etat.parcours and etat.parcours not in etat.traites:
+        etat.traites.append(etat.parcours)
+    if decision.type in TERMINALES and not etat.question_m3:
+        interrompu = (en_cours and decision.type != "abandon" and en_cours[0] not in etat.file_demandes
+                      and (decision.type == "rag" or etat.parcours != en_cours[0]))
+        if interrompu:
+            etat.parcours, etat.famille, etat.slots, etat.info_attendue = en_cours
+            etat.memoire.pop(en_cours[0], None)
+            texte += "\n\n" + reprise(en_cours[0], question_en_attente(etat, profil))
+        elif etat.file_demandes and not etat.info_attendue:
+            suivante = etat.file_demandes.pop(0)
+            suite = Comprehension(famille=famille_de(suivante), intention=suivante, confiance=1.0,
+                                  niveau=NIVEAU_FILE, modele="file")
+            decision_suite, conseil_suite = _traiter(None, "", suite, etat, profil, trace)
+            texte_suite, etape = formuler(decision_suite, conseil_suite, profil, etat, "")
+            trace.append(etape)
+            texte += "\n\n" + transition(suivante) + " " + texte_suite
+            decision, conseil = decision_suite, conseil_suite or conseil
+    elif en_cours and etat.parcours != en_cours[0] and en_cours[0] not in etat.file_demandes:
+        etat.file_demandes.insert(0, en_cours[0])  # la question interrompue reviendra ensuite
 
-
-    # 5. Formuler : le seul appel LLM du tour, et seulement pour un conseil complet.
-    texte, etape = formuler(decision, conseil, profil, etat, message)
-    trace.append(etape)
-
+    etat.niveaux.append(aiguillage.niveau)
     etat.derniere_reponse = texte
     etat.historique.append({"role": "assistant", "content": texte})
     reponse = Reponse(
         texte=texte, comprehension=comprehension, conseil=conseil,
         question=decision.info if decision.type in ("question", "question_m3") else None,
-        escalade=escalade, trace=trace,
+        escalade=escalade, trace=trace, niveau=aiguillage.niveau, raison_niveau=aiguillage.raison,
+        sources=sources,
     )
     return reponse, etat

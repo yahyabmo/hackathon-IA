@@ -107,8 +107,9 @@ def test_pas_d_escalade_par_defaut_meme_avec_le_llm(monkeypatch):
     monkeypatch.setenv("ASSISTANT_LLM", "1")
     monkeypatch.setattr("src.llm.URL", "http://127.0.0.1:9")
     reponse, etat = converser("C01", ["Je ne sais pas quoi demander", "rien de précis"])
-    assert reponse.escalade is False
-    assert reponse.appels_llm == 0
+    assert reponse.escalade is False  # jamais d'escalade vers le 14B par défaut
+    assert reponse.niveau == 1 and reponse.appels_llm == 1  # le niveau 1 est tenté une fois…
+    assert "aucun accès" in reponse.texte  # …et, serveur injoignable, le repli sûr répond
     assert "aucun accès" in reponse.texte.lower()
 
 
