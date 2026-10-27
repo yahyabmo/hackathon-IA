@@ -37,7 +37,9 @@ def _executer(action: Action, profil: dict, etat: EtatConversation, trace: list[
     return action
 
 
-def _decision_conseil(etat: EtatConversation) -> Decision:
+def decision_conseil(etat: EtatConversation) -> Decision:
+    """La décision de conseil d'un parcours (publique : le banc de formulation la réutilise)."""
+
     credit = etat.famille == "credit"
     return Decision("conseil", parcours=etat.parcours, mention_legale="credit" if credit else None,
                     proposer="transmettre_conseiller" if credit else None)
@@ -74,7 +76,7 @@ def _reprendre_question_m3(message: str, etat: EtatConversation, profil: dict) -
     else:
         etat.slots[champ] = valeur
     etat.question_m3 = etat.info_attendue = None
-    return _decision_conseil(etat)
+    return decision_conseil(etat)
 
 
 def _repondre_a_l_action_en_attente(message: str, etat: EtatConversation, profil: dict,

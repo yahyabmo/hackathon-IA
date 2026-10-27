@@ -5,6 +5,11 @@ descend, et on garde le plus petit qui tient le seuil fixé à l'avance :
 **zéro nombre inventé** (garde-fou) et **au moins 27 réponses sur 30 jugées
 bonnes** (exact, clair, ton juste) par deux membres de l'équipe.
 
+Les situations passent par le même chemin que l'assistant : règles de M3,
+décision de conseil de l'orchestrateur, gabarit de formuler(), puis la même
+fonction reformuler() et le même garde-fou. Le banc mesure donc exactement ce
+que l'assistant affichera.
+
 Pour chaque modèle, les 30 mêmes situations de conseil sont reformulées. Le
 garde-fou est vérifié automatiquement ; le jugement humain se fait dans le CSV
 produit (colonnes ``juge_1`` et ``juge_2`` à remplir par oui / non, facultatives).
@@ -28,7 +33,7 @@ from typing import Any
 from src import llm
 from src.conseiller import clients, conseiller
 from src.contrats import EtatConversation
-from src.converser.dialogue import Decision, parcours_disponibles
+from src.assistant import decision_conseil
 from src.converser.formuler import gabarit, reformuler
 from src.taxonomie import famille_de
 
@@ -56,10 +61,8 @@ def preparer(client: str, parcours: str, infos: dict[str, Any]) -> tuple[str, st
     profil = clients.profil(client)
     slots = {"revenus_nets": profil["revenus_nets"], "mensualites_en_cours": profil["mensualites_credits"],
              **infos}
-    fin = parcours_disponibles()[parcours]["fin"]
-    decision = Decision("conseil", parcours=parcours, mention_legale=fin.get("mention_legale"),
-                        proposer=fin.get("proposer"))
     etat = EtatConversation(parcours=parcours, famille=famille_de(parcours), slots=slots)
+    decision = decision_conseil(etat)
     return f"{client}-{parcours}-{'-'.join(str(v) for v in infos.values())}", \
         gabarit(decision, conseiller(parcours, profil, slots), None, profil, etat, "")
 

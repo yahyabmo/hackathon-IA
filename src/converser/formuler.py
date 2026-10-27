@@ -123,17 +123,30 @@ def _joindre(*morceaux: str | None, sep: str = " ") -> str:
 
 # ── Gabarits ──────────────────────────────────────────────────────────
 
+def _suite(raison: str) -> str:
+    """Une raison de M3 placée après « : » : minuscule initiale (sauf sigle), un seul point final."""
+
+    raison = raison.strip().rstrip(".")
+    premier_mot = raison.split(" ", 1)[0]
+    if len(premier_mot) == 1 or not premier_mot.isupper():
+        raison = raison[0].lower() + raison[1:]
+    return raison + "."
+
+
 def _conseil_general(conseil: Conseil) -> str:
-    proposes = [p for p in conseil.propositions if p.produit_id != "rdv_conseiller"]
-    morceaux = []
+    """Un paragraphe pour ce qui est proposé, un pour ce qui ne l'est pas, un pour les alertes."""
+
+    proposes = [p for p in conseil.propositions if p.produit_id != "rdv_conseiller" and p.raisons]
+    paragraphes = []
     if proposes:
-        morceaux.append("Voici ce que je vous propose. " + " ".join(
-            f"{nom_produit(p.produit_id)} : {p.raisons[0][0].lower()}{p.raisons[0][1:]}" for p in proposes if p.raisons))
+        paragraphes.append("Voici ce que je vous propose. " + " ".join(
+            f"{nom_produit(p.produit_id)} : {_suite(p.raisons[0])}" for p in proposes))
     if conseil.ecartees:
-        morceaux.append("Je ne vous propose pas : " + " ; ".join(
-            f"{nom_produit(e.produit_id)}, {e.raison}" for e in conseil.ecartees) + ".")
-    morceaux += conseil.alertes
-    return " ".join(morceaux)
+        paragraphes.append(" ".join(
+            f"Non proposé — {nom_produit(e.produit_id)} : {_suite(e.raison)}" for e in conseil.ecartees))
+    if conseil.alertes:
+        paragraphes.append(" ".join(conseil.alertes))
+    return "\n\n".join(paragraphes)
 
 
 def _gabarit_conseil(decision: Decision, conseil: Conseil) -> str:
@@ -141,7 +154,7 @@ def _gabarit_conseil(decision: Decision, conseil: Conseil) -> str:
     écarts et les alertes (assurance inconnue, frais non couverts…), le gabarit les restitue."""
 
     question = f"Voulez-vous qu'un conseiller vous rappelle ? {OUI_NON}" if decision.proposer else None
-    return _joindre(_conseil_general(conseil), question)
+    return _joindre(_conseil_general(conseil), question, sep="\n\n")
 
 
 def _gabarit_action_a_confirmer(decision: Decision, profil: dict[str, Any], etat: EtatConversation) -> str:
