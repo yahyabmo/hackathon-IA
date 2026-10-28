@@ -10,6 +10,8 @@ faute de comprendre, « Bonjour ! » hors de propos, repli du garde-fou).
 Usage, depuis la racine du dépôt :
     ASSISTANT_LLM=1 python -m eval.rejouer_conversations      # avec les niveaux 1 et 2
     python -m eval.rejouer_conversations                      # sans LLM
+    OLLAMA_MODEL_NIVEAU1=ministral-3:3b CONVERSATIONS_SORTIE=conversations-libres-ministral.md \
+        ASSISTANT_LLM=1 python -m eval.rejouer_conversations       # comparer un autre modèle
 Écrit ``eval/resultats/conversations-libres.md`` (et ``.json``).
 """
 
@@ -35,14 +37,13 @@ from src.contrats import EtatConversation  # noqa: E402
 
 RACINE = Path(__file__).resolve().parents[1]
 CONVERSATIONS = RACINE / "eval" / "conversations_libres.yaml"
-SORTIE = RACINE / "eval" / "resultats" / "conversations-libres.md"
+SORTIE = RACINE / "eval" / "resultats" / os.environ.get("CONVERSATIONS_SORTIE", "conversations-libres.md")
 SIGNAUX = {
     "incompris": "Je n'ai pas bien compris",
     "clarification": "Pour bien vous aider",
     "question fermée": "Pour être sûr de bien vous aider",
     "orienté faute de comprendre": "Je préfère ne pas deviner",
     "« Bonjour ! »": "Bonjour !",
-    "pas de fiche": "Je n'ai pas encore de fiche",
     "hors de nos fiches": "Je n'ai pas cette information",
 }
 

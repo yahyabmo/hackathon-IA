@@ -30,6 +30,7 @@ DOSSIER = Path(__file__).resolve().parent / "parcours"
 CHAMPS_MONETAIRES = ("revenus_nets", "epargne", "solde", "mensualites_credits")
 NE_SAIT_PAS = ("je ne sais pas", "je sais pas", "sais pas", "aucune idee", "je ne suis pas sur",
                "pas sur", "j hesite")
+A_PART = ("hors_sujet", "question_definition")  # répondues à part, sans remplacer le parcours en cours
 REFUS = ("non", "laisse tomber", "annule", "annuler", "finalement non", "pas maintenant",
          "on arrete", "stop")
 
@@ -189,6 +190,9 @@ def avancer(
 ) -> Decision:
     """Fait avancer le parcours d'un tour et dit quoi faire."""
 
+    if comprehension.intention in A_PART and comprehension.niveau != NIVEAU_REPONSE:
+        # Une politesse ou une définition : le parcours en cours reste là pour la suite.
+        return Decision("fiche", parcours=comprehension.intention)
     nouveau = comprehension.niveau != NIVEAU_REPONSE and comprehension.intention != etat.parcours
     if nouveau:
         _mettre_de_cote(etat)
@@ -211,6 +215,9 @@ def avancer(
                 supposition = info["si_inconnu"]["phrase"]
             else:
                 relance = "ne_sait_pas"
+        elif (info["type"] != "montant" and comprehension.entites.get("montants")
+              and corriger(message, comprehension.entites, etat, spec)):
+            relance = "meme_sujet"  # « non je préfère 5000 » : la correction, puis la même question
         elif _refus(texte) and not comprehension.entites.get("montants"):
             if "si_non" in info:
                 etat.slots[attendue] = info["si_non"]

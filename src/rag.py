@@ -180,12 +180,14 @@ def rechercher(question: str, explication: list[str] | None = None,
                k: int = NOMBRE_PASSAGES) -> list[dict[str, Any]]:
     """Les k passages les plus proches, avec leur score ; l'explication du dernier conseil en plus.
 
-    Un « pourquoi ? » sans autre mot porte sur le dernier conseil : ses phrases sont les passages.
+    Un « pourquoi ? » sans autre mot, ou qui ne nomme aucune fiche (« pourquoi c'est refusé ? »),
+    porte sur le dernier conseil : ses phrases sont les passages.
     """
 
     import torch
 
-    if explication and len(normaliser(question).split()) <= 3:
+    texte = normaliser(question)
+    if explication and (len(texte.split()) <= 3 or (texte.startswith("pourquoi") and not vocabulaire_cite(question))):
         return _passages_explication(explication)[:k]
 
     index = _index()

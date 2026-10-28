@@ -55,7 +55,9 @@ RELANCES = {
     "meme_sujet": "Bien sûr.",
     "merci": "Avec plaisir.",
 }
-ACCORDS = ("oui", "ok", "d accord", "merci", "parfait", "tres bien", "super", "non", "non merci", "c est bon")
+ACCORDS = ("oui", "ok", "d accord", "merci", "parfait", "tres bien", "super", "non", "non merci", "c est bon",
+           "ok super", "ok cool", "bon d accord", "ok d accord", "d accord merci", "laisse tomber", "pas maintenant",
+           "oui mais pas maintenant", "c est note", "entendu", "ca marche")
 # Formules de politesse, pour répondre « au revoir » à un au revoir, et non « Bonjour ! ».
 AU_REVOIR = ("au revoir", "bye", "goodbye", "bonne journee", "bonne soiree", "bonne fin de journee", "a bientot",
              "a plus", "ciao", "a la prochaine", "bonne nuit")
@@ -253,7 +255,7 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
         fiche = glossaire.chercher(message, approchant=True)
         if fiche:
             return f"{fiche['terme']} : {fiche['explication']}"
-        return "Je n'ai pas encore de fiche sur ce terme : un conseiller pourra vous l'expliquer."
+        return f"Je n'ai pas cette information dans mes fiches. {ORIENTATION_CONSEILLER}"
     if decision.parcours == "hors_sujet":
         genre = politesse(message)
         if genre == "fin":

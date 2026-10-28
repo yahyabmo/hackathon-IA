@@ -283,3 +283,15 @@ def test_rendez_vous_et_releves_sans_acces_au_compte():
     reponse, etat = converser("C01", ["Je veux un crédit pour acheter une voiture.", "12000",
                                       "dis moi en se basant sur mes relevés"])
     assert "aucun accès à vos relevés" in reponse.texte and "Revenons à un crédit" in reponse.texte
+
+
+def test_une_definition_ne_remplace_pas_le_parcours():
+    reponse, etat = converser("C05", ["je veux un crédit conso", "12000", "48 mois", "c'est quoi le TAEG",
+                                      "et avec 8000 ?"])
+    assert etat.parcours == "credit_conso" and etat.slots["montant"] == 8000 and "Prêt personnel" in reponse.texte
+
+
+def test_correction_pendant_une_question():
+    reponse, etat = converser("C05", ["je veux un crédit conso", "10000", "non je préfère 5000"])
+    assert etat.slots["montant"] == 5000 and reponse.question == "duree_mois"
+    assert "Je n'ai pas bien compris" not in reponse.texte

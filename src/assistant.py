@@ -26,8 +26,8 @@ from .comprendre import classifieur, comprendre, escalader, interprete, mots_cle
 from .comprendre.entites import extraire
 from .conseiller import clients, conseiller
 from .conseiller import integration as m3
-from .contrats import (NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_MOTS_CLES, NIVEAU_REPONSE, Comprehension, Conseil,
-                       EtatConversation, Etape, Reponse)
+from .contrats import (NIVEAU_CLASSIFIEUR, NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_MOTS_CLES, NIVEAU_REPONSE,
+                       Comprehension, Conseil, EtatConversation, Etape, Reponse)
 from .converser import Decision, avancer, formuler, glossaire
 from .converser.dialogue import _mettre_de_cote, parcours_disponibles, question_en_attente, reponse_lisible
 from .converser.formuler import mots_simples, politesse, question_clarification, reprise, simplifier, transition
@@ -46,12 +46,20 @@ RENDEZ_VOUS = ("rendez vous", "rdv", "parler a un conseiller", "voir un conseill
                "etre rappele", "me rappeler", "parler a quelqu un")
 DONNEES_COMPTE = ("releve", "releves", "mes donnees", "en se basant sur mes", "regarde mon compte",
                   "consulte mon compte", "verifie mon compte", "mon historique", "mes operations")
+# Réponses données à part : elles ne terminent pas le parcours en cours, qui reprend ensuite.
+A_PART_REGLES = ("rendez_vous", "acces_compte", "code_secret", "hors_sujet", "question_definition")
 MOTS_CREDIT = ("credit", "pret", "emprunt", "emprunter")
 BIEN_MINIMUM = 40_000  # sous ce montant, « un crédit de 10 000 € » n'est pas un projet immobilier
 NOMBRE_SEUL = re.compile(r"[\d\s.,€k]+(?:euros?)?", re.IGNORECASE)
 # « finalement oui » après un refus : le parcours laissé de côté reprend là où il en était.
 REPRENDRE = ("finalement oui", "finalement si", "oui finalement", "si finalement", "en fait oui", "on reprend",
              "reprenons", "on continue", "je veux bien finalement", "finalement je veux bien", "finalement d accord")
+# « et si j'emprunte sur 30 ans ? », « non plutôt 300 € » : une variante du parcours, pas un nouveau sujet.
+SUITE = ("et si", "et avec", "et sur", "et pour", "et en", "plutot", "reessayer", "finalement", "si j emprunte",
+         "si je prends", "si je mets")
+# « je vais être remboursée ? » après un vol de carte : le classifieur, qui ne voit pas la conversation,
+# n'a pas le dernier mot sur une question de suite d'un autre domaine ; le niveau 1 la lit avec le contexte.
+QUESTION_DE_SUITE = re.compile(r"\?\s*$|^(et|est ce|je |il |elle |ca |c est )")
 # « il veut aussi mon code de carte » : jamais, à personne (règle de sécurité, avant tout le reste).
 CODE_SECRET = ("code de carte", "code de ma carte", "code de la carte", "code confidentiel", "code secret",
                "mon code", "mot de passe", "mes identifiants")
@@ -225,7 +233,7 @@ def _politesse_seule(message: str, texte_normalise: str) -> str | None:
 def _parcours_a_reprendre(etat: EtatConversation) -> str | None:
     """Le parcours guidé auquel rattacher la suite : celui en cours, sinon le dernier laissé de côté."""
 
-    if etat.parcours in parcours_disponibles():
+    if etat.parcours in parcours_disponibles() and etat.parcours not in A_PART_REGLES:
         return etat.parcours
     return next(reversed(etat.memoire), None)
 
@@ -289,7 +297,9 @@ def reply(
         montants = comprehension.entites.get("montants") or []
         nombre_seul = bool(NOMBRE_SEUL.fullmatch(message.strip()))
         cible = _parcours_a_reprendre(etat)
-        sans_demande = not comprehension.comprise or nombre_seul or comprehension.intention == "hors_sujet"
+        suite = any(contient(texte_normalise, m) for m in SUITE) and comprehension.niveau != NIVEAU_MOTS_CLES
+        sans_demande = (not comprehension.comprise or nombre_seul or suite
+                        or comprehension.intention == "hors_sujet")
         valeurs = montants or any(comprehension.entites.get(k) for k in ("duree_mois", "lien", "objet"))
         reprendre = (cible and not etat.info_attendue and comprehension.niveau != NIVEAU_MOTS_CLES
                      and any(contient(texte_normalise, r) for r in REPRENDRE))
@@ -304,6 +314,12 @@ def reply(
             comprehension = Comprehension(
                 famille=etat.famille or "", intention=etat.parcours, confiance=1.0,
                 niveau=NIVEAU_REPONSE, modele="regles", entites=comprehension.entites)
+        elif (cible and comprehension.niveau == NIVEAU_CLASSIFIEUR and not etat.info_attendue
+              and comprehension.intention not in parcours_disponibles()
+              and _domaine(comprehension.intention) != _domaine(cible)
+              and QUESTION_DE_SUITE.search(message.strip().lower())):
+            comprehension = Comprehension(entites=comprehension.entites, alternatives=comprehension.alternatives,
+                                          modele=comprehension.modele)
         if (etat.parcours == "credit_immobilier" and montants and max(montants) < BIEN_MINIMUM
                 and any(contient(texte_normalise, m) for m in MOTS_CREDIT)):
             # « Un crédit de 10 000 € » n'est pas un bien à 10 000 € : c'est un crédit à la consommation.
@@ -314,7 +330,7 @@ def reply(
                        "pas d'un crédit immobilier.")
             comprehension = Comprehension(famille="credit", intention="credit_conso", confiance=1.0,
                                           niveau=NIVEAU_MOTS_CLES, modele="regles", entites=comprehension.entites)
-        lisible = (comprehension.niveau != NIVEAU_REPONSE or poli is not None
+        lisible = (comprehension.niveau != NIVEAU_REPONSE or poli in ("merci", "salut")
                    or reponse_lisible(message, comprehension.entites, etat))
         llm_ok = _llm_permis(etat)
         aiguillage = aiguiller(message, comprehension, etat, lisible=lisible,
@@ -326,6 +342,16 @@ def reply(
         if etat.niveau_force is not None:
             aiguillage = Aiguillage(etat.niveau_force, "niveau forcé (démonstration)", aiguillage.signaux)
 
+        if aiguillage.niveau == 1 and llm_ok:
+            interpretation = interprete.interpreter(message, _contexte(etat, profil))
+            trace.append(interpretation.etape)
+            if interpretation.valide:
+                comprehension, lu, meme_sujet = _appliquer(interpretation, comprehension, etat, message)
+            aiguillage.raison += f" → {interpretation.raison}"
+            if (comprehension.intention == "question_definition" and rag.disponible()
+                    and glossaire.chercher(message, approchant=True) is None):
+                aiguillage = Aiguillage(2, aiguillage.raison + " ; aucun terme du glossaire : nos fiches",
+                                        aiguillage.signaux)
         if aiguillage.niveau == 2:
             pourquoi = message.strip().lower().startswith("pourquoi")
             reponse_rag = rag.repondre(message, etat.explication if pourquoi else None, avec_llm=llm_ok)
@@ -335,12 +361,6 @@ def reply(
                 texte_rag, decision = reponse_rag.texte, Decision("rag")
             else:
                 aiguillage = Aiguillage(0, "aucune fiche assez proche : retour aux règles", aiguillage.signaux)
-        elif aiguillage.niveau == 1 and llm_ok:
-            interpretation = interprete.interpreter(message, _contexte(etat, profil))
-            trace.append(interpretation.etape)
-            if interpretation.valide:
-                comprehension, lu, meme_sujet = _appliquer(interpretation, comprehension, etat, message)
-            aiguillage.raison += f" → {interpretation.raison}"
 
         if comprehension.autres_intentions:
             etat.file_demandes = trier_par_urgence(
@@ -379,12 +399,13 @@ def reply(
         trace.append(etape)
 
     # 5. La suite : reprendre la question interrompue, ou passer à la demande suivante en file.
-    if decision.type in TERMINALES and decision.type != "rag" and etat.parcours and etat.parcours not in etat.traites:
+    a_part = decision.parcours in A_PART_REGLES
+    if (decision.type in TERMINALES and decision.type != "rag" and not a_part and etat.parcours
+            and etat.parcours not in etat.traites):
         etat.traites.append(etat.parcours)
     if decision.type in TERMINALES and not etat.question_m3:
         interrompu = (en_cours and decision.type != "abandon" and en_cours[0] not in etat.file_demandes
-                      and (decision.type == "rag" or decision.parcours in ("rendez_vous", "acces_compte")
-                           or etat.parcours != en_cours[0]))
+                      and (decision.type == "rag" or a_part or etat.parcours != en_cours[0]))
         if interrompu:
             etat.parcours, etat.famille, etat.slots, etat.info_attendue = en_cours
             etat.memoire.pop(en_cours[0], None)
