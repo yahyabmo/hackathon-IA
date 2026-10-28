@@ -24,7 +24,7 @@ from ..contrats import Alternative, Conseil, Etape, EtatConversation
 from ..conseiller import catalogue as cat
 from ..conseiller import integration as questions_m3
 from ..taxonomie import LIBELLES_FAMILLES, famille_de
-from ..texte import euros, normaliser
+from ..texte import contient, euros, normaliser
 from . import garde_fou, glossaire
 from .dialogue import Decision
 
@@ -53,8 +53,15 @@ RELANCES = {
     "incompris": "Je n'ai pas bien compris.",
     "ne_sait_pas": "Pas de souci, une estimation suffit.",
     "meme_sujet": "Bien sûr.",
+    "merci": "Avec plaisir.",
 }
 ACCORDS = ("oui", "ok", "d accord", "merci", "parfait", "tres bien", "super", "non", "non merci", "c est bon")
+# Formules de politesse, pour répondre « au revoir » à un au revoir, et non « Bonjour ! ».
+AU_REVOIR = ("au revoir", "bye", "goodbye", "bonne journee", "bonne soiree", "bonne fin de journee", "a bientot",
+             "a plus", "ciao", "a la prochaine", "bonne nuit")
+REFLECHIR = ("je vais reflechir", "je vais y reflechir", "je reviendrai", "je reviens plus tard", "je vais voir")
+MERCI = ("merci", "thank you", "thanks")
+SALUT = ("bonjour", "bonsoir", "salut", "hello", "coucou", "hi")
 SEUIL_MONTANT_INHABITUEL = 10  # fois les revenus mensuels
 MOIS = ("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre")
@@ -229,6 +236,18 @@ def parties_conseil(decision: Decision, conseil: Conseil) -> tuple[str, str | No
     return corps, SUITE_CONSEILLER if decision.proposer else None
 
 
+def politesse(message: str) -> str | None:
+    """« fin », « reflechir », « merci », « accord » ou « salut » si le message est une formule de politesse."""
+
+    texte = normaliser(message)
+    if len(texte.split()) > 6:
+        return None
+    for genre, formules in (("fin", AU_REVOIR), ("reflechir", REFLECHIR), ("merci", MERCI), ("salut", SALUT)):
+        if any(contient(texte, f) for f in formules):
+            return genre
+    return "accord" if texte in ACCORDS else None
+
+
 def _gabarit_fiche(decision: Decision, message: str) -> str:
     if decision.parcours == "question_definition":
         fiche = glossaire.chercher(message, approchant=True)
@@ -236,10 +255,17 @@ def _gabarit_fiche(decision: Decision, message: str) -> str:
             return f"{fiche['terme']} : {fiche['explication']}"
         return "Je n'ai pas encore de fiche sur ce terme : un conseiller pourra vous l'expliquer."
     if decision.parcours == "hors_sujet":
+        genre = politesse(message)
+        if genre == "fin":
+            return "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question."
+        if genre == "reflechir":
+            return "Bien sûr, prenez le temps d'y réfléchir. Je reste disponible si vous avez une question."
         if normaliser(message) in ACCORDS:
-            debut = "Avec plaisir." if "merci" in normaliser(message) else "D'accord."
+            debut = "Avec plaisir." if genre == "merci" else "D'accord."
             return f"{debut} Puis-je vous aider pour autre chose ?"
-        debut = "Avec plaisir !" if "merci" in normaliser(message) else "Bonjour !"
+        # Un message sans demande lisible n'est pas une salutation : pas de « Bonjour ! » hors de propos.
+        debut = {"merci": "Avec plaisir !", "salut": "Bonjour !"}.get(genre or "",
+                                                                      "Je ne suis pas sûr de bien vous comprendre.")
         return (f"{debut} Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un "
                 "projet de crédit. Que puis-je faire pour vous ?")
     sujet = LIBELLES_FAMILLES.get(famille_de(decision.parcours or ""), "ce sujet")
@@ -264,6 +290,11 @@ def _gabarit_orientation(decision: Decision, profil: dict[str, Any], etat: EtatC
         return ("Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte. Pour voir un "
                 "conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou "
                 "appelez votre agence. Préparez votre projet : montant, durée, revenus.")
+    if decision.parcours == "code_secret":
+        return ("Ne donnez jamais votre code confidentiel, ni vos identifiants, à personne : ni par téléphone, ni par "
+                "SMS, ni par mail, même à quelqu'un qui se présente comme la banque. La banque ne vous les demandera "
+                "jamais. Si vous l'avez déjà donné, faites opposition sur votre carte tout de suite, dans votre "
+                "espace bancaire sécurisé, et prévenez votre conseiller.")
     if decision.parcours == "acces_compte":
         return ("Je n'ai aucun accès à vos relevés ni à votre compte : je ne peux pas les consulter. Je m'appuie "
                 "seulement sur les informations de votre profil (revenus, épargne, crédits en cours). Pour un examen "

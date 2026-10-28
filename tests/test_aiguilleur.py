@@ -107,9 +107,9 @@ def test_le_schema_impose_une_liste_fermee_de_sujets():
 
 
 def test_niveau_1_meme_sujet_on_repose_la_question_avec_des_exemples(monkeypatch):
-    monkeypatch.setattr(llm, "generer", faux_llm({"oui": {"intentions": ["faire_virement"],
-                                                          "reponse_a_la_question": "oui"}}))
-    reponse, _ = converser("C01", ["Je veux faire un virement", "oui"], llm_actif=True)
+    monkeypatch.setattr(llm, "generer", faux_llm({"oui c'est ça": {"intentions": ["faire_virement"],
+                                                                  "reponse_a_la_question": "oui"}}))
+    reponse, _ = converser("C01", ["Je veux faire un virement", "oui c'est ça"], llm_actif=True)
     assert reponse.niveau == 1 and reponse.appels_llm == 1
     assert reponse.texte.startswith("Bien sûr. À qui voulez-vous envoyer l'argent ?")
     assert "Par exemple : votre fils" in reponse.texte
@@ -124,8 +124,35 @@ def test_niveau_1_une_reponse_libre_remplit_l_information(monkeypatch):
 
 def test_niveau_1_injoignable_repli_sur_les_regles(monkeypatch):
     monkeypatch.setattr(llm, "URL", "http://127.0.0.1:9")
-    reponse, _ = converser("C01", ["Je veux faire un virement", "oui"], llm_actif=True)
+    reponse, _ = converser("C01", ["Je veux faire un virement", "oui c'est ça"], llm_actif=True)
     assert reponse.niveau == 1 and "Je n'ai pas bien compris" in reponse.texte
+
+
+def test_politesse_pendant_une_question_sans_llm(monkeypatch):
+    monkeypatch.setattr(llm, "URL", "http://127.0.0.1:9")
+    reponse, etat = converser("C01", ["Je veux faire un virement", "merci"], llm_actif=True)
+    assert reponse.niveau == 0 and reponse.texte.startswith("Avec plaisir. À qui voulez-vous envoyer")
+    reponse, etat = converser("C01", ["Je veux faire un virement", "au revoir"], llm_actif=True)
+    assert reponse.texte.startswith("Au revoir") and etat.info_attendue is None
+    assert "faire_virement" in etat.memoire
+
+
+def test_finalement_oui_reprend_le_parcours_refuse():
+    reponse, etat = converser("C05", ["je veux un crédit conso", "non", "finalement si"])
+    assert reponse.texte.startswith("Très bien, reprenons") and reponse.question == "montant"
+    reponse, etat = converser("C04", ["je veux faire un virement", "à mon fils", "non", "500"])
+    assert etat.slots.get("montant") == 500 and etat.slots.get("beneficiaire") == "fils"
+
+
+def test_au_revoir_n_est_pas_bonjour():
+    for message in ("au revoir", "bye", "bonne journée"):
+        reponse, _ = converser("C01", [message])
+        assert reponse.texte.startswith("Au revoir"), message
+
+
+def test_on_ne_donne_jamais_son_code():
+    reponse, _ = converser("C01", ["il veut aussi mon code de carte"])
+    assert "Ne donnez jamais votre code" in reponse.texte
 
 
 # ── Niveau 2 : RAG sur nos fiches (vrai encodeur) ──

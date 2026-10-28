@@ -28,9 +28,9 @@ from .conseiller import clients, conseiller
 from .conseiller import integration as m3
 from .contrats import (NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_MOTS_CLES, NIVEAU_REPONSE, Comprehension, Conseil,
                        EtatConversation, Etape, Reponse)
-from .converser import Decision, avancer, formuler
-from .converser.dialogue import question_en_attente, reponse_lisible
-from .converser.formuler import mots_simples, question_clarification, reprise, simplifier, transition
+from .converser import Decision, avancer, formuler, glossaire
+from .converser.dialogue import _mettre_de_cote, parcours_disponibles, question_en_attente, reponse_lisible
+from .converser.formuler import mots_simples, politesse, question_clarification, reprise, simplifier, transition
 from .mesure import mesurer
 from .taxonomie import LIBELLES_FAMILLES, famille_de
 from .texte import contient, euros, normaliser
@@ -49,6 +49,14 @@ DONNEES_COMPTE = ("releve", "releves", "mes donnees", "en se basant sur mes", "r
 MOTS_CREDIT = ("credit", "pret", "emprunt", "emprunter")
 BIEN_MINIMUM = 40_000  # sous ce montant, « un crédit de 10 000 € » n'est pas un projet immobilier
 NOMBRE_SEUL = re.compile(r"[\d\s.,€k]+(?:euros?)?", re.IGNORECASE)
+# « finalement oui » après un refus : le parcours laissé de côté reprend là où il en était.
+REPRENDRE = ("finalement oui", "finalement si", "oui finalement", "si finalement", "en fait oui", "on reprend",
+             "reprenons", "on continue", "je veux bien finalement", "finalement je veux bien", "finalement d accord")
+# « il veut aussi mon code de carte » : jamais, à personne (règle de sécurité, avant tout le reste).
+CODE_SECRET = ("code de carte", "code de ma carte", "code de la carte", "code confidentiel", "code secret",
+               "mon code", "mot de passe", "mes identifiants")
+DEMANDE_DE_CODE = ("veut", "veulent", "demande", "demandent", "donner", "donne", "envoyer", "communiquer",
+                   "quelqu un", "telephone", "sms", "mail")
 
 
 def decision_conseil(etat: EtatConversation) -> Decision:
@@ -205,6 +213,23 @@ def _traiter(decision: Decision, message: str, comprehension: Comprehension, eta
     return decision, conseil
 
 
+def _politesse_seule(message: str, texte_normalise: str) -> str | None:
+    """Le genre de politesse (``formuler.politesse``) d'un message qui ne contient aucune autre demande."""
+
+    trouvees = mots_cles.expressions_trouvees(message)
+    if set(trouvees) - {"hors_sujet"} or extraire(message).get("montants"):
+        return None
+    return politesse(texte_normalise)
+
+
+def _parcours_a_reprendre(etat: EtatConversation) -> str | None:
+    """Le parcours guidé auquel rattacher la suite : celui en cours, sinon le dernier laissé de côté."""
+
+    if etat.parcours in parcours_disponibles():
+        return etat.parcours
+    return next(reversed(etat.memoire), None)
+
+
 def reply(
     message: str, client_id: str, etat: EtatConversation | None = None
 ) -> tuple[Reponse, EtatConversation]:
@@ -235,8 +260,20 @@ def reply(
 
     # 0. Barrières : montant ambigu, information manquante pour un conseil.
     texte_normalise = normaliser(message)
-    if m3.montant_ambigu(message):
+    poli = _politesse_seule(message, texte_normalise)
+    if any(contient(texte_normalise, c) for c in CODE_SECRET) and any(
+            contient(texte_normalise, d) for d in DEMANDE_DE_CODE):
+        decision = Decision("orienter", parcours="code_secret")
+    elif m3.montant_ambigu(message):
         decision = Decision("montant_ambigu")
+    elif poli in ("fin", "reflechir"):
+        # « au revoir » pendant une question : on salue, la demande reste en mémoire si le client revient.
+        _mettre_de_cote(etat)
+        etat.parcours = etat.famille = etat.info_attendue = None
+        etat.slots, etat.file_demandes, en_cours = {}, [], None
+        comprehension = Comprehension(famille=famille_de("hors_sujet"), intention="hors_sujet", confiance=1.0,
+                                      niveau=NIVEAU_MOTS_CLES, modele="regles")
+        decision = Decision("fiche", parcours="hors_sujet")
     elif any(contient(texte_normalise, e) for e in RENDEZ_VOUS):
         decision = Decision("orienter", parcours="rendez_vous")
     elif any(contient(texte_normalise, e) for e in DONNEES_COMPTE):
@@ -251,8 +288,18 @@ def reply(
         trace.append(etape)
         montants = comprehension.entites.get("montants") or []
         nombre_seul = bool(NOMBRE_SEUL.fullmatch(message.strip()))
-        if (not comprehension.comprise or nombre_seul) and etat.parcours and (
-                montants or comprehension.entites.get("duree_mois")):
+        cible = _parcours_a_reprendre(etat)
+        sans_demande = not comprehension.comprise or nombre_seul or comprehension.intention == "hors_sujet"
+        valeurs = montants or any(comprehension.entites.get(k) for k in ("duree_mois", "lien", "objet"))
+        reprendre = (cible and not etat.info_attendue and comprehension.niveau != NIVEAU_MOTS_CLES
+                     and any(contient(texte_normalise, r) for r in REPRENDRE))
+        if cible and cible != etat.parcours and ((sans_demande and valeurs) or reprendre):
+            # « finalement oui », ou « 500 » après un refus : le parcours laissé de côté reprend.
+            comprehension = Comprehension(
+                famille=etat.memoire[cible].get("famille") or famille_de(cible), intention=cible, confiance=1.0,
+                niveau=NIVEAU_MOTS_CLES, modele="regles", entites=comprehension.entites)
+            bascule = f"Très bien, reprenons : {LIBELLES_FAMILLES.get(famille_de(cible), 'votre demande')}."
+        elif sans_demande and cible and (montants or comprehension.entites.get("duree_mois")):
             # « Et avec un bien à 200 000 ? », ou « 1000 » : la suite du parcours en cours.
             comprehension = Comprehension(
                 famille=etat.famille or "", intention=etat.parcours, confiance=1.0,
@@ -267,11 +314,15 @@ def reply(
                        "pas d'un crédit immobilier.")
             comprehension = Comprehension(famille="credit", intention="credit_conso", confiance=1.0,
                                           niveau=NIVEAU_MOTS_CLES, modele="regles", entites=comprehension.entites)
-        lisible = comprehension.niveau != NIVEAU_REPONSE or reponse_lisible(message, comprehension.entites, etat)
+        lisible = (comprehension.niveau != NIVEAU_REPONSE or poli is not None
+                   or reponse_lisible(message, comprehension.entites, etat))
         llm_ok = _llm_permis(etat)
         aiguillage = aiguiller(message, comprehension, etat, lisible=lisible,
                                sujets_cites=rag.vocabulaire_cite(message), llm_ok=llm_ok,
                                rag_ok=rag.disponible())
+        if (aiguillage.niveau == 0 and comprehension.intention == "question_definition" and rag.disponible()
+                and glossaire.chercher(message, approchant=True) is None):
+            aiguillage = Aiguillage(2, "terme absent du glossaire : recherche dans nos fiches", aiguillage.signaux)
         if etat.niveau_force is not None:
             aiguillage = Aiguillage(etat.niveau_force, "niveau forcé (démonstration)", aiguillage.signaux)
 
@@ -314,8 +365,8 @@ def reply(
     # 2 et 3. Converser, puis conseiller (niveau 0, ou après le niveau 1).
     if decision is None or decision.type == "conseil":
         decision, conseil = _traiter(decision, lu, comprehension, etat, profil, trace)
-    if meme_sujet and decision.type == "question" and decision.relance == "incompris":
-        decision.relance = "meme_sujet"
+    if (meme_sujet or poli) and decision.type == "question" and decision.relance == "incompris":
+        decision.relance = "merci" if poli == "merci" else "meme_sujet"  # « merci » ou « ok » : pas un incompris
     if bascule:
         decision.accroche = bascule
 

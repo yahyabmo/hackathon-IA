@@ -215,6 +215,7 @@ def avancer(
             if "si_non" in info:
                 etat.slots[attendue] = info["si_non"]
             else:
+                _mettre_de_cote(etat)  # « finalement oui » pourra le reprendre
                 etat.parcours = etat.famille = etat.info_attendue = None
                 etat.slots = {}
                 return Decision("abandon")

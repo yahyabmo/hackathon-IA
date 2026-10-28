@@ -1,0 +1,453 @@
+# 30 conversations libres, écrites comme de vrais clients : fautes, familier, plusieurs demandes,
+# changements de sujet, questions ouvertes, refus, hors sujet. Pas de résultat attendu automatique :
+# le rapport (eval/resultats/conversations-libres.md) se lit et se juge réponse par réponse.
+
+- id: 1
+  client: C01
+  theme: carte perdue puis virement, avec fautes
+  messages:
+    - "bonjour j'ai perdu ma cb hier soir"
+    - "jai deja fais opposition c bon ?"
+    - "et du coup je voudrais faire un virement"
+    - "a ma soeur"
+    - "300 euros"
+    - "elle va le recevoir quand ?"
+    - "et si je me suis trompé de montant ?"
+    - "ok merci"
+    - "au fait comment je commande une nouvelle carte"
+    - "merci bcp"
+
+- id: 2
+  client: C01
+  theme: vol de carte, peur de la fraude, rendez-vous
+  messages:
+    - "on m'a volé mon portefeuille avec ma carte dedans"
+    - "y a des achats que j'ai pas fait"
+    - "est-ce que je vais être remboursée ?"
+    - "je veux parler à un conseiller"
+    - "c'est urgent"
+    - "et pour mon téléphone volé aussi ?"
+    - "mon appli bancaire était dessus"
+    - "comment je bloque l'accès ?"
+    - "ok"
+    - "au revoir"
+
+- id: 3
+  client: C02
+  theme: frais, offre clientèle fragile, réclamation
+  messages:
+    - "pourquoi j'ai payé 8 € de frais ce mois-ci ?"
+    - "c'est quoi une commission d'intervention"
+    - "j'en ai eu plusieurs ce mois ci"
+    - "c'est pas normal"
+    - "j'ai droit à l'offre clientèle fragile ?"
+    - "comment je conteste ces frais ?"
+    - "je veux faire une réclamation"
+    - "et si la banque répond pas ?"
+    - "c'est qui le médiateur"
+    - "merci"
+
+- id: 4
+  client: C02
+  theme: découvert et jargon
+  messages:
+    - "c'est quoi un découvert autorisé"
+    - "et les agios c'est quoi"
+    - "j'ai un découvert de 200 € ça me coûte combien ?"
+    - "comment je peux éviter ça"
+    - "je voudrais mettre un peu de côté pour pas être à découvert"
+    - "dans 1 an"
+    - "50 euros par mois"
+    - "pourquoi ?"
+    - "c'est quoi le LDDS"
+    - "ok super"
+
+- id: 5
+  client: C03
+  theme: épargne pour les enfants, comparaison de livrets
+  messages:
+    - "je voudrais mettre de côté pour mes enfants"
+    - "dans 10 ans"
+    - "100 euros par mois"
+    - "pourquoi pas le LDDS ?"
+    - "quelle est la différence entre le livret A et le LDDS"
+    - "et le livret jeune c'est à partir de quel âge"
+    - "mon grand a 12 ans"
+    - "et le PEL ?"
+    - "je peux retirer de l'argent d'un PEL avant 4 ans ?"
+    - "merci beaucoup"
+
+- id: 6
+  client: C03
+  theme: épargne puis projet immobilier
+  messages:
+    - "je veux épargner"
+    - "pour moi"
+    - "je sais pas trop, quelques années"
+    - "200 € par mois"
+    - "en fait on pense acheter une maison"
+    - "300000"
+    - "on a 40000 d'apport"
+    - "et avec 250000 ?"
+    - "pourquoi ce n'est pas possible ?"
+    - "je peux avoir le prêt à taux zéro ?"
+
+- id: 7
+  client: C04
+  theme: Paul, virement pas à pas, hésitations
+  messages:
+    - "je dois envoyer 500 € à mon fils"
+    - "oui mais pas maintenant"
+    - "non plutôt 300 €"
+    - "comment je fais exactement ?"
+    - "je trouve pas le bouton"
+    - "c'est où l'espace sécurisé ?"
+    - "vous pouvez le faire pour moi ?"
+    - "pourquoi vous ne pouvez pas ?"
+    - "bon d'accord"
+    - "merci madame"
+
+- id: 8
+  client: C04
+  theme: Paul ne comprend pas le vocabulaire
+  messages:
+    - "c'est quoi un RIB"
+    - "et un IBAN c'est pareil ?"
+    - "mon petit-fils m'a demandé mon IBAN c'est normal ?"
+    - "il veut aussi mon code de carte"
+    - "je fais quoi alors"
+    - "je veux envoyer 50 € à mon petit-fils"
+    - "mon petit fils"
+    - "50"
+    - "merci"
+    - "au revoir"
+
+- id: 9
+  client: C05
+  theme: Karim, crédit auto, variantes
+  messages:
+    - "je veux un crédit pour acheter une voiture"
+    - "12000"
+    - "48 mois"
+    - "pourquoi ?"
+    - "et sur 60 mois ?"
+    - "et si j'emprunte 8000 ?"
+    - "c'est quoi le TAEG"
+    - "je peux avoir un rendez-vous pour en parler"
+    - "ok"
+    - "merci"
+
+- id: 10
+  client: C05
+  theme: Karim, crédit trop gros, refus et reprise
+  messages:
+    - "il me faut un prêt de 25000 pour une voiture neuve"
+    - "sur 3 ans"
+    - "pourquoi c'est refusé ?"
+    - "c'est quoi le taux d'effort"
+    - "laisse tomber"
+    - "finalement je veux bien réessayer avec 10000"
+    - "sur 48 mois"
+    - "et l'assurance elle est comprise ?"
+    - "je vais réfléchir"
+    - "merci"
+
+- id: 11
+  client: C06
+  theme: Julie, mécontente, application en panne
+  messages:
+    - "votre appli ne marche jamais !"
+    - "ça fait 3 fois que j'essaie"
+    - "c'est inadmissible"
+    - "je veux faire une réclamation"
+    - "et ça va prendre combien de temps"
+    - "je veux parler à quelqu'un de vrai"
+    - "vous êtes un robot ?"
+    - "bon et je fais comment pour mon virement alors"
+    - "à ma mère, 200 €"
+    - "merci quand même"
+
+- id: 12
+  client: C06
+  theme: Julie veut fermer son compte
+  messages:
+    - "j'en ai marre je veux fermer mon compte"
+    - "comment je fais ?"
+    - "et mon livret A il devient quoi"
+    - "vous gardez mes données ?"
+    - "en fait j'ai aussi des frais que je comprends pas"
+    - "des frais de 8 €"
+    - "c'est scandaleux"
+    - "je veux un rendez-vous"
+    - "ok"
+    - "au revoir"
+
+- id: 13
+  client: C07
+  theme: Léa, appartement, pourquoi, notaire
+  messages:
+    - "je veux acheter un appartement"
+    - "autour de 250 000, et je peux mettre les 25 000"
+    - "pourquoi ?"
+    - "et avec un bien à 200 000 ?"
+    - "combien de frais de notaire pour un appartement ancien ?"
+    - "et si j'emprunte sur 30 ans ?"
+    - "c'est quoi le HCSF"
+    - "le taux d'effort maximum c'est combien"
+    - "je peux avoir un rendez-vous"
+    - "merci"
+
+- id: 14
+  client: C07
+  theme: Léa, questions ouvertes sur le crédit immobilier
+  messages:
+    - "c'est quoi le taux moyen d'un crédit immobilier en ce moment ?"
+    - "sur combien d'années maximum on peut emprunter"
+    - "j'ai droit au prêt à taux zéro ?"
+    - "c'est quoi une assurance emprunteur"
+    - "je veux acheter un studio pour le louer"
+    - "120000"
+    - "20000"
+    - "pourquoi ?"
+    - "et le frais de notaire dans le neuf ?"
+    - "ok merci"
+
+- id: 15
+  client: C08
+  theme: Lucas, épargne courte, jargon, prêt étudiant
+  messages:
+    - "je voudrais mettre de côté"
+    - "dans 2 ans"
+    - "50 euros"
+    - "c'est quoi le TEAG ?"
+    - "je voudrais un prêt étudiant"
+    - "5000"
+    - "pourquoi ?"
+    - "je rembourse quand ?"
+    - "il faut un garant ?"
+    - "merci"
+
+- id: 16
+  client: C08
+  theme: Lucas, prêt étudiant avec fautes
+  messages:
+    - "slt je ve un pret pour mes etudes"
+    - "jsp combien, mon ecole coute 7000 par an"
+    - "7000"
+    - "jai 20 ans je suis en master"
+    - "c'est quoi un différé"
+    - "et si je rate mon année"
+    - "je peux en parler à quelqu'un ?"
+    - "ok"
+    - "merci bcp"
+    - "a+"
+
+- id: 17
+  client: C01
+  theme: problème de carte flou, en langage SMS
+  messages:
+    - "slt"
+    - "jsuis perdu"
+    - "j'ai un pb avec ma cb"
+    - "elle passe pas"
+    - "au distributeur"
+    - "et en magasin non plus"
+    - "mon code est bon pourtant"
+    - "c'est peut être bloqué ?"
+    - "je fais quoi"
+    - "merci"
+
+- id: 18
+  client: C02
+  theme: opérations contestées
+  messages:
+    - "il y a un prélèvement que je connais pas"
+    - "de 45 €"
+    - "j'ai aussi été débité deux fois pour le même achat"
+    - "comment je me fais rembourser ?"
+    - "c'est quoi un prélèvement"
+    - "je peux le bloquer ?"
+    - "je veux parler à un conseiller"
+    - "merci"
+    - "ah et mes frais de 8 € ?"
+    - "ok"
+
+- id: 19
+  client: C03
+  theme: virement aux enfants et épargne mêlés
+  messages:
+    - "je veux virer 100 € à ma fille et mettre de côté pour elle"
+    - "ma fille"
+    - "100"
+    - "pour l'épargne c'est pour dans 5 ans"
+    - "30 euros par mois"
+    - "pourquoi le livret jeune ?"
+    - "elle a 14 ans"
+    - "et pour mon fils aussi"
+    - "merci"
+    - "au revoir"
+
+- id: 20
+  client: C04
+  theme: Paul perdu dans l'application
+  messages:
+    - "je comprends rien à l'appli"
+    - "comment je fais un virement"
+    - "c'est quoi un bénéficiaire"
+    - "mon fils"
+    - "200"
+    - "je peux le faire au guichet ?"
+    - "je préfère voir quelqu'un"
+    - "merci"
+    - "vous êtes gentille"
+    - "au revoir"
+
+- id: 21
+  client: C05
+  theme: capacité d'emprunt, questions générales
+  messages:
+    - "combien je peux emprunter"
+    - "pour une voiture"
+    - "15000"
+    - "60 mois"
+    - "pourquoi ?"
+    - "et c'est quoi le taux moyen d'un prêt personnel"
+    - "je peux avoir un crédit sans justificatif ?"
+    - "et un crédit renouvelable ?"
+    - "ok"
+    - "merci"
+
+- id: 22
+  client: C06
+  theme: bavardage puis vraie demande
+  messages:
+    - "salut ça va ?"
+    - "t'es un robot ?"
+    - "il fait beau aujourd'hui"
+    - "bon j'ai une vraie question"
+    - "j'ai des frais bizarres sur mon compte"
+    - "pourquoi ?"
+    - "c'est la troisième fois que je vous écris aujourd'hui"
+    - "vous êtes nuls"
+    - "bon je veux un rendez-vous"
+    - "bye"
+
+- id: 23
+  client: C07
+  theme: questions ouvertes sur l'épargne (RAG)
+  messages:
+    - "quel est le plafond du livret A ?"
+    - "et du LDDS"
+    - "est-ce que je peux ouvrir un LEP ?"
+    - "combien faut-il garder au minimum sur un CEL ?"
+    - "quel est le versement minimum pour ouvrir un PEL ?"
+    - "c'est quoi la différence entre un PEL et un CEL"
+    - "et ça rapporte combien ?"
+    - "je veux épargner pour un apport"
+    - "dans 5 ans"
+    - "300 € par mois"
+
+- id: 24
+  client: C08
+  theme: carte bloquée, code PIN, virement à la mère
+  messages:
+    - "ma carte est bloquée j'ai tapé 3 fois le mauvais code"
+    - "comment je la débloque"
+    - "et je peux changer mon code ?"
+    - "en attendant je dois envoyer de l'argent à ma mère"
+    - "80"
+    - "elle a un compte dans une autre banque ça marche ?"
+    - "combien de temps ça prend"
+    - "ok"
+    - "merci"
+    - "a plus"
+
+- id: 25
+  client: C01
+  theme: trois demandes d'un coup
+  messages:
+    - "j'ai perdu ma carte, je veux faire un virement et je voudrais épargner"
+    - "à mon frère"
+    - "150"
+    - "pour l'épargne dans 3 ans"
+    - "100 par mois"
+    - "pourquoi ?"
+    - "merci"
+    - "et mes frais ?"
+    - "8 €"
+    - "ok"
+
+- id: 26
+  client: C02
+  theme: rendez-vous, relevés, accès au compte
+  messages:
+    - "regarde mon compte et dis moi si j'ai assez pour un crédit"
+    - "consulte mes relevés stp"
+    - "pourquoi tu peux pas ?"
+    - "je veux un rdv avec mon conseiller"
+    - "je veux un crédit pour des travaux"
+    - "6000"
+    - "36 mois"
+    - "pourquoi ?"
+    - "ok"
+    - "merci"
+
+- id: 27
+  client: C03
+  theme: épargne avec réponses vagues et abandon
+  messages:
+    - "je voudrais épargner"
+    - "pour mes enfants"
+    - "je sais pas"
+    - "je sais pas non plus"
+    - "euh"
+    - "laisse tomber"
+    - "finalement oui"
+    - "dans 2 ans"
+    - "20 euros par mois"
+    - "merci"
+
+- id: 28
+  client: C05
+  theme: refus et changement d'avis
+  messages:
+    - "je veux un crédit conso"
+    - "non"
+    - "finalement si"
+    - "10000"
+    - "non je préfère 5000"
+    - "24 mois"
+    - "pourquoi ?"
+    - "c'est trop cher"
+    - "laisse tomber"
+    - "merci"
+
+- id: 29
+  client: C07
+  theme: anglais puis français
+  messages:
+    - "I lost my card"
+    - "can you help me?"
+    - "how do I block it"
+    - "ok merci, je parle français en fait"
+    - "je veux savoir combien coûte un crédit immobilier"
+    - "220000"
+    - "30000"
+    - "pourquoi ?"
+    - "thank you"
+    - "bye"
+
+- id: 30
+  client: C04
+  theme: réponses très courtes, mots simples
+  messages:
+    - "virement"
+    - "oui"
+    - "fils"
+    - "non"
+    - "500"
+    - "oui"
+    - "merci"
+    - "carte"
+    - "perdue"
+    - "au revoir"

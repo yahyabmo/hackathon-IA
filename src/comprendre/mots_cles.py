@@ -52,7 +52,9 @@ LEXIQUE: dict[str, tuple[str, ...]] = {
         "ne marche jamais", "marche jamais", "j en ai marre", "ras le bol", "inadmissible",
         "scandaleux", "inacceptable", "c est nul", "toujours en panne", "pas normal",
     ),
-    "hors_sujet": ("bonjour", "bonsoir", "salut", "merci", "au revoir"),
+    "hors_sujet": ("bonjour", "bonsoir", "salut", "merci", "au revoir", "bye", "goodbye", "bonne journee",
+                   "bonne soiree", "a bientot", "a plus", "a la prochaine", "thank you", "thanks", "hello", "coucou",
+                   "je vais reflechir", "je reviendrai"),
 }
 
 # Les salutations ne comptent que si rien d'autre n'est trouvé :

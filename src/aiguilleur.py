@@ -36,7 +36,8 @@ QUESTION_FORTE = (
     "pourquoi", "ai je le droit", "a t on le droit", "comment fonctionne", "comment ca marche", "ca marche comment",
     "a quoi sert", "quelle difference", "difference entre", "quelles sont les conditions", "quelles conditions",
     "plafond", "combien de temps", "quel delai", "quel taux", "c est combien", "combien de frais",
-    "a partir de quel age", "jusqu a quel age", "qui peut",
+    "a partir de quel age", "jusqu a quel age", "qui peut", "j ai droit", "ai je droit", "droit a",
+    "quel est le", "quelle est la", "minimum", "maximum", "combien rapporte", "ca rapporte", "rapporte combien",
 )
 QUESTION_FAIBLE = (
     "est ce que je peux", "est ce qu on peut", "est ce que je pourrais", "puis je", "peut on", "je peux",
