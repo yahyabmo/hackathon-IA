@@ -36,7 +36,7 @@ from src.comprendre import classifieur  # noqa: E402
 from src.contrats import EtatConversation  # noqa: E402
 
 RACINE = Path(__file__).resolve().parents[1]
-CONVERSATIONS = RACINE / "eval" / "conversations_libres.yaml"
+CONVERSATIONS = RACINE / "eval" / os.environ.get("CONVERSATIONS_FICHIER", "conversations_libres.yaml")
 SORTIE = RACINE / "eval" / "resultats" / os.environ.get("CONVERSATIONS_SORTIE", "conversations-libres.md")
 SIGNAUX = {
     "incompris": "Je n'ai pas bien compris",
@@ -77,7 +77,7 @@ def rapport(resultats: list[dict]) -> str:
     mode = (f"niveaux 1 et 2 actifs ({llm.MODELE_NIVEAU1} / {llm.MODELE_NIVEAU2})" if llm.actif()
             else "sans LLM (niveau 0, RAG en extrait)")
     lignes = [
-        "# Conversations libres : 30 conversations rejouées", "",
+        f"# Conversations libres : {len(resultats)} conversations rejouées ({CONVERSATIONS.name})", "",
         f"Généré le {datetime.now():%d/%m/%Y à %H h %M} sur {platform.node()}, {mode}.", "",
         "## Résumé", "",
         f"- {len(tours)} messages, dans {len(resultats)} conversations.",
