@@ -12,6 +12,7 @@ Les conversations sont gardées en mémoire, par identifiant de session.
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -77,6 +78,19 @@ def _cout_par_niveau() -> dict[int, float] | None:
     return {0: sans_llm, 1: sans_llm + par_appel, 2: sans_llm + par_appel}
 
 
+@lru_cache(maxsize=1)
+def intensite_carbone() -> float:
+    """g CO₂e par kWh du réseau français, celle que CodeCarbon applique (56,039 dans sa version 3.3.2)."""
+
+    try:
+        import codecarbon
+
+        mix = Path(codecarbon.__file__).parent / "data" / "private_infra" / "global_energy_mix.json"
+        return float(json.loads(mix.read_text(encoding="utf-8"))["FRA"]["carbon_intensity"])
+    except (ImportError, OSError, KeyError, ValueError):
+        return 56.039
+
+
 def serialiser(reponse: Reponse, etat: EtatConversation) -> dict[str, Any]:
     c, conseil = reponse.comprehension, reponse.conseil
     couts = _cout_par_niveau()
@@ -111,6 +125,8 @@ def serialiser(reponse: Reponse, etat: EtatConversation) -> dict[str, Any]:
         "tokens": sum(e.tokens for e in reponse.trace),
         "appels_llm": reponse.appels_llm,
         "energie_wh": energie,
+        # Énergie mesurée par CodeCarbon (banc A/B/C) × intensité carbone du réseau français selon CodeCarbon.
+        "co2_g": energie / 1000 * intensite_carbone() if energie is not None else None,
         "file": etat.file_demandes,
     }
 
@@ -137,6 +153,7 @@ def config() -> dict[str, Any]:
         "classifieur": {"disponible": classifieur.disponible(), "tau": classifieur.SEUIL_TAU},
         "rag": {"fiches": len(rag.fiches()), "disponible": rag.disponible()},
         "mesures": _cout_par_niveau() is not None,
+        "intensite_carbone": intensite_carbone(),
     }
 
 

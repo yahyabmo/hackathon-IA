@@ -52,7 +52,6 @@ header{border-bottom:1px solid var(--trait);background:var(--blanc);position:sti
 .marque{font-family:var(--serif);font-size:21px;letter-spacing:-.3px;font-weight:600;color:var(--encre);
         white-space:nowrap}
 .marque span{color:var(--accent)}
-.sous-titre{font-size:13px;color:var(--gris)}
 .outils{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 
 /* L'interrupteur de vue : deux boutons collés, celui qui est actif prend l'accent. */
@@ -138,6 +137,7 @@ select{cursor:pointer}
 .reponse .sources-mini{padding:0 19px 13px;font-size:12.5px;color:var(--gris)}
 .meta{padding:9px 19px;border-top:1px solid var(--trait);font-size:12.5px;color:var(--gris);
       display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:var(--blanc)}
+.meta .co2{color:var(--ok);font-weight:600}
 .avis{margin:0 19px 12px;border-left:3px solid var(--alerte);padding:3px 0 3px 13px;color:var(--alerte);font-size:13px}
 details.replie{border-top:1px solid var(--trait);background:var(--blanc)}
 details.replie summary{cursor:pointer;color:var(--gris);font-size:13.5px;list-style:none;padding:9px 19px;user-select:none}
@@ -175,10 +175,7 @@ form#saisie textarea{resize:none;min-height:46px;max-height:160px;line-height:1.
 <body>
 <header>
   <div class="bandeau">
-    <div>
-      <div class="marque">Assistant <span>bancaire</span></div>
-      <div class="sous-titre demo-seul">Aiguilleur frugal — modèles locaux, aucun accès au compte</div>
-    </div>
+    <div class="marque">Assistant <span>bancaire</span></div>
     <div class="outils">
       <div class="bascule" role="group" aria-label="Vue">
         <button type="button" data-vue="demo">Démo : tout voir</button>
@@ -249,11 +246,15 @@ form#saisie textarea{resize:none;min-height:46px;max-height:160px;line-height:1.
 const $ = s => document.querySelector(s);
 const fil = $('#fil');
 const NOMS = {0: 'Niveau 0 · règles', 1: 'Niveau 1 · petit LLM interprète', 2: 'Niveau 2 · RAG et rédaction'};
-let SESSION = Math.random().toString(36).slice(2), CONFIG = null, CUMUL = {tours: 0, ms: 0, tokens: 0, wh: 0, llm: 0, chaine: []};
+let SESSION = Math.random().toString(36).slice(2), CONFIG = null, CUMUL = {tours: 0, ms: 0, tokens: 0, wh: 0, co2: 0, llm: 0, chaine: []};
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 const nombre = (x, d = 0) => Number(x).toLocaleString('fr-FR', {maximumFractionDigits: d});
 const badge = n => `<span class="niv n${n}">${NOMS[n]}</span>`;
+// Le CO₂ d'un message est minuscule : en µg sous le milligramme, en mg au-dessus.
+const carbone = g => g < 0.001 ? `${nombre(g * 1e6, 0)} µg CO₂e` : `${nombre(g * 1000, g < 0.01 ? 2 : 1)} mg CO₂e`;
+const SOURCE_CO2 = () => `Estimation : énergie mesurée par CodeCarbon sur DeepEirb (banc A/B/C), multipliée par ` +
+  `${nombre(CONFIG.intensite_carbone, 1)} g CO₂e/kWh, l'intensité du réseau français selon CodeCarbon.`;
 const garder = (cle, valeur) => { try { localStorage.setItem(cle, valeur); } catch (e) {} };
 
 // ─── Vue « Démo » (tout) ou « Utilisateur » (les messages seuls), et thème clair ou sombre ───
@@ -302,7 +303,7 @@ async function changerClient() {
 async function nouvelle() {
   await fetch('/api/nouvelle', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({session: SESSION})});
   SESSION = Math.random().toString(36).slice(2);
-  CUMUL = {tours: 0, ms: 0, tokens: 0, wh: 0, llm: 0, chaine: []};
+  CUMUL = {tours: 0, ms: 0, tokens: 0, wh: 0, co2: 0, llm: 0, chaine: []};
   fil.innerHTML = $('#accueil').innerHTML;
   majStats();
 }
@@ -314,7 +315,8 @@ function majStats() {
     `<b>${CUMUL.tours} message(s)</b><div class="chaine">${CUMUL.chaine.map(n => `<span class="niv n${n}">${n}</span>`).join('→')}</div>` +
     `niveau 0 : ${par[0]} · niveau 1 : ${par[1]} · niveau 2 : ${par[2]}<br>` +
     `appels au LLM : ${CUMUL.llm} · tokens : ${nombre(CUMUL.tokens)}<br>latence totale : ${nombre(CUMUL.ms)} ms` +
-    (CONFIG.mesures ? `<br>énergie estimée : ${nombre(CUMUL.wh * 1000, 3)} mWh` : '');
+    (CONFIG.mesures ? `<br>énergie estimée : ${nombre(CUMUL.wh * 1000, 3)} mWh` +
+                      `<br><span title="${esc(SOURCE_CO2())}">carbone estimé : ${carbone(CUMUL.co2)}</span>` : '');
 }
 
 function reponse(d) {
@@ -348,7 +350,8 @@ function reponse(d) {
     ${d.sources.length ? `<div class="sources-mini utilisateur-seul">Sources : ${[...new Set(d.sources.map(s => s.titre))].map(esc).join(' ; ')}</div>` : ''}
     <div class="meta demo-seul">${badge(d.niveau)}<span>${llmUtilises.length ? esc(llmUtilises.join(', ')) : 'aucun LLM'}</span>
       <span>${nombre(d.latence_ms, 1)} ms</span>${d.tokens ? `<span>${d.tokens} tokens</span>` : ''}
-      ${d.energie_wh !== null ? `<span>≈ ${nombre(d.energie_wh * 1000, 3)} mWh</span>` : ''}</div>
+      ${d.energie_wh !== null ? `<span>≈ ${nombre(d.energie_wh * 1000, 3)} mWh</span>` : ''}
+      ${d.co2_g !== null ? `<span class="co2" title="${esc(SOURCE_CO2())}">≈ ${carbone(d.co2_g)}</span>` : ''}</div>
     ${repli ? `<div class="avis demo-seul">Le garde-fou a écarté la sortie du LLM (${esc(repli.modele)}) : réponse de repli, sûre.</div>` : ''}
     <details class="replie demo-seul"><summary>Pourquoi</summary>${pourquoi}</details>
     ${d.sources.length ? `<details class="replie demo-seul" open><summary>Sources (${d.sources.length})</summary>${sources}</details>` : ''}
@@ -379,7 +382,7 @@ async function envoyer(message) {
     attente.remove();
     fil.insertAdjacentHTML('beforeend', reponse(d));
     CUMUL.tours++; CUMUL.ms += d.latence_ms; CUMUL.tokens += d.tokens; CUMUL.llm += d.appels_llm;
-    CUMUL.wh += d.energie_wh || 0; CUMUL.chaine = d.chaine;
+    CUMUL.wh += d.energie_wh || 0; CUMUL.co2 += d.co2_g || 0; CUMUL.chaine = d.chaine;
     majStats();
   } catch (e) {
     attente.innerHTML = '<span class="ko">Erreur : ' + esc(e.message) + '</span>';
