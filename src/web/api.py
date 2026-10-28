@@ -17,6 +17,7 @@ from typing import Any
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .. import llm, rag
@@ -117,6 +118,9 @@ def serialiser(reponse: Reponse, etat: EtatConversation) -> dict[str, Any]:
 @app.get("/")
 def page() -> FileResponse:
     return FileResponse(STATIC / "index.html")
+
+
+app.mount("/static", StaticFiles(directory=STATIC), name="static")  # polices de l'interface (thème Timso AI)
 
 
 @app.get("/api/config")
