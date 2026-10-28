@@ -297,11 +297,13 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
         etape = Etape(nom="rediger", modele=modele, appel_llm=True)
         try:
             texte, etape.tokens = llm.generer(modele, SYSTEME_REDACTION, _consigne(question, passages),
-                                              max_tokens=260, role="niveau2", delai=60)
+                                              max_tokens=260, role="niveau2", delai=llm.DELAI_NIVEAU2)
             texte = texte.strip().strip('"').strip()
             if normaliser(texte).startswith(normaliser(question)):  # l'écho de la question, retiré
                 texte = texte[len(question):].lstrip(" ?[]0123456789").strip()
             problemes = verifier(texte, passages, question)
+            if problemes == ["aucune citation"]:  # fidèle, mais sans [1] : on cite la meilleure fiche
+                texte, problemes = texte.rstrip() + " [1]", []
         except (OSError, KeyError, ValueError) as erreur:
             texte, problemes = "", [f"LLM injoignable ({type(erreur).__name__})"]
         etape.latence_ms = (perf_counter() - debut) * 1000

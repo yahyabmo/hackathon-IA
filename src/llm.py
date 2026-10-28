@@ -32,6 +32,10 @@ MODELE_NIVEAU1 = os.getenv("OLLAMA_MODEL_NIVEAU1", "qwen3:1.7b")  # comprendre u
 MODELE_NIVEAU2 = os.getenv("OLLAMA_MODEL_NIVEAU2", "qwen3:1.7b")  # rédiger depuis les fiches (RAG)
 OPTIONS = {"temperature": 0.2, "num_ctx": 4096}
 MODELES_A_REFLEXION = ("qwen3", "gemma4")
+# Délais au-delà desquels l'aiguilleur renonce au LLM et donne la réponse de repli (secondes).
+# Sur GPU, qwen3:1.7b répond en moins d'une seconde ; sur CPU, il peut dépasser la minute.
+DELAI_NIVEAU1 = float(os.getenv("LLM_DELAI_NIVEAU1", "10"))
+DELAI_NIVEAU2 = float(os.getenv("LLM_DELAI_NIVEAU2", "20"))
 
 
 def actif() -> bool:
@@ -80,7 +84,7 @@ def corps_ollama(modele: str, systeme: str, message: str, max_tokens: int,
         "model": modele,
         "messages": [{"role": "system", "content": systeme}, {"role": "user", "content": message}],
         "stream": False,
-        "keep_alive": "30m",
+        "keep_alive": os.getenv("LLM_KEEP_ALIVE", "4h"),  # le modèle reste chargé pendant toute la démo
         "options": {**OPTIONS, "num_predict": max_tokens},
     }
     if modele.startswith(MODELES_A_REFLEXION):

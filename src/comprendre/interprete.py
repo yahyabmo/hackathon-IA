@@ -143,7 +143,8 @@ def interpreter(message: str, contexte: dict[str, str | None], modele: str | Non
     etape = Etape(nom="interpreter", modele=modele, appel_llm=True)
     try:
         sortie, etape.tokens = llm.generer(modele, SYSTEME, consigne(message, contexte, exemples),
-                                           max_tokens=120, role="niveau1", schema=SCHEMA, delai=30)
+                                           max_tokens=120, role="niveau1", schema=SCHEMA,
+                                           delai=llm.DELAI_NIVEAU1)
         resultat = lire(sortie, message)
     except (OSError, KeyError, ValueError) as erreur:
         resultat = Interpretation(raison=f"LLM injoignable ({type(erreur).__name__})")

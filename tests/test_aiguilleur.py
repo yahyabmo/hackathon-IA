@@ -215,3 +215,17 @@ def test_pourquoi_apres_un_conseil_explique_le_conseil(monkeypatch, index_rag):
                            llm_actif=True)
     assert reponse.niveau == 2 and reponse.sources[0]["titre"] == "Votre simulation"
     assert "n'est pas proposé" in reponse.sources[0]["texte"]
+
+
+def test_la_suite_d_un_parcours_termine_reste_au_niveau_0():
+    reponse, _ = converser("C01", ["Je veux faire un virement", "mon père", "100000",
+                                   "ok je peux envoyer 1000 ?"], llm_actif=True)
+    assert reponse.niveau == 0 and reponse.appels_llm == 0
+    assert "100 000" not in reponse.texte and "espace bancaire sécurisé" in reponse.texte
+
+
+@pytest.mark.classifieur
+def test_une_reponse_fidele_sans_citation_est_acceptee_avec_la_meilleure_fiche(monkeypatch, index_rag):
+    monkeypatch.setattr(llm, "generer", lambda *a, **k: ("Tout retrait anticipé entraîne la clôture du plan", 30))
+    resultat = rag.repondre("Je peux retirer de mon PEL avant 4 ans ?")
+    assert resultat.repli is None and "clôture du plan [1]" in resultat.texte

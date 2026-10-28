@@ -97,7 +97,10 @@ def aiguiller(message: str, comprehension: Comprehension, etat: EtatConversation
     if renvoi_au_contexte(message) and (etat.parcours or etat.niveaux):
         signaux.append(4)
     # Une demande sûre des mots-clés ouvre son parcours guidé (« pourquoi j'ai payé 8 € de frais ? »).
-    parcours_sur = (comprehension.niveau == NIVEAU_MOTS_CLES and comprehension.intention in parcours_disponibles()
+    # La suite d'un parcours terminé (« et avec 1000 ? ») aussi : elle se recalcule par les règles.
+    suite = comprehension.niveau == NIVEAU_REPONSE and not etat.info_attendue
+    parcours_sur = ((comprehension.niveau == NIVEAU_MOTS_CLES or suite)
+                    and comprehension.intention in parcours_disponibles()
                     and comprehension.intention != "question_definition")
     pourquoi_conseil = normaliser(message).startswith("pourquoi") and bool(etat.explication)
     force = question_ouverte(message)
