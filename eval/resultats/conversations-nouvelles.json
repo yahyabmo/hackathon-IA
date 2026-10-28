@@ -1,0 +1,4360 @@
+[
+ {
+  "id": 31,
+  "client": "C08",
+  "theme": "langage SMS et verlan, carte bloquée",
+  "tours": [
+   {
+    "message": "wesh ma cb elle marche pa",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 236.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "jsui au distrib la",
+    "texte": "Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des frais, votre épargne ou un projet de crédit.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → rien de net",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 191.9,
+    "signaux": [
+     "clarification"
+    ],
+    "sources": []
+   },
+   {
+    "message": "elle a été avalé",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.91,
+    "appels_llm": 0,
+    "latence_ms": 9.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "jfai koi",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 213.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c chaud jai besoin de tune ce soir",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 205.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "jpeu faire un retrait sans carte ?",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 267.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ok",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 189.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et pour en avoir une nouvelle ca prend cb de tps",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 184.1,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "trkl merci",
+    "texte": "Avec plaisir. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "a+",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 190.3,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 32,
+  "client": "C04",
+  "theme": "client âgé, très formel, messages longs",
+  "tours": [
+   {
+    "message": "Bonjour Madame, je me permets de vous écrire car mon petit-fils m'a dit que je pouvais vous poser mes questions ici.",
+    "texte": "Je ne suis pas sûr de bien vous comprendre.\n\nJe peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit.\n\nQue puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.92,
+    "appels_llm": 0,
+    "latence_ms": 11.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "Je souhaiterais envoyer un peu d'argent à ma petite-fille pour son anniversaire, elle va avoir dix-huit ans.",
+    "texte": "D'accord, je vous guide pas à pas.\n\nQuel montant voulez-vous envoyer ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "faire_virement",
+    "comprise_par": "classifieur",
+    "confiance": 0.83,
+    "appels_llm": 0,
+    "latence_ms": 11.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "Ce serait pour ma petite fille Camille",
+    "texte": "Je n'ai pas bien compris.\n\nQuel montant voulez-vous envoyer ?\n\nPar exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 219.7,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "Je pensais à cent cinquante euros, est-ce raisonnable ?",
+    "texte": "Bonne idée de mettre de côté.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 238.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "150 €",
+    "texte": "D'accord, je vous guide pas à pas.\n\nPour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider.\n\nJe ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.\n\nPassons maintenant à votre autre demande : un virement. Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider.\n\nJe ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 227.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "Je vous remercie. Pouvez-vous me rappeler ce qu'est un IBAN, je ne m'en souviens jamais ?",
+    "texte": "Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte.\n\nPour voir un conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou appelez votre agence.\n\nPréparez votre projet : montant, durée, revenus.\n\nPassons maintenant à votre autre demande : votre épargne. Bonne idée de mettre de côté.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "Et où puis-je trouver le sien ?",
+    "texte": "Je comprends que votre demande concerne la commande d'une carte.\n\nJe n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nPassons maintenant à votre autre demande : votre épargne. Bonne idée de mettre de côté.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "order_physical_card",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 256.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "Je préférerais vraiment en parler avec quelqu'un au téléphone.",
+    "texte": "Je n'ai pas bien compris.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?\n\nPar exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 200.9,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "Vous êtes bien aimable.",
+    "texte": "Je n'ai pas bien compris.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?\n\nPar exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 179.0,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "Je vous souhaite une excellente journée.",
+    "texte": "Je n'ai pas bien compris.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?\n\nPar exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 183.6,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 33,
+  "client": "C01",
+  "theme": "trois demandes dans un seul message",
+  "tours": [
+   {
+    "message": "j'ai perdu ma carte, je dois envoyer 200 euros à ma mère et j'ai des frais bizarres sur mon relevé",
+    "texte": "Je n'ai aucun accès à vos relevés ni à votre compte : je ne peux pas les consulter. Je m'appuie seulement sur les informations de votre profil (revenus, épargne, crédits en cours). Pour un examen de vos relevés, un conseiller peut le faire avec vous.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est fait pour l'opposition",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.91,
+    "appels_llm": 0,
+    "latence_ms": 10.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "à ma mère",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.94,
+    "appels_llm": 0,
+    "latence_ms": 10.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "200",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "insatisfaction",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et les frais alors ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 1,
+    "raison": "renvoi au contexte → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 248.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'était 8 euros",
+    "texte": "Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi une commission d'intervention",
+    "texte": "Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : une explication. Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "plusieurs demandes nettes : traitées par ordre d'urgence",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.7,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": []
+   },
+   {
+    "message": "ok je vois",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.94,
+    "appels_llm": 0,
+    "latence_ms": 10.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est tout pour moi",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 196.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci",
+    "texte": "Avec plaisir. Puis-je vous aider pour autre chose ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 34,
+  "client": "C07",
+  "theme": "montants en lettres et en k",
+  "tours": [
+   {
+    "message": "je veux acheter une maison à deux cent mille euros",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 2 900 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "credit_immobilier",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai 25k d'apport",
+    "texte": "Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et avec un bien à 180k ?",
+    "texte": "Non proposé — Crédit immobilier : l'apport couvre le prix et les frais estimés : aucun emprunt nécessaire dans cette simulation.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et si je mets trente mille d'apport ?",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 276.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi la mensualité baisse ?",
+    "texte": "D'après votre simulation : Crédit immobilier n'est pas proposé : L'apport couvre le prix et les frais estimés : aucun emprunt nécessaire dans cette simulation. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques))\n\nRevenons à votre épargne : dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 333.7,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "c'est quoi le reste à vivre",
+    "texte": "reste à vivre : Ce qui vous reste chaque mois une fois payés vos charges et vos crédits.\n\nRevenons à votre épargne : dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et si on emprunte à deux avec mon conjoint ?",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 2 900 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_immobilier",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 326.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "il gagne 2000 par mois",
+    "texte": "Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je peux avoir un rendez-vous ?",
+    "texte": "Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte. Pour voir un conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou appelez votre agence. Préparez votre projet : montant, durée, revenus.\n\nRevenons à un crédit : quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "super merci",
+    "texte": "Avec plaisir. Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 35,
+  "client": "C02",
+  "theme": "anglais d'un bout à l'autre",
+  "tours": [
+   {
+    "message": "hello, I was charged a fee I don't understand",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "it was 8 euros last week",
+    "texte": "Je comprends que votre demande concerne le change ou l'étranger. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "fiat_currency_support",
+    "comprise_par": "classifieur",
+    "confiance": 0.94,
+    "appels_llm": 0,
+    "latence_ms": 10.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "why do you charge that?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "classifieur",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "can I get a refund?",
+    "texte": "Je comprends que votre demande concerne des frais ou une opération contestée. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "request_refund",
+    "comprise_par": "classifieur",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 11.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "I want to talk to someone",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 200.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "what is an overdraft?",
+    "texte": "Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "aucune fiche assez proche : retour aux règles",
+    "intention": "question_definition",
+    "comprise_par": "classifieur",
+    "confiance": 0.8,
+    "appels_llm": 0,
+    "latence_ms": 21.4,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": [
+     "Livret de développement durable et solidaire (LDDS)",
+     "Emprunter pour un logement : durée maximale et taux d'effort (HCSF)",
+     "agios"
+    ]
+   },
+   {
+    "message": "how do I send money to my brother?",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "faire_virement",
+    "comprise_par": "classifieur",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "to my brother",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 233.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "100 euros",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 234.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "thanks, bye",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 36,
+  "client": "C06",
+  "theme": "colère, émojis, menace de partir",
+  "tours": [
+   {
+    "message": "😡😡😡 encore des frais !!!",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 225.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "vous vous foutez de moi",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 9.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je vais changer de banque",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 228.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est la troisième fois ce mois ci",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 249.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "comment je fais une réclamation 🙄",
+    "texte": "En cas de désaccord, adressez d'abord une réclamation à votre banque : à votre conseiller, puis au service réclamations. Si la réponse ne vous convient pas, ou sans réponse, vous pouvez saisir gratuitement le médiateur bancaire. [1]\n\nSources : [1] Faire une réclamation (Service-Public, litige avec sa banque et médiation bancaire, 2026-10-27) ; [2] Livret Jeune (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Carte perdue ou volée (Service-Public, perte ou vol de carte bancaire, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.9,
+    "appels_llm": 1,
+    "latence_ms": 460.5,
+    "signaux": [],
+    "sources": [
+     "Faire une réclamation",
+     "Livret Jeune",
+     "Carte perdue ou volée"
+    ]
+   },
+   {
+    "message": "et si personne répond ?",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 264.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est qui le médiateur ?",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 236.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bon ok",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.83,
+    "appels_llm": 0,
+    "latence_ms": 9.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci quand même 🙏",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bye",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 37,
+  "client": "C04",
+  "theme": "fraude, faux conseiller au téléphone",
+  "tours": [
+   {
+    "message": "un monsieur m'a appelé en disant qu'il était de la banque",
+    "texte": "Je ne suis pas sûr de bien vous comprendre.\n\nJe peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit.\n\nQue puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 209.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "il m'a demandé mon code pour sécuriser mon compte",
+    "texte": "Ne donnez jamais votre code confidentiel, ni vos identifiants, à personne : ni par téléphone, ni par SMS, ni par mail, même à quelqu'un qui se présente comme la banque.\n\nLa banque ne vous les demandera jamais.\n\nSi vous l'avez déjà donné, faites opposition sur votre carte tout de suite, dans votre espace bancaire sécurisé, et prévenez votre conseiller.\n\n« opposition » veut dire : le blocage définitif d'une carte perdue ou volée, pour que personne ne puisse s'en servir.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je lui ai donné",
+    "texte": "D'accord, je vous guide pas à pas.\n\nÀ qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 229.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "qu'est-ce que je dois faire maintenant ?",
+    "texte": "Je n'ai pas bien compris.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 244.7,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "comment je fais opposition ?",
+    "texte": "D'après nos fiches : En cas de perte ou de vol de votre carte, faites opposition immédiatement : depuis votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller.\n\nLes opérations frauduleuses faites après l'opposition ne sont pas à votre charge.\n\nLa banque ne vous demandera jamais votre code confidentiel.\n\n[1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Carte perdue ou volée\n\nRevenons à un virement : à qui voulez-vous envoyer l'argent ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 355.7,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Carte perdue ou volée",
+     "opposition",
+     "Faire une réclamation"
+    ]
+   },
+   {
+    "message": "j'ai aussi reçu un SMS avec un lien",
+    "texte": "Je n'ai pas bien compris.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 221.2,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "j'ai cliqué dessus",
+    "texte": "Je n'ai pas bien compris.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 178.9,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "est-ce que je vais perdre mon argent ?",
+    "texte": "Je n'ai pas bien compris.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 221.7,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "je veux parler à mon conseiller",
+    "texte": "Je suis désolé pour ce désagrément.\n\nJe n'ai aucun accès à votre compte, mais votre réclamation compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nSi le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas.\n\nÀ qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 238.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci beaucoup",
+    "texte": "Avec plaisir.\n\nÀ qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 38,
+  "client": "C08",
+  "theme": "étudiant, premier budget, jargon",
+  "tours": [
+   {
+    "message": "salut je suis étudiant et je sais pas trop gérer mon argent",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je voudrais mettre un peu de côté",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris (réponse écartée : absente du message)",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 264.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pour dans 1 an",
+    "texte": "Combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "genre 30 balles par mois",
+    "texte": "Voici ce que je vous propose. Livret Jeune : à 20 ans, tranche d'âge compatible ; épargne disponible. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation.\n\nNon proposé — Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Livret d'épargne populaire (LEP) : domicile fiscal français et imposition séparée nécessaires. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\n\nLe versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus.\n\nDisponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi la différence entre le livret jeune et le livret A",
+    "texte": "Quelle est la différence entre le Livret Jeune et le Livret A ? [1] Le Livret Jeune est destiné aux jeunes de 12 à 25 ans, avec un plafond des versements de 1 600 €. [2] Le Livret A est pour tout le monde, y compris les mineurs, avec un plafond des versements de 22 950 €.\n\nSources : [1] Livret Jeune (https://www.service-public.gouv.fr/particuliers/vosdroits/F2904, 2026-10-27) ; [2] Livret Jeune (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Livret A (https://www.service-public.gouv.fr/particuliers/vosdroits/F2365, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 604.5,
+    "signaux": [],
+    "sources": [
+     "Livret Jeune",
+     "Livret Jeune",
+     "Livret A"
+    ]
+   },
+   {
+    "message": "et ça rapporte combien ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "classifieur",
+    "confiance": 0.95,
+    "appels_llm": 0,
+    "latence_ms": 10.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je voudrais aussi un prêt étudiant",
+    "texte": "C'est une question fréquente pendant les études. De quel montant auriez-vous besoin, à peu près ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "pret_etudiant",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "3000 euros",
+    "texte": "Voici ce que je vous propose. Prêt étudiant : piste LBP compatible avec l'âge, le montant et le statut déclarés ; justificatif étudiant et étude du prêteur nécessaires. Différé selon contrat, sous réserve d'acceptation du prêteur.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "pret_etudiant",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je rembourse à partir de quand ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : l'alimentation de votre compte. Je comprends que votre demande concerne l'alimentation de votre compte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 345.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "cimer",
+    "texte": "Pour être sûr de bien vous aider : votre demande concerne-t-elle votre compte ou votre identité, ou une explication ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → rien de net",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 182.5,
+    "signaux": [
+     "question fermée"
+    ],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 39,
+  "client": "C05",
+  "theme": "crédit énorme, hésitations, corrections",
+  "tours": [
+   {
+    "message": "je veux emprunter 50000 pour une voiture",
+    "texte": "Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédit par mois. Sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_conso",
+    "comprise_par": "classifieur",
+    "confiance": 0.99,
+    "appels_llm": 0,
+    "latence_ms": 10.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "euh non plutôt 30000",
+    "texte": "Bien sûr. Sur combien de mois souhaitez-vous rembourser ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 211.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "sur 5 ans",
+    "texte": "Non proposé — Prêt personnel : mensualité indicative de 581 € sur 60 mois, soit 38,4 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF. Taux d'effort indicatif de 38,4 % : au-delà du repère de 35 %.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 6 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "attends, sur 7 ans plutôt",
+    "texte": "Voici ce que je vous propose. Prêt personnel : mensualité indicative de 439 € sur 84 mois, soit 31 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 6 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est refusé ?",
+    "texte": "Je comprends que votre demande concerne l'utilisation de votre carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "card_not_working",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 244.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi ?",
+    "texte": "D'après votre simulation : Prêt personnel : Mensualité indicative de 439 € sur 84 mois, soit 31 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques))",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 478.4,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "et avec 15000 ?",
+    "texte": "Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des frais, votre épargne ou un projet de crédit.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 268.7,
+    "signaux": [
+     "clarification"
+    ],
+    "sources": []
+   },
+   {
+    "message": "sur 48 mois",
+    "texte": "Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédit par mois. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "credit_conso",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 216.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le TAEG",
+    "texte": "TAEG : Le coût total d'un crédit (intérêts, frais, assurance obligatoire) exprimé en pourcentage par an. C'est le chiffre qui permet de comparer deux offres.\n\nRevenons à un crédit : quel montant souhaitez-vous emprunter ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bon je vais réfléchir",
+    "texte": "Bien sûr, prenez le temps d'y réfléchir. Je reste disponible si vous avez une question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 40,
+  "client": "C03",
+  "theme": "épargne enfants, nombres en lettres, renvois",
+  "tours": [
+   {
+    "message": "je voudrais ouvrir un livret pour ma fille",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "epargne_projet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "elle a dix ans",
+    "texte": "Bien sûr. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 234.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "dans huit ans environ",
+    "texte": "Bien sûr. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 234.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "cinquante euros par mois",
+    "texte": "Bien sûr. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 240.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et pour mon fils de 15 ans ?",
+    "texte": "Combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi pas un PEL ?",
+    "texte": "D'après nos fiches : Plan épargne logement (PEL) : Un plan par personne. Retrait anticipé entraînant clôture et conséquences selon ancienneté ; les fonds ne sont pas définitivement bloqués. Plafond des versements : 61 200 €. Durée minimale : 4 ans. Versement initial minimum : 225 € ; versements annuels minimum : 540 €. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Plan épargne logement (PEL) (https://www.service-public.gouv.fr/particuliers/vosdroits/F16140, 2026-10-27)\n\nRevenons à votre épargne : combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 539.5,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Plan épargne logement (PEL)",
+     "PEL",
+     "Livret d'épargne populaire (LEP)"
+    ]
+   },
+   {
+    "message": "c'est quoi le plafond du livret A ?",
+    "texte": "D'après nos fiches : Livret A : Le livret d'épargne le plus courant : argent disponible à tout moment, intérêts sans impôt, taux fixé par l'État, plafond de 22 950 €. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Livret A (Glossaire de l'équipe (fiches vérifiées), 2026-10-27)\n\nRevenons à votre épargne : combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 1,
+    "latence_ms": 287.9,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Livret A",
+     "Livret A",
+     "Livret Jeune"
+    ]
+   },
+   {
+    "message": "et le LDDS ?",
+    "texte": "Bien sûr. Combien pouvez-vous mettre de côté chaque mois ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles ; renvoi au contexte → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 278.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "mes enfants peuvent avoir un LDDS ?",
+    "texte": "Bien sûr. Combien pouvez-vous mettre de côté chaque mois ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 244.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci, bonne soirée",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 41,
+  "client": "C01",
+  "theme": "hors sujet en série",
+  "tours": [
+   {
+    "message": "quel temps il fait demain à Bordeaux ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.98,
+    "appels_llm": 0,
+    "latence_ms": 9.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "t'es une IA ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 203.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "raconte moi une blague",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.91,
+    "appels_llm": 0,
+    "latence_ms": 10.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "qui a gagné le match hier",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.93,
+    "appels_llm": 0,
+    "latence_ms": 10.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "tu peux m'aider à faire mes devoirs de maths ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 299.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ok et la bourse, je dois acheter des actions Tesla ?",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 3 200 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 8 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_immobilier",
+    "comprise_par": "classifieur",
+    "confiance": 0.88,
+    "appels_llm": 0,
+    "latence_ms": 10.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bon, j'ai une vraie question : mon virement n'est pas arrivé",
+    "texte": "Je n'ai pas bien compris. Quel est le prix du bien que vous visez, et quelle part de vos 8 000 € d'épargne souhaitez-vous y consacrer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 268.0,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "je l'ai fait hier à mon frère",
+    "texte": "D'accord, je vous guide pas à pas. Quel montant voulez-vous envoyer ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 261.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est normal ?",
+    "texte": "Je n'ai pas bien compris. Quel montant voulez-vous envoyer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 210.2,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "merci",
+    "texte": "Avec plaisir. Quel montant voulez-vous envoyer ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 42,
+  "client": "C07",
+  "theme": "primo-accédante, questions ouvertes en série",
+  "tours": [
+   {
+    "message": "c'est mon premier achat immobilier, par où je commence ?",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 2 900 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "credit_immobilier",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai droit au prêt à taux zéro ?",
+    "texte": "Bien sûr. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 270.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi l'apport minimum ?",
+    "texte": "D'après nos fiches : apport personnel : L'argent que vous mettez vous-même dans un achat, sans l'emprunter. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] apport personnel (Glossaire de l'équipe (fiches vérifiées), 2026-10-27)\n\nRevenons à un crédit : quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 1,
+    "latence_ms": 424.8,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "apport personnel",
+     "Compte épargne logement (CEL)",
+     "Livret de développement durable et solidaire (LDDS)"
+    ]
+   },
+   {
+    "message": "on peut emprunter sur 30 ans ?",
+    "texte": "Bien sûr. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 297.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le HCSF ?",
+    "texte": "D'après nos fiches : Pour emprunter et acheter un logement, le cadre du HCSF limite la durée du crédit immobilier à 25 ans et le taux d'effort à 35 % des revenus, assurance comprise. La banque garde une part de flexibilité et décide après étude du dossier : aucun accord n'est automatique. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Emprunter pour un logement : durée maximale et taux d'effort (HCSF) (https://www.economie.gouv.fr/hcsf/mesures/mesure-relative-loctroi-de-credits-immobiliers, 2026-10-27)",
+    "niveau": 2,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message) ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 954.4,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Emprunter pour un logement : durée maximale et taux d'effort (HCSF)",
+     "Crédit immobilier",
+     "reste à vivre"
+    ]
+   },
+   {
+    "message": "les frais de notaire c'est combien ?",
+    "texte": "Les frais de notaire sont estimés à environ 7,5 % dans l'ancien et 2,5 % dans le neuf, selon le prix du logement [1]. Le notaire précise le montant exact.\n\nSources : [1] Frais d'acquisition (notaire) (https://www.notaires.fr/fr/immobilier-fiscalite/financement/acquerir-en-frais-de-notaire-reduits, 2026-10-27) ; [2] frais de notaire (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Commission d'intervention (https://www.tresor.economie.gouv.fr/banque-assurance-finance/protection-des-consommateurs, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 335.8,
+    "signaux": [],
+    "sources": [
+     "Frais d'acquisition (notaire)",
+     "frais de notaire",
+     "Commission d'intervention"
+    ]
+   },
+   {
+    "message": "c'est quoi une assurance emprunteur",
+    "texte": "assurance emprunteur : Une assurance qui rembourse tout ou partie de votre crédit si vous ne pouvez plus le faire (décès, invalidité…). Elle est presque toujours demandée pour un crédit immobilier.",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "le bien coûte 230000",
+    "texte": "Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "15000",
+    "texte": "Non proposé — Crédit immobilier : mensualité indicative de 1 140 € sur 300 mois, soit 39,3 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 39,3 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 206 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\n\nPassons maintenant à votre autre demande : un crédit. Non proposé — Crédit immobilier : mensualité indicative de 1 140 € sur 300 mois, soit 39,3 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 39,3 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 206 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci pour tout",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 43,
+  "client": "C02",
+  "theme": "découvert, rejet de prélèvement, situation fragile",
+  "tours": [
+   {
+    "message": "je suis à découvert depuis 2 semaines",
+    "texte": "Je comprends que votre demande concerne la commande d'une carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "card_arrival",
+    "comprise_par": "classifieur",
+    "confiance": 0.84,
+    "appels_llm": 0,
+    "latence_ms": 10.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai eu un prélèvement rejeté",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 270.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ça va me coûter combien ?",
+    "texte": "Je comprends que votre demande concerne des frais ou une opération contestée. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "top_up_by_bank_transfer_charge",
+    "comprise_par": "classifieur",
+    "confiance": 0.96,
+    "appels_llm": 0,
+    "latence_ms": 9.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je suis au chômage en ce moment",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 197.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "est-ce qu'il y a une aide ?",
+    "texte": "Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des frais, votre épargne ou un projet de crédit.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → rien de net",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 202.3,
+    "signaux": [
+     "clarification"
+    ],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi l'offre clientèle fragile",
+    "texte": "L'offre clientèle fragile est une offre spéciale pour les clients en situation de fragilité financière, avec des frais d'incidents plafonnés [1]. La commission d'intervention est prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé, et elle est plafonnée à 8 € par opération et 80 € par mois [2].\n\nSources : [1] Offre clientèle fragile (https://www.tresor.economie.gouv.fr/banque-assurance-finance/protection-des-consommateurs, 2026-10-27) ; [2] Commission d'intervention (https://www.tresor.economie.gouv.fr/banque-assurance-finance/protection-des-consommateurs, 2026-10-27) ; [3] Emprunter pour un logement : durée maximale et taux d'effort (HCSF) (https://www.economie.gouv.fr/hcsf/mesures/mesure-relative-loctroi-de-credits-immobiliers, 2026-10-27)",
+    "niveau": 2,
+    "raison": "terme absent du glossaire : recherche dans nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "classifieur",
+    "confiance": 0.96,
+    "appels_llm": 1,
+    "latence_ms": 599.7,
+    "signaux": [],
+    "sources": [
+     "Offre clientèle fragile",
+     "Commission d'intervention",
+     "Emprunter pour un logement : durée maximale et taux d'effort (HCSF)"
+    ]
+   },
+   {
+    "message": "comment je fais pour l'avoir ?",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 300.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je peux avoir un petit crédit pour finir le mois ?",
+    "texte": "Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 850 € nets par mois. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_conso",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 224.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "500 euros",
+    "texte": "Sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ok merci",
+    "texte": "Avec plaisir. Sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 44,
+  "client": "C06",
+  "theme": "fermeture de compte, données, RGPD",
+  "tours": [
+   {
+    "message": "je veux clôturer mon compte",
+    "texte": "Je comprends que votre demande concerne votre compte ou votre identité. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "terminate_account",
+    "comprise_par": "classifieur",
+    "confiance": 0.77,
+    "appels_llm": 0,
+    "latence_ms": 10.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "vous allez garder mes données ?",
+    "texte": "Je n'ai aucun accès à vos relevés ni à votre compte : je ne peux pas les consulter. Je m'appuie seulement sur les informations de votre profil (revenus, épargne, crédits en cours). Pour un examen de vos relevés, un conseiller peut le faire avec vous.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le RGPD",
+    "texte": "Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "aucune fiche assez proche : retour aux règles",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 501.9,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": [
+     "LEP",
+     "Prêt personnel",
+     "Livret de développement durable et solidaire (LDDS)"
+    ]
+   },
+   {
+    "message": "et mon livret A il devient quoi si je pars ?",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 241.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je peux transférer mon argent ailleurs ?",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 308.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "combien de temps ça prend ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 253.4,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "il y a des frais pour partir ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 229.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je veux un rendez-vous",
+    "texte": "Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte. Pour voir un conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou appelez votre agence. Préparez votre projet : montant, durée, revenus.\n\nRevenons à un virement : à qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "non",
+    "texte": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?\n\nPassons maintenant à votre autre demande : votre épargne. Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "au revoir",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 45,
+  "client": "C04",
+  "theme": "deuil, sujet sensible",
+  "tours": [
+   {
+    "message": "mon épouse est décédée le mois dernier",
+    "texte": "Je suis désolé pour ce désagrément.\n\nJe n'ai aucun accès à votre compte, mais votre réclamation compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nSi le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 198.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "qu'est-ce qui se passe pour notre compte joint ?",
+    "texte": "L’assistant n’a aucun accès à votre compte et ne réalise aucune opération : ni virement, ni opposition, ni modification.\n\nIl explique, conseille à partir de règles publiques et vous oriente vers votre espace bancaire sécurisé ou un conseiller [1].\n\nSources : [1] Ce que l'assistant peut faire, 2026-10-26) ; [2] agios, 2026-10-27) ; [3] Compte épargne logement",
+    "niveau": 2,
+    "raison": "confiance sous le seuil → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 736.6,
+    "signaux": [],
+    "sources": [
+     "Ce que l'assistant peut faire",
+     "agios",
+     "Compte épargne logement (CEL)"
+    ]
+   },
+   {
+    "message": "je ne comprends rien à toutes ces démarches",
+    "texte": "Je n'ai aucun accès à votre compte, mais votre réclamation compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nSi le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.94,
+    "appels_llm": 0,
+    "latence_ms": 10.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "parlez moi simplement s'il vous plaît",
+    "texte": "Je ne suis pas sûr de bien vous comprendre.\n\nJe peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit.\n\nQue puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.96,
+    "appels_llm": 0,
+    "latence_ms": 10.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "est-ce que je peux encore utiliser la carte ?",
+    "texte": "D'après nos fiches : En cas de perte ou de vol de votre carte, faites opposition immédiatement : depuis votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller.\n\nLes opérations frauduleuses faites après l'opposition ne sont pas à votre charge.\n\nLa banque ne vous demandera jamais votre code confidentiel.\n\n[1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Carte perdue ou volée",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 382.2,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Carte perdue ou volée",
+     "Faire une réclamation",
+     "Ce que l'assistant peut faire"
+    ]
+   },
+   {
+    "message": "je dois faire un virement pour les pompes funèbres",
+    "texte": "D'accord, je vous guide pas à pas.\n\nÀ qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "faire_virement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "aux pompes funèbres",
+    "texte": "Je n'ai pas bien compris.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 236.1,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "2400 euros",
+    "texte": "Bien sûr.\n\nÀ qui voulez-vous envoyer l'argent ?\n\nPar exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 245.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci de votre patience",
+    "texte": "Avec plaisir.\n\nÀ qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "au revoir",
+    "texte": "Au revoir, et bonne journée !\n\nJe reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 46,
+  "client": "C08",
+  "theme": "fautes d'orthographe très lourdes",
+  "tours": [
+   {
+    "message": "je veu fair un viremant",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "faire_virement",
+    "comprise_par": "classifieur",
+    "confiance": 0.99,
+    "appels_llm": 0,
+    "latence_ms": 9.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "a mon coloc",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 213.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pour le loyé",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 238.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "350",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 213.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "sa arive quand",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 178.7,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "jai u des fré sur mon conte",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 229.6,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "pk",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 164.5,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "c koi le decouver",
+    "texte": "découvert autorisé : La possibilité, prévue avec votre banque, d'avoir un solde négatif jusqu'à un certain montant. Il coûte des agios.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 214.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "jpeu epargné ou pa",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 217.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "mrc",
+    "texte": "Je n'ai pas bien compris. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 172.1,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 47,
+  "client": "C05",
+  "theme": "parenthèse au milieu d'un crédit",
+  "tours": [
+   {
+    "message": "je veux un crédit pour des travaux",
+    "texte": "Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédit par mois. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_conso",
+    "comprise_par": "classifieur",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "15000",
+    "texte": "Sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "attends j'ai perdu ma carte je crois",
+    "texte": "Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.\n\nRevenons à un crédit : sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "lost_or_stolen_card",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "non c'est bon je l'ai retrouvée",
+    "texte": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "on en était où ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 203.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "sur 3 ans",
+    "texte": "Très bien, reprenons : un crédit. Voici ce que je vous propose. Prêt personnel : mensualité indicative de 457 € sur 36 mois, soit 31,9 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 6 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "credit_conso",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 9.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et sur 5 ans ça fait combien ?",
+    "texte": "Voici ce que je vous propose. Prêt personnel : mensualité indicative de 290 € sur 60 mois, soit 23,2 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 6 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 9.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le taux d'endettement",
+    "texte": "taux d'endettement : La part de vos revenus qui part chaque mois dans vos crédits. Pour un crédit immobilier, elle ne doit pas dépasser 35 %.",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "le mien il est de combien ?",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 267.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci",
+    "texte": "Avec plaisir. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 48,
+  "client": "C03",
+  "theme": "messages vides, ponctuation, menu",
+  "tours": [
+   {
+    "message": "?",
+    "texte": "Pour bien vous aider, pouvez-vous préciser ? Par exemple : votre carte, un virement, des frais, votre épargne ou un projet de crédit.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → rien de net",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 194.5,
+    "signaux": [
+     "clarification"
+    ],
+    "sources": []
+   },
+   {
+    "message": "aide",
+    "texte": "Je n'ai aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → rien de net",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 218.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "...",
+    "texte": "Je comprends que votre demande concerne votre compte ou votre identité. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "verify_source_of_funds",
+    "comprise_par": "classifieur",
+    "confiance": 0.78,
+    "appels_llm": 0,
+    "latence_ms": 10.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "menu",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.8,
+    "appels_llm": 0,
+    "latence_ms": 9.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "épargne",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 262.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "???",
+    "texte": "Bien sûr. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 214.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "dans 3 ans",
+    "texte": "Combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "100",
+    "texte": "Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.\n\nNon proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\n\nLe versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.\n\nDisponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi",
+    "texte": "Parce que l’âge du client est hors de la tranche d’âge du Livret Jeune.  \nPourquoi [2] ? Parce que le besoin de disponibilité est hors de l’horizon court du Plan épargne logement.  \nPourquoi [3] ? Parce que le Livret A est adapté à une réserve ou un projet sans immobilisation.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques)) ; [2] Votre simulation (Calcul du prototype (règles publiques)) ; [3] Votre simulation (Calcul du prototype (règles publiques))",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 545.0,
+    "signaux": [],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "ok",
+    "texte": "D'accord. Puis-je vous aider pour autre chose ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 239.4,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 49,
+  "client": "C01",
+  "theme": "mélange de langues, darija et anglais",
+  "tours": [
+   {
+    "message": "salam, j'ai un problème avec ma carte",
+    "texte": "Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.\n\nPassons maintenant à votre autre demande : l'utilisation de votre carte. Je comprends que votre demande concerne l'utilisation de votre carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "lost_or_stolen_card",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 293.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "elle marche plus f l'étranger, I'm in Spain",
+    "texte": "Je comprends que votre demande concerne le change ou l'étranger. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "country_support",
+    "comprise_par": "classifieur",
+    "confiance": 0.78,
+    "appels_llm": 0,
+    "latence_ms": 9.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai besoin d'argent urgent",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "faire_virement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 254.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "my mom wants to send me money, comment elle fait ?",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 244.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi mon IBAN",
+    "texte": "IBAN : Le numéro qui identifie un compte bancaire ; il faut le donner pour recevoir un virement.\n\nRevenons à un virement : à qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ok and what about fees abroad ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 239.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est cher les frais à l'étranger ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 264.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bon je fais comment pour débloquer",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 204.0,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "shukran",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 176.2,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "bslama",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 170.4,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 50,
+  "client": "C07",
+  "theme": "projet locatif, variantes de durée et d'apport",
+  "tours": [
+   {
+    "message": "je veux investir dans un studio pour le louer",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 2 900 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_immobilier",
+    "comprise_par": "classifieur",
+    "confiance": 0.96,
+    "appels_llm": 0,
+    "latence_ms": 11.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "120000",
+    "texte": "Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai 10000 d'apport",
+    "texte": "Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 584 € sur 300 mois, soit 20,1 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nNon proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 201 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et sur 20 ans ?",
+    "texte": "Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 584 € sur 300 mois, soit 20,1 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nNon proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 201 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et avec 30000 d'apport ?",
+    "texte": "Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 486 € sur 300 mois, soit 16,8 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nNon proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 220 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "les loyers comptent dans mes revenus ?",
+    "texte": "Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 486 € sur 300 mois, soit 16,8 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nNon proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 220 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_immobilier",
+    "comprise_par": "classifieur",
+    "confiance": 0.77,
+    "appels_llm": 0,
+    "latence_ms": 11.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le taux d'effort",
+    "texte": "taux d'endettement : La part de vos revenus qui part chaque mois dans vos crédits. Pour un crédit immobilier, elle ne doit pas dépasser 35 %.",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi 35 % ?",
+    "texte": "D'après votre simulation : Un prêt immobilier sur 30 ans n'est pas proposé : Option de durée hors du cadre général de 25 ans modélisé. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques))",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 547.8,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "et si j'achète à 100000 ?",
+    "texte": "Voici ce que je vous propose. Crédit immobilier : mensualité indicative de 381 € sur 300 mois, soit 13,1 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nNon proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Budget indicatif sous ces hypothèses : environ 220 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 9.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "parfait merci",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 51,
+  "client": "C02",
+  "theme": "réclamation polie mais insistante",
+  "tours": [
+   {
+    "message": "bonjour, je souhaite contester des frais",
+    "texte": "Bonjour ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [
+     "« Bonjour ! »"
+    ],
+    "sources": []
+   },
+   {
+    "message": "on m'a prélevé 16 euros pour deux opérations",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris (réponse écartée : absente du message)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 325.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je ne savais pas que mon solde était négatif",
+    "texte": "Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "aucune fiche assez proche : retour aux règles",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 259.1,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": [
+     "Faire une réclamation",
+     "Carte perdue ou volée",
+     "découvert autorisé"
+    ]
+   },
+   {
+    "message": "est-ce qu'on peut me rembourser ?",
+    "texte": "Je comprends que votre demande concerne des frais ou une opération contestée. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "request_refund",
+    "comprise_par": "classifieur",
+    "confiance": 0.82,
+    "appels_llm": 0,
+    "latence_ms": 8.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "qui décide ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.85,
+    "appels_llm": 0,
+    "latence_ms": 9.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je veux faire une réclamation officielle",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.88,
+    "appels_llm": 0,
+    "latence_ms": 9.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "en combien de temps on me répond ?",
+    "texte": "D'après nos fiches : Livret Jeune : De 12 à 25 ans. Plafond des versements : 1 600 €. De 12 à 25 ans. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Livret Jeune (https://www.service-public.gouv.fr/particuliers/vosdroits/F2904, 2026-10-27)",
+    "niveau": 2,
+    "raison": "confiance sous le seuil → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 567.1,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Livret Jeune",
+     "Prêt étudiant",
+     "Prêt personnel"
+    ]
+   },
+   {
+    "message": "et si la réponse ne me convient pas ?",
+    "texte": "adressez d'abord une réclamation à votre banque : à votre conseiller, puis au service réclamations. Si la réponse ne vous convient pas, ou sans réponse, vous pouvez saisir gratuitement le médiateur bancaire. [1]\n\nSources : [1] Faire une réclamation (Service-Public, litige avec sa banque et médiation bancaire, 2026-10-27) ; [2] Carte perdue ou volée (Service-Public, perte ou vol de carte bancaire, 2026-10-27) ; [3] Ce que l'assistant peut faire (Périmètre du prototype (kick-off du hackathon), 2026-10-26)",
+    "niveau": 2,
+    "raison": "confiance sous le seuil → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 700.8,
+    "signaux": [],
+    "sources": [
+     "Faire une réclamation",
+     "Carte perdue ou volée",
+     "Ce que l'assistant peut faire"
+    ]
+   },
+   {
+    "message": "d'accord, merci pour ces informations",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bonne journée",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 52,
+  "client": "C08",
+  "theme": "questions sur l'assistant lui-même",
+  "tours": [
+   {
+    "message": "tu peux voir mon solde ?",
+    "texte": "Je comprends que votre demande concerne votre compte ou votre identité. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris (réponse écartée : absente du message)",
+    "intention": "edit_personal_details",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 274.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "tu peux faire un virement à ma place ?",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "faire_virement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi tu peux pas ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 210.8,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "tu enregistres ce que je dis ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 177.2,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "tu es fiable ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 184.0,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "d'où viennent tes informations ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 227.7,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "ok alors c'est quoi le plafond du livret jeune",
+    "texte": "Le plafond du Livret Jeune est de 1 600 €. [1]\n\nSources : [1] Livret Jeune (https://www.service-public.gouv.fr/particuliers/vosdroits/F2904, 2026-10-27) ; [2] Livret Jeune (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Livret d'épargne populaire (LEP) (https://www.service-public.gouv.fr/particuliers/vosdroits/F2367, 2026-10-27)\n\nRevenons à un virement : à qui voulez-vous envoyer l'argent ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 1,
+    "latence_ms": 208.2,
+    "signaux": [],
+    "sources": [
+     "Livret Jeune",
+     "Livret Jeune",
+     "Livret d'épargne populaire (LEP)"
+    ]
+   },
+   {
+    "message": "j'ai 20 ans j'y ai droit ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 244.3,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "merci",
+    "texte": "Avec plaisir. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "salut",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 53,
+  "client": "C05",
+  "theme": "mariage, deux projets à la fois",
+  "tours": [
+   {
+    "message": "on se marie l'année prochaine et on veut acheter un appart",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédits par mois. Quel est le prix du bien que vous visez, et quelle part de vos 1 500 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "credit_immobilier",
+    "comprise_par": "classifieur",
+    "confiance": 0.95,
+    "appels_llm": 0,
+    "latence_ms": 9.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je voudrais d'abord épargner pour le mariage",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "epargne_projet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "dans 1 an",
+    "texte": "Combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "300 € par mois",
+    "texte": "Voici ce que je vous propose. Livret A : alimenter le livret existant, sans en ouvrir un second. Épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.\n\nNon proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\n\nLe versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.\n\nDisponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.\n\nPassons maintenant à votre autre demande : un crédit. C'est un beau projet. Quel est le prix du bien que vous visez, et quelle part de vos 1 500 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et pour l'appart maintenant",
+    "texte": "Bien sûr. Quel est le prix du bien que vous visez, et quelle part de vos 1 500 € d'épargne souhaitez-vous y consacrer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles ; renvoi au contexte → compris",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 237.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "autour de 180000",
+    "texte": "Quelle part de vos 1 500 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "on a 20000",
+    "texte": "Non proposé — Crédit immobilier : mensualité indicative de 852 € sur 300 mois, soit 52,7 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 52,7 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 116 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est possible ?",
+    "texte": "Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "aucune fiche assez proche : retour aux règles",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 230.2,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": [
+     "reste à vivre",
+     "Livret Jeune",
+     "Prêt personnel"
+    ]
+   },
+   {
+    "message": "pourquoi pas ?",
+    "texte": "parce que la simulation ne propose pas de crédit immobilier, et [2] parce que le prêt immobilier sur 30 ans n'est pas proposé.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques)) ; [2] Votre simulation (Calcul du prototype (règles publiques)) ; [3] Votre simulation (Calcul du prototype (règles publiques))",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 288.7,
+    "signaux": [],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "ok on va réfléchir",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.8,
+    "appels_llm": 0,
+    "latence_ms": 9.5,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 54,
+  "client": "C06",
+  "theme": "application en panne, virement urgent",
+  "tours": [
+   {
+    "message": "l'appli plante quand je veux faire un virement",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "faire_virement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est urgent je dois payer mon loyer aujourd'hui",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 263.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "à mon propriétaire",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 230.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "780 euros",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 241.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "mais l'appli marche pas !!",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles ; renvoi au contexte → compris (réponse écartée : absente du message)",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 236.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "y a un autre moyen ?",
+    "texte": "Je n'ai pas bien compris. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 173.2,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "je peux le faire au guichet ?",
+    "texte": "Bien sûr. À qui voulez-vous envoyer l'argent ? Par exemple : votre fils, votre mère, un ami.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 251.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "vous êtes nuls",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 181.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bon merci",
+    "texte": "Avec plaisir. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "au revoir",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 55,
+  "client": "C03",
+  "theme": "changements de sujet très rapides",
+  "tours": [
+   {
+    "message": "épargne",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 252.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "non en fait crédit",
+    "texte": "D'accord, on laisse ça de côté. Puis-je vous aider pour autre chose ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "non laisse, plutôt une question sur ma carte",
+    "texte": "Votre carte a été perdue ou volée. Faites opposition immédiatement via votre espace bancaire sécurisé ou en appelant votre conseiller [1]. La banque ne vous demandera jamais votre code confidentiel.\n\nSources : [1] Carte perdue ou volée (Service-Public, perte ou vol de carte bancaire, 2026-10-27) ; [2] Faire une réclamation (Service-Public, litige avec sa banque et médiation bancaire, 2026-10-27) ; [3] opposition (Glossaire de l'équipe (fiches vérifiées), 2026-10-27)",
+    "niveau": 2,
+    "raison": "confiance sous le seuil → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 543.8,
+    "signaux": [],
+    "sources": [
+     "Carte perdue ou volée",
+     "Faire une réclamation",
+     "opposition"
+    ]
+   },
+   {
+    "message": "elle a été volée",
+    "texte": "Je comprends, il faut agir vite. Faites opposition tout de suite : dans votre espace bancaire sécurisé, rubrique Opposition, ou en appelant votre conseiller. Je ne peux pas bloquer votre carte depuis cette conversation. Rappel : la banque ne vous demandera jamais votre code confidentiel.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris (réponse écartée : absente du message)",
+    "intention": "lost_or_stolen_card",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 295.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et je voulais aussi envoyer de l'argent",
+    "texte": "D'accord, je vous guide pas à pas. À qui voulez-vous envoyer l'argent ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "faire_virement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "à mon frère",
+    "texte": "Quel montant voulez-vous envoyer ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et si je le fais demain ?",
+    "texte": "Bien sûr. Quel montant voulez-vous envoyer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 282.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "100",
+    "texte": "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi un virement SEPA",
+    "texte": "D'après nos fiches : Un virement se fait depuis votre espace bancaire sécurisé : choisissez ou ajoutez le bénéficiaire, vérifiez son IBAN, puis validez. Vérifiez toujours le bénéficiaire avant de valider, et méfiez-vous d'une demande pressante d'un inconnu. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Faire un virement (Consigne du prototype, 2026-10-27)",
+    "niveau": 2,
+    "raison": "confiance sous le seuil → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 629.9,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Faire un virement",
+     "IBAN",
+     "Livret d'épargne populaire (LEP)"
+    ]
+   },
+   {
+    "message": "merci",
+    "texte": "Avec plaisir. Puis-je vous aider pour autre chose ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 56,
+  "client": "C04",
+  "theme": "client qui ne comprend pas et demande des mots simples",
+  "tours": [
+   {
+    "message": "je suis pas à l'aise avec tout ça",
+    "texte": "Je suis désolé pour ce désagrément.\n\nJe n'ai aucun accès à votre compte, mais votre réclamation compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nSi le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "insatisfaction",
+    "comprise_par": "classifieur",
+    "confiance": 0.99,
+    "appels_llm": 0,
+    "latence_ms": 10.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je voudrais placer mes économies",
+    "texte": "Bonne idée de mettre de côté.\n\nDans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "epargne_projet",
+    "comprise_par": "classifieur",
+    "confiance": 0.96,
+    "appels_llm": 0,
+    "latence_ms": 10.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je ne sais pas",
+    "texte": "Je pars sur un an ; vous pourrez ajuster.\n\nCombien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je sais pas non plus",
+    "texte": "Pas de souci, une estimation suffit.\n\nCombien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est trop compliqué",
+    "texte": "Je suis désolé pour ce désagrément.\n\nJe n'ai aucun accès à votre compte, mais votre réclamation compte.\n\nUn conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.\n\nSi le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.\n\nPassons maintenant à votre autre demande : votre épargne. Bonne idée de mettre de côté.\n\nCombien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 230.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "vous pouvez dire ça plus simplement ?",
+    "texte": "Je n'ai pas bien compris.\n\nCombien pouvez-vous mettre de côté chaque mois ?\n\nPar exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 170.6,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi un livret",
+    "texte": "D'après nos fiches : LEP : Un livret mieux rémunéré, réservé aux personnes dont les revenus sont sous un plafond.\n\n[1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] LEP, 2026-10-27)",
+    "niveau": 2,
+    "raison": "réponse libre, illisible par les règles → compris ; aucun terme du glossaire : nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 2,
+    "latence_ms": 922.3,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "LEP",
+     "Livret A",
+     "Livret Jeune"
+    ]
+   },
+   {
+    "message": "et ça rapporte ?",
+    "texte": "Je n'ai pas bien compris.\n\nCombien pouvez-vous mettre de côté chaque mois ?\n\nPar exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → rien de net",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 204.0,
+    "signaux": [
+     "incompris"
+    ],
+    "sources": []
+   },
+   {
+    "message": "merci jeune homme",
+    "texte": "Avec plaisir.\n\nCombien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "au revoir",
+    "texte": "Au revoir, et bonne journée !\n\nJe reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 57,
+  "client": "C07",
+  "theme": "négociation et questions chiffrées",
+  "tours": [
+   {
+    "message": "quel est le taux pour un crédit immobilier sur 25 ans ?",
+    "texte": "C'est un beau projet. J'ai noté vos revenus de 2 900 € nets par mois. Quel est le prix du bien que vous visez, et quelle part de vos 25 000 € d'épargne souhaitez-vous y consacrer ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "credit_immobilier",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est négociable ?",
+    "texte": "Je n'ai pas cette information dans mes fiches. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "aucune fiche assez proche : retour aux règles",
+    "intention": "question_definition",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 223.3,
+    "signaux": [
+     "hors de nos fiches"
+    ],
+    "sources": [
+     "Frais d'acquisition (notaire)",
+     "reste à vivre",
+     "apport personnel"
+    ]
+   },
+   {
+    "message": "je veux acheter à 300000",
+    "texte": "Quelle part de vos 25 000 € d'épargne souhaitez-vous consacrer à l'achat ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "50000",
+    "texte": "Non proposé — Crédit immobilier : mensualité indicative de 1 338 € sur 300 mois, soit 46,1 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 46,1 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 238 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\n\nPassons maintenant à votre autre demande : un crédit. Non proposé — Crédit immobilier : mensualité indicative de 1 338 € sur 300 mois, soit 46,1 % des revenus avec les crédits en cours. Projet non retenu dans cette simulation ; aucun refus bancaire n'est prononcé. Non proposé — Un prêt immobilier sur 30 ans : option de durée hors du cadre général de 25 ans modélisé.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Taux d'effort indicatif de 46,1 % : au-delà du repère de 35 %. Budget indicatif sous ces hypothèses : environ 238 000 €. Assurance inconnue : budget à réviser. Le cadre HCSF comporte des cas particuliers et une flexibilité réservée à la banque.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 3,3 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Bien ancien, frais d'acquisition estimés à 7,5 % ; estimation à confirmer par un notaire. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_immobilier",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est trop cher ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 246.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et à 250000 ?",
+    "texte": "Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 0,
+    "raison": "demande claire (reponse_attendue)",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 10.4,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi la différence entre le taux et le TAEG",
+    "texte": "Le taux d'endettement est la part des revenus allouée aux crédits, tandis que le TAEG représente le coût total d'un crédit (intérêts, frais, assurance obligatoire) exprimé en pourcentage par an. Ils sont différents car le taux d'endettement est un indicateur global, tandis que le TAEG est un chiffre de comparaison. [1]\n\nSources : [1] TAEG (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [2] taux d'endettement (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Taux moyen des crédits : repères de la Banque de France (https://www.banque-france.fr/fr/statistiques/credit/credits-aux-particuliers-2026-08, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 1,
+    "latence_ms": 556.4,
+    "signaux": [],
+    "sources": [
+     "TAEG",
+     "taux d'endettement",
+     "Taux moyen des crédits : repères de la Banque de France"
+    ]
+   },
+   {
+    "message": "le notaire dans le neuf c'est combien",
+    "texte": "Le notaire dans le neuf donne le montant exact des frais d'acquisition, qui est estimé à 2,5 % du prix. [1]\n\nSources : [1] Frais d'acquisition (notaire) (https://www.notaires.fr/fr/immobilier-fiscalite/financement/acquerir-en-frais-de-notaire-reduits, 2026-10-27) ; [2] frais de notaire (Glossaire de l'équipe (fiches vérifiées), 2026-10-27) ; [3] Livret Jeune (https://www.service-public.gouv.fr/particuliers/vosdroits/F2904, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "credit_immobilier",
+    "comprise_par": "classifieur",
+    "confiance": 0.94,
+    "appels_llm": 1,
+    "latence_ms": 268.0,
+    "signaux": [],
+    "sources": [
+     "Frais d'acquisition (notaire)",
+     "frais de notaire",
+     "Livret Jeune"
+    ]
+   },
+   {
+    "message": "je peux avoir un rendez-vous la semaine prochaine ?",
+    "texte": "Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte. Pour voir un conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou appelez votre agence. Préparez votre projet : montant, durée, revenus.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "top",
+    "texte": "Je comprends que votre demande concerne l'alimentation de votre compte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "top_up_reverted",
+    "comprise_par": "classifieur",
+    "confiance": 0.98,
+    "appels_llm": 0,
+    "latence_ms": 10.1,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 58,
+  "client": "C01",
+  "theme": "carte sans contact, plafond, code oublié",
+  "tours": [
+   {
+    "message": "mon paiement sans contact ne marche plus",
+    "texte": "Je comprends que votre demande concerne l'utilisation de votre carte. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "contactless_not_working",
+    "comprise_par": "classifieur",
+    "confiance": 0.99,
+    "appels_llm": 0,
+    "latence_ms": 10.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et mon plafond de carte c'est combien ?",
+    "texte": "D'après nos fiches : La commission d'intervention est prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. Elle est plafonnée à 8 € par opération et 80 € par mois, et à 4 € et 20 € pour la clientèle fragile. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Commission d'intervention (https://www.tresor.economie.gouv.fr/banque-assurance-finance/protection-des-consommateurs, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 636.6,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Commission d'intervention",
+     "Livret d'épargne populaire (LEP)",
+     "Livret Jeune"
+    ]
+   },
+   {
+    "message": "je peux l'augmenter ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "hors_sujet",
+    "comprise_par": "classifieur",
+    "confiance": 0.77,
+    "appels_llm": 0,
+    "latence_ms": 10.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'ai oublié mon code aussi",
+    "texte": "Je comprends que votre demande concerne votre compte ou votre identité. Je n'ai pas de parcours guidé pour ce point, et aucun accès à votre compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "edit_personal_details",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 262.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je l'ai tapé 3 fois faux",
+    "texte": "Je suis désolé pour ce désagrément. Je n'ai aucun accès à votre compte, mais votre réclamation compte. Un conseiller peut reprendre votre demande : prenez rendez-vous depuis votre espace bancaire sécurisé ou contactez votre agence. Si le problème persiste, le service réclamations puis le médiateur bancaire peuvent être saisis.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris (réponse écartée : absente du message)",
+    "intention": "insatisfaction",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 272.9,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "elle est bloquée pour toujours ?",
+    "texte": "Je ne suis pas sûr de bien vous comprendre. Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "hors_sujet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 197.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je dois refaire une carte ?",
+    "texte": "Pour être sûr de bien vous aider : votre demande concerne-t-elle la commande d'une carte, ou l'alimentation de votre compte ?",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 216.1,
+    "signaux": [
+     "question fermée"
+    ],
+    "sources": []
+   },
+   {
+    "message": "ça coûte combien ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 247.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ok merci",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bonne soirée",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 59,
+  "client": "C02",
+  "theme": "épargne de précaution avec petits revenus",
+  "tours": [
+   {
+    "message": "j'ai pas beaucoup de revenus mais je veux mettre un peu de côté",
+    "texte": "Bonne idée de mettre de côté. Dans combien de temps pensez-vous avoir besoin de cet argent ?",
+    "niveau": 0,
+    "raison": "demande claire (classifieur)",
+    "intention": "epargne_projet",
+    "comprise_par": "classifieur",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 11.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pour les imprévus",
+    "texte": "Bien sûr. Dans combien de temps pensez-vous avoir besoin de cet argent ? Par exemple : 2 ans, ou 48 mois.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 236.5,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "je sais pas",
+    "texte": "Je pars sur un an ; vous pourrez ajuster. Combien pouvez-vous mettre de côté chaque mois ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "10 euros par mois c'est possible ?",
+    "texte": "Voici ce que je vous propose. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.\n\nNon proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\n\nLe versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.\n\nDisponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "epargne_projet",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "c'est quoi le LEP",
+    "texte": "LEP : Un livret mieux rémunéré, réservé aux personnes dont les revenus sont sous un plafond.",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "question_definition",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "j'y ai droit ?",
+    "texte": "Voici ce que je vous propose. Livret A : épargne disponible ; adaptée à une réserve ou un projet sans immobilisation. Livret de développement durable et solidaire (LDDS) : domicile fiscal français et imposition séparée déclarés ; épargne disponible.\n\nNon proposé — Livret Jeune : hors de la tranche d'âge du Livret Jeune. Non proposé — Plan épargne logement (PEL) : besoin de disponibilité ou horizon court : un retrait anticipé entraîne la clôture et peut réduire les avantages.\n\nLe versement mensuel est celui déclaré par le client ; sa capacité d'épargne n'est pas déduite de ses seuls revenus. Livret d'épargne populaire (LEP) : éligibilité à vérifier (revenu fiscal de référence, nombre de parts fiscales, année du revenu fiscal, territoire fiscal), aucune inéligibilité déduite.\n\nDisponibilité privilégiée tant que le client n'a pas indiqué accepter une épargne moins liquide.",
+    "niveau": 1,
+    "raison": "confiance sous le seuil → compris",
+    "intention": "epargne_projet",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 245.7,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "ça rapporte plus que le livret A ?",
+    "texte": "D'après nos fiches : Livret A : Tout le monde, mineurs compris ; un par personne. Plafond des versements : 22 950 €. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Livret A (https://www.service-public.gouv.fr/particuliers/vosdroits/F2365, 2026-10-27)",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 708.5,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Livret A",
+     "Livret A",
+     "Livret Jeune"
+    ]
+   },
+   {
+    "message": "pourquoi ?",
+    "texte": "D'après votre simulation : Livret Jeune n'est pas proposé : Hors de la tranche d'âge du Livret Jeune. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques))",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "inconnue",
+    "comprise_par": "aucun",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 590.2,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "merci c'est clair",
+    "texte": "Avec plaisir ! Je peux vous aider pour votre carte, un virement, des frais, votre épargne ou un projet de crédit. Que puis-je faire pour vous ?",
+    "niveau": 0,
+    "raison": "demande claire (mots_cles)",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "bye",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ },
+ {
+  "id": 60,
+  "client": "C05",
+  "theme": "tout en même temps, puis au revoir",
+  "tours": [
+   {
+    "message": "bonjour je veux un crédit auto, faire un virement à ma femme et comprendre mes frais",
+    "texte": "D'accord, je vous guide pas à pas. Quel montant voulez-vous envoyer ?",
+    "niveau": 0,
+    "raison": "plusieurs demandes nettes : traitées par ordre d'urgence",
+    "intention": "faire_virement",
+    "comprise_par": "mots_cles",
+    "confiance": 0.9,
+    "appels_llm": 0,
+    "latence_ms": 0.2,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "le crédit d'abord",
+    "texte": "Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédit par mois. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "credit_conso",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 255.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "10000",
+    "texte": "Sur combien de mois souhaitez-vous rembourser ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "36 mois",
+    "texte": "Voici ce que je vous propose. Prêt personnel : mensualité indicative de 304 € sur 36 mois, soit 23,9 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants.\n\nAssurance non renseignée : estimation hors assurance, effort sous-estimé si une assurance est requise. Le seuil de prudence consommation est une heuristique interne, pas une obligation HCSF.\n\nPour aller plus loin, un conseiller peut étudier votre projet : prenez rendez-vous depuis votre espace bancaire sécurisé.\n\nTaux annuel de 6 % : repère statistique Banque de France, période 2026-08, relevé le 2026-10-27. Amortissement à mensualité constante, taux annuel divisé par douze ; hors frais de dossier et garantie. Ce n'est pas un TAEG ni une offre.\n\nUn crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.\n\nPassons maintenant à votre autre demande : un virement. D'accord, je vous guide pas à pas. Quel montant voulez-vous envoyer ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "credit_conso",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.3,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "pourquoi ?",
+    "texte": "D'après votre simulation : Prêt personnel : Mensualité indicative de 304 € sur 36 mois, soit 23,9 % des revenus avec les crédits en cours. Orientation conditionnelle, sous réserve de l'étude du dossier et des coûts manquants. [1]\n\nPour votre situation précise, un conseiller peut vous répondre.\n\nSources : [1] Votre simulation (Calcul du prototype (règles publiques))\n\nRevenons à un virement : quel montant voulez-vous envoyer ?",
+    "niveau": 2,
+    "raison": "question ouverte sur un sujet de nos fiches",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 396.3,
+    "signaux": [
+     "repli du garde-fou"
+    ],
+    "sources": [
+     "Votre simulation",
+     "Votre simulation",
+     "Votre simulation"
+    ]
+   },
+   {
+    "message": "maintenant le virement",
+    "texte": "Bien sûr. Quel montant voulez-vous envoyer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris (réponse écartée : absente du message)",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 261.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "à ma femme",
+    "texte": "Bien sûr. Quel montant voulez-vous envoyer ? Par exemple : 200 €.",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles → compris",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 1,
+    "latence_ms": 243.8,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "500",
+    "texte": "Pour effectuer ce virement, utilisez votre espace bancaire sécurisé et vérifiez le bénéficiaire avant de valider. Je ne peux pas accéder à votre compte ni exécuter le virement depuis cette conversation.\n\nPassons maintenant à votre autre demande : un crédit. Je peux vous aider à y voir clair, avec prudence. J'ai noté vos revenus de 1 900 € nets par mois. Vous remboursez déjà 150 € de crédit par mois. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 0,
+    "raison": "réponse attendue, lue par les règles",
+    "intention": "faire_virement",
+    "comprise_par": "reponse_attendue",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.1,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "et les frais ?",
+    "texte": "Je vous explique. Je n'ai aucun accès à votre compte, mais voici ce qui explique le plus souvent ces frais : une commission d'intervention, prélevée quand la banque traite une opération qui dépasse votre solde ou votre découvert autorisé. La loi la plafonne à 8 € par opération et 80 € par mois (4 € et 20 € pour la clientèle fragile). Le détail figure sur votre relevé, dans votre espace bancaire sécurisé. Si ces frais reviennent souvent, l'offre clientèle fragile les limite : un conseiller peut vérifier si vous y avez droit, et c'est aussi à lui qu'on conteste un frais.\n\nPassons maintenant à votre autre demande : un crédit. Je peux vous aider à y voir clair, avec prudence. Quel montant souhaitez-vous emprunter ?",
+    "niveau": 1,
+    "raison": "réponse libre, illisible par les règles ; renvoi au contexte → compris",
+    "intention": "extra_charge_on_statement",
+    "comprise_par": "interprete",
+    "confiance": 0.0,
+    "appels_llm": 1,
+    "latence_ms": 226.6,
+    "signaux": [],
+    "sources": []
+   },
+   {
+    "message": "merci, à bientôt",
+    "texte": "Au revoir, et bonne journée ! Je reste disponible si vous avez une autre question.",
+    "niveau": 0,
+    "raison": "règles",
+    "intention": "hors_sujet",
+    "comprise_par": "mots_cles",
+    "confiance": 1.0,
+    "appels_llm": 0,
+    "latence_ms": 0.0,
+    "signaux": [],
+    "sources": []
+   }
+  ]
+ }
+]
