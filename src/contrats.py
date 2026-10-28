@@ -106,6 +106,7 @@ class Reponse:
     niveau: int = 0  # niveau choisi par l'aiguilleur : 0 règles, 1 petit LLM interprète, 2 RAG
     raison_niveau: str = ""
     sources: list[dict[str, Any]] = field(default_factory=list)  # passages du RAG cités
+    brouillon_refuse: dict[str, Any] | None = None  # niveau 2 : la rédaction du LLM écartée par le garde-fou
 
     @property
     def appels_llm(self) -> int:

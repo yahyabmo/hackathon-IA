@@ -138,6 +138,10 @@ select{cursor:pointer}
 .meta{padding:9px 19px;border-top:1px solid var(--trait);font-size:12.5px;color:var(--gris);
       display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:var(--blanc)}
 .meta .co2{color:var(--ok);font-weight:600}
+/* La rédaction écartée par le garde-fou : les mots absents des fiches, surlignés. */
+.brouillon{font-style:italic;white-space:pre-wrap;margin:5px 0 6px;color:var(--encre)}
+.brouillon mark{font-style:normal;background:color-mix(in srgb,var(--alerte) 24%,transparent);color:inherit;
+                border-radius:3px;padding:0 2px}
 .avis{margin:0 19px 12px;border-left:3px solid var(--alerte);padding:3px 0 3px 13px;color:var(--alerte);font-size:13px}
 details.replie{border-top:1px solid var(--trait);background:var(--blanc)}
 details.replie summary{cursor:pointer;color:var(--gris);font-size:13.5px;list-style:none;padding:9px 19px;user-select:none}
@@ -301,6 +305,15 @@ const badge = n => `<span class="niv n${n}">${NOMS[n]}</span>`;
 const carbone = g => g < 0.001 ? `${nombre(g * 1e6, 0)} µg CO₂e` : `${nombre(g * 1000, g < 0.01 ? 2 : 1)} mg CO₂e`;
 const SOURCE_CO2 = () => `Estimation : énergie mesurée par CodeCarbon sur DeepEirb (banc A/B/C), multipliée par ` +
   `${nombre(CONFIG.intensite_carbone, 1)} g CO₂e/kWh, l'intensité du réseau français selon CodeCarbon.`;
+// Surligne des mots entiers dans un texte (échappé d'abord).
+function surligner(texte, mots) {
+  let html = esc(texte);
+  for (const mot of [...mots].sort((a, b) => b.length - a.length)) {
+    const motif = esc(mot).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    html = html.replace(new RegExp(`(?<![\\p{L}\\p{N}])${motif}(?![\\p{L}\\p{N}])`, 'gu'), '<mark>$&</mark>');
+  }
+  return html;
+}
 const garder = (cle, valeur) => { try { localStorage.setItem(cle, valeur); } catch (e) {} };
 
 // ─── Vue « Démo » (tout) ou « Utilisateur » (les messages seuls), et thème clair ou sombre ───
@@ -442,6 +455,15 @@ function reponse(d) {
   const texte = esc(brut).replace(/\[(\d)\]/g, '<sup>[$1]</sup>');
   const c = d.comprehension;
   let pourquoi = `<div class="ligne"><div class="h"><span>Aiguillage</span></div>${badge(d.niveau)} ${esc(d.raison)}</div>`;
+  const b = d.brouillon_refuse;
+  if (b) {
+    pourquoi += `<div class="ligne"><div class="h"><span class="ko">Rédaction du LLM écartée par le garde-fou</span>
+      <span class="sc">fidélité ${nombre(b.fidelite * 100)} % (minimum ${nombre(b.fidelite_min * 100)} %)</span></div>
+      <div class="brouillon">« ${surligner(b.texte, b.mots_absents)} »</div>
+      <div class="muted">Raisons : ${b.problemes.map(esc).join(' ; ')}.` +
+      (b.mots_absents.length ? ` Surlignés : les mots absents des fiches retrouvées.` : '') +
+      ` La réponse affichée est l'extrait de la fiche.</div></div>`;
+  }
   if (c.intention !== 'inconnue') {
     pourquoi += `<div class="ligne"><div class="h"><span>Compréhension</span><span class="sc">${esc(c.niveau)}</span></div>
       Intention <b>${esc(c.intention)}</b> (${esc(c.famille)})` +
@@ -467,7 +489,8 @@ function reponse(d) {
       <span>${nombre(d.latence_ms, 1)} ms</span>${d.tokens ? `<span>${d.tokens} tokens</span>` : ''}
       ${d.energie_wh !== null ? `<span>≈ ${nombre(d.energie_wh * 1000, 3)} mWh</span>` : ''}
       ${d.co2_g !== null ? `<span class="co2" title="${esc(SOURCE_CO2())}">≈ ${carbone(d.co2_g)}</span>` : ''}</div>
-    ${repli ? `<div class="avis demo-seul">Le garde-fou a écarté la sortie du LLM (${esc(repli.modele)}) : réponse de repli, sûre.</div>` : ''}
+    ${repli ? `<div class="avis demo-seul">Le garde-fou a écarté la sortie du LLM (${esc(repli.modele)}) : réponse de repli, sûre.` +
+              (b ? ' Le texte écarté est dans « Pourquoi ».' : '') + `</div>` : ''}
     <details class="replie demo-seul"><summary>Pourquoi</summary>${pourquoi}</details>
     ${d.sources.length ? `<details class="replie demo-seul" open><summary>Sources (${d.sources.length})</summary>${sources}</details>` : ''}
     <details class="replie demo-seul"><summary>Étapes mesurées</summary><table class="etapes">${etapes}</table></details>

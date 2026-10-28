@@ -181,6 +181,17 @@ def test_le_garde_fou_du_niveau_2_refuse_une_affirmation_inventee(index_rag):
 
 
 @pytest.mark.classifieur
+def test_niveau_2_la_redaction_ecartee_est_gardee_pour_etre_montree(index_rag, monkeypatch):
+    monkeypatch.setattr(llm, "generer", lambda *a, **k: ("Oui, mais vous perdez la prime d'État [1].", 30))
+    reponse, _ = converser("C01", ["Je peux retirer de mon PEL avant 4 ans ?"], llm_actif=True)
+    brouillon = reponse.brouillon_refuse
+    assert reponse.niveau == 2 and reponse.texte.startswith("D'après nos fiches")
+    assert "affirmations absentes des extraits" in brouillon["problemes"]
+    assert brouillon["fidelite"] < brouillon["fidelite_min"]
+    assert {"perdez", "prime"} <= set(brouillon["mots_absents"])
+
+
+@pytest.mark.classifieur
 def test_niveau_2_sans_llm_repli_sur_la_meilleure_fiche(index_rag):
     reponse, _ = converser("C01", ["Je peux retirer de mon PEL avant 4 ans ?"])
     assert reponse.niveau == 2 and reponse.appels_llm == 0

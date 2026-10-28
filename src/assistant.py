@@ -259,6 +259,7 @@ def reply(
     decision: Decision | None = None
     aiguillage = Aiguillage(0, "règles")
     sources: list[dict] = []
+    brouillon: dict | None = None
     texte_rag: str | None = None
     meme_sujet = False
     bascule: str | None = None
@@ -356,7 +357,7 @@ def reply(
             pourquoi = message.strip().lower().startswith("pourquoi")
             reponse_rag = rag.repondre(message, etat.explication if pourquoi else None, avec_llm=llm_ok)
             trace += reponse_rag.etapes
-            sources = reponse_rag.sources
+            sources, brouillon = reponse_rag.sources, reponse_rag.brouillon_refuse
             if reponse_rag.pertinent or etat.niveau_force == 2:
                 texte_rag, decision = reponse_rag.texte, Decision("rag")
             else:
@@ -442,6 +443,6 @@ def reply(
         texte=texte, comprehension=comprehension, conseil=conseil,
         question=decision.info if decision.type in ("question", "question_m3") else None,
         escalade=escalade, trace=trace, niveau=aiguillage.niveau, raison_niveau=aiguillage.raison,
-        sources=sources,
+        sources=sources, brouillon_refuse=brouillon,
     )
     return reponse, etat

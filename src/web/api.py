@@ -123,6 +123,7 @@ def serialiser(reponse: Reponse, etat: EtatConversation) -> dict[str, Any]:
                      "score": s["score"]} for n, s in enumerate(reponse.sources, start=1)],
         "trace": [{"nom": e.nom, "modele": e.modele, "latence_ms": round(e.latence_ms, 2), "tokens": e.tokens,
                    "appel_llm": e.appel_llm} for e in reponse.trace],
+        "brouillon_refuse": reponse.brouillon_refuse,
         "latence_ms": round(sum(e.latence_ms for e in reponse.trace), 1),
         "tokens": sum(e.tokens for e in reponse.trace),
         "appels_llm": reponse.appels_llm,

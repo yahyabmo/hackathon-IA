@@ -17,6 +17,7 @@ Les chiffres restent ceux du catalogue : le LLM ne calcule rien.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -224,6 +225,8 @@ class ReponseRag:
     etapes: list[Etape] = field(default_factory=list)
     repli: str | None = None  # None si le LLM a rédigé ; sinon la raison du repli
     pertinent: bool = True
+    # La rédaction du LLM écartée par le garde-fou, pour la montrer : texte, raisons, fidélité, mots absents.
+    brouillon_refuse: dict[str, Any] | None = None
 
 
 def _sources_affichees(passages: list[dict[str, Any]]) -> str:
@@ -254,6 +257,20 @@ def fidelite(texte: str, passages: list[dict[str, Any]], question: str) -> float
     for p in passages:
         base |= _racines(p["titre"] + " " + p["texte"])
     return 1 - len(mots - base) / len(mots)
+
+
+def mots_absents(texte: str, passages: list[dict[str, Any]], question: str) -> list[str]:
+    """Les mots de la réponse qui ne viennent ni des extraits ni de la question : ce que la fidélité refuse."""
+
+    base = _racines(question)
+    for p in passages:
+        base |= _racines(p["titre"] + " " + p["texte"])
+    absents: list[str] = []
+    for mot in re.findall(r"[^\W\d_]+", texte):
+        racine = normaliser(mot)
+        if len(racine) >= 4 and racine not in MOTS_VIDES and racine[:6] not in base and mot not in absents:
+            absents.append(mot)
+    return absents
 
 
 def verifier(texte: str, passages: list[dict[str, Any]], question: str) -> list[str]:
@@ -294,6 +311,7 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
             sources=passages, etapes=[recherche], repli="aucune fiche assez proche", pertinent=False)
 
     modele = modele or llm.MODELE_NIVEAU2
+    brouillon = None
     if avec_llm:
         debut = perf_counter()
         etape = Etape(nom="rediger", modele=modele, appel_llm=True)
@@ -314,6 +332,9 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
                               etapes=[recherche, etape])
         etape.modele = f"{modele} (refusé : {problemes[0]})"
         repli, etapes = "garde-fou : " + "; ".join(problemes), [recherche, etape]
+        if texte:
+            brouillon = {"texte": texte, "problemes": problemes, "fidelite": round(fidelite(texte, passages, question), 2),
+                         "fidelite_min": FIDELITE_MIN, "mots_absents": mots_absents(texte, passages, question)}
     else:
         repli, etapes = "LLM désactivé", [recherche]
     retenus = _extraits_de_repli(question, passages)
@@ -321,4 +342,4 @@ def repondre(question: str, explication: list[str] | None = None, avec_llm: bool
     origine = "votre simulation" if retenus[0]["id"].startswith("simulation:") else "nos fiches"
     texte = (f"D'après {origine} : {extraits}\n\nPour votre situation précise, un conseiller peut "
              f"vous répondre.\n\n{_sources_affichees(retenus)}")
-    return ReponseRag(texte=texte, sources=passages, etapes=etapes, repli=repli)
+    return ReponseRag(texte=texte, sources=passages, etapes=etapes, repli=repli, brouillon_refuse=brouillon)

@@ -438,6 +438,9 @@ Fichier : `src/rag.py`.
   - une citation ; si la réponse est fidèle mais sans citation, on ajoute [1].
   Si le garde-fou refuse, on donne **l'extrait de la meilleure fiche** (« D'après nos fiches : … »).
   La réponse reste donc juste dans tous les cas ; seule la fluidité varie.
+  Le texte refusé est gardé et affiché dans l'interface, avec les mots absents des fiches surlignés
+  (le LLM écrit avec un peu de hasard, température 0,2 : la même question peut être acceptée une fois et
+  refusée une autre ; c'est le garde-fou qui garantit la réponse, pas le modèle).
 
 ### 6.6 Le conseiller (M3) : des règles publiques, pas un score
 
@@ -782,7 +785,9 @@ messages »** ; bouton **« Scénarios »** ; « Mode sombre » ; « Nouvelle co
 - sous chaque réponse : la **pastille de niveau** (vert : 0, ambre : 1, bordeaux : 2), le LLM utilisé,
   la latence, l'énergie, le **CO₂ estimé** ; les volets **« + Pourquoi »** (aiguillage, compréhension,
   produits proposés / écartés, hypothèses), **« Sources »** (passages et scores), **« Étapes
-  mesurées »** ; un avis quand le garde-fou a écarté la rédaction du LLM.
+  mesurées »** ; un avis quand le garde-fou a écarté la rédaction du LLM. Dans ce cas, « + Pourquoi »
+  montre **le texte que le LLM avait écrit**, sa fidélité (ex. 52 % pour un minimum de 80 %) et **les mots
+  absents des fiches, surlignés** : on voit concrètement ce que le garde-fou a bloqué.
 
 **Vue utilisateur** : seulement la conversation, en bulles (comme une vraie application), avec une ligne
 « Sources : » quand une fiche est citée.
