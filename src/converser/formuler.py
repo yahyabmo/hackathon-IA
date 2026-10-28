@@ -260,6 +260,14 @@ def _gabarit_orientation(decision: Decision, profil: dict[str, Any], etat: EtatC
                         "exécuter le virement depuis cette conversation.")
     if famille_de(decision.parcours or "") == "frais_contestation":
         return _joindre(decision.accroche, _explication_frais())
+    if decision.parcours == "rendez_vous":
+        return ("Je ne peux pas prendre de rendez-vous pour vous : je n'ai aucun accès à votre compte. Pour voir un "
+                "conseiller, prenez rendez-vous depuis votre espace bancaire sécurisé, rubrique Rendez-vous, ou "
+                "appelez votre agence. Préparez votre projet : montant, durée, revenus.")
+    if decision.parcours == "acces_compte":
+        return ("Je n'ai aucun accès à vos relevés ni à votre compte : je ne peux pas les consulter. Je m'appuie "
+                "seulement sur les informations de votre profil (revenus, épargne, crédits en cours). Pour un examen "
+                "de vos relevés, un conseiller peut le faire avec vous.")
     if decision.parcours == "insatisfaction":
         return _joindre(decision.accroche, "Je n'ai aucun accès à votre compte, mais votre réclamation compte.",
                         ORIENTATION_CONSEILLER, "Si le problème persiste, le service réclamations puis le "

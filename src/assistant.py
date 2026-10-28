@@ -18,20 +18,22 @@ conseil) produisent des décisions comme les autres.
 
 from __future__ import annotations
 
+import re
+
 from . import incompris, llm, rag
 from .aiguilleur import URGENCE, Aiguillage, aiguiller, renvoi_au_contexte, trier_par_urgence
 from .comprendre import classifieur, comprendre, escalader, interprete, mots_cles
 from .comprendre.entites import extraire
 from .conseiller import clients, conseiller
 from .conseiller import integration as m3
-from .contrats import (NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_REPONSE, Comprehension, Conseil,
+from .contrats import (NIVEAU_FILE, NIVEAU_INTERPRETE, NIVEAU_MOTS_CLES, NIVEAU_REPONSE, Comprehension, Conseil,
                        EtatConversation, Etape, Reponse)
 from .converser import Decision, avancer, formuler
 from .converser.dialogue import question_en_attente, reponse_lisible
 from .converser.formuler import mots_simples, question_clarification, reprise, simplifier, transition
 from .mesure import mesurer
 from .taxonomie import LIBELLES_FAMILLES, famille_de
-from .texte import normaliser
+from .texte import contient, euros, normaliser
 
 # Informations de la question M3 qui complètent le profil plutôt que le projet.
 CHAMPS_PROFIL = {"age": "age", "est_etudiant": "est_etudiant", "ages_enfants": "enfants"}
@@ -39,6 +41,14 @@ CHAMPS_PROFIL = {"age": "age", "est_etudiant": "est_etudiant", "ages_enfants": "
 TERMINALES = ("orienter", "fiche", "conseil", "rag", "abandon")
 # Demandes qui n'attendent pas la fin d'une question en cours : la carte perdue ou volée.
 URGENTES = URGENCE[:4]
+# Demandes traitées par une règle, avant tout le reste (aucun accès au compte, aucun rendez-vous pris).
+RENDEZ_VOUS = ("rendez vous", "rdv", "parler a un conseiller", "voir un conseiller", "contacter un conseiller",
+               "etre rappele", "me rappeler", "parler a quelqu un")
+DONNEES_COMPTE = ("releve", "releves", "mes donnees", "en se basant sur mes", "regarde mon compte",
+                  "consulte mon compte", "verifie mon compte", "mon historique", "mes operations")
+MOTS_CREDIT = ("credit", "pret", "emprunt", "emprunter")
+BIEN_MINIMUM = 40_000  # sous ce montant, « un crédit de 10 000 € » n'est pas un projet immobilier
+NOMBRE_SEUL = re.compile(r"[\d\s.,€k]+(?:euros?)?", re.IGNORECASE)
 
 
 def decision_conseil(etat: EtatConversation) -> Decision:
@@ -218,13 +228,19 @@ def reply(
     sources: list[dict] = []
     texte_rag: str | None = None
     meme_sujet = False
+    bascule: str | None = None
     lu = message
     # Une question restait en attente : après une parenthèse, on y revient.
     en_cours = (etat.parcours, etat.famille, dict(etat.slots), etat.info_attendue) if etat.info_attendue else None
 
     # 0. Barrières : montant ambigu, information manquante pour un conseil.
+    texte_normalise = normaliser(message)
     if m3.montant_ambigu(message):
         decision = Decision("montant_ambigu")
+    elif any(contient(texte_normalise, e) for e in RENDEZ_VOUS):
+        decision = Decision("orienter", parcours="rendez_vous")
+    elif any(contient(texte_normalise, e) for e in DONNEES_COMPTE):
+        decision = Decision("orienter", parcours="acces_compte")
     elif etat.question_m3:
         decision = _reprendre_question_m3(message, etat, profil)
 
@@ -233,12 +249,24 @@ def reply(
         comprehension, etape = mesurer("comprendre", lambda: comprendre(message, etat))
         etape.modele = comprehension.modele
         trace.append(etape)
-        if not comprehension.comprise and etat.parcours and (
-                comprehension.entites.get("montants") or comprehension.entites.get("duree_mois")):
-            # « Et avec un bien à 200 000 ? » : la suite du parcours en cours.
+        montants = comprehension.entites.get("montants") or []
+        nombre_seul = bool(NOMBRE_SEUL.fullmatch(message.strip()))
+        if (not comprehension.comprise or nombre_seul) and etat.parcours and (
+                montants or comprehension.entites.get("duree_mois")):
+            # « Et avec un bien à 200 000 ? », ou « 1000 » : la suite du parcours en cours.
             comprehension = Comprehension(
                 famille=etat.famille or "", intention=etat.parcours, confiance=1.0,
                 niveau=NIVEAU_REPONSE, modele="regles", entites=comprehension.entites)
+        if (etat.parcours == "credit_immobilier" and montants and max(montants) < BIEN_MINIMUM
+                and any(contient(texte_normalise, m) for m in MOTS_CREDIT)):
+            # « Un crédit de 10 000 € » n'est pas un bien à 10 000 € : c'est un crédit à la consommation.
+            etat.memoire.pop("credit_immobilier", None)
+            etat.parcours = etat.info_attendue = None
+            etat.slots, en_cours = {}, None
+            bascule = (f"Pour emprunter {euros(max(montants))}, il s'agit d'un crédit à la consommation, "
+                       "pas d'un crédit immobilier.")
+            comprehension = Comprehension(famille="credit", intention="credit_conso", confiance=1.0,
+                                          niveau=NIVEAU_MOTS_CLES, modele="regles", entites=comprehension.entites)
         lisible = comprehension.niveau != NIVEAU_REPONSE or reponse_lisible(message, comprehension.entites, etat)
         llm_ok = _llm_permis(etat)
         aiguillage = aiguiller(message, comprehension, etat, lisible=lisible,
@@ -288,6 +316,8 @@ def reply(
         decision, conseil = _traiter(decision, lu, comprehension, etat, profil, trace)
     if meme_sujet and decision.type == "question" and decision.relance == "incompris":
         decision.relance = "meme_sujet"
+    if bascule:
+        decision.accroche = bascule
 
     # 4. Formuler (le niveau 2 a déjà rédigé sa réponse).
     if texte_rag is not None:
@@ -302,7 +332,8 @@ def reply(
         etat.traites.append(etat.parcours)
     if decision.type in TERMINALES and not etat.question_m3:
         interrompu = (en_cours and decision.type != "abandon" and en_cours[0] not in etat.file_demandes
-                      and (decision.type == "rag" or etat.parcours != en_cours[0]))
+                      and (decision.type == "rag" or decision.parcours in ("rendez_vous", "acces_compte")
+                           or etat.parcours != en_cours[0]))
         if interrompu:
             etat.parcours, etat.famille, etat.slots, etat.info_attendue = en_cours
             etat.memoire.pop(en_cours[0], None)

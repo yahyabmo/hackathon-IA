@@ -72,6 +72,13 @@ def _est(texte_normalise: str, expressions: tuple[str, ...]) -> bool:
     return any(contient(texte_normalise, e) for e in expressions)
 
 
+def _refus(texte_normalise: str) -> bool:
+    """« non » en tête, ou une réponse courte : « dis-moi si je peux, oui ou non ? » n'est pas un refus."""
+
+    return any(texte_normalise.startswith(e) for e in REFUS) or (
+        len(texte_normalise.split()) <= 3 and _est(texte_normalise, REFUS))
+
+
 def _remplir(spec, message, entites, etat, profil) -> list[str]:
     """Remplit ce qui peut l'être ; rend les phrases de confirmation des infos lues dans le profil."""
 
@@ -148,7 +155,7 @@ def reponse_lisible(message: str, entites: dict[str, Any], etat: EtatConversatio
     if info is None:
         return True
     texte = normaliser(message)
-    if _est(texte, NE_SAIT_PAS) or _est(texte, REFUS):
+    if _est(texte, NE_SAIT_PAS) or _refus(texte):
         return True
     if info["type"] == "montant":
         return bool(entites.get("montants"))
@@ -204,7 +211,7 @@ def avancer(
                 supposition = info["si_inconnu"]["phrase"]
             else:
                 relance = "ne_sait_pas"
-        elif _est(texte, REFUS) and not comprehension.entites.get("montants"):
+        elif _refus(texte) and not comprehension.entites.get("montants"):
             if "si_non" in info:
                 etat.slots[attendue] = info["si_non"]
             else:

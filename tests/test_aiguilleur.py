@@ -229,3 +229,30 @@ def test_une_reponse_fidele_sans_citation_est_acceptee_avec_la_meilleure_fiche(m
     monkeypatch.setattr(llm, "generer", lambda *a, **k: ("Tout retrait anticipé entraîne la clôture du plan", 30))
     resultat = rag.repondre("Je peux retirer de mon PEL avant 4 ans ?")
     assert resultat.repli is None and "clôture du plan [1]" in resultat.texte
+
+
+# ── Règles ajoutées après le test de l'école (mercredi matin) ──
+
+def test_un_nombre_seul_continue_le_parcours():
+    reponse, _ = converser("C01", ["Je veux faire un virement", "mon père", "100000", "1000"])
+    assert "Bonjour" not in reponse.texte and "espace bancaire sécurisé" in reponse.texte
+
+
+def test_un_petit_credit_n_est_pas_un_projet_immobilier():
+    reponse, etat = converser("C01", ["Je veux acheter un appartement", "verifie si je peux avoir un credit de 10000 euro"])
+    assert reponse.texte.startswith("Pour emprunter")
+    assert etat.parcours == "credit_conso" and etat.slots["montant"] == 10000
+
+
+def test_oui_ou_non_n_est_pas_un_refus():
+    reponse, etat = converser("C01", ["Je veux un crédit pour acheter une voiture.", "12000",
+                                      "dis moi si je peux, oui ou non ?"])
+    assert "on laisse ça de côté" not in reponse.texte and etat.parcours == "credit_conso"
+
+
+def test_rendez_vous_et_releves_sans_acces_au_compte():
+    reponse, _ = converser("C01", ["je veux prendre un rendez vous stp"])
+    assert "rubrique Rendez-vous" in reponse.texte
+    reponse, etat = converser("C01", ["Je veux un crédit pour acheter une voiture.", "12000",
+                                      "dis moi en se basant sur mes relevés"])
+    assert "aucun accès à vos relevés" in reponse.texte and "Revenons à un crédit" in reponse.texte
