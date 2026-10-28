@@ -161,9 +161,39 @@ table.etapes td{padding:6px 19px;border-top:1px solid var(--trait);color:var(--g
 .points span:nth-child(2){animation-delay:.15s} .points span:nth-child(3){animation-delay:.3s}
 @keyframes saute{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
 
-/* ─── Saisie, accrochée en bas ─── */
-form#saisie{position:sticky;bottom:0;background:var(--blanc);border-top:1px solid var(--trait);
-            padding:14px 0 18px;display:flex;gap:10px;align-items:flex-end}
+/* ─── Saisie, accrochée en bas, avec la barre de scénario au-dessus ─── */
+.pied{position:sticky;bottom:0;background:var(--blanc);border-top:1px solid var(--trait);padding:12px 0 18px}
+form#saisie{display:flex;gap:10px;align-items:flex-end}
+
+/* La barre de scénario : le prochain message de la démonstration, envoyé d'un clic ou de la flèche →. */
+.scenario{background:var(--sable);border:1px solid var(--trait);border-left:3px solid var(--accent);
+          border-radius:0 14px 14px 0;padding:11px 15px;margin-bottom:12px}
+.scenario[hidden]{display:none}
+.sc-haut{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:9px}
+.sc-haut .etiquette{margin:0;color:var(--accent)}
+.sc-haut .bascule{background:var(--blanc)}
+.sc-progres{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--gris);
+            font-variant-numeric:tabular-nums}
+.sc-points{display:flex;gap:4px}
+.sc-points i{width:8px;height:8px;border-radius:50%;background:var(--trait);display:block}
+.sc-points i.fait{background:var(--ok)}
+.sc-points i.cours{background:var(--accent);animation:bat 1.4s ease-in-out infinite}
+@keyframes bat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.45);opacity:.6}}
+.sc-bas{display:flex;gap:10px;align-items:center}
+.sc-prochain{flex:1;min-width:0;text-align:left;font-family:var(--sans);font-size:14px;color:var(--encre);
+             background:var(--blanc);border:1px dashed var(--trait);border-radius:9px;padding:9px 13px;cursor:text;
+             white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-prochain:hover{border-color:var(--accent)}
+.sc-prochain .quoi{color:var(--gris);font-size:12px;text-transform:uppercase;letter-spacing:.7px;font-weight:600;margin-right:8px}
+.sc-fermer{background:none;border:none;color:var(--gris);font-size:18px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px}
+.sc-fermer:hover{background:var(--blanc);color:var(--encre)}
+.lien[aria-pressed="true"]{background:var(--accent-clair);color:var(--accent);font-weight:600}
+/* En vue utilisateur, la barre se réduit à une pastille discrète, en bas à droite. */
+.sc-pastille{position:fixed;right:clamp(16px,2.4vw,34px);bottom:96px;z-index:5;background:var(--accent);color:var(--blanc);
+             border:none;border-radius:20px;padding:8px 15px;font-family:var(--sans);font-size:13px;font-weight:600;
+             cursor:pointer;box-shadow:0 6px 20px -10px color-mix(in srgb,var(--encre) 55%,transparent)}
+.sc-pastille[hidden]{display:none}
+.sc-pastille:disabled{opacity:.5;cursor:default}
 form#saisie textarea{resize:none;min-height:46px;max-height:160px;line-height:1.5}
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
@@ -181,6 +211,7 @@ form#saisie textarea{resize:none;min-height:46px;max-height:160px;line-height:1.
         <button type="button" data-vue="demo">Démo : tout voir</button>
         <button type="button" data-vue="utilisateur">Utilisateur : les messages</button>
       </div>
+      <button type="button" class="lien" id="scenarios" aria-pressed="false">Scénarios</button>
       <button type="button" class="lien" id="theme">Mode sombre</button>
       <button type="button" class="btn doux petit" id="nouvelle">Nouvelle conversation</button>
     </div>
@@ -222,10 +253,25 @@ form#saisie textarea{resize:none;min-height:46px;max-height:160px;line-height:1.
 
     <section class="conversation">
       <div id="fil"></div>
-      <form id="saisie">
-        <textarea id="q" rows="1" placeholder="Votre message… par exemple : j'ai perdu ma carte et je veux faire un virement."></textarea>
-        <button class="btn" id="envoyer" type="submit">Envoyer</button>
-      </form>
+      <div class="pied">
+        <div class="scenario demo-seul" id="scenario" hidden>
+          <div class="sc-haut">
+            <span class="etiquette">Scénario</span>
+            <div class="bascule" id="sc-choix" role="group" aria-label="Scénario"></div>
+            <div class="sc-progres"><span class="sc-points" id="sc-points"></span><span id="sc-compte"></span></div>
+            <button type="button" class="sc-fermer" id="sc-fermer" title="Masquer (Échap)">×</button>
+          </div>
+          <div class="sc-bas">
+            <button type="button" class="sc-prochain" id="sc-prochain" title="Mettre dans la zone de saisie, sans envoyer"></button>
+            <button type="button" class="btn" id="sc-envoyer" title="Taper et envoyer (flèche →)">Envoyer ›</button>
+          </div>
+        </div>
+        <button type="button" class="sc-pastille utilisateur-seul" id="sc-pastille" hidden title="Taper et envoyer le prochain message (flèche →)"></button>
+        <form id="saisie">
+          <textarea id="q" rows="1" placeholder="Votre message… par exemple : j'ai perdu ma carte et je veux faire un virement."></textarea>
+          <button class="btn" id="envoyer" type="submit">Envoyer</button>
+        </form>
+      </div>
     </section>
   </div>
 </main>
@@ -286,12 +332,80 @@ async function chargerConfig() {
   // ?client=C07&rejouer : rejoue les exemples du profil (démonstration de secours, en direct).
   const params = new URLSearchParams(location.search);
   if (params.get('client')) $('#client').value = params.get('client');
-  await changerClient();
+  $('#sc-choix').innerHTML = CONFIG.scenarios.map(s =>
+    `<button type="button" data-id="${s.id}" title="${esc(s.sujet)}">${s.id} · ${esc(s.titre)}</button>`).join('');
+  $('#sc-choix').querySelectorAll('button').forEach(b => b.onclick = () => choisirScenario(Number(b.dataset.id)));
+  if (params.get('scenario')) { ouvrirScenarios(true); await choisirScenario(Number(params.get('scenario'))); }
+  else await changerClient();
   if (params.has('rejouer')) for (const m of CONFIG.exemples[$('#client').value] || []) await envoyer(m);
 }
 
+// ─── Scénarios de la démonstration : le prochain message, tapé puis envoyé d'un clic ───
+const SC = {id: null, pas: 0, occupe: false, ouvert: false};
+const scenario = () => CONFIG?.scenarios.find(s => s.id === SC.id);
+
+function ouvrirScenarios(ouvert) {
+  SC.ouvert = ouvert;
+  $('#scenarios').setAttribute('aria-pressed', ouvert);
+  majScenario();
+}
+
+async function choisirScenario(id) {
+  const s = CONFIG.scenarios.find(x => x.id === id);
+  if (!s) return;
+  SC.id = id;
+  $('#client').value = s.client;
+  await changerClient();  // nouveau client, nouvelle conversation : le scénario repart du début
+}
+
+function majScenario() {
+  const s = scenario(), n = s ? s.messages.length : 0, fini = s && SC.pas >= n;
+  $('#scenario').hidden = !SC.ouvert;
+  $('#sc-pastille').hidden = !SC.ouvert || !s;
+  $('#sc-choix').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', Number(b.dataset.id) === SC.id));
+  $('#sc-points').innerHTML = s ? s.messages.map((_, i) => `<i class="${i < SC.pas ? 'fait' : i === SC.pas ? 'cours' : ''}"></i>`).join('') : '';
+  $('#sc-compte').textContent = s ? `${Math.min(SC.pas, n)} / ${n}` : '';
+  $('#sc-prochain').innerHTML = !s ? '<span class="quoi">Choisissez un scénario</span>'
+    : fini ? '<span class="quoi">Scénario terminé</span>Nouvelle conversation pour le rejouer.'
+    : `<span class="quoi">Prochain</span>« ${esc(s.messages[SC.pas])} »`;
+  $('#sc-envoyer').disabled = $('#sc-pastille').disabled = !s || fini || SC.occupe;
+  $('#sc-pastille').textContent = !s ? '' : fini ? '✓ terminé' : `▶ ${SC.pas + 1} / ${n}`;
+}
+
+// Le message est tapé lettre par lettre dans la zone de saisie (une seconde environ), puis envoyé.
+async function scenarioSuivant() {
+  const s = scenario();
+  if (!s || SC.occupe || SC.pas >= s.messages.length) return;
+  const message = s.messages[SC.pas];
+  SC.occupe = true; majScenario();
+  const q = $('#q'), delai = Math.min(28, 1100 / message.length);
+  q.value = '';
+  for (const lettre of message) { q.value += lettre; await new Promise(r => setTimeout(r, delai)); }
+  await new Promise(r => setTimeout(r, 180));
+  q.value = '';
+  SC.pas++;
+  await envoyer(message);
+  SC.occupe = false; majScenario();
+}
+
+$('#scenarios').onclick = () => ouvrirScenarios(!SC.ouvert);
+$('#sc-fermer').onclick = () => ouvrirScenarios(false);
+$('#sc-envoyer').onclick = scenarioSuivant;
+$('#sc-pastille').onclick = scenarioSuivant;
+$('#sc-prochain').onclick = () => {
+  const s = scenario();
+  if (s && SC.pas < s.messages.length) { $('#q').value = s.messages[SC.pas]; SC.pas++; majScenario(); $('#q').focus(); }
+};
+document.addEventListener('keydown', ev => {
+  if (!SC.ouvert) return;
+  const saisie = document.activeElement === $('#q');
+  if (ev.key === 'Escape') { ouvrirScenarios(false); return; }
+  if (ev.key === 'ArrowRight' && (!saisie || !$('#q').value)) { ev.preventDefault(); scenarioSuivant(); }
+});
+
 async function changerClient() {
   const id = $('#client').value;
+  if (scenario() && scenario().client !== id) SC.id = null;  // un autre client : le scénario ne s'applique plus
   const p = await (await fetch('/api/profil/' + id)).json();
   $('#profil').innerHTML = `<div class="nom">${esc(p.prenom)}</div>` + p.champs.map(c =>
     `<dt>${esc(c.libelle)}</dt><dd>${c.valeur === null ? 'inconnu' : esc(typeof c.valeur === 'number' ? nombre(c.valeur) : c.valeur)}${c.simule ? ' <i>simulé</i>' : ''}</dd>`).join('');
@@ -305,7 +419,8 @@ async function nouvelle() {
   SESSION = Math.random().toString(36).slice(2);
   CUMUL = {tours: 0, ms: 0, tokens: 0, wh: 0, co2: 0, llm: 0, chaine: []};
   fil.innerHTML = $('#accueil').innerHTML;
-  majStats();
+  SC.pas = 0;
+  majStats(); majScenario();
 }
 
 function majStats() {

@@ -16,6 +16,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import yaml
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -29,6 +30,7 @@ from ..contrats import EtatConversation, Reponse
 from ..converser.formuler import nom_produit
 
 STATIC = Path(__file__).resolve().parent / "static"
+SCENARIOS = Path(__file__).resolve().parent / "scenarios.yaml"  # les conversations de la démonstration
 MESURES_ABC = Path(__file__).resolve().parents[2] / "eval" / "resultats" / "abc.json"
 CHAMPS_PROFIL = (("age", "Âge"), ("metier", "Métier"), ("situation", "Situation"), ("revenus_nets", "Revenus nets / mois"),
                  ("epargne", "Épargne"), ("solde", "Solde"), ("mensualites_credits", "Crédits en cours / mois"))
@@ -154,6 +156,7 @@ def config() -> dict[str, Any]:
         "rag": {"fiches": len(rag.fiches()), "disponible": rag.disponible()},
         "mesures": _cout_par_niveau() is not None,
         "intensite_carbone": intensite_carbone(),
+        "scenarios": yaml.safe_load(SCENARIOS.read_text(encoding="utf-8")),
     }
 
 

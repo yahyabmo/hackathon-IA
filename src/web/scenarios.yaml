@@ -1,0 +1,47 @@
+# Les trois conversations de la démonstration, jouées depuis la barre de scénario de l'interface.
+# `niveaux` : le niveau attendu à chaque message (vérifié en rejouant le scénario avec le LLM).
+- id: 1
+  titre: Inès
+  client: C01
+  sujet: l'aiguilleur passe d'un niveau à l'autre
+  messages:
+    - "J'ai perdu ma carte et je veux faire un virement."
+    - "oui"
+    - "c'est pour mon papa"
+    - "Je peux retirer de mon PEL avant 4 ans ?"
+    - "100000000"
+    - "mais ma carte ?"
+    - "Ma carte ne marche plus au distributeur"
+    - "Un conseiller m'appelle et me demande mon code, je lui donne ?"
+    - "Je voudrais un rendez-vous"
+    - "merci, au revoir"
+- id: 2
+  titre: Léa
+  client: C07
+  sujet: conseil, « pourquoi », fiches citées
+  messages:
+    - "Je veux acheter un appartement"
+    - "Autour de 250 000, et je peux mettre les 25 000"
+    - "pourquoi ?"
+    - "Et avec un bien à 200 000 ?"
+    - "c'est quoi le taux d'endettement"
+    - "Combien de frais de notaire pour un appartement ancien ?"
+    - "pourquoi pas sur 30 ans ?"
+    - "c'est quoi le HCSF ?"
+    - "je peux avoir un rendez-vous ?"
+    - "merci beaucoup"
+- id: 3
+  titre: Karim
+  client: C05
+  sujet: crédit, corrections, plusieurs sujets
+  messages:
+    - "Je veux un crédit pour acheter une voiture."
+    - "12000"
+    - "48 mois"
+    - "pourquoi ?"
+    - "et sur 60 mois ?"
+    - "non plutôt 8000"
+    - "c'est quoi le TAEG"
+    - "au fait je dois envoyer 200 € à ma mère"
+    - "Pourquoi j'ai payé 8 € de frais ce mois-ci ?"
+    - "je vais réfléchir, merci"

@@ -93,7 +93,13 @@ ASSISTANT_LLM=1 python -m src.web # interface de la démo : http://localhost:800
 le serveur ne répond pas, l'aiguilleur reste au niveau 0 et le RAG répond par
 l'extrait de la fiche. Les modèles des niveaux se choisissent avec
 `OLLAMA_MODEL_NIVEAU1` et `OLLAMA_MODEL_NIVEAU2`. `?client=C07&rejouer` rejoue
-les exemples d'un profil. L'interface Streamlit de secours reste disponible :
+les exemples d'un profil.
+
+L'interface a deux vues : « Démo » (niveaux, pourquoi, sources, énergie et CO₂ de
+chaque réponse) et « Utilisateur » (les messages seuls). Le bouton « Scénarios »
+ouvre les trois conversations de la démonstration (`src/web/scenarios.yaml`) :
+chaque clic sur « Envoyer › », ou la flèche →, tape et envoie le message suivant.
+`?scenario=2&utilisateur` ouvre directement le scénario 2 en vue utilisateur. L'interface Streamlit de secours reste disponible :
 `streamlit run app.py`.
 
 L'encodeur `multilingual-e5-small` est téléchargé une fois, puis `HF_HUB_OFFLINE=1`
