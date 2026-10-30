@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="gt gd">
+<title id="gt">17 fois moins d'énergie que le modèle qui répond à tout</title>
+<desc id="gd">Énergie pour 1 000 messages : 194 Wh pour un LLM de 14 milliards de paramètres, 11,5 Wh pour notre aiguilleur, 0,4 Wh pour le niveau 0 seul.</desc>
+<style>
+.fond{fill:#fbf8f6;stroke:#e8e1de}.titre{fill:#241c21;font-size:25px;font-weight:700}.sous{fill:#6e6469;font-size:15px}
+.second{fill:#6e6469;font-size:16px}.fort{fill:#241c21;font-size:16px;font-weight:700}.valeur{fill:#241c21;font-size:16px;font-weight:700}
+.barre{fill:#8c3b4e}.ligne{stroke:#c9bfc2;stroke-width:1}.note{fill:#6e6469;font-size:13px}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+@media (prefers-color-scheme:dark){.fond{fill:#1e1a1d;stroke:#332c31}.titre,.fort,.valeur{fill:#ede5e7}.sous,.second,.note{fill:#a0959a}.barre{fill:#c97a8d}.ligne{stroke:#4a4146}}
+</style>
+<rect class="fond" x=".5" y=".5" width="899" height="329" rx="14"/>
+<text class="titre" x="40" y="50">17 fois moins d'énergie que le modèle qui répond à tout</text>
+<text class="sous" x="40" y="78">Énergie consommée pour 1 000 messages</text>
+<path class="ligne" d="M40 106 V300"/>
+<text class="second" x="40" y="115">Un LLM de 14 milliards de paramètres répond à tout</text><path class="barre" d="M40 124 H786.0 Q790.0 124 790.0 128 V136 Q790.0 140 786.0 140 H40 Z"/><text class="valeur" x="800.0" y="137">194 Wh</text><text class="fort" x="40" y="177">Notre aiguilleur</text><path class="barre" d="M40 186 H80.48212397979613 Q84.48212397979613 186 84.48212397979613 190 V198 Q84.48212397979613 202 80.48212397979613 202 H40 Z"/><text class="valeur" x="94.48212397979613" y="199">11,5 Wh</text><text class="second" x="40" y="239">Niveau 0 seul, sans LLM</text><path class="barre" d="M40 248 H41.25 Q42.5 248 42.5 249.25 V262.75 Q42.5 264 41.25 264 H40 Z"/><text class="valeur" x="52.5" y="261">0,4 Wh</text>
+<text class="note" x="40" y="316">CodeCarbon, consommation brute, repos de la machine inclus. Mesuré sur DeepEirb (RTX 6000 Ada).</text>
+</svg>
