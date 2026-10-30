@@ -6,7 +6,7 @@
 
 **Un assistant bancaire local et explicable, qui n'appelle un LLM que lorsqu'il en a vraiment besoin.**
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-7a2e3f?style=flat-square&logo=python&logoColor=white)](#démarrage-rapide) [![FastAPI](https://img.shields.io/badge/FastAPI-interface-7a2e3f?style=flat-square&logo=fastapi&logoColor=white)](#linterface) [![Ollama](https://img.shields.io/badge/Ollama-100%25%20local-7a2e3f?style=flat-square&logo=ollama&logoColor=white)](#stack) [![Modèle](https://img.shields.io/badge/LLM-1%2C4%20Go-3a6b4c?style=flat-square)](#choisir-le-modèle-en-descendant-en-taille) [![Tests](https://img.shields.io/badge/tests-153%20r%C3%A9ussis-3a6b4c?style=flat-square)](#tests-et-mesures) [![Scénarios](https://img.shields.io/badge/sc%C3%A9narios-15%2F15-3a6b4c?style=flat-square)](#tests-et-mesures)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-7a2e3f?style=flat-square&logo=python&logoColor=white)](#démarrage-rapide) [![FastAPI](https://img.shields.io/badge/FastAPI-interface-7a2e3f?style=flat-square&logo=fastapi&logoColor=white)](#linterface) [![Ollama](https://img.shields.io/badge/Ollama-100%25%20local-7a2e3f?style=flat-square&logo=ollama&logoColor=white)](#stack) [![Modèle](https://img.shields.io/badge/LLM-1%2C4%20Go-3a6b4c?style=flat-square)](#choisir-le-modèle-en-descendant-en-taille) [![Tests](https://img.shields.io/badge/tests-153%20r%C3%A9ussis-3a6b4c?style=flat-square)](#tests-et-mesures) [![Scénarios](https://img.shields.io/badge/sc%C3%A9narios-15%2F15-3a6b4c?style=flat-square)](#tests-et-mesures) [![Licence](https://img.shields.io/badge/licence-MIT-3a6b4c?style=flat-square)](LICENSE)
 
 [La démo](#la-démo) · [Comment ça marche](#comment-ça-marche) · [Résultats](#résultats-mesurés) · [Démarrage rapide](#démarrage-rapide) · [Limites](#limites)
 
@@ -399,6 +399,10 @@ Nous préférons les mesurer plutôt que de les cacher.
 | **Yahya Bel Hajjam** | Aiguilleur, conversation, interface | Architecture, niveaux 1 et 2, automate de dialogue, bancs des niveaux, interface |
 | **Sohayb El Yaktini** | Conseiller | Profils, catalogue sourcé, règles métier, scénarios de référence |
 | **Younes Bamouss** | Comprendre et mesurer | Mots-clés, entités, classifieur, bancs de compréhension et d'énergie |
+
+## Licence
+
+Le code est distribué sous [licence MIT](LICENSE). Les jeux de données (Banking77, Bank Marketing) et les polices de l'interface gardent leur propre licence.
 
 ## Pour aller plus loin
 
